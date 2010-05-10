@@ -1,0 +1,53 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: WindPatterns - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\root\LOCALS~1\Temp\RSP18.tmp" with contents
+[
+/nologo /MDd /W3 /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /Fo"Debug\Temp/" /Fd"Debug\Temp/" /FD /GZ /c 
+"C:\windwax\commun\fichier.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\root\LOCALS~1\Temp\RSP18.tmp" 
+Creating temporary file "C:\DOCUME~1\root\LOCALS~1\Temp\RSP19.tmp" with contents
+[
+glui32d.lib glut32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/WindPatterns.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt.lib" /out:"Debug/WindPatterns.exe" /pdbtype:sept 
+.\Debug\Temp\fichier.obj
+.\Debug\Temp\geom.obj
+.\Debug\Temp\logger.obj
+.\Debug\Temp\matrice.obj
+.\Debug\Temp\pince.obj
+.\Debug\Temp\plot.obj
+.\Debug\Temp\profil.obj
+.\Debug\Temp\rasklad.obj
+.\Debug\Temp\WindPatterns.obj
+.\Debug\Temp\patternsproject.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\root\LOCALS~1\Temp\RSP19.tmp"
+<h3>Output Window</h3>
+Compiling...
+fichier.cpp
+C:\windwax\commun\fichier.cpp(2076) : warning C4101: 'm_WingLoad' : unreferenced local variable
+C:\windwax\commun\fichier.cpp(2077) : warning C4101: 'm_Height' : unreferenced local variable
+C:\windwax\commun\fichier.cpp(2838) : warning C4101: 'interpXSuspente' : unreferenced local variable
+C:\windwax\commun\fichier.cpp(2839) : warning C4101: 'posSuspente' : unreferenced local variable
+C:\windwax\commun\fichier.cpp(2838) : warning C4101: 'interpYSuspente' : unreferenced local variable
+C:\windwax\commun\fichier.cpp(2092) : warning C4700: local variable 'm_Weight' used without having been initialized
+C:\windwax\commun\fichier.cpp(2093) : warning C4700: local variable 'm_QInf' used without having been initialized
+C:\windwax\commun\fichier.cpp(2094) : warning C4700: local variable 'm_XCmRef' used without having been initialized
+C:\windwax\commun\fichier.cpp(2095) : warning C4700: local variable 'm_Density' used without having been initialized
+C:\windwax\commun\fichier.cpp(2096) : warning C4700: local variable 'm_Viscosity' used without having been initialized
+C:\windwax\commun\fichier.cpp(2097) : warning C4700: local variable 'm_Alpha' used without having been initialized
+C:\windwax\commun\fichier.cpp(2098) : warning C4700: local variable 'm_Beta' used without having been initialized
+Linking...
+
+
+
+<h3>Results</h3>
+WindPatterns.exe - 0 error(s), 12 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,4066 @@
+
+PROJECT f17v2
+FORME f17v2.txt
+REP_POINTS rep_points.txt
+DIAG_NERVS diagnervs.txt
+VENT_HOLES ventholes.txt
+ 0f1 D=0.0110(M=0.505)[0.002]  1.79819/ 1.79820 l 1.79815 a0.0017 a0.0017 OK:)
+ 1f1 D=0.0007(M=0.505)[-0.000]  1.79922/ 1.79923 l 1.79920 a0.0017 a0.0017 OK:)
+ 2f1 D=0.0038(M=0.500)[-0.002]  1.79925/ 1.79925 l 1.79920 a0.0017 a0.0017 OK:)
+ 3f1 D=0.0008(M=0.510)[0.002]  1.79923/ 1.79923 l 1.79920 a0.0017 a0.0016 OK:)
+ 4f1 D=0.0071(M=0.500)[0.001]  1.79713/ 1.79714 l 1.79710 a0.0016 a0.0016 OK:)
+ 5f1 D=0.0056(M=0.505)[-0.002]  1.79505/ 1.79506 l 1.79500 a0.0016 a0.0016 OK:)
+ 6f1 D=0.0109(M=0.505)[-0.001]  1.79188/ 1.79189 l 1.79186 a0.0016 a0.0015 OK:)
+ 7f1 D=0.0206(M=0.500)[-0.001]  1.78664/ 1.78666 l 1.78660 a0.0015 a0.0015 OK:)
+ 8f1 D=0.0134(M=0.505)[-0.002]  1.78034/ 1.78035 l 1.78031 a0.0015 a0.0015 OK:)
+ 9f1 D=0.0215(M=0.500)[0.000]  1.77300/ 1.77302 l 1.77297 a0.0015 a0.0015 OK:)
+10f1 D=0.0295(M=0.505)[-0.002]  1.76147/ 1.76150 l 1.76144 a0.0015 a0.0014 OK:)
+11f1 D=0.0331(M=0.505)[0.002]  1.74991/ 1.74995 l 1.74991 a0.0014 a0.0014 OK:)
+12f1 D=0.0395(M=0.500)[-0.002]  1.73420/ 1.73424 l 1.73417 a0.0014 a0.0014 OK:)
+13f1 D=0.0424(M=0.505)[-0.002]  1.71740/ 1.71744 l 1.71740 a0.0014 a0.0014 OK:)
+14f1 D=0.0527(M=0.500)[-0.002]  1.69749/ 1.69754 l 1.69747 a0.0014 a0.0014 OK:)
+15f1 D=0.0599(M=0.505)[0.001]  1.67440/ 1.67446 l 1.67440 a0.0014 a0.0013 OK:)
+16f1 D=0.0691(M=0.505)[0.000]  1.64924/ 1.64931 l 1.64924 a0.0013 a0.0013 OK:)
+17f1 D=0.0763(M=0.500)[-0.002]  1.61777/ 1.61785 l 1.61777 a0.0013 a0.0013 OK:)
+18f1 D=0.0819(M=0.505)[0.000]  1.58630/ 1.58638 l 1.58631 a0.0013 a0.0013 OK:)
+19f1 D=0.0914(M=0.505)[0.002]  1.54856/ 1.54865 l 1.54857 a0.0013 a0.0012 OK:)
+20f1 D=0.1031(M=0.505)[0.002]  1.50870/ 1.50880 l 1.50872 a0.0013 a0.0012 OK:)
+21f1 D=0.1108(M=0.505)[0.002]  1.46571/ 1.46582 l 1.46572 a0.0012 a0.0012 OK:)
+22f1 D=0.1166(M=0.505)[-0.001]  1.41746/ 1.41758 l 1.41749 a0.0012 a0.0012 OK:)
+23f1 D=0.1310(M=0.500)[0.000]  1.36713/ 1.36726 l 1.36715 a0.0012 a0.0012 OK:)
+24f1 D=0.1380(M=0.505)[0.001]  1.31154/ 1.31167 l 1.31157 a0.0012 a0.0012 OK:)
+25f1 D=0.1435(M=0.500)[-0.001]  1.25492/ 1.25506 l 1.25495 a0.0012 a0.0012 OK:)
+26f1 D=0.1527(M=0.505)[0.001]  1.19200/ 1.19215 l 1.19203 a0.0012 a0.0011 OK:)
+27f1 D=0.1612(M=0.500)[-0.002]  1.12802/ 1.12818 l 1.12807 a0.0011 a0.0011 OK:)
+28f1 D=0.1696(M=0.500)[-0.000]  1.05987/ 1.06004 l 1.05991 a0.0011 a0.0011 OK:)
+29f1 D=0.1712(M=0.505)[0.001]  0.98960/ 0.98977 l 0.98965 a0.0011 a0.0011 OK:)
+30f1 D=0.1748(M=0.500)[-0.002]  0.91620/ 0.91637 l 0.91625 a0.0011 a0.0011 OK:)
+31f1 D=0.1879(M=0.500)[-0.000]  0.84176/ 0.84195 l 0.84180 a0.0011 a0.0011 OK:)
+32f1 D=0.1924(M=0.505)[0.001]  0.76354/ 0.76374 l 0.76360 a0.0011 a0.0011 OK:)
+33f1 D=0.1965(M=0.500)[0.000]  0.68548/ 0.68568 l 0.68553 a0.0011 a0.0011 OK:)
+34f1 D=0.3824(M=0.495)[-0.001]  0.60416/ 0.60455 l 0.60421 a0.0011 a0.0011 OK:)
+
+ 0f2 D=0.0098(M=0.505)[0.002]  1.75478/ 1.75477 l 1.75476 a0.0017 a0.0016 OK:)
+ 1f2 D=0.0007(M=0.505)[-0.001]  1.75581/ 1.75581 l 1.75578 a0.0016 a0.0016 OK:)
+ 2f2 D=0.0013(M=0.505)[0.001]  1.75579/ 1.75579 l 1.75578 a0.0016 a0.0016 OK:)
+ 3f2 D=0.0017(M=0.505)[0.000]  1.75581/ 1.75581 l 1.75578 a0.0016 a0.0016 OK:)
+ 4f2 D=0.0026(M=0.505)[0.002]  1.75376/ 1.75376 l 1.75374 a0.0016 a0.0015 OK:)
+ 5f2 D=0.0041(M=0.505)[-0.001]  1.75169/ 1.75170 l 1.75169 a0.0015 a0.0015 OK:)
+ 6f2 D=0.0039(M=0.505)[0.000]  1.74864/ 1.74864 l 1.74862 a0.0015 a0.0015 OK:)
+ 7f2 D=0.0027(M=0.505)[0.001]  1.74351/ 1.74352 l 1.74351 a0.0015 a0.0014 OK:)
+ 8f2 D=0.0097(M=0.505)[0.001]  1.73738/ 1.73739 l 1.73737 a0.0015 a0.0014 OK:)
+ 9f2 D=0.0109(M=0.505)[0.001]  1.73022/ 1.73023 l 1.73021 a0.0014 a0.0014 OK:)
+10f2 D=0.0100(M=0.505)[-0.000]  1.71895/ 1.71896 l 1.71895 a0.0014 a0.0014 OK:)
+11f2 D=0.0151(M=0.505)[0.001]  1.70771/ 1.70773 l 1.70770 a0.0014 a0.0013 OK:)
+12f2 D=0.0181(M=0.505)[0.001]  1.69234/ 1.69236 l 1.69235 a0.0013 a0.0013 OK:)
+13f2 D=0.0207(M=0.505)[0.000]  1.67599/ 1.67601 l 1.67598 a0.0013 a0.0013 OK:)
+14f2 D=0.0240(M=0.505)[0.000]  1.65653/ 1.65656 l 1.65654 a0.0013 a0.0013 OK:)
+15f2 D=0.0258(M=0.500)[-0.002]  1.63403/ 1.63405 l 1.63403 a0.0013 a0.0013 OK:)
+16f2 D=0.0302(M=0.505)[-0.001]  1.60947/ 1.60950 l 1.60948 a0.0013 a0.0012 OK:)
+17f2 D=0.0343(M=0.500)[-0.001]  1.57877/ 1.57880 l 1.57878 a0.0012 a0.0012 OK:)
+18f2 D=0.0383(M=0.505)[-0.000]  1.54808/ 1.54812 l 1.54809 a0.0012 a0.0012 OK:)
+19f2 D=0.0440(M=0.500)[-0.002]  1.51124/ 1.51128 l 1.51125 a0.0012 a0.0012 OK:)
+20f2 D=0.0438(M=0.505)[0.002]  1.47236/ 1.47241 l 1.47238 a0.0012 a0.0012 OK:)
+21f2 D=0.0499(M=0.500)[-0.002]  1.43041/ 1.43046 l 1.43043 a0.0012 a0.0012 OK:)
+22f2 D=0.0548(M=0.505)[0.000]  1.38334/ 1.38340 l 1.38336 a0.0012 a0.0011 OK:)
+23f2 D=0.0572(M=0.500)[0.000]  1.33423/ 1.33428 l 1.33425 a0.0011 a0.0011 OK:)
+24f2 D=0.0614(M=0.500)[-0.002]  1.28000/ 1.28006 l 1.28002 a0.0011 a0.0011 OK:)
+25f2 D=0.0678(M=0.500)[-0.002]  1.22475/ 1.22482 l 1.22477 a0.0011 a0.0011 OK:)
+26f2 D=0.0690(M=0.505)[0.002]  1.16336/ 1.16342 l 1.16339 a0.0011 a0.0011 OK:)
+27f2 D=0.0717(M=0.500)[-0.002]  1.10095/ 1.10102 l 1.10097 a0.0011 a0.0011 OK:)
+28f2 D=0.0744(M=0.500)[-0.001]  1.03444/ 1.03451 l 1.03447 a0.0011 a0.0011 OK:)
+29f2 D=0.0794(M=0.500)[-0.002]  0.96589/ 0.96597 l 0.96592 a0.0011 a0.0011 OK:)
+30f2 D=0.0833(M=0.505)[0.002]  0.89427/ 0.89435 l 0.89430 a0.0011 a0.0011 OK:)
+31f2 D=0.0842(M=0.500)[-0.000]  0.82162/ 0.82170 l 0.82165 a0.0011 a0.0011 OK:)
+32f2 D=0.0843(M=0.505)[0.002]  0.74559/ 0.74567 l 0.74561 a0.0011 a0.0010 OK:)
+33f2 D=0.0860(M=0.500)[-0.000]  0.66961/ 0.66970 l 0.66964 a0.0010 a0.0010 OK:)
+34f2 D=0.1706(M=0.505)[-0.000]  0.59052/ 0.59069 l 0.59055 a0.0011 a0.0010 OK:)
+(0, 0) _d1=0.159046 _d2=0.048673... d1=0.055776 d2=-0.057160 OK OK
+(1, 1) _d1=0.171601 _d2=0.029744... d1=0.071289 d2=-0.073057 OK OK
+(2, 2) _d1=0.151400 _d2=0.053856... d1=0.049424 d2=-0.050650 OK OK
+(3, 3) _d1=0.166422 _d2=0.033802... d1=0.066719 d2=-0.068374 OK OK
+(4, 4) _d1=0.163292 _d2=0.033889... d1=0.065112 d2=-0.066727 OK OK
+(5, 5) _d1=0.149662 _d2=0.051079... d1=0.049910 d2=-0.051148 OK OK
+(6, 6) _d1=0.164404 _d2=0.029222... d1=0.067945 d2=-0.069630 OK OK
+(7, 7) _d1=0.150690 _d2=0.045504... d1=0.053144 d2=-0.054462 OK OK
+(8, 8) _d1=0.157857 _d2=0.032344... d1=0.063148 d2=-0.064714 OK OK
+(9, 9) _d1=0.155813 _d2=0.036122... d1=0.060282 d2=-0.061778 OK OK
+(10, 10) _d1=0.143472 _d2=0.047188... d1=0.048713 d2=-0.049921 OK OK
+(11, 11) _d1=0.161366 _d2=0.024177... d1=0.068887 d2=-0.070596 OK OK
+(12, 12) _d1=0.136317 _d2=0.050945... d1=0.043302 d2=-0.044376 OK OK
+(13, 13) _d1=0.154900 _d2=0.026957... d1=0.064298 d2=-0.065892 OK OK
+(14, 14) _d1=0.139302 _d2=0.043037... d1=0.048653 d2=-0.049860 OK OK
+(15, 15) _d1=0.143740 _d2=0.034215... d1=0.055176 d2=-0.056544 OK OK
+(16, 16) _d1=0.141181 _d2=0.036442... d1=0.052810 d2=-0.054119 OK OK
+(17, 17) _d1=0.134143 _d2=0.037882... d1=0.048589 d2=-0.049793 OK OK
+(18, 18) _d1=0.138869 _d2=0.032504... d1=0.053575 d2=-0.054902 OK OK
+(19, 19) _d1=0.126859 _d2=0.041207... d1=0.043324 d2=-0.044397 OK OK
+(20, 20) _d1=0.130930 _d2=0.031732... d1=0.049982 d2=-0.051220 OK OK
+(21, 21) _d1=0.123076 _d2=0.039193... d1=0.042415 d2=-0.043465 OK OK
+(22, 22) _d1=0.123131 _d2=0.031697... d1=0.046100 d2=-0.047241 OK OK
+(23, 23) _d1=0.115348 _d2=0.040868... d1=0.037734 d2=-0.038667 OK OK
+(24, 24) _d1=0.114612 _d2=0.031877... d1=0.041752 d2=-0.042785 OK OK
+(25, 25) _d1=0.111679 _d2=0.035799... d1=0.038372 d2=-0.039321 OK OK
+(26, 26) _d1=0.100220 _d2=0.039823... d1=0.030679 d2=-0.031437 OK OK
+(27, 27) _d1=0.106543 _d2=0.030246... d1=0.038513 d2=-0.039464 OK OK
+(28, 28) _d1=0.088683 _d2=0.045851... d1=0.021968 d2=-0.022510 OK OK
+(29, 29) _d1=0.096552 _d2=0.031596... d1=0.032858 d2=-0.033668 OK OK
+(30, 30) _d1=0.086636 _d2=0.037345... d1=0.025094 d2=-0.025712 OK OK
+(31, 31) _d1=0.077415 _d2=0.050053... d1=0.014282 d2=-0.014634 OK OK
+(32, 32) _d1=0.075783 _d2=0.040273... d1=0.018231 d2=-0.018672 OK OK
+(33, 33) _d1=0.069319 _d2=0.050336... d1=0.010076 d2=-0.010316 OK OK
+(34, 34) _d1=0.101394 _d2=0.149458... d1=-0.022337 d2=0.022855 OK OK
+(2, 1) _d1=0.151400 _d2=0.029744... d1=0.061188 d2=-0.062706 OK OK
+(2, 3) _d1=0.151400 _d2=0.033802... d1=0.059208 d2=-0.060677 OK OK
+(5, 4) _d1=0.149662 _d2=0.033889... d1=0.058316 d2=-0.059833 OK OK
+(5, 6) _d1=0.149662 _d2=0.029222... d1=0.060549 d2=-0.061942 OK OK
+(8, 7) _d1=0.157857 _d2=0.045504... d1=0.056805 d2=-0.058420 OK OK
+(8, 9) _d1=0.157857 _d2=0.036122... d1=0.061232 d2=-0.062491 OK OK
+(11, 10) _d1=0.161366 _d2=0.047188... d1=0.057811 d2=-0.059635 OK OK
+(11, 12) _d1=0.161366 _d2=0.050945... d1=0.055602 d2=-0.056468 OK OK
+(14, 13) _d1=0.139302 _d2=0.026957... d1=0.056651 d2=-0.058737 OK OK
+(14, 15) _d1=0.139302 _d2=0.034215... d1=0.052728 d2=-0.053300 OK OK
+(17, 16) _d1=0.134143 _d2=0.036442... d1=0.049630 d2=-0.051849 OK OK
+(17, 18) _d1=0.134143 _d2=0.032504... d1=0.050898 d2=-0.051145 OK OK
+(20, 19) _d1=0.130930 _d2=0.041207... d1=0.045877 d2=-0.048255 OK OK
+(20, 21) _d1=0.130930 _d2=0.039193... d1=0.045781 d2=-0.045578 OK OK
+(23, 22) _d1=0.115348 _d2=0.031697... d1=0.042757 d2=-0.045429 OK OK
+(23, 24) _d1=0.115348 _d2=0.031877... d1=0.041461 d2=-0.040760 OK OK
+(26, 25) _d1=0.100220 _d2=0.035799... d1=0.033518 d2=-0.036159 OK OK
+(26, 27) _d1=0.100220 _d2=0.030246... d1=0.034515 d2=-0.033470 OK OK
+(29, 28) _d1=0.096552 _d2=0.045851... d1=0.027385 d2=-0.030052 OK OK
+(29, 30) _d1=0.096552 _d2=0.037345... d1=0.028593 d2=-0.027125 OK OK
+(32, 31) _d1=0.075783 _d2=0.050053... d1=0.015726 d2=-0.017757 OK OK
+(32, 33) _d1=0.075783 _d2=0.050336... d1=0.010519 d2=-0.009672 OK OK
+
+ t=0 p[ 1.7  1.7  1.7  1.7] -1 0 [  0.0(1) 100.0(1)] [  0.0(1) 100.0(1)]
+ text=P-1F1t0F1
+ getReperPointsPince ... l=0.260282 coeff=0.000000
+ 0 dist rp=0.260281
+ getReperPointsPince ... l=0.776946 coeff=0.000000
+ 1 dist rp=0.776940
+ getReperPointsPince ... l=1.249430 coeff=0.000000
+ 2 dist rp=1.249421
+ getReperPointsPince ... l=1.683975 coeff=0.000000
+ 3 dist rp=1.683965
+ getReperPointsPince ... l=0.242673 coeff=0.000000
+ 4 dist rp=0.242672
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 5 dist rp=0.000000
+ getReperPointsPince ... l=0.082507 coeff=0.000000
+ 6 dist rp=0.082507
+ getReperPointsPince ... l=0.169051 coeff=0.000000
+ 7 dist rp=0.169051
+ getReperPointsPince ... l=0.346802 coeff=0.000000
+ 8 dist rp=0.346800
+ getReperPointsPince ... l=0.535588 coeff=0.000000
+ 9 dist rp=0.535584
+ getReperPointsPince ... l=1.019042 coeff=0.000000
+ 10 dist rp=1.019034
+ getReperPointsPince ... l=0.260282 coeff=1.000059
+ 0 dist rp=0.001484
+ getReperPointsPince ... l=0.776946 coeff=1.000059
+ 1 dist rp=0.001727
+ getReperPointsPince ... l=1.249430 coeff=1.000059
+ 2 dist rp=0.001728
+ getReperPointsPince ... l=1.683975 coeff=1.000059
+ 3 dist rp=0.000056
+ getReperPointsPince ... l=0.242673 coeff=1.000059
+ 4 dist rp=0.001377
+ getReperPointsPince ... l=0.000000 coeff=1.000059
+ 5 dist rp=0.000000
+ getReperPointsPince ... l=0.082507 coeff=1.000059
+ 6 dist rp=0.000166
+ getReperPointsPince ... l=0.169051 coeff=1.000059
+ 7 dist rp=0.000768
+ getReperPointsPince ... l=0.346802 coeff=1.000059
+ 8 dist rp=0.001727
+ getReperPointsPince ... l=0.535588 coeff=1.000059
+ 9 dist rp=0.001727
+ getReperPointsPince ... l=1.019042 coeff=1.000059
+ 10 dist rp=0.001728
+
+ t=1 p[ 1.7  1.7  1.7  1.7] 0 1 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P0F1t1F1
+ getReperPointsPince ... l=0.312257 coeff=1.000059
+ 0 dist rp=0.001455
+ getReperPointsPince ... l=0.828921 coeff=1.000059
+ 1 dist rp=0.001693
+ getReperPointsPince ... l=1.301405 coeff=1.000059
+ 2 dist rp=0.001694
+ getReperPointsPince ... l=1.735950 coeff=1.000059
+ 3 dist rp=0.000051
+ getReperPointsPince ... l=0.294648 coeff=1.000059
+ 4 dist rp=0.001350
+ getReperPointsPince ... l=0.051969 coeff=1.000059
+ 5 dist rp=0.000007
+ getReperPointsPince ... l=-0.000000 coeff=1.000059
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.051969 coeff=1.000059
+ 7 dist rp=0.000007
+ getReperPointsPince ... l=0.134482 coeff=1.000059
+ 8 dist rp=0.000163
+ getReperPointsPince ... l=0.221026 coeff=1.000059
+ 9 dist rp=0.000753
+ getReperPointsPince ... l=0.398777 coeff=1.000059
+ 10 dist rp=0.001693
+ getReperPointsPince ... l=0.587563 coeff=1.000059
+ 11 dist rp=0.001693
+ getReperPointsPince ... l=1.071017 coeff=1.000059
+ 12 dist rp=0.001693
+ getReperPointsPince ... l=0.312439 coeff=1.000057
+ 0 dist rp=0.001459
+ getReperPointsPince ... l=0.829404 coeff=1.000057
+ 1 dist rp=0.001698
+ getReperPointsPince ... l=1.302164 coeff=1.000057
+ 2 dist rp=0.001699
+ getReperPointsPince ... l=1.736962 coeff=1.000057
+ 3 dist rp=0.000068
+ getReperPointsPince ... l=0.294820 coeff=1.000057
+ 4 dist rp=0.001354
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 5 dist rp=0.000002
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000225
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 7 dist rp=0.000002
+ getReperPointsPince ... l=0.134560 coeff=1.000057
+ 8 dist rp=0.000163
+ getReperPointsPince ... l=0.221155 coeff=1.000057
+ 9 dist rp=0.000755
+ getReperPointsPince ... l=0.399009 coeff=1.000057
+ 10 dist rp=0.001698
+ getReperPointsPince ... l=0.587906 coeff=1.000057
+ 11 dist rp=0.001698
+ getReperPointsPince ... l=1.071641 coeff=1.000057
+ 12 dist rp=0.001699
+
+ t=2 p[ 1.7  1.7  1.7  1.7] 1 2 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P1F1t2F1
+ getReperPointsPince ... l=0.312439 coeff=1.000057
+ 0 dist rp=0.001431
+ getReperPointsPince ... l=0.829404 coeff=1.000057
+ 1 dist rp=0.001665
+ getReperPointsPince ... l=1.302164 coeff=1.000057
+ 2 dist rp=0.001666
+ getReperPointsPince ... l=1.736962 coeff=1.000057
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.294820 coeff=1.000057
+ 4 dist rp=0.001328
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 5 dist rp=0.000003
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000220
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 7 dist rp=0.000003
+ getReperPointsPince ... l=0.134560 coeff=1.000057
+ 8 dist rp=0.000160
+ getReperPointsPince ... l=0.221155 coeff=1.000057
+ 9 dist rp=0.000740
+ getReperPointsPince ... l=0.399009 coeff=1.000057
+ 10 dist rp=0.001664
+ getReperPointsPince ... l=0.587906 coeff=1.000057
+ 11 dist rp=0.001664
+ getReperPointsPince ... l=1.071641 coeff=1.000057
+ 12 dist rp=0.001665
+ getReperPointsPince ... l=0.312439 coeff=1.000058
+ 0 dist rp=0.001423
+ getReperPointsPince ... l=0.829404 coeff=1.000058
+ 1 dist rp=0.001655
+ getReperPointsPince ... l=1.302164 coeff=1.000058
+ 2 dist rp=0.001656
+ getReperPointsPince ... l=1.736962 coeff=1.000058
+ 3 dist rp=0.000051
+ getReperPointsPince ... l=0.294820 coeff=1.000058
+ 4 dist rp=0.001320
+ getReperPointsPince ... l=0.051999 coeff=1.000058
+ 5 dist rp=0.000005
+ getReperPointsPince ... l=-0.000000 coeff=1.000058
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.213234
+ getReperPointsPince ... l=0.051999 coeff=1.000058
+ 7 dist rp=0.000005
+ getReperPointsPince ... l=0.134560 coeff=1.000058
+ 8 dist rp=0.000160
+ getReperPointsPince ... l=0.221155 coeff=1.000058
+ 9 dist rp=0.000736
+ getReperPointsPince ... l=0.399009 coeff=1.000058
+ 10 dist rp=0.001655
+ getReperPointsPince ... l=0.587906 coeff=1.000058
+ 11 dist rp=0.001655
+ getReperPointsPince ... l=1.071641 coeff=1.000058
+ 12 dist rp=0.001656
+
+ t=3 p[ 1.7  1.7  1.7  1.7] 2 3 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P2F1t3F1
+ getReperPointsPince ... l=0.312439 coeff=1.000058
+ 0 dist rp=0.001423
+ getReperPointsPince ... l=0.829404 coeff=1.000058
+ 1 dist rp=0.001655
+ getReperPointsPince ... l=1.302164 coeff=1.000058
+ 2 dist rp=0.001656
+ getReperPointsPince ... l=1.736962 coeff=1.000058
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.294820 coeff=1.000058
+ 4 dist rp=0.001321
+ getReperPointsPince ... l=0.051999 coeff=1.000058
+ 5 dist rp=0.000007
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 6 dist rp=0.000215
+ getReperPointsPince ... l=0.051999 coeff=1.000058
+ 7 dist rp=0.000007
+ getReperPointsPince ... l=0.134560 coeff=1.000058
+ 8 dist rp=0.000160
+ getReperPointsPince ... l=0.221155 coeff=1.000058
+ 9 dist rp=0.000737
+ getReperPointsPince ... l=0.399009 coeff=1.000058
+ 10 dist rp=0.001655
+ getReperPointsPince ... l=0.587906 coeff=1.000058
+ 11 dist rp=0.001655
+ getReperPointsPince ... l=1.071641 coeff=1.000058
+ 12 dist rp=0.001656
+ getReperPointsPince ... l=0.312439 coeff=1.000057
+ 0 dist rp=0.001421
+ getReperPointsPince ... l=0.829404 coeff=1.000057
+ 1 dist rp=0.001653
+ getReperPointsPince ... l=1.302164 coeff=1.000057
+ 2 dist rp=0.001654
+ getReperPointsPince ... l=1.736962 coeff=1.000057
+ 3 dist rp=0.000065
+ getReperPointsPince ... l=0.294820 coeff=1.000057
+ 4 dist rp=0.001319
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 5 dist rp=0.000002
+ getReperPointsPince ... l=-0.000000 coeff=1.000057
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.209671
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 7 dist rp=0.000002
+ getReperPointsPince ... l=0.134560 coeff=1.000057
+ 8 dist rp=0.000160
+ getReperPointsPince ... l=0.221155 coeff=1.000057
+ 9 dist rp=0.000736
+ getReperPointsPince ... l=0.399009 coeff=1.000057
+ 10 dist rp=0.001653
+ getReperPointsPince ... l=0.587906 coeff=1.000057
+ 11 dist rp=0.001653
+ getReperPointsPince ... l=1.071641 coeff=1.000057
+ 12 dist rp=0.001654
+
+ t=4 p[ 1.6  1.6  1.6  1.6] 3 4 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P3F1t4F1
+ getReperPointsPince ... l=0.312439 coeff=1.000057
+ 0 dist rp=0.001365
+ getReperPointsPince ... l=0.829404 coeff=1.000057
+ 1 dist rp=0.001588
+ getReperPointsPince ... l=1.302164 coeff=1.000057
+ 2 dist rp=0.001589
+ getReperPointsPince ... l=1.736962 coeff=1.000057
+ 3 dist rp=0.000067
+ getReperPointsPince ... l=0.294820 coeff=1.000057
+ 4 dist rp=0.001266
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 5 dist rp=0.000005
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000213
+ getReperPointsPince ... l=0.051999 coeff=1.000057
+ 7 dist rp=0.000005
+ getReperPointsPince ... l=0.134560 coeff=1.000057
+ 8 dist rp=0.000152
+ getReperPointsPince ... l=0.221155 coeff=1.000057
+ 9 dist rp=0.000705
+ getReperPointsPince ... l=0.399009 coeff=1.000057
+ 10 dist rp=0.001588
+ getReperPointsPince ... l=0.587906 coeff=1.000057
+ 11 dist rp=0.001588
+ getReperPointsPince ... l=1.071641 coeff=1.000057
+ 12 dist rp=0.001589
+ getReperPointsPince ... l=0.312075 coeff=1.000056
+ 0 dist rp=0.001372
+ getReperPointsPince ... l=0.828438 coeff=1.000056
+ 1 dist rp=0.001597
+ getReperPointsPince ... l=1.300646 coeff=1.000056
+ 2 dist rp=0.001598
+ getReperPointsPince ... l=1.734938 coeff=1.000056
+ 3 dist rp=0.000065
+ getReperPointsPince ... l=0.294476 coeff=1.000056
+ 4 dist rp=0.001273
+ getReperPointsPince ... l=0.051939 coeff=1.000056
+ 5 dist rp=0.000001
+ getReperPointsPince ... l=-0.000000 coeff=1.000056
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.206621
+ getReperPointsPince ... l=0.051939 coeff=1.000056
+ 7 dist rp=0.000001
+ getReperPointsPince ... l=0.134404 coeff=1.000056
+ 8 dist rp=0.000153
+ getReperPointsPince ... l=0.220897 coeff=1.000056
+ 9 dist rp=0.000709
+ getReperPointsPince ... l=0.398544 coeff=1.000056
+ 10 dist rp=0.001597
+ getReperPointsPince ... l=0.587220 coeff=1.000056
+ 11 dist rp=0.001597
+ getReperPointsPince ... l=1.070392 coeff=1.000056
+ 12 dist rp=0.001598
+
+ t=5 p[ 1.6  1.6  1.6  1.6] 4 5 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P4F1t5F1
+ getReperPointsPince ... l=0.312075 coeff=1.000056
+ 0 dist rp=0.001373
+ getReperPointsPince ... l=0.828438 coeff=1.000056
+ 1 dist rp=0.001597
+ getReperPointsPince ... l=1.300646 coeff=1.000056
+ 2 dist rp=0.001598
+ getReperPointsPince ... l=1.734938 coeff=1.000056
+ 3 dist rp=0.000062
+ getReperPointsPince ... l=0.294476 coeff=1.000056
+ 4 dist rp=0.001274
+ getReperPointsPince ... l=0.051939 coeff=1.000056
+ 5 dist rp=0.000006
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000208
+ getReperPointsPince ... l=0.051939 coeff=1.000056
+ 7 dist rp=0.000006
+ getReperPointsPince ... l=0.134404 coeff=1.000056
+ 8 dist rp=0.000155
+ getReperPointsPince ... l=0.220897 coeff=1.000056
+ 9 dist rp=0.000712
+ getReperPointsPince ... l=0.398544 coeff=1.000056
+ 10 dist rp=0.001597
+ getReperPointsPince ... l=0.587220 coeff=1.000056
+ 11 dist rp=0.001597
+ getReperPointsPince ... l=1.070392 coeff=1.000056
+ 12 dist rp=0.001597
+ getReperPointsPince ... l=0.311710 coeff=1.000057
+ 0 dist rp=0.001372
+ getReperPointsPince ... l=0.827471 coeff=1.000057
+ 1 dist rp=0.001596
+ getReperPointsPince ... l=1.299128 coeff=1.000057
+ 2 dist rp=0.001596
+ getReperPointsPince ... l=1.732913 coeff=1.000057
+ 3 dist rp=0.000051
+ getReperPointsPince ... l=0.294133 coeff=1.000057
+ 4 dist rp=0.001273
+ getReperPointsPince ... l=0.051878 coeff=1.000057
+ 5 dist rp=0.000004
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000208
+ getReperPointsPince ... l=0.051878 coeff=1.000057
+ 7 dist rp=0.000004
+ getReperPointsPince ... l=0.134247 coeff=1.000057
+ 8 dist rp=0.000154
+ getReperPointsPince ... l=0.220639 coeff=1.000057
+ 9 dist rp=0.000711
+ getReperPointsPince ... l=0.398079 coeff=1.000057
+ 10 dist rp=0.001596
+ getReperPointsPince ... l=0.586535 coeff=1.000057
+ 11 dist rp=0.001596
+ getReperPointsPince ... l=1.069143 coeff=1.000057
+ 12 dist rp=0.001596
+
+ t=6 p[ 1.6  1.6  1.6  1.6] 5 6 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P5F1t6F1
+ getReperPointsPince ... l=0.311710 coeff=1.000057
+ 0 dist rp=0.001345
+ getReperPointsPince ... l=0.827471 coeff=1.000057
+ 1 dist rp=0.001564
+ getReperPointsPince ... l=1.299128 coeff=1.000057
+ 2 dist rp=0.001565
+ getReperPointsPince ... l=1.732913 coeff=1.000057
+ 3 dist rp=0.000051
+ getReperPointsPince ... l=0.294133 coeff=1.000057
+ 4 dist rp=0.001248
+ getReperPointsPince ... l=0.051878 coeff=1.000057
+ 5 dist rp=0.000009
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000204
+ getReperPointsPince ... l=0.051878 coeff=1.000057
+ 7 dist rp=0.000009
+ getReperPointsPince ... l=0.134247 coeff=1.000057
+ 8 dist rp=0.000151
+ getReperPointsPince ... l=0.220639 coeff=1.000057
+ 9 dist rp=0.000696
+ getReperPointsPince ... l=0.398079 coeff=1.000057
+ 10 dist rp=0.001564
+ getReperPointsPince ... l=0.586535 coeff=1.000057
+ 11 dist rp=0.001564
+ getReperPointsPince ... l=1.069143 coeff=1.000057
+ 12 dist rp=0.001564
+ getReperPointsPince ... l=0.311164 coeff=1.000055
+ 0 dist rp=0.001338
+ getReperPointsPince ... l=0.826021 coeff=1.000055
+ 1 dist rp=0.001557
+ getReperPointsPince ... l=1.296852 coeff=1.000055
+ 2 dist rp=0.001558
+ getReperPointsPince ... l=1.729877 coeff=1.000055
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.293617 coeff=1.000055
+ 4 dist rp=0.001242
+ getReperPointsPince ... l=0.051787 coeff=1.000055
+ 5 dist rp=0.000000
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000205
+ getReperPointsPince ... l=0.051787 coeff=1.000055
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.134011 coeff=1.000055
+ 8 dist rp=0.000150
+ getReperPointsPince ... l=0.220253 coeff=1.000055
+ 9 dist rp=0.000693
+ getReperPointsPince ... l=0.397382 coeff=1.000055
+ 10 dist rp=0.001557
+ getReperPointsPince ... l=0.585507 coeff=1.000055
+ 11 dist rp=0.001557
+ getReperPointsPince ... l=1.067270 coeff=1.000055
+ 12 dist rp=0.001558
+
+ t=7 p[ 1.5  1.5  1.5  1.5] 6 7 [  0.0(1) 100.0(1)] [  0.0(1) 100.0(1)]
+ text=P6F1t7F1
+ getReperPointsPince ... l=0.259371 coeff=1.000055
+ 0 dist rp=0.001312
+ getReperPointsPince ... l=0.774228 coeff=1.000055
+ 1 dist rp=0.001526
+ getReperPointsPince ... l=1.245059 coeff=1.000055
+ 2 dist rp=0.001527
+ getReperPointsPince ... l=1.678084 coeff=1.000055
+ 3 dist rp=0.000058
+ getReperPointsPince ... l=0.241824 coeff=1.000055
+ 4 dist rp=0.001217
+ getReperPointsPince ... l=0.082218 coeff=1.000055
+ 5 dist rp=0.000147
+ getReperPointsPince ... l=1.447051 coeff=1.000055
+ 6 dist rp=0.000045
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.082218 coeff=1.000055
+ 8 dist rp=0.000147
+ getReperPointsPince ... l=0.168460 coeff=1.000055
+ 9 dist rp=0.000679
+ getReperPointsPince ... l=0.345589 coeff=1.000055
+ 10 dist rp=0.001526
+ getReperPointsPince ... l=0.533714 coeff=1.000055
+ 11 dist rp=0.001526
+ getReperPointsPince ... l=1.015477 coeff=1.000055
+ 12 dist rp=0.001527
+ getReperPointsPince ... l=0.258629 coeff=1.000056
+ 0 dist rp=0.001306
+ getReperPointsPince ... l=0.777130 coeff=1.000056
+ 1 dist rp=0.001520
+ getReperPointsPince ... l=1.241419 coeff=1.000056
+ 2 dist rp=0.001521
+ getReperPointsPince ... l=1.673167 coeff=1.000056
+ 3 dist rp=0.000058
+ getReperPointsPince ... l=0.241133 coeff=1.000056
+ 4 dist rp=0.001212
+ getReperPointsPince ... l=0.081983 coeff=1.000056
+ 5 dist rp=0.000146
+ getReperPointsPince ... l=1.442815 coeff=1.000056
+ 6 dist rp=0.000046
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.081983 coeff=1.000056
+ 8 dist rp=0.000146
+ getReperPointsPince ... l=0.167979 coeff=1.000056
+ 9 dist rp=0.000676
+ getReperPointsPince ... l=0.344597 coeff=1.000056
+ 10 dist rp=0.001520
+ getReperPointsPince ... l=0.532171 coeff=1.000056
+ 11 dist rp=0.001520
+ getReperPointsPince ... l=1.012514 coeff=1.000056
+ 12 dist rp=0.001520
+
+ t=8 p[ 1.5  1.5  1.5  1.5] 7 8 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P7F1t8F1
+ getReperPointsPince ... l=0.310267 coeff=1.000056
+ 0 dist rp=0.001307
+ getReperPointsPince ... l=0.828768 coeff=1.000056
+ 1 dist rp=0.001520
+ getReperPointsPince ... l=1.293057 coeff=1.000056
+ 2 dist rp=0.001520
+ getReperPointsPince ... l=1.724805 coeff=1.000056
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.292771 coeff=1.000056
+ 4 dist rp=0.001213
+ getReperPointsPince ... l=0.051632 coeff=1.000056
+ 5 dist rp=0.000011
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000196
+ getReperPointsPince ... l=0.051632 coeff=1.000056
+ 7 dist rp=0.000011
+ getReperPointsPince ... l=0.133621 coeff=1.000056
+ 8 dist rp=0.000148
+ getReperPointsPince ... l=0.219617 coeff=1.000056
+ 9 dist rp=0.000678
+ getReperPointsPince ... l=0.396234 coeff=1.000056
+ 10 dist rp=0.001519
+ getReperPointsPince ... l=0.583809 coeff=1.000056
+ 11 dist rp=0.001519
+ getReperPointsPince ... l=1.064152 coeff=1.000056
+ 12 dist rp=0.001520
+ getReperPointsPince ... l=0.309175 coeff=1.000055
+ 0 dist rp=0.001297
+ getReperPointsPince ... l=0.829273 coeff=1.000055
+ 1 dist rp=0.001509
+ getReperPointsPince ... l=1.288504 coeff=1.000055
+ 2 dist rp=0.001510
+ getReperPointsPince ... l=1.718732 coeff=1.000055
+ 3 dist rp=0.000064
+ getReperPointsPince ... l=0.291740 coeff=1.000055
+ 4 dist rp=0.001204
+ getReperPointsPince ... l=0.051450 coeff=1.000055
+ 5 dist rp=0.000002
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000197
+ getReperPointsPince ... l=0.051450 coeff=1.000055
+ 7 dist rp=0.000002
+ getReperPointsPince ... l=0.133150 coeff=1.000055
+ 8 dist rp=0.000146
+ getReperPointsPince ... l=0.218843 coeff=1.000055
+ 9 dist rp=0.000672
+ getReperPointsPince ... l=0.394839 coeff=1.000055
+ 10 dist rp=0.001508
+ getReperPointsPince ... l=0.581753 coeff=1.000055
+ 11 dist rp=0.001508
+ getReperPointsPince ... l=1.060405 coeff=1.000055
+ 12 dist rp=0.001509
+
+ t=9 p[ 1.5  1.5  1.5  1.5] 8 9 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P8F1t9F1
+ getReperPointsPince ... l=0.309175 coeff=1.000055
+ 0 dist rp=0.001271
+ getReperPointsPince ... l=0.829273 coeff=1.000055
+ 1 dist rp=0.001479
+ getReperPointsPince ... l=1.288504 coeff=1.000055
+ 2 dist rp=0.001480
+ getReperPointsPince ... l=1.718732 coeff=1.000055
+ 3 dist rp=0.000060
+ getReperPointsPince ... l=0.291740 coeff=1.000055
+ 4 dist rp=0.001179
+ getReperPointsPince ... l=0.051450 coeff=1.000055
+ 5 dist rp=0.000009
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000194
+ getReperPointsPince ... l=0.051450 coeff=1.000055
+ 7 dist rp=0.000009
+ getReperPointsPince ... l=0.133150 coeff=1.000055
+ 8 dist rp=0.000143
+ getReperPointsPince ... l=0.218843 coeff=1.000055
+ 9 dist rp=0.000658
+ getReperPointsPince ... l=0.394839 coeff=1.000055
+ 10 dist rp=0.001478
+ getReperPointsPince ... l=0.581753 coeff=1.000055
+ 11 dist rp=0.001478
+ getReperPointsPince ... l=1.060405 coeff=1.000055
+ 12 dist rp=0.001479
+ getReperPointsPince ... l=0.307900 coeff=1.000055
+ 0 dist rp=0.001264
+ getReperPointsPince ... l=0.827559 coeff=1.000055
+ 1 dist rp=0.001472
+ getReperPointsPince ... l=1.283192 coeff=1.000055
+ 2 dist rp=0.001473
+ getReperPointsPince ... l=1.711646 coeff=1.000055
+ 3 dist rp=0.000065
+ getReperPointsPince ... l=0.290538 coeff=1.000055
+ 4 dist rp=0.001173
+ getReperPointsPince ... l=0.051238 coeff=1.000055
+ 5 dist rp=0.000001
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000195
+ getReperPointsPince ... l=0.051238 coeff=1.000055
+ 7 dist rp=0.000001
+ getReperPointsPince ... l=0.132601 coeff=1.000055
+ 8 dist rp=0.000142
+ getReperPointsPince ... l=0.217941 coeff=1.000055
+ 9 dist rp=0.000654
+ getReperPointsPince ... l=0.393212 coeff=1.000055
+ 10 dist rp=0.001471
+ getReperPointsPince ... l=0.579355 coeff=1.000055
+ 11 dist rp=0.001472
+ getReperPointsPince ... l=1.056034 coeff=1.000055
+ 12 dist rp=0.001472
+
+ t=10 p[ 1.5  1.5  1.5  1.5] 9 10 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P9F1t10F1
+ getReperPointsPince ... l=0.307900 coeff=1.000055
+ 0 dist rp=0.001265
+ getReperPointsPince ... l=0.827559 coeff=1.000055
+ 1 dist rp=0.001471
+ getReperPointsPince ... l=1.283192 coeff=1.000055
+ 2 dist rp=0.001473
+ getReperPointsPince ... l=1.711646 coeff=1.000055
+ 3 dist rp=0.000056
+ getReperPointsPince ... l=0.290538 coeff=1.000055
+ 4 dist rp=0.001174
+ getReperPointsPince ... l=0.051238 coeff=1.000055
+ 5 dist rp=0.000011
+ getReperPointsPince ... l=-0.000000 coeff=1.000055
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.051238 coeff=1.000055
+ 7 dist rp=0.000011
+ getReperPointsPince ... l=0.132601 coeff=1.000055
+ 8 dist rp=0.000144
+ getReperPointsPince ... l=0.217941 coeff=1.000055
+ 9 dist rp=0.000657
+ getReperPointsPince ... l=0.393212 coeff=1.000055
+ 10 dist rp=0.001471
+ getReperPointsPince ... l=0.579355 coeff=1.000055
+ 11 dist rp=0.001471
+ getReperPointsPince ... l=1.056034 coeff=1.000055
+ 12 dist rp=0.001472
+ getReperPointsPince ... l=0.305897 coeff=1.000055
+ 0 dist rp=0.001259
+ getReperPointsPince ... l=0.825563 coeff=1.000055
+ 1 dist rp=0.001466
+ getReperPointsPince ... l=1.274845 coeff=1.000055
+ 2 dist rp=0.001467
+ getReperPointsPince ... l=1.700512 coeff=1.000055
+ 3 dist rp=0.000056
+ getReperPointsPince ... l=0.288648 coeff=1.000055
+ 4 dist rp=0.001169
+ getReperPointsPince ... l=0.050905 coeff=1.000055
+ 5 dist rp=0.000002
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000190
+ getReperPointsPince ... l=0.050905 coeff=1.000055
+ 7 dist rp=0.000002
+ getReperPointsPince ... l=0.131739 coeff=1.000055
+ 8 dist rp=0.000142
+ getReperPointsPince ... l=0.216524 coeff=1.000055
+ 9 dist rp=0.000653
+ getReperPointsPince ... l=0.390654 coeff=1.000055
+ 10 dist rp=0.001465
+ getReperPointsPince ... l=0.575586 coeff=1.000055
+ 11 dist rp=0.001465
+ getReperPointsPince ... l=1.049164 coeff=1.000055
+ 12 dist rp=0.001466
+
+ t=11 p[ 1.4  1.4  1.4  1.4] 10 11 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P10F1t11F1
+ getReperPointsPince ... l=0.305897 coeff=1.000055
+ 0 dist rp=0.001235
+ getReperPointsPince ... l=0.825563 coeff=1.000055
+ 1 dist rp=0.001436
+ getReperPointsPince ... l=1.274845 coeff=1.000055
+ 2 dist rp=0.001437
+ getReperPointsPince ... l=1.700512 coeff=1.000055
+ 3 dist rp=0.000043
+ getReperPointsPince ... l=0.288648 coeff=1.000055
+ 4 dist rp=0.001146
+ getReperPointsPince ... l=0.050905 coeff=1.000055
+ 5 dist rp=0.000014
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000186
+ getReperPointsPince ... l=0.050905 coeff=1.000055
+ 7 dist rp=0.000014
+ getReperPointsPince ... l=0.131739 coeff=1.000055
+ 8 dist rp=0.000140
+ getReperPointsPince ... l=0.216524 coeff=1.000055
+ 9 dist rp=0.000640
+ getReperPointsPince ... l=0.390654 coeff=1.000055
+ 10 dist rp=0.001435
+ getReperPointsPince ... l=0.575586 coeff=1.000055
+ 11 dist rp=0.001436
+ getReperPointsPince ... l=1.049164 coeff=1.000055
+ 12 dist rp=0.001436
+ getReperPointsPince ... l=0.303894 coeff=1.000054
+ 0 dist rp=0.001234
+ getReperPointsPince ... l=0.821840 coeff=1.000054
+ 1 dist rp=0.001437
+ getReperPointsPince ... l=1.266498 coeff=1.000054
+ 2 dist rp=0.001438
+ getReperPointsPince ... l=1.689378 coeff=1.000054
+ 3 dist rp=0.000075
+ getReperPointsPince ... l=0.286758 coeff=1.000054
+ 4 dist rp=0.001145
+ getReperPointsPince ... l=0.050571 coeff=1.000054
+ 5 dist rp=0.000006
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000187
+ getReperPointsPince ... l=0.050571 coeff=1.000054
+ 7 dist rp=0.000006
+ getReperPointsPince ... l=0.130876 coeff=1.000054
+ 8 dist rp=0.000139
+ getReperPointsPince ... l=0.215106 coeff=1.000054
+ 9 dist rp=0.000639
+ getReperPointsPince ... l=0.388096 coeff=1.000054
+ 10 dist rp=0.001435
+ getReperPointsPince ... l=0.571818 coeff=1.000054
+ 11 dist rp=0.001436
+ getReperPointsPince ... l=1.042295 coeff=1.000054
+ 12 dist rp=0.001438
+
+ t=12 p[ 1.4  1.4  1.4  1.4] 11 12 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P11F1t12F1
+ getReperPointsPince ... l=0.303894 coeff=1.000054
+ 0 dist rp=0.001209
+ getReperPointsPince ... l=0.821840 coeff=1.000054
+ 1 dist rp=0.001407
+ getReperPointsPince ... l=1.266498 coeff=1.000054
+ 2 dist rp=0.001409
+ getReperPointsPince ... l=1.689378 coeff=1.000054
+ 3 dist rp=0.000062
+ getReperPointsPince ... l=0.286758 coeff=1.000054
+ 4 dist rp=0.001122
+ getReperPointsPince ... l=0.050571 coeff=1.000054
+ 5 dist rp=0.000014
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000183
+ getReperPointsPince ... l=0.050571 coeff=1.000054
+ 7 dist rp=0.000014
+ getReperPointsPince ... l=0.130876 coeff=1.000054
+ 8 dist rp=0.000137
+ getReperPointsPince ... l=0.215106 coeff=1.000054
+ 9 dist rp=0.000627
+ getReperPointsPince ... l=0.388096 coeff=1.000054
+ 10 dist rp=0.001405
+ getReperPointsPince ... l=0.571818 coeff=1.000054
+ 11 dist rp=0.001406
+ getReperPointsPince ... l=1.042295 coeff=1.000054
+ 12 dist rp=0.001408
+ getReperPointsPince ... l=0.301176 coeff=1.000055
+ 0 dist rp=0.001206
+ getReperPointsPince ... l=0.817798 coeff=1.000055
+ 1 dist rp=0.001406
+ getReperPointsPince ... l=1.255115 coeff=1.000055
+ 2 dist rp=0.001408
+ getReperPointsPince ... l=1.674184 coeff=1.000055
+ 3 dist rp=0.000053
+ getReperPointsPince ... l=0.284193 coeff=1.000055
+ 4 dist rp=0.001119
+ getReperPointsPince ... l=0.050113 coeff=1.000055
+ 5 dist rp=0.000005
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000183
+ getReperPointsPince ... l=0.050113 coeff=1.000055
+ 7 dist rp=0.000005
+ getReperPointsPince ... l=0.129701 coeff=1.000055
+ 8 dist rp=0.000136
+ getReperPointsPince ... l=0.213181 coeff=1.000055
+ 9 dist rp=0.000625
+ getReperPointsPince ... l=0.384623 coeff=1.000055
+ 10 dist rp=0.001404
+ getReperPointsPince ... l=0.566693 coeff=1.000055
+ 11 dist rp=0.001405
+ getReperPointsPince ... l=1.032932 coeff=1.000055
+ 12 dist rp=0.001407
+
+ t=13 p[ 1.4  1.4  1.4  1.4] 12 13 [  0.0(1) 100.0(1)] [  0.0(1) 100.0(1)]
+ text=P12F1t13F1
+ getReperPointsPince ... l=0.251057 coeff=1.000055
+ 0 dist rp=0.001209
+ getReperPointsPince ... l=0.767679 coeff=1.000055
+ 1 dist rp=0.001406
+ getReperPointsPince ... l=1.204996 coeff=1.000055
+ 2 dist rp=0.001407
+ getReperPointsPince ... l=1.624065 coeff=1.000055
+ 3 dist rp=0.000019
+ getReperPointsPince ... l=0.234074 coeff=1.000055
+ 4 dist rp=0.001122
+ getReperPointsPince ... l=0.079582 coeff=1.000055
+ 5 dist rp=0.000137
+ getReperPointsPince ... l=1.400477 coeff=1.000055
+ 6 dist rp=0.000006
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.079582 coeff=1.000055
+ 8 dist rp=0.000137
+ getReperPointsPince ... l=0.163062 coeff=1.000055
+ 9 dist rp=0.000627
+ getReperPointsPince ... l=0.334504 coeff=1.000055
+ 10 dist rp=0.001405
+ getReperPointsPince ... l=0.516573 coeff=1.000055
+ 11 dist rp=0.001405
+ getReperPointsPince ... l=0.982813 coeff=1.000055
+ 12 dist rp=0.001406
+ getReperPointsPince ... l=0.248628 coeff=1.000054
+ 0 dist rp=0.001197
+ getReperPointsPince ... l=0.761904 coeff=1.000054
+ 1 dist rp=0.001395
+ getReperPointsPince ... l=1.193339 coeff=1.000054
+ 2 dist rp=0.001397
+ getReperPointsPince ... l=1.608354 coeff=1.000054
+ 3 dist rp=0.000081
+ getReperPointsPince ... l=0.231809 coeff=1.000054
+ 4 dist rp=0.001111
+ getReperPointsPince ... l=0.078812 coeff=1.000054
+ 5 dist rp=0.000135
+ getReperPointsPince ... l=1.386930 coeff=1.000054
+ 6 dist rp=0.000069
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.078812 coeff=1.000054
+ 8 dist rp=0.000135
+ getReperPointsPince ... l=0.161484 coeff=1.000054
+ 9 dist rp=0.000621
+ getReperPointsPince ... l=0.331268 coeff=1.000054
+ 10 dist rp=0.001392
+ getReperPointsPince ... l=0.511576 coeff=1.000054
+ 11 dist rp=0.001393
+ getReperPointsPince ... l=0.973306 coeff=1.000054
+ 12 dist rp=0.001396
+
+ t=14 p[ 1.4  1.4  1.4  1.4] 13 14 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P13F1t14F1
+ getReperPointsPince ... l=0.298263 coeff=1.000054
+ 0 dist rp=0.001171
+ getReperPointsPince ... l=0.811538 coeff=1.000054
+ 1 dist rp=0.001365
+ getReperPointsPince ... l=1.242973 coeff=1.000054
+ 2 dist rp=0.001367
+ getReperPointsPince ... l=1.657989 coeff=1.000054
+ 3 dist rp=0.000056
+ getReperPointsPince ... l=0.281444 coeff=1.000054
+ 4 dist rp=0.001087
+ getReperPointsPince ... l=0.049629 coeff=1.000054
+ 5 dist rp=0.000017
+ getReperPointsPince ... l=-0.000000 coeff=1.000054
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.049629 coeff=1.000054
+ 7 dist rp=0.000017
+ getReperPointsPince ... l=0.128447 coeff=1.000054
+ 8 dist rp=0.000133
+ getReperPointsPince ... l=0.211119 coeff=1.000054
+ 9 dist rp=0.000607
+ getReperPointsPince ... l=0.380902 coeff=1.000054
+ 10 dist rp=0.001362
+ getReperPointsPince ... l=0.561211 coeff=1.000054
+ 11 dist rp=0.001363
+ getReperPointsPince ... l=1.022940 coeff=1.000054
+ 12 dist rp=0.001366
+ getReperPointsPince ... l=0.294803 coeff=1.000055
+ 0 dist rp=0.001160
+ getReperPointsPince ... l=0.805389 coeff=1.000055
+ 1 dist rp=0.001354
+ getReperPointsPince ... l=1.228555 coeff=1.000055
+ 2 dist rp=0.001356
+ getReperPointsPince ... l=1.638757 coeff=1.000055
+ 3 dist rp=0.000061
+ getReperPointsPince ... l=0.278179 coeff=1.000055
+ 4 dist rp=0.001076
+ getReperPointsPince ... l=0.049053 coeff=1.000055
+ 5 dist rp=0.000009
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000177
+ getReperPointsPince ... l=0.049053 coeff=1.000055
+ 7 dist rp=0.000009
+ getReperPointsPince ... l=0.126957 coeff=1.000055
+ 8 dist rp=0.000130
+ getReperPointsPince ... l=0.208670 coeff=1.000055
+ 9 dist rp=0.000600
+ getReperPointsPince ... l=0.376484 coeff=1.000055
+ 10 dist rp=0.001350
+ getReperPointsPince ... l=0.554701 coeff=1.000055
+ 11 dist rp=0.001352
+ getReperPointsPince ... l=1.011074 coeff=1.000055
+ 12 dist rp=0.001355
+
+ t=15 p[ 1.4  1.4  1.4  1.4] 14 15 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P14F1t15F1
+ getReperPointsPince ... l=0.294803 coeff=1.000055
+ 0 dist rp=0.001161
+ getReperPointsPince ... l=0.805389 coeff=1.000055
+ 1 dist rp=0.001352
+ getReperPointsPince ... l=1.228555 coeff=1.000055
+ 2 dist rp=0.001355
+ getReperPointsPince ... l=1.638757 coeff=1.000055
+ 3 dist rp=0.000039
+ getReperPointsPince ... l=0.278179 coeff=1.000055
+ 4 dist rp=0.001078
+ getReperPointsPince ... l=0.049053 coeff=1.000055
+ 5 dist rp=0.000021
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000173
+ getReperPointsPince ... l=0.049053 coeff=1.000055
+ 7 dist rp=0.000021
+ getReperPointsPince ... l=0.126957 coeff=1.000055
+ 8 dist rp=0.000133
+ getReperPointsPince ... l=0.208670 coeff=1.000055
+ 9 dist rp=0.000603
+ getReperPointsPince ... l=0.376484 coeff=1.000055
+ 10 dist rp=0.001349
+ getReperPointsPince ... l=0.554701 coeff=1.000055
+ 11 dist rp=0.001351
+ getReperPointsPince ... l=1.011074 coeff=1.000055
+ 12 dist rp=0.001354
+ getReperPointsPince ... l=0.290810 coeff=1.000054
+ 0 dist rp=0.001157
+ getReperPointsPince ... l=0.796064 coeff=1.000054
+ 1 dist rp=0.001351
+ getReperPointsPince ... l=1.211861 coeff=1.000054
+ 2 dist rp=0.001354
+ getReperPointsPince ... l=1.616478 coeff=1.000054
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.274411 coeff=1.000054
+ 4 dist rp=0.001074
+ getReperPointsPince ... l=0.048383 coeff=1.000054
+ 5 dist rp=0.000012
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000172
+ getReperPointsPince ... l=0.048383 coeff=1.000054
+ 7 dist rp=0.000012
+ getReperPointsPince ... l=0.125233 coeff=1.000054
+ 8 dist rp=0.000131
+ getReperPointsPince ... l=0.205842 coeff=1.000054
+ 9 dist rp=0.000600
+ getReperPointsPince ... l=0.371382 coeff=1.000054
+ 10 dist rp=0.001347
+ getReperPointsPince ... l=0.547177 coeff=1.000054
+ 11 dist rp=0.001349
+ getReperPointsPince ... l=0.997340 coeff=1.000054
+ 12 dist rp=0.001353
+
+ t=16 p[ 1.3  1.3  1.3  1.3] 15 16 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P15F1t16F1
+ getReperPointsPince ... l=0.290810 coeff=1.000054
+ 0 dist rp=0.001134
+ getReperPointsPince ... l=0.796064 coeff=1.000054
+ 1 dist rp=0.001322
+ getReperPointsPince ... l=1.211861 coeff=1.000054
+ 2 dist rp=0.001326
+ getReperPointsPince ... l=1.616478 coeff=1.000054
+ 3 dist rp=0.000043
+ getReperPointsPince ... l=0.274411 coeff=1.000054
+ 4 dist rp=0.001052
+ getReperPointsPince ... l=0.048383 coeff=1.000054
+ 5 dist rp=0.000022
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000172
+ getReperPointsPince ... l=0.048383 coeff=1.000054
+ 7 dist rp=0.000022
+ getReperPointsPince ... l=0.125233 coeff=1.000054
+ 8 dist rp=0.000130
+ getReperPointsPince ... l=0.205842 coeff=1.000054
+ 9 dist rp=0.000588
+ getReperPointsPince ... l=0.371382 coeff=1.000054
+ 10 dist rp=0.001318
+ getReperPointsPince ... l=0.547177 coeff=1.000054
+ 11 dist rp=0.001320
+ getReperPointsPince ... l=0.997340 coeff=1.000054
+ 12 dist rp=0.001324
+ getReperPointsPince ... l=0.286439 coeff=1.000055
+ 0 dist rp=0.001136
+ getReperPointsPince ... l=0.785686 coeff=1.000055
+ 1 dist rp=0.001328
+ getReperPointsPince ... l=1.193649 coeff=1.000055
+ 2 dist rp=0.001332
+ getReperPointsPince ... l=1.592186 coeff=1.000055
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.270287 coeff=1.000055
+ 4 dist rp=0.001054
+ getReperPointsPince ... l=0.047656 coeff=1.000055
+ 5 dist rp=0.000014
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000171
+ getReperPointsPince ... l=0.047656 coeff=1.000055
+ 7 dist rp=0.000014
+ getReperPointsPince ... l=0.123351 coeff=1.000055
+ 8 dist rp=0.000128
+ getReperPointsPince ... l=0.202749 coeff=1.000055
+ 9 dist rp=0.000588
+ getReperPointsPince ... l=0.365801 coeff=1.000055
+ 10 dist rp=0.001323
+ getReperPointsPince ... l=0.538954 coeff=1.000055
+ 11 dist rp=0.001325
+ getReperPointsPince ... l=0.982352 coeff=1.000055
+ 12 dist rp=0.001330
+
+ t=17 p[ 1.3  1.3  1.3  1.3] 16 17 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P16F1t17F1
+ getReperPointsPince ... l=0.286439 coeff=1.000055
+ 0 dist rp=0.001113
+ getReperPointsPince ... l=0.785686 coeff=1.000055
+ 1 dist rp=0.001299
+ getReperPointsPince ... l=1.193649 coeff=1.000055
+ 2 dist rp=0.001304
+ getReperPointsPince ... l=1.592186 coeff=1.000055
+ 3 dist rp=0.000039
+ getReperPointsPince ... l=0.270287 coeff=1.000055
+ 4 dist rp=0.001033
+ getReperPointsPince ... l=0.047656 coeff=1.000055
+ 5 dist rp=0.000025
+ getReperPointsPince ... l=-0.000000 coeff=1.000055
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.047656 coeff=1.000055
+ 7 dist rp=0.000025
+ getReperPointsPince ... l=0.123351 coeff=1.000055
+ 8 dist rp=0.000129
+ getReperPointsPince ... l=0.202749 coeff=1.000055
+ 9 dist rp=0.000578
+ getReperPointsPince ... l=0.365801 coeff=1.000055
+ 10 dist rp=0.001293
+ getReperPointsPince ... l=0.538954 coeff=1.000055
+ 11 dist rp=0.001296
+ getReperPointsPince ... l=0.982352 coeff=1.000055
+ 12 dist rp=0.001302
+ getReperPointsPince ... l=0.280989 coeff=1.000054
+ 0 dist rp=0.001106
+ getReperPointsPince ... l=0.770710 coeff=1.000054
+ 1 dist rp=0.001296
+ getReperPointsPince ... l=1.170883 coeff=1.000054
+ 2 dist rp=0.001300
+ getReperPointsPince ... l=1.561810 coeff=1.000054
+ 3 dist rp=0.000066
+ getReperPointsPince ... l=0.265144 coeff=1.000054
+ 4 dist rp=0.001026
+ getReperPointsPince ... l=0.046744 coeff=1.000054
+ 5 dist rp=0.000017
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000166
+ getReperPointsPince ... l=0.046744 coeff=1.000054
+ 7 dist rp=0.000017
+ getReperPointsPince ... l=0.121000 coeff=1.000054
+ 8 dist rp=0.000125
+ getReperPointsPince ... l=0.198890 coeff=1.000054
+ 9 dist rp=0.000573
+ getReperPointsPince ... l=0.358838 coeff=1.000054
+ 10 dist rp=0.001288
+ getReperPointsPince ... l=0.528688 coeff=1.000054
+ 11 dist rp=0.001292
+ getReperPointsPince ... l=0.963621 coeff=1.000054
+ 12 dist rp=0.001298
+
+ t=18 p[ 1.3  1.3  1.3  1.3] 17 18 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P17F1t18F1
+ getReperPointsPince ... l=0.280989 coeff=1.000054
+ 0 dist rp=0.001107
+ getReperPointsPince ... l=0.770710 coeff=1.000054
+ 1 dist rp=0.001293
+ getReperPointsPince ... l=1.170883 coeff=1.000054
+ 2 dist rp=0.001298
+ getReperPointsPince ... l=1.561810 coeff=1.000054
+ 3 dist rp=0.000033
+ getReperPointsPince ... l=0.265144 coeff=1.000054
+ 4 dist rp=0.001027
+ getReperPointsPince ... l=0.046744 coeff=1.000054
+ 5 dist rp=0.000026
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 6 dist rp=0.000166
+ getReperPointsPince ... l=0.046744 coeff=1.000054
+ 7 dist rp=0.000026
+ getReperPointsPince ... l=0.121000 coeff=1.000054
+ 8 dist rp=0.000128
+ getReperPointsPince ... l=0.198890 coeff=1.000054
+ 9 dist rp=0.000575
+ getReperPointsPince ... l=0.358838 coeff=1.000054
+ 10 dist rp=0.001287
+ getReperPointsPince ... l=0.528688 coeff=1.000054
+ 11 dist rp=0.001290
+ getReperPointsPince ... l=0.963621 coeff=1.000054
+ 12 dist rp=0.001296
+ getReperPointsPince ... l=0.275537 coeff=1.000055
+ 0 dist rp=0.001100
+ getReperPointsPince ... l=0.755735 coeff=1.000055
+ 1 dist rp=0.001289
+ getReperPointsPince ... l=1.148118 coeff=1.000055
+ 2 dist rp=0.001294
+ getReperPointsPince ... l=1.531435 coeff=1.000055
+ 3 dist rp=0.000072
+ getReperPointsPince ... l=0.260000 coeff=1.000055
+ 4 dist rp=0.001020
+ getReperPointsPince ... l=0.045832 coeff=1.000055
+ 5 dist rp=0.000018
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000166
+ getReperPointsPince ... l=0.045832 coeff=1.000055
+ 7 dist rp=0.000018
+ getReperPointsPince ... l=0.118649 coeff=1.000055
+ 8 dist rp=0.000125
+ getReperPointsPince ... l=0.195031 coeff=1.000055
+ 9 dist rp=0.000570
+ getReperPointsPince ... l=0.351875 coeff=1.000055
+ 10 dist rp=0.001281
+ getReperPointsPince ... l=0.518422 coeff=1.000055
+ 11 dist rp=0.001285
+ getReperPointsPince ... l=0.944890 coeff=1.000055
+ 12 dist rp=0.001292
+
+ t=19 p[ 1.3  1.3  1.3  1.3] 18 19 [  0.0(1) 100.0(1)] [  0.0(1) 100.0(1)]
+ text=P18F1t19F1
+ getReperPointsPince ... l=0.229700 coeff=1.000055
+ 0 dist rp=0.001076
+ getReperPointsPince ... l=0.709897 coeff=1.000055
+ 1 dist rp=0.001260
+ getReperPointsPince ... l=1.102281 coeff=1.000055
+ 2 dist rp=0.001266
+ getReperPointsPince ... l=1.485598 coeff=1.000055
+ 3 dist rp=0.000008
+ getReperPointsPince ... l=0.214163 coeff=1.000055
+ 4 dist rp=0.000998
+ getReperPointsPince ... l=0.072812 coeff=1.000055
+ 5 dist rp=0.000122
+ getReperPointsPince ... l=1.281085 coeff=1.000055
+ 6 dist rp=0.000003
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.072812 coeff=1.000055
+ 8 dist rp=0.000122
+ getReperPointsPince ... l=0.149194 coeff=1.000055
+ 9 dist rp=0.000558
+ getReperPointsPince ... l=0.306038 coeff=1.000055
+ 10 dist rp=0.001251
+ getReperPointsPince ... l=0.472585 coeff=1.000055
+ 11 dist rp=0.001255
+ getReperPointsPince ... l=0.899053 coeff=1.000055
+ 12 dist rp=0.001263
+ getReperPointsPince ... l=0.224235 coeff=1.000055
+ 0 dist rp=0.001078
+ getReperPointsPince ... l=0.691518 coeff=1.000055
+ 1 dist rp=0.001268
+ getReperPointsPince ... l=1.076053 coeff=1.000055
+ 2 dist rp=0.001275
+ getReperPointsPince ... l=1.450250 coeff=1.000055
+ 3 dist rp=0.000085
+ getReperPointsPince ... l=0.209067 coeff=1.000055
+ 4 dist rp=0.001000
+ getReperPointsPince ... l=0.071079 coeff=1.000055
+ 5 dist rp=0.000122
+ getReperPointsPince ... l=1.250603 coeff=1.000055
+ 6 dist rp=0.000074
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.071079 coeff=1.000055
+ 8 dist rp=0.000122
+ getReperPointsPince ... l=0.145644 coeff=1.000055
+ 9 dist rp=0.000558
+ getReperPointsPince ... l=0.298756 coeff=1.000055
+ 10 dist rp=0.001257
+ getReperPointsPince ... l=0.461340 coeff=1.000055
+ 11 dist rp=0.001262
+ getReperPointsPince ... l=0.877661 coeff=1.000055
+ 12 dist rp=0.001272
+
+ t=20 p[ 1.2  1.2  1.3  1.3] 19 20 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P19F1t20F1
+ getReperPointsPince ... l=0.268981 coeff=1.000055
+ 0 dist rp=0.001056
+ getReperPointsPince ... l=0.736264 coeff=1.000055
+ 1 dist rp=0.001238
+ getReperPointsPince ... l=1.120799 coeff=1.000055
+ 2 dist rp=0.001246
+ getReperPointsPince ... l=1.494996 coeff=1.000055
+ 3 dist rp=0.000026
+ getReperPointsPince ... l=0.253814 coeff=1.000055
+ 4 dist rp=0.000980
+ getReperPointsPince ... l=0.044741 coeff=1.000055
+ 5 dist rp=0.000033
+ getReperPointsPince ... l=-0.000000 coeff=1.000055
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.044741 coeff=1.000055
+ 7 dist rp=0.000033
+ getReperPointsPince ... l=0.115826 coeff=1.000055
+ 8 dist rp=0.000124
+ getReperPointsPince ... l=0.190390 coeff=1.000055
+ 9 dist rp=0.000549
+ getReperPointsPince ... l=0.343503 coeff=1.000055
+ 10 dist rp=0.001228
+ getReperPointsPince ... l=0.506087 coeff=1.000055
+ 11 dist rp=0.001232
+ getReperPointsPince ... l=0.922408 coeff=1.000055
+ 12 dist rp=0.001243
+ getReperPointsPince ... l=0.262072 coeff=1.000055
+ 0 dist rp=0.001061
+ getReperPointsPince ... l=0.715879 coeff=1.000055
+ 1 dist rp=0.001250
+ getReperPointsPince ... l=1.091963 coeff=1.000055
+ 2 dist rp=0.001258
+ getReperPointsPince ... l=1.456524 coeff=1.000055
+ 3 dist rp=0.000073
+ getReperPointsPince ... l=0.247294 coeff=1.000055
+ 4 dist rp=0.000984
+ getReperPointsPince ... l=0.043587 coeff=1.000055
+ 5 dist rp=0.000025
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000161
+ getReperPointsPince ... l=0.043587 coeff=1.000055
+ 7 dist rp=0.000025
+ getReperPointsPince ... l=0.112847 coeff=1.000055
+ 8 dist rp=0.000121
+ getReperPointsPince ... l=0.185499 coeff=1.000055
+ 9 dist rp=0.000550
+ getReperPointsPince ... l=0.334678 coeff=1.000055
+ 10 dist rp=0.001237
+ getReperPointsPince ... l=0.493078 coeff=1.000055
+ 11 dist rp=0.001243
+ getReperPointsPince ... l=0.898680 coeff=1.000055
+ 12 dist rp=0.001254
+
+ t=21 p[ 1.2  1.2  1.2  1.2] 20 21 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P20F1t21F1
+ getReperPointsPince ... l=0.262072 coeff=1.000055
+ 0 dist rp=0.001039
+ getReperPointsPince ... l=0.715879 coeff=1.000055
+ 1 dist rp=0.001221
+ getReperPointsPince ... l=1.091963 coeff=1.000055
+ 2 dist rp=0.001231
+ getReperPointsPince ... l=1.456524 coeff=1.000055
+ 3 dist rp=0.000028
+ getReperPointsPince ... l=0.247294 coeff=1.000055
+ 4 dist rp=0.000964
+ getReperPointsPince ... l=0.043587 coeff=1.000055
+ 5 dist rp=0.000033
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 6 dist rp=0.000157
+ getReperPointsPince ... l=0.043587 coeff=1.000055
+ 7 dist rp=0.000033
+ getReperPointsPince ... l=0.112847 coeff=1.000055
+ 8 dist rp=0.000123
+ getReperPointsPince ... l=0.185499 coeff=1.000055
+ 9 dist rp=0.000540
+ getReperPointsPince ... l=0.334678 coeff=1.000055
+ 10 dist rp=0.001208
+ getReperPointsPince ... l=0.493078 coeff=1.000055
+ 11 dist rp=0.001214
+ getReperPointsPince ... l=0.898680 coeff=1.000055
+ 12 dist rp=0.001226
+ getReperPointsPince ... l=0.254617 coeff=1.000056
+ 0 dist rp=0.001043
+ getReperPointsPince ... l=0.694082 coeff=1.000056
+ 1 dist rp=0.001233
+ getReperPointsPince ... l=1.060851 coeff=1.000056
+ 2 dist rp=0.001243
+ getReperPointsPince ... l=1.415016 coeff=1.000056
+ 3 dist rp=0.000068
+ getReperPointsPince ... l=0.240259 coeff=1.000056
+ 4 dist rp=0.000967
+ getReperPointsPince ... l=0.042342 coeff=1.000056
+ 5 dist rp=0.000026
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000157
+ getReperPointsPince ... l=0.042342 coeff=1.000056
+ 7 dist rp=0.000026
+ getReperPointsPince ... l=0.109633 coeff=1.000056
+ 8 dist rp=0.000119
+ getReperPointsPince ... l=0.180221 coeff=1.000056
+ 9 dist rp=0.000540
+ getReperPointsPince ... l=0.325155 coeff=1.000056
+ 10 dist rp=0.001218
+ getReperPointsPince ... l=0.479041 coeff=1.000056
+ 11 dist rp=0.001225
+ getReperPointsPince ... l=0.873079 coeff=1.000056
+ 12 dist rp=0.001238
+
+ t=22 p[ 1.2  1.2  1.2  1.2] 21 22 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P21F1t22F1
+ getReperPointsPince ... l=0.254617 coeff=1.000056
+ 0 dist rp=0.001022
+ getReperPointsPince ... l=0.694082 coeff=1.000056
+ 1 dist rp=0.001204
+ getReperPointsPince ... l=1.060851 coeff=1.000056
+ 2 dist rp=0.001215
+ getReperPointsPince ... l=1.415016 coeff=1.000056
+ 3 dist rp=0.000020
+ getReperPointsPince ... l=0.240259 coeff=1.000056
+ 4 dist rp=0.000947
+ getReperPointsPince ... l=0.042342 coeff=1.000056
+ 5 dist rp=0.000037
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000157
+ getReperPointsPince ... l=0.042342 coeff=1.000056
+ 7 dist rp=0.000037
+ getReperPointsPince ... l=0.109633 coeff=1.000056
+ 8 dist rp=0.000122
+ getReperPointsPince ... l=0.180221 coeff=1.000056
+ 9 dist rp=0.000531
+ getReperPointsPince ... l=0.325155 coeff=1.000056
+ 10 dist rp=0.001188
+ getReperPointsPince ... l=0.479041 coeff=1.000056
+ 11 dist rp=0.001195
+ getReperPointsPince ... l=0.873079 coeff=1.000056
+ 12 dist rp=0.001210
+ getReperPointsPince ... l=0.246249 coeff=1.000056
+ 0 dist rp=0.001020
+ getReperPointsPince ... l=0.667163 coeff=1.000056
+ 1 dist rp=0.001209
+ getReperPointsPince ... l=1.025944 coeff=1.000056
+ 2 dist rp=0.001221
+ getReperPointsPince ... l=1.368448 coeff=1.000056
+ 3 dist rp=0.000071
+ getReperPointsPince ... l=0.232364 coeff=1.000056
+ 4 dist rp=0.000946
+ getReperPointsPince ... l=0.040946 coeff=1.000056
+ 5 dist rp=0.000029
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000156
+ getReperPointsPince ... l=0.040946 coeff=1.000056
+ 7 dist rp=0.000029
+ getReperPointsPince ... l=0.106027 coeff=1.000056
+ 8 dist rp=0.000118
+ getReperPointsPince ... l=0.174298 coeff=1.000056
+ 9 dist rp=0.000528
+ getReperPointsPince ... l=0.314468 coeff=1.000056
+ 10 dist rp=0.001192
+ getReperPointsPince ... l=0.463291 coeff=1.000056
+ 11 dist rp=0.001200
+ getReperPointsPince ... l=0.844355 coeff=1.000056
+ 12 dist rp=0.001216
+
+ t=23 p[ 1.2  1.2  1.2  1.2] 22 23 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P22F1t23F1
+ getReperPointsPince ... l=0.246249 coeff=1.000056
+ 0 dist rp=0.001000
+ getReperPointsPince ... l=0.667163 coeff=1.000056
+ 1 dist rp=0.001181
+ getReperPointsPince ... l=1.025944 coeff=1.000056
+ 2 dist rp=0.001194
+ getReperPointsPince ... l=1.368448 coeff=1.000056
+ 3 dist rp=0.000021
+ getReperPointsPince ... l=0.232364 coeff=1.000056
+ 4 dist rp=0.000927
+ getReperPointsPince ... l=0.040946 coeff=1.000056
+ 5 dist rp=0.000038
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 6 dist rp=0.000153
+ getReperPointsPince ... l=0.040946 coeff=1.000056
+ 7 dist rp=0.000038
+ getReperPointsPince ... l=0.106027 coeff=1.000056
+ 8 dist rp=0.000120
+ getReperPointsPince ... l=0.174298 coeff=1.000056
+ 9 dist rp=0.000519
+ getReperPointsPince ... l=0.314468 coeff=1.000056
+ 10 dist rp=0.001164
+ getReperPointsPince ... l=0.463291 coeff=1.000056
+ 11 dist rp=0.001171
+ getReperPointsPince ... l=0.844355 coeff=1.000056
+ 12 dist rp=0.001189
+ getReperPointsPince ... l=0.237517 coeff=1.000058
+ 0 dist rp=0.000993
+ getReperPointsPince ... l=0.640856 coeff=1.000058
+ 1 dist rp=0.001181
+ getReperPointsPince ... l=0.989519 coeff=1.000058
+ 2 dist rp=0.001194
+ getReperPointsPince ... l=1.319856 coeff=1.000058
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.224124 coeff=1.000058
+ 4 dist rp=0.000920
+ getReperPointsPince ... l=0.039490 coeff=1.000058
+ 5 dist rp=0.000030
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 6 dist rp=0.000153
+ getReperPointsPince ... l=0.039490 coeff=1.000058
+ 7 dist rp=0.000030
+ getReperPointsPince ... l=0.102263 coeff=1.000058
+ 8 dist rp=0.000115
+ getReperPointsPince ... l=0.168116 coeff=1.000058
+ 9 dist rp=0.000513
+ getReperPointsPince ... l=0.303315 coeff=1.000058
+ 10 dist rp=0.001161
+ getReperPointsPince ... l=0.446853 coeff=1.000058
+ 11 dist rp=0.001170
+ getReperPointsPince ... l=0.814382 coeff=1.000058
+ 12 dist rp=0.001188
+
+ t=24 p[ 1.2  1.2  1.2  1.2] 23 24 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P23F1t24F1
+ getReperPointsPince ... l=0.237517 coeff=1.000058
+ 0 dist rp=0.000989
+ getReperPointsPince ... l=0.640856 coeff=1.000058
+ 1 dist rp=0.001173
+ getReperPointsPince ... l=0.989519 coeff=1.000058
+ 2 dist rp=0.001189
+ getReperPointsPince ... l=1.319856 coeff=1.000058
+ 3 dist rp=0.000011
+ getReperPointsPince ... l=0.224124 coeff=1.000058
+ 4 dist rp=0.000917
+ getReperPointsPince ... l=0.039490 coeff=1.000058
+ 5 dist rp=0.000043
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 6 dist rp=0.000152
+ getReperPointsPince ... l=0.039490 coeff=1.000058
+ 7 dist rp=0.000043
+ getReperPointsPince ... l=0.102263 coeff=1.000058
+ 8 dist rp=0.000121
+ getReperPointsPince ... l=0.168116 coeff=1.000058
+ 9 dist rp=0.000515
+ getReperPointsPince ... l=0.303315 coeff=1.000058
+ 10 dist rp=0.001151
+ getReperPointsPince ... l=0.446853 coeff=1.000058
+ 11 dist rp=0.001160
+ getReperPointsPince ... l=0.814382 coeff=1.000058
+ 12 dist rp=0.001182
+ getReperPointsPince ... l=0.227883 coeff=1.000057
+ 0 dist rp=0.000986
+ getReperPointsPince ... l=0.609780 coeff=1.000057
+ 1 dist rp=0.001177
+ getReperPointsPince ... l=0.949301 coeff=1.000057
+ 2 dist rp=0.001195
+ getReperPointsPince ... l=1.266196 coeff=1.000057
+ 3 dist rp=0.000072
+ getReperPointsPince ... l=0.215033 coeff=1.000057
+ 4 dist rp=0.000913
+ getReperPointsPince ... l=0.037879 coeff=1.000057
+ 5 dist rp=0.000035
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 6 dist rp=0.000151
+ getReperPointsPince ... l=0.037879 coeff=1.000057
+ 7 dist rp=0.000035
+ getReperPointsPince ... l=0.098109 coeff=1.000057
+ 8 dist rp=0.000115
+ getReperPointsPince ... l=0.161296 coeff=1.000057
+ 9 dist rp=0.000510
+ getReperPointsPince ... l=0.291010 coeff=1.000057
+ 10 dist rp=0.001153
+ getReperPointsPince ... l=0.428713 coeff=1.000057
+ 11 dist rp=0.001164
+ getReperPointsPince ... l=0.781290 coeff=1.000057
+ 12 dist rp=0.001187
+
+ t=25 p[ 1.2  1.2  1.2  1.2] 24 25 [  0.0(1) 100.0(1)] [  0.0(1) 100.0(1)]
+ text=P24F1t25F1
+ getReperPointsPince ... l=0.189999 coeff=1.000057
+ 0 dist rp=0.000969
+ getReperPointsPince ... l=0.571897 coeff=1.000057
+ 1 dist rp=0.001151
+ getReperPointsPince ... l=0.911417 coeff=1.000057
+ 2 dist rp=0.001168
+ getReperPointsPince ... l=1.228312 coeff=1.000057
+ 3 dist rp=0.000031
+ getReperPointsPince ... l=0.177149 coeff=1.000057
+ 4 dist rp=0.000898
+ getReperPointsPince ... l=0.060225 coeff=1.000057
+ 5 dist rp=0.000110
+ getReperPointsPince ... l=1.059237 coeff=1.000057
+ 6 dist rp=0.000041
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.060225 coeff=1.000057
+ 8 dist rp=0.000110
+ getReperPointsPince ... l=0.123412 coeff=1.000057
+ 9 dist rp=0.000503
+ getReperPointsPince ... l=0.253126 coeff=1.000057
+ 10 dist rp=0.001128
+ getReperPointsPince ... l=0.390829 coeff=1.000057
+ 11 dist rp=0.001139
+ getReperPointsPince ... l=0.743406 coeff=1.000057
+ 12 dist rp=0.001161
+ getReperPointsPince ... l=0.181810 coeff=1.000060
+ 0 dist rp=0.000963
+ getReperPointsPince ... l=0.542395 coeff=1.000060
+ 1 dist rp=0.001153
+ getReperPointsPince ... l=0.872077 coeff=1.000060
+ 2 dist rp=0.001172
+ getReperPointsPince ... l=1.175286 coeff=1.000060
+ 3 dist rp=0.000106
+ getReperPointsPince ... l=0.169514 coeff=1.000060
+ 4 dist rp=0.000892
+ getReperPointsPince ... l=0.057629 coeff=1.000060
+ 5 dist rp=0.000109
+ getReperPointsPince ... l=1.013513 coeff=1.000060
+ 6 dist rp=0.000097
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 7 dist rp=0.000000
+ getReperPointsPince ... l=0.057629 coeff=1.000060
+ 8 dist rp=0.000109
+ getReperPointsPince ... l=0.118093 coeff=1.000060
+ 9 dist rp=0.000498
+ getReperPointsPince ... l=0.242213 coeff=1.000060
+ 10 dist rp=0.001127
+ getReperPointsPince ... l=0.373971 coeff=1.000060
+ 11 dist rp=0.001139
+ getReperPointsPince ... l=0.711323 coeff=1.000060
+ 12 dist rp=0.001164
+
+ t=26 p[ 1.2  1.2  1.2  1.2] 25 26 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P25F1t26F1
+ getReperPointsPince ... l=0.218056 coeff=1.000060
+ 0 dist rp=0.000958
+ getReperPointsPince ... l=0.578641 coeff=1.000060
+ 1 dist rp=0.001143
+ getReperPointsPince ... l=0.908323 coeff=1.000060
+ 2 dist rp=0.001165
+ getReperPointsPince ... l=1.211532 coeff=1.000060
+ 3 dist rp=0.000009
+ getReperPointsPince ... l=0.205760 coeff=1.000060
+ 4 dist rp=0.000887
+ getReperPointsPince ... l=0.036242 coeff=1.000060
+ 5 dist rp=0.000046
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 6 dist rp=0.000149
+ getReperPointsPince ... l=0.036242 coeff=1.000060
+ 7 dist rp=0.000046
+ getReperPointsPince ... l=0.093875 coeff=1.000060
+ 8 dist rp=0.000118
+ getReperPointsPince ... l=0.154339 coeff=1.000060
+ 9 dist rp=0.000498
+ getReperPointsPince ... l=0.278459 coeff=1.000060
+ 10 dist rp=0.001115
+ getReperPointsPince ... l=0.410217 coeff=1.000060
+ 11 dist rp=0.001128
+ getReperPointsPince ... l=0.747569 coeff=1.000060
+ 12 dist rp=0.001156
+ getReperPointsPince ... l=0.207144 coeff=1.000060
+ 0 dist rp=0.000948
+ getReperPointsPince ... l=0.543921 coeff=1.000060
+ 1 dist rp=0.001142
+ getReperPointsPince ... l=0.862793 coeff=1.000060
+ 2 dist rp=0.001165
+ getReperPointsPince ... l=1.150789 coeff=1.000060
+ 3 dist rp=0.000064
+ getReperPointsPince ... l=0.195463 coeff=1.000060
+ 4 dist rp=0.000878
+ getReperPointsPince ... l=0.034420 coeff=1.000060
+ 5 dist rp=0.000039
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 6 dist rp=0.000149
+ getReperPointsPince ... l=0.034420 coeff=1.000060
+ 7 dist rp=0.000039
+ getReperPointsPince ... l=0.089172 coeff=1.000060
+ 8 dist rp=0.000112
+ getReperPointsPince ... l=0.146614 coeff=1.000060
+ 9 dist rp=0.000490
+ getReperPointsPince ... l=0.264521 coeff=1.000060
+ 10 dist rp=0.001112
+ getReperPointsPince ... l=0.389674 coeff=1.000060
+ 11 dist rp=0.001126
+ getReperPointsPince ... l=0.710103 coeff=1.000060
+ 12 dist rp=0.001155
+
+ t=27 p[ 1.1  1.1  1.1  1.1] 26 27 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P26F1t27F1
+ getReperPointsPince ... l=0.207144 coeff=1.000060
+ 0 dist rp=0.000933
+ getReperPointsPince ... l=0.543921 coeff=1.000060
+ 1 dist rp=0.001114
+ getReperPointsPince ... l=0.862793 coeff=1.000060
+ 2 dist rp=0.001138
+ getReperPointsPince ... l=1.150789 coeff=1.000060
+ 3 dist rp=0.000002
+ getReperPointsPince ... l=0.195463 coeff=1.000060
+ 4 dist rp=0.000863
+ getReperPointsPince ... l=0.034420 coeff=1.000060
+ 5 dist rp=0.000047
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 6 dist rp=0.000146
+ getReperPointsPince ... l=0.034420 coeff=1.000060
+ 7 dist rp=0.000047
+ getReperPointsPince ... l=0.089172 coeff=1.000060
+ 8 dist rp=0.000116
+ getReperPointsPince ... l=0.146614 coeff=1.000060
+ 9 dist rp=0.000485
+ getReperPointsPince ... l=0.264521 coeff=1.000060
+ 10 dist rp=0.001086
+ getReperPointsPince ... l=0.389674 coeff=1.000060
+ 11 dist rp=0.001099
+ getReperPointsPince ... l=0.710103 coeff=1.000060
+ 12 dist rp=0.001128
+ getReperPointsPince ... l=0.196047 coeff=1.000062
+ 0 dist rp=0.000923
+ getReperPointsPince ... l=0.508247 coeff=1.000062
+ 1 dist rp=0.001112
+ getReperPointsPince ... l=0.816503 coeff=1.000062
+ 2 dist rp=0.001137
+ getReperPointsPince ... l=1.089036 coeff=1.000062
+ 3 dist rp=0.000075
+ getReperPointsPince ... l=0.184993 coeff=1.000062
+ 4 dist rp=0.000854
+ getReperPointsPince ... l=0.032569 coeff=1.000062
+ 5 dist rp=0.000041
+ getReperPointsPince ... l=0.000000 coeff=1.000062
+ 6 dist rp=0.000146
+ getReperPointsPince ... l=0.032569 coeff=1.000062
+ 7 dist rp=0.000041
+ getReperPointsPince ... l=0.084390 coeff=1.000062
+ 8 dist rp=0.000110
+ getReperPointsPince ... l=0.138759 coeff=1.000062
+ 9 dist rp=0.000477
+ getReperPointsPince ... l=0.250349 coeff=1.000062
+ 10 dist rp=0.001082
+ getReperPointsPince ... l=0.368787 coeff=1.000062
+ 11 dist rp=0.001096
+ getReperPointsPince ... l=0.672013 coeff=1.000062
+ 12 dist rp=0.001127
+
+ t=28 p[ 1.1  1.1  1.1  1.1] 27 28 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P27F1t28F1
+ getReperPointsPince ... l=0.196047 coeff=1.000062
+ 0 dist rp=0.000919
+ getReperPointsPince ... l=0.508247 coeff=1.000062
+ 1 dist rp=0.001104
+ getReperPointsPince ... l=0.816503 coeff=1.000062
+ 2 dist rp=0.001133
+ getReperPointsPince ... l=1.089036 coeff=1.000062
+ 3 dist rp=0.000003
+ getReperPointsPince ... l=0.184993 coeff=1.000062
+ 4 dist rp=0.000850
+ getReperPointsPince ... l=0.032569 coeff=1.000062
+ 5 dist rp=0.000049
+ getReperPointsPince ... l=0.000000 coeff=1.000062
+ 6 dist rp=0.000146
+ getReperPointsPince ... l=0.032569 coeff=1.000062
+ 7 dist rp=0.000049
+ getReperPointsPince ... l=0.084390 coeff=1.000062
+ 8 dist rp=0.000115
+ getReperPointsPince ... l=0.138759 coeff=1.000062
+ 9 dist rp=0.000478
+ getReperPointsPince ... l=0.250349 coeff=1.000062
+ 10 dist rp=0.001071
+ getReperPointsPince ... l=0.368787 coeff=1.000062
+ 11 dist rp=0.001087
+ getReperPointsPince ... l=0.672013 coeff=1.000062
+ 12 dist rp=0.001121
+ getReperPointsPince ... l=0.184228 coeff=1.000064
+ 0 dist rp=0.000906
+ getReperPointsPince ... l=0.471451 coeff=1.000064
+ 1 dist rp=0.001099
+ getReperPointsPince ... l=0.767178 coeff=1.000064
+ 2 dist rp=0.001129
+ getReperPointsPince ... l=1.023230 coeff=1.000064
+ 3 dist rp=0.000061
+ getReperPointsPince ... l=0.173840 coeff=1.000064
+ 4 dist rp=0.000838
+ getReperPointsPince ... l=0.030595 coeff=1.000064
+ 5 dist rp=0.000042
+ getReperPointsPince ... l=0.000000 coeff=1.000064
+ 6 dist rp=0.000144
+ getReperPointsPince ... l=0.030595 coeff=1.000064
+ 7 dist rp=0.000042
+ getReperPointsPince ... l=0.079294 coeff=1.000064
+ 8 dist rp=0.000108
+ getReperPointsPince ... l=0.130392 coeff=1.000064
+ 9 dist rp=0.000468
+ getReperPointsPince ... l=0.235253 coeff=1.000064
+ 10 dist rp=0.001064
+ getReperPointsPince ... l=0.346534 coeff=1.000064
+ 11 dist rp=0.001082
+ getReperPointsPince ... l=0.631426 coeff=1.000064
+ 12 dist rp=0.001117
+
+ t=29 p[ 1.1  1.1  1.1  1.1] 28 29 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P28F1t29F1
+ getReperPointsPince ... l=0.184228 coeff=1.000064
+ 0 dist rp=0.000911
+ getReperPointsPince ... l=0.471451 coeff=1.000064
+ 1 dist rp=0.001093
+ getReperPointsPince ... l=0.767178 coeff=1.000064
+ 2 dist rp=0.001125
+ getReperPointsPince ... l=1.023230 coeff=1.000064
+ 3 dist rp=0.000014
+ getReperPointsPince ... l=0.173840 coeff=1.000064
+ 4 dist rp=0.000843
+ getReperPointsPince ... l=0.030595 coeff=1.000064
+ 5 dist rp=0.000052
+ getReperPointsPince ... l=0.000000 coeff=1.000064
+ 6 dist rp=0.000144
+ getReperPointsPince ... l=0.030595 coeff=1.000064
+ 7 dist rp=0.000052
+ getReperPointsPince ... l=0.079294 coeff=1.000064
+ 8 dist rp=0.000116
+ getReperPointsPince ... l=0.130392 coeff=1.000064
+ 9 dist rp=0.000475
+ getReperPointsPince ... l=0.235253 coeff=1.000064
+ 10 dist rp=0.001060
+ getReperPointsPince ... l=0.346534 coeff=1.000064
+ 11 dist rp=0.001076
+ getReperPointsPince ... l=0.631426 coeff=1.000064
+ 12 dist rp=0.001112
+ getReperPointsPince ... l=0.172034 coeff=1.000066
+ 0 dist rp=0.000901
+ getReperPointsPince ... l=0.432610 coeff=1.000066
+ 1 dist rp=0.001092
+ getReperPointsPince ... l=0.716336 coeff=1.000066
+ 2 dist rp=0.001126
+ getReperPointsPince ... l=0.955407 coeff=1.000066
+ 3 dist rp=0.000070
+ getReperPointsPince ... l=0.162334 coeff=1.000066
+ 4 dist rp=0.000833
+ getReperPointsPince ... l=0.028564 coeff=1.000066
+ 5 dist rp=0.000045
+ getReperPointsPince ... l=0.000000 coeff=1.000066
+ 6 dist rp=0.000143
+ getReperPointsPince ... l=0.028564 coeff=1.000066
+ 7 dist rp=0.000045
+ getReperPointsPince ... l=0.074041 coeff=1.000066
+ 8 dist rp=0.000109
+ getReperPointsPince ... l=0.121761 coeff=1.000066
+ 9 dist rp=0.000466
+ getReperPointsPince ... l=0.219679 coeff=1.000066
+ 10 dist rp=0.001057
+ getReperPointsPince ... l=0.323585 coeff=1.000066
+ 11 dist rp=0.001075
+ getReperPointsPince ... l=0.589586 coeff=1.000066
+ 12 dist rp=0.001113
+
+ t=30 p[ 1.1  1.1  1.1  1.1] 29 30 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P29F1t30F1
+ getReperPointsPince ... l=0.172034 coeff=1.000066
+ 0 dist rp=0.000879
+ getReperPointsPince ... l=0.432610 coeff=1.000066
+ 1 dist rp=0.001062
+ getReperPointsPince ... l=0.716336 coeff=1.000066
+ 2 dist rp=0.001099
+ getReperPointsPince ... l=0.955407 coeff=1.000066
+ 3 dist rp=0.000004
+ getReperPointsPince ... l=0.162334 coeff=1.000066
+ 4 dist rp=0.000812
+ getReperPointsPince ... l=0.028564 coeff=1.000066
+ 5 dist rp=0.000052
+ getReperPointsPince ... l=0.000000 coeff=1.000066
+ 6 dist rp=0.000144
+ getReperPointsPince ... l=0.028564 coeff=1.000066
+ 7 dist rp=0.000052
+ getReperPointsPince ... l=0.074041 coeff=1.000066
+ 8 dist rp=0.000112
+ getReperPointsPince ... l=0.121761 coeff=1.000066
+ 9 dist rp=0.000457
+ getReperPointsPince ... l=0.219679 coeff=1.000066
+ 10 dist rp=0.001025
+ getReperPointsPince ... l=0.323585 coeff=1.000066
+ 11 dist rp=0.001043
+ getReperPointsPince ... l=0.589586 coeff=1.000066
+ 12 dist rp=0.001085
+ getReperPointsPince ... l=0.159305 coeff=1.000069
+ 0 dist rp=0.000867
+ getReperPointsPince ... l=0.394390 coeff=1.000069
+ 1 dist rp=0.001058
+ getReperPointsPince ... l=0.663217 coeff=1.000069
+ 2 dist rp=0.001096
+ getReperPointsPince ... l=0.884539 coeff=1.000069
+ 3 dist rp=0.000062
+ getReperPointsPince ... l=0.150323 coeff=1.000069
+ 4 dist rp=0.000801
+ getReperPointsPince ... l=0.026438 coeff=1.000069
+ 5 dist rp=0.000047
+ getReperPointsPince ... l=0.000000 coeff=1.000069
+ 6 dist rp=0.000143
+ getReperPointsPince ... l=0.026438 coeff=1.000069
+ 7 dist rp=0.000047
+ getReperPointsPince ... l=0.068554 coeff=1.000069
+ 8 dist rp=0.000106
+ getReperPointsPince ... l=0.112749 coeff=1.000069
+ 9 dist rp=0.000447
+ getReperPointsPince ... l=0.203421 coeff=1.000069
+ 10 dist rp=0.001020
+ getReperPointsPince ... l=0.299620 coeff=1.000069
+ 11 dist rp=0.001039
+ getReperPointsPince ... l=0.545877 coeff=1.000069
+ 12 dist rp=0.001082
+
+ t=31 p[ 1.1  1.1  1.1  1.1] 30 31 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P30F1t31F1
+ getReperPointsPince ... l=0.159305 coeff=1.000069
+ 0 dist rp=0.000872
+ getReperPointsPince ... l=0.394390 coeff=1.000069
+ 1 dist rp=0.001053
+ getReperPointsPince ... l=0.663217 coeff=1.000069
+ 2 dist rp=0.001093
+ getReperPointsPince ... l=0.884539 coeff=1.000069
+ 3 dist rp=0.000013
+ getReperPointsPince ... l=0.150323 coeff=1.000069
+ 4 dist rp=0.000806
+ getReperPointsPince ... l=0.026438 coeff=1.000069
+ 5 dist rp=0.000053
+ getReperPointsPince ... l=0.000000 coeff=1.000069
+ 6 dist rp=0.000140
+ getReperPointsPince ... l=0.026438 coeff=1.000069
+ 7 dist rp=0.000053
+ getReperPointsPince ... l=0.068554 coeff=1.000069
+ 8 dist rp=0.000112
+ getReperPointsPince ... l=0.112749 coeff=1.000069
+ 9 dist rp=0.000454
+ getReperPointsPince ... l=0.203421 coeff=1.000069
+ 10 dist rp=0.001016
+ getReperPointsPince ... l=0.299620 coeff=1.000069
+ 11 dist rp=0.001035
+ getReperPointsPince ... l=0.545877 coeff=1.000069
+ 12 dist rp=0.001078
+ getReperPointsPince ... l=0.146383 coeff=1.000077
+ 0 dist rp=0.000858
+ getReperPointsPince ... l=0.355087 coeff=1.000077
+ 1 dist rp=0.001048
+ getReperPointsPince ... l=0.609339 coeff=1.000077
+ 2 dist rp=0.001090
+ getReperPointsPince ... l=0.812668 coeff=1.000077
+ 3 dist rp=0.000058
+ getReperPointsPince ... l=0.138129 coeff=1.000077
+ 4 dist rp=0.000792
+ getReperPointsPince ... l=0.024285 coeff=1.000077
+ 5 dist rp=0.000046
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 6 dist rp=0.000140
+ getReperPointsPince ... l=0.024285 coeff=1.000077
+ 7 dist rp=0.000046
+ getReperPointsPince ... l=0.062987 coeff=1.000077
+ 8 dist rp=0.000105
+ getReperPointsPince ... l=0.103602 coeff=1.000077
+ 9 dist rp=0.000442
+ getReperPointsPince ... l=0.186917 coeff=1.000077
+ 10 dist rp=0.001010
+ getReperPointsPince ... l=0.275301 coeff=1.000077
+ 11 dist rp=0.001031
+ getReperPointsPince ... l=0.501540 coeff=1.000077
+ 12 dist rp=0.001075
+
+ t=32 p[ 1.1  1.1  1.1  1.1] 31 32 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P31F1t32F1
+ getReperPointsPince ... l=0.146383 coeff=1.000077
+ 0 dist rp=0.000862
+ getReperPointsPince ... l=0.355087 coeff=1.000077
+ 1 dist rp=0.001039
+ getReperPointsPince ... l=0.609339 coeff=1.000077
+ 2 dist rp=0.001085
+ getReperPointsPince ... l=0.812668 coeff=1.000077
+ 3 dist rp=0.000027
+ getReperPointsPince ... l=0.138129 coeff=1.000077
+ 4 dist rp=0.000797
+ getReperPointsPince ... l=0.024285 coeff=1.000077
+ 5 dist rp=0.000056
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 6 dist rp=0.000140
+ getReperPointsPince ... l=0.024285 coeff=1.000077
+ 7 dist rp=0.000056
+ getReperPointsPince ... l=0.062987 coeff=1.000077
+ 8 dist rp=0.000114
+ getReperPointsPince ... l=0.103602 coeff=1.000077
+ 9 dist rp=0.000451
+ getReperPointsPince ... l=0.186917 coeff=1.000077
+ 10 dist rp=0.001003
+ getReperPointsPince ... l=0.275301 coeff=1.000077
+ 11 dist rp=0.001022
+ getReperPointsPince ... l=0.501540 coeff=1.000077
+ 12 dist rp=0.001068
+ getReperPointsPince ... l=0.132295 coeff=1.000077
+ 0 dist rp=0.000851
+ getReperPointsPince ... l=0.317343 coeff=1.000077
+ 1 dist rp=0.001040
+ getReperPointsPince ... l=0.552501 coeff=1.000077
+ 2 dist rp=0.001088
+ getReperPointsPince ... l=0.737034 coeff=1.000077
+ 3 dist rp=0.000061
+ getReperPointsPince ... l=0.124805 coeff=1.000077
+ 4 dist rp=0.000786
+ getReperPointsPince ... l=0.021919 coeff=1.000077
+ 5 dist rp=0.000050
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 6 dist rp=0.000140
+ getReperPointsPince ... l=0.021919 coeff=1.000077
+ 7 dist rp=0.000050
+ getReperPointsPince ... l=0.056758 coeff=1.000077
+ 8 dist rp=0.000106
+ getReperPointsPince ... l=0.093497 coeff=1.000077
+ 9 dist rp=0.000440
+ getReperPointsPince ... l=0.169091 coeff=1.000077
+ 10 dist rp=0.001001
+ getReperPointsPince ... l=0.249327 coeff=1.000077
+ 11 dist rp=0.001023
+ getReperPointsPince ... l=0.454668 coeff=1.000077
+ 12 dist rp=0.001071
+
+ t=33 p[ 1.1  1.1  1.1  1.1] 32 33 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P32F1t33F1
+ getReperPointsPince ... l=0.132295 coeff=1.000077
+ 0 dist rp=0.000841
+ getReperPointsPince ... l=0.317343 coeff=1.000077
+ 1 dist rp=0.001015
+ getReperPointsPince ... l=0.552501 coeff=1.000077
+ 2 dist rp=0.001062
+ getReperPointsPince ... l=0.737034 coeff=1.000077
+ 3 dist rp=0.000026
+ getReperPointsPince ... l=0.124805 coeff=1.000077
+ 4 dist rp=0.000778
+ getReperPointsPince ... l=0.021919 coeff=1.000077
+ 5 dist rp=0.000055
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 6 dist rp=0.000138
+ getReperPointsPince ... l=0.021919 coeff=1.000077
+ 7 dist rp=0.000055
+ getReperPointsPince ... l=0.056758 coeff=1.000077
+ 8 dist rp=0.000111
+ getReperPointsPince ... l=0.093497 coeff=1.000077
+ 9 dist rp=0.000441
+ getReperPointsPince ... l=0.169091 coeff=1.000077
+ 10 dist rp=0.000978
+ getReperPointsPince ... l=0.249327 coeff=1.000077
+ 11 dist rp=0.000998
+ getReperPointsPince ... l=0.454668 coeff=1.000077
+ 12 dist rp=0.001046
+ getReperPointsPince ... l=0.118332 coeff=1.000088
+ 0 dist rp=0.000831
+ getReperPointsPince ... l=0.278649 coeff=1.000088
+ 1 dist rp=0.001017
+ getReperPointsPince ... l=0.495805 coeff=1.000088
+ 2 dist rp=0.001067
+ getReperPointsPince ... l=0.661555 coeff=1.000088
+ 3 dist rp=0.000055
+ getReperPointsPince ... l=0.111604 coeff=1.000088
+ 4 dist rp=0.000768
+ getReperPointsPince ... l=0.019578 coeff=1.000088
+ 5 dist rp=0.000049
+ getReperPointsPince ... l=0.000000 coeff=1.000088
+ 6 dist rp=0.000138
+ getReperPointsPince ... l=0.019578 coeff=1.000088
+ 7 dist rp=0.000049
+ getReperPointsPince ... l=0.050617 coeff=1.000088
+ 8 dist rp=0.000105
+ getReperPointsPince ... l=0.083506 coeff=1.000088
+ 9 dist rp=0.000431
+ getReperPointsPince ... l=0.151389 coeff=1.000088
+ 10 dist rp=0.000979
+ getReperPointsPince ... l=0.223478 coeff=1.000088
+ 11 dist rp=0.001001
+ getReperPointsPince ... l=0.407932 coeff=1.000088
+ 12 dist rp=0.001050
+
+ t=34 p[ 1.1  1.1  1.1  1.1] 33 34 [  2.0(2) 100.0(1)] [  2.0(2) 100.0(1)]
+ text=P33F1t34F1
+ getReperPointsPince ... l=0.118332 coeff=1.000088
+ 0 dist rp=0.000834
+ getReperPointsPince ... l=0.278649 coeff=1.000088
+ 1 dist rp=0.001006
+ getReperPointsPince ... l=0.495805 coeff=1.000088
+ 2 dist rp=0.001060
+ getReperPointsPince ... l=0.661555 coeff=1.000088
+ 3 dist rp=0.000033
+ getReperPointsPince ... l=0.111604 coeff=1.000088
+ 4 dist rp=0.000771
+ getReperPointsPince ... l=0.019578 coeff=1.000088
+ 5 dist rp=0.000059
+ getReperPointsPince ... l=0.000000 coeff=1.000088
+ 6 dist rp=0.000138
+ getReperPointsPince ... l=0.019578 coeff=1.000088
+ 7 dist rp=0.000059
+ getReperPointsPince ... l=0.050617 coeff=1.000088
+ 8 dist rp=0.000114
+ getReperPointsPince ... l=0.083506 coeff=1.000088
+ 9 dist rp=0.000441
+ getReperPointsPince ... l=0.151389 coeff=1.000088
+ 10 dist rp=0.000967
+ getReperPointsPince ... l=0.223478 coeff=1.000088
+ 11 dist rp=0.000989
+ getReperPointsPince ... l=0.407932 coeff=1.000088
+ 12 dist rp=0.001041
+ getReperPointsPince ... l=0.103710 coeff=1.000210
+ 0 dist rp=0.000825
+ getReperPointsPince ... l=0.242843 coeff=1.000210
+ 1 dist rp=0.001016
+ getReperPointsPince ... l=0.436715 coeff=1.000210
+ 2 dist rp=0.001075
+ getReperPointsPince ... l=0.582918 coeff=1.000210
+ 3 dist rp=0.000110
+ getReperPointsPince ... l=0.097777 coeff=1.000210
+ 4 dist rp=0.000763
+ getReperPointsPince ... l=0.017127 coeff=1.000210
+ 5 dist rp=0.000051
+ getReperPointsPince ... l=0.000000 coeff=1.000210
+ 6 dist rp=0.000139
+ getReperPointsPince ... l=0.017127 coeff=1.000210
+ 7 dist rp=0.000051
+ getReperPointsPince ... l=0.044164 coeff=1.000210
+ 8 dist rp=0.000105
+ getReperPointsPince ... l=0.073027 coeff=1.000210
+ 9 dist rp=0.000430
+ getReperPointsPince ... l=0.132876 coeff=1.000210
+ 10 dist rp=0.000973
+ getReperPointsPince ... l=0.196487 coeff=1.000210
+ 11 dist rp=0.000998
+ getReperPointsPince ... l=0.359206 coeff=1.000210
+ 12 dist rp=0.001055
+
+ t=35 p[ 1.1  1.1  0.0  0.0] 34 35 [  2.0(2) 100.0(1)] [  0.0(2) 100.0(1)]
+ text=P34F1t35F1
+ getReperPointsPince ... l=0.103710 coeff=1.000210
+ 0 dist rp=0.000937
+ getReperPointsPince ... l=0.242843 coeff=1.000210
+ 1 dist rp=0.001050
+ getReperPointsPince ... l=0.436715 coeff=1.000210
+ 2 dist rp=0.001099
+ getReperPointsPince ... l=0.582918 coeff=1.000210
+ 3 dist rp=0.000162
+ getReperPointsPince ... l=0.097777 coeff=1.000210
+ 4 dist rp=0.000884
+ getReperPointsPince ... l=0.017127 coeff=1.000210
+ 5 dist rp=0.000061
+ getReperPointsPince ... l=-0.000000 coeff=1.000210
+ Ahtung! calcRepPointByLength() == -1 
+ 6 dist rp=0.000000
+ getReperPointsPince ... l=0.017127 coeff=1.000210
+ 7 dist rp=0.000061
+ getReperPointsPince ... l=0.044164 coeff=1.000210
+ 8 dist rp=0.000188
+ getReperPointsPince ... l=0.073027 coeff=1.000210
+ 9 dist rp=0.000593
+ getReperPointsPince ... l=0.132876 coeff=1.000210
+ 10 dist rp=0.001029
+ getReperPointsPince ... l=0.196487 coeff=1.000210
+ 11 dist rp=0.001040
+ getReperPointsPince ... l=0.359206 coeff=1.000210
+ 12 dist rp=0.001081
+ getReperPointsPince ... l=0.010046 coeff=0.000000
+ 0 dist rp=0.000006
+ getReperPointsPince ... l=0.086022 coeff=0.000000
+ 1 dist rp=0.075950
+ getReperPointsPince ... l=0.222583 coeff=0.000000
+ 2 dist rp=0.212499
+ getReperPointsPince ... l=0.385053 coeff=0.000000
+ 3 dist rp=0.374958
+ getReperPointsPince ... l=0.025889 coeff=0.000000
+ 4 dist rp=0.015842
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 5 dist rp=0.010040
+ getReperPointsPince ... l=0.011284 coeff=0.000000
+ 6 dist rp=0.001244
+ getReperPointsPince ... l=0.019397 coeff=0.000000
+ 7 dist rp=0.009354
+ getReperPointsPince ... l=0.045488 coeff=0.000000
+ 8 dist rp=0.035431
+ getReperPointsPince ... l=0.074608 coeff=0.000000
+ 9 dist rp=0.064539
+ getReperPointsPince ... l=0.161049 coeff=0.000000
+ 10 dist rp=0.150968
+
+ t=36  c[1.000059] 0 0 ff1=2 ff2=1
+ text=N0F2t0F1
+
+ t=37  c[1.000057] 1 1 ff1=2 ff2=1
+ text=N1F2t1F1
+
+ t=38  c[1.000058] 2 2 ff1=2 ff2=1
+ text=N2F2t2F1
+
+ t=39  c[1.000057] 3 3 ff1=2 ff2=1
+ text=N3F2t3F1
+
+ t=40  c[1.000056] 4 4 ff1=2 ff2=1
+ text=N4F2t4F1
+
+ t=41  c[1.000057] 5 5 ff1=2 ff2=1
+ text=N5F2t5F1
+
+ t=42  c[1.000055] 6 6 ff1=2 ff2=1
+ text=N6F2t6F1
+
+ t=43  c[1.000056] 7 7 ff1=2 ff2=1
+ text=N7F2t7F1
+
+ t=44  c[1.000055] 8 8 ff1=2 ff2=1
+ text=N8F2t8F1
+
+ t=45  c[1.000055] 9 9 ff1=2 ff2=1
+ text=N9F2t9F1
+
+ t=46  c[1.000055] 10 10 ff1=2 ff2=1
+ text=N10F2t10F1
+
+ t=47  c[1.000054] 11 11 ff1=2 ff2=1
+ text=N11F2t11F1
+
+ t=48  c[1.000055] 12 12 ff1=2 ff2=1
+ text=N12F2t12F1
+
+ t=49  c[1.000054] 13 13 ff1=2 ff2=1
+ text=N13F2t13F1
+
+ t=50  c[1.000055] 14 14 ff1=2 ff2=1
+ text=N14F2t14F1
+
+ t=51  c[1.000054] 15 15 ff1=2 ff2=1
+ text=N15F2t15F1
+
+ t=52  c[1.000055] 16 16 ff1=2 ff2=1
+ text=N16F2t16F1
+
+ t=53  c[1.000054] 17 17 ff1=2 ff2=1
+ text=N17F2t17F1
+
+ t=54  c[1.000055] 18 18 ff1=2 ff2=1
+ text=N18F2t18F1
+
+ t=55  c[1.000055] 19 19 ff1=2 ff2=1
+ text=N19F2t19F1
+
+ t=56  c[1.000055] 20 20 ff1=2 ff2=1
+ text=N20F2t20F1
+
+ t=57  c[1.000056] 21 21 ff1=2 ff2=1
+ text=N21F2t21F1
+
+ t=58  c[1.000056] 22 22 ff1=2 ff2=1
+ text=N22F2t22F1
+
+ t=59  c[1.000058] 23 23 ff1=2 ff2=1
+ text=N23F2t23F1
+
+ t=60  c[1.000057] 24 24 ff1=2 ff2=1
+ text=N24F2t24F1
+
+ t=61  c[1.000060] 25 25 ff1=2 ff2=1
+ text=N25F2t25F1
+
+ t=62  c[1.000060] 26 26 ff1=2 ff2=1
+ text=N26F2t26F1
+
+ t=63  c[1.000062] 27 27 ff1=2 ff2=1
+ text=N27F2t27F1
+
+ t=64  c[1.000064] 28 28 ff1=2 ff2=1
+ text=N28F2t28F1
+
+ t=65  c[1.000066] 29 29 ff1=2 ff2=1
+ text=N29F2t29F1
+
+ t=66  c[1.000069] 30 30 ff1=2 ff2=1
+ text=N30F2t30F1
+
+ t=67  c[1.000077] 31 31 ff1=2 ff2=1
+ text=N31F2t31F1
+
+ t=68  c[1.000077] 32 32 ff1=2 ff2=1
+ text=N32F2t32F1
+
+ t=69  c[1.000088] 33 33 ff1=2 ff2=1
+ text=N33F2t33F1
+
+ t=70  c[1.000210] 34 34 ff1=2 ff2=1
+ text=N34F2t34F1
+
+ t=71  c[1.000051] 2 1 ff1=2 ff2=1
+ text=D2F2t1F1
+
+ t=72  c[1.000053] 2 3 ff1=2 ff2=1
+ text=D2F2t3F1
+
+ t=73  c[1.000052] 5 4 ff1=2 ff2=1
+ text=D5F2t4F1
+
+ t=74  c[1.000051] 5 6 ff1=2 ff2=1
+ text=D5F2t6F1
+
+ t=75  c[1.000058] 8 7 ff1=2 ff2=1
+ text=D8F2t7F1
+
+ t=76  c[1.000056] 8 9 ff1=2 ff2=1
+ text=D8F2t9F1
+
+ t=77  c[1.000061] 11 10 ff1=2 ff2=1
+ text=D11F2t10F1
+
+ t=78  c[1.000062] 11 12 ff1=2 ff2=1
+ text=D11F2t12F1
+
+ t=79  c[1.000050] 14 13 ff1=2 ff2=1
+ text=D14F2t13F1
+
+ t=80  c[1.000052] 14 15 ff1=2 ff2=1
+ text=D14F2t15F1
+
+ t=81  c[1.000054] 17 16 ff1=2 ff2=1
+ text=D17F2t16F1
+
+ t=82  c[1.000053] 17 18 ff1=2 ff2=1
+ text=D17F2t18F1
+
+ t=83  c[1.000058] 20 19 ff1=2 ff2=1
+ text=D20F2t19F1
+
+ t=84  c[1.000058] 20 21 ff1=2 ff2=1
+ text=D20F2t21F1
+
+ t=85  c[1.000054] 23 22 ff1=2 ff2=1
+ text=D23F2t22F1
+
+ t=86  c[1.000055] 23 24 ff1=2 ff2=1
+ text=D23F2t24F1
+
+ t=87  c[1.000057] 26 25 ff1=2 ff2=1
+ text=D26F2t25F1
+
+ t=88  c[1.000056] 26 27 ff1=2 ff2=1
+ text=D26F2t27F1
+
+ t=89  c[1.000072] 29 28 ff1=2 ff2=1
+ text=D29F2t28F1
+
+ t=90  c[1.000070] 29 30 ff1=2 ff2=1
+ text=D29F2t30F1
+
+ t=91  c[1.000081] 32 31 ff1=2 ff2=1
+ text=D32F2t31F1
+
+ t=92  c[1.000088] 32 33 ff1=2 ff2=1
+ text=D32F2t33F1
+
+ t=93 p[ 1.3  1.3  1.3  1.3] -1 0 [  0.0(2)   2.0(2)] [  0.0(2)   2.0(2)]
+ text=V-1F2t0F2
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.051969 coeff=0.000000
+ 1 dist rp=0.051969
+ getReperPointsPince ... l=0.000000 coeff=1.000059
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.051969 coeff=1.000059
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.227579
+
+ t=94 p[ 1.7  1.7  1.7  1.7] -1 0 [  2.0(2)   6.0(2)] [  2.0(2)   6.0(2)]
+ text=V-1F2t0F2
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 0 dist rp=0.000229
+ getReperPointsPince ... l=0.071902 coeff=0.000000
+ 1 dist rp=0.071903
+ getReperPointsPince ... l=0.000000 coeff=1.000059
+ 0 dist rp=0.000229
+ getReperPointsPince ... l=0.071902 coeff=1.000059
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.232280
+
+ t=95 p[ 1.7  1.7  1.7  1.7] -1 0 [  6.0(2) 100.0(2)] [  6.0(2) 100.0(2)]
+ text=P-1F2t0F2
+ getReperPointsPince ... l=0.088399 coeff=0.000000
+ 0 dist rp=0.088404
+ getReperPointsPince ... l=0.608565 coeff=0.000000
+ 1 dist rp=0.608566
+ getReperPointsPince ... l=1.081133 coeff=0.000000
+ 2 dist rp=1.081131
+ getReperPointsPince ... l=1.516432 coeff=0.000000
+ 3 dist rp=1.516430
+ getReperPointsPince ... l=0.070797 coeff=0.000000
+ 4 dist rp=0.070802
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 5 dist rp=0.000652
+ getReperPointsPince ... l=0.176274 coeff=0.000000
+ 6 dist rp=0.176277
+ getReperPointsPince ... l=0.367737 coeff=0.000000
+ 7 dist rp=0.367739
+ getReperPointsPince ... l=0.850269 coeff=0.000000
+ 8 dist rp=0.850268
+ getReperPointsPince ... l=0.088399 coeff=1.000059
+ 0 dist rp=0.001274
+ getReperPointsPince ... l=0.608565 coeff=1.000059
+ 1 dist rp=0.001680
+ getReperPointsPince ... l=1.081133 coeff=1.000059
+ 2 dist rp=0.001681
+ getReperPointsPince ... l=1.516432 coeff=1.000059
+ 3 dist rp=0.000068
+ getReperPointsPince ... l=0.070797 coeff=1.000059
+ 4 dist rp=0.001146
+ getReperPointsPince ... l=0.000000 coeff=1.000059
+ 5 dist rp=0.000652
+ getReperPointsPince ... l=0.176274 coeff=1.000059
+ 6 dist rp=0.001679
+ getReperPointsPince ... l=0.367737 coeff=1.000059
+ 7 dist rp=0.001679
+ getReperPointsPince ... l=0.850269 coeff=1.000059
+ 8 dist rp=0.001680
+
+ t=96  c[0.000000] -1 0 ff1=0 ff2=0
+ text=K-1F0t0F0
+
+ t=97  c[0.000000] -1 0 ff1=0 ff2=0
+ text=K-1F0t0F0
+
+ t=98  c[0.000000] -1 0 ff1=0 ff2=0
+ text=K-1F0t0F0
+
+ t=99 p[ 1.6  1.6  1.6  1.6] 0 1 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P0F2t1F2
+ getReperPointsPince ... l=0.160301 coeff=1.000059
+ 0 dist rp=0.001249
+ getReperPointsPince ... l=0.680467 coeff=1.000059
+ 1 dist rp=0.001647
+ getReperPointsPince ... l=1.153035 coeff=1.000059
+ 2 dist rp=0.001648
+ getReperPointsPince ... l=1.588334 coeff=1.000059
+ 3 dist rp=0.000080
+ getReperPointsPince ... l=0.142699 coeff=1.000059
+ 4 dist rp=0.001123
+ getReperPointsPince ... l=0.000000 coeff=1.000059
+ 5 dist rp=0.000224
+ getReperPointsPince ... l=0.071902 coeff=1.000059
+ 6 dist rp=0.000639
+ getReperPointsPince ... l=0.248175 coeff=1.000059
+ 7 dist rp=0.001646
+ getReperPointsPince ... l=0.439639 coeff=1.000059
+ 8 dist rp=0.001646
+ getReperPointsPince ... l=0.922171 coeff=1.000059
+ 9 dist rp=0.001647
+ getReperPointsPince ... l=0.160395 coeff=1.000057
+ 0 dist rp=0.001251
+ getReperPointsPince ... l=0.680863 coeff=1.000057
+ 1 dist rp=0.001649
+ getReperPointsPince ... l=1.153707 coeff=1.000057
+ 2 dist rp=0.001650
+ getReperPointsPince ... l=1.589260 coeff=1.000057
+ 3 dist rp=0.000064
+ getReperPointsPince ... l=0.142782 coeff=1.000057
+ 4 dist rp=0.001125
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000225
+ getReperPointsPince ... l=0.071944 coeff=1.000057
+ 6 dist rp=0.000640
+ getReperPointsPince ... l=0.248320 coeff=1.000057
+ 7 dist rp=0.001649
+ getReperPointsPince ... l=0.439895 coeff=1.000057
+ 8 dist rp=0.001649
+ getReperPointsPince ... l=0.922708 coeff=1.000057
+ 9 dist rp=0.001649
+
+ t=100 p[ 1.6  1.6  1.6  1.6] 1 2 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P1F2t2F2
+ getReperPointsPince ... l=0.160395 coeff=1.000057
+ 0 dist rp=0.001226
+ getReperPointsPince ... l=0.680863 coeff=1.000057
+ 1 dist rp=0.001616
+ getReperPointsPince ... l=1.153707 coeff=1.000057
+ 2 dist rp=0.001617
+ getReperPointsPince ... l=1.589260 coeff=1.000057
+ 3 dist rp=0.000063
+ getReperPointsPince ... l=0.142782 coeff=1.000057
+ 4 dist rp=0.001103
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000220
+ getReperPointsPince ... l=0.071944 coeff=1.000057
+ 6 dist rp=0.000627
+ getReperPointsPince ... l=0.248320 coeff=1.000057
+ 7 dist rp=0.001616
+ getReperPointsPince ... l=0.439895 coeff=1.000057
+ 8 dist rp=0.001616
+ getReperPointsPince ... l=0.922708 coeff=1.000057
+ 9 dist rp=0.001617
+ getReperPointsPince ... l=0.160395 coeff=1.000058
+ 0 dist rp=0.001224
+ getReperPointsPince ... l=0.680863 coeff=1.000058
+ 1 dist rp=0.001614
+ getReperPointsPince ... l=1.153707 coeff=1.000058
+ 2 dist rp=0.001615
+ getReperPointsPince ... l=1.589260 coeff=1.000058
+ 3 dist rp=0.000082
+ getReperPointsPince ... l=0.142782 coeff=1.000058
+ 4 dist rp=0.001101
+ getReperPointsPince ... l=0.107517 coeff=1.000058
+ 5 dist rp=0.000865
+ getReperPointsPince ... l=1.200533 coeff=1.000058
+ 6 dist rp=0.001616
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 7 dist rp=0.000220
+ getReperPointsPince ... l=0.071944 coeff=1.000058
+ 8 dist rp=0.000626
+ getReperPointsPince ... l=0.248320 coeff=1.000058
+ 9 dist rp=0.001614
+ getReperPointsPince ... l=0.439895 coeff=1.000058
+ 10 dist rp=0.001614
+ getReperPointsPince ... l=0.922708 coeff=1.000058
+ 11 dist rp=0.001615
+
+ t=101 p[ 1.6  1.6  1.6  1.6] 2 3 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P2F2t3F2
+ getReperPointsPince ... l=0.160395 coeff=1.000058
+ 0 dist rp=0.001199
+ getReperPointsPince ... l=0.680863 coeff=1.000058
+ 1 dist rp=0.001582
+ getReperPointsPince ... l=1.153707 coeff=1.000058
+ 2 dist rp=0.001584
+ getReperPointsPince ... l=1.589260 coeff=1.000058
+ 3 dist rp=0.000082
+ getReperPointsPince ... l=0.142782 coeff=1.000058
+ 4 dist rp=0.001078
+ getReperPointsPince ... l=0.107517 coeff=1.000058
+ 5 dist rp=0.000847
+ getReperPointsPince ... l=1.200533 coeff=1.000058
+ 6 dist rp=0.001584
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 7 dist rp=0.000215
+ getReperPointsPince ... l=0.071944 coeff=1.000058
+ 8 dist rp=0.000613
+ getReperPointsPince ... l=0.248320 coeff=1.000058
+ 9 dist rp=0.001582
+ getReperPointsPince ... l=0.439895 coeff=1.000058
+ 10 dist rp=0.001582
+ getReperPointsPince ... l=0.922708 coeff=1.000058
+ 11 dist rp=0.001583
+ getReperPointsPince ... l=0.160395 coeff=1.000057
+ 0 dist rp=0.001206
+ getReperPointsPince ... l=0.680863 coeff=1.000057
+ 1 dist rp=0.001591
+ getReperPointsPince ... l=1.153707 coeff=1.000057
+ 2 dist rp=0.001592
+ getReperPointsPince ... l=1.589260 coeff=1.000057
+ 3 dist rp=0.000069
+ getReperPointsPince ... l=0.142782 coeff=1.000057
+ 4 dist rp=0.001085
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000216
+ getReperPointsPince ... l=0.071944 coeff=1.000057
+ 6 dist rp=0.000617
+ getReperPointsPince ... l=0.248320 coeff=1.000057
+ 7 dist rp=0.001591
+ getReperPointsPince ... l=0.439895 coeff=1.000057
+ 8 dist rp=0.001591
+ getReperPointsPince ... l=0.922708 coeff=1.000057
+ 9 dist rp=0.001592
+
+ t=102 p[ 1.6  1.6  1.6  1.6] 3 4 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P3F2t4F2
+ getReperPointsPince ... l=0.160395 coeff=1.000057
+ 0 dist rp=0.001184
+ getReperPointsPince ... l=0.680863 coeff=1.000057
+ 1 dist rp=0.001560
+ getReperPointsPince ... l=1.153707 coeff=1.000057
+ 2 dist rp=0.001560
+ getReperPointsPince ... l=1.589260 coeff=1.000057
+ 3 dist rp=0.000065
+ getReperPointsPince ... l=0.142782 coeff=1.000057
+ 4 dist rp=0.001065
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000213
+ getReperPointsPince ... l=0.071944 coeff=1.000057
+ 6 dist rp=0.000607
+ getReperPointsPince ... l=0.248320 coeff=1.000057
+ 7 dist rp=0.001559
+ getReperPointsPince ... l=0.439895 coeff=1.000057
+ 8 dist rp=0.001559
+ getReperPointsPince ... l=0.922708 coeff=1.000057
+ 9 dist rp=0.001560
+ getReperPointsPince ... l=0.160208 coeff=1.000056
+ 0 dist rp=0.001188
+ getReperPointsPince ... l=0.680070 coeff=1.000056
+ 1 dist rp=0.001566
+ getReperPointsPince ... l=1.152362 coeff=1.000056
+ 2 dist rp=0.001567
+ getReperPointsPince ... l=1.587408 coeff=1.000056
+ 3 dist rp=0.000073
+ getReperPointsPince ... l=0.142616 coeff=1.000056
+ 4 dist rp=0.001069
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000214
+ getReperPointsPince ... l=0.071860 coeff=1.000056
+ 6 dist rp=0.000609
+ getReperPointsPince ... l=0.248031 coeff=1.000056
+ 7 dist rp=0.001566
+ getReperPointsPince ... l=0.439382 coeff=1.000056
+ 8 dist rp=0.001566
+ getReperPointsPince ... l=0.921633 coeff=1.000056
+ 9 dist rp=0.001567
+
+ t=103 p[ 1.5  1.5  1.5  1.5] 4 5 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P4F2t5F2
+ getReperPointsPince ... l=0.160208 coeff=1.000056
+ 0 dist rp=0.001163
+ getReperPointsPince ... l=0.680070 coeff=1.000056
+ 1 dist rp=0.001535
+ getReperPointsPince ... l=1.152362 coeff=1.000056
+ 2 dist rp=0.001536
+ getReperPointsPince ... l=1.587408 coeff=1.000056
+ 3 dist rp=0.000066
+ getReperPointsPince ... l=0.142616 coeff=1.000056
+ 4 dist rp=0.001046
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000208
+ getReperPointsPince ... l=0.071860 coeff=1.000056
+ 6 dist rp=0.000595
+ getReperPointsPince ... l=0.248031 coeff=1.000056
+ 7 dist rp=0.001534
+ getReperPointsPince ... l=0.439382 coeff=1.000056
+ 8 dist rp=0.001535
+ getReperPointsPince ... l=0.921633 coeff=1.000056
+ 9 dist rp=0.001535
+ getReperPointsPince ... l=0.160021 coeff=1.000057
+ 0 dist rp=0.001162
+ getReperPointsPince ... l=0.679276 coeff=1.000057
+ 1 dist rp=0.001533
+ getReperPointsPince ... l=1.151018 coeff=1.000057
+ 2 dist rp=0.001535
+ getReperPointsPince ... l=1.585556 coeff=1.000057
+ 3 dist rp=0.000086
+ getReperPointsPince ... l=0.142449 coeff=1.000057
+ 4 dist rp=0.001045
+ getReperPointsPince ... l=0.107266 coeff=1.000057
+ 5 dist rp=0.000820
+ getReperPointsPince ... l=1.197734 coeff=1.000057
+ 6 dist rp=0.001535
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 7 dist rp=0.000208
+ getReperPointsPince ... l=0.071776 coeff=1.000057
+ 8 dist rp=0.000594
+ getReperPointsPince ... l=0.247741 coeff=1.000057
+ 9 dist rp=0.001533
+ getReperPointsPince ... l=0.438869 coeff=1.000057
+ 10 dist rp=0.001533
+ getReperPointsPince ... l=0.920557 coeff=1.000057
+ 11 dist rp=0.001534
+
+ t=104 p[ 1.5  1.5  1.5  1.5] 5 6 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P5F2t6F2
+ getReperPointsPince ... l=0.160021 coeff=1.000057
+ 0 dist rp=0.001139
+ getReperPointsPince ... l=0.679276 coeff=1.000057
+ 1 dist rp=0.001503
+ getReperPointsPince ... l=1.151018 coeff=1.000057
+ 2 dist rp=0.001504
+ getReperPointsPince ... l=1.585556 coeff=1.000057
+ 3 dist rp=0.000077
+ getReperPointsPince ... l=0.142449 coeff=1.000057
+ 4 dist rp=0.001024
+ getReperPointsPince ... l=0.107266 coeff=1.000057
+ 5 dist rp=0.000805
+ getReperPointsPince ... l=1.197734 coeff=1.000057
+ 6 dist rp=0.001504
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 7 dist rp=0.000204
+ getReperPointsPince ... l=0.071776 coeff=1.000057
+ 8 dist rp=0.000583
+ getReperPointsPince ... l=0.247741 coeff=1.000057
+ 9 dist rp=0.001502
+ getReperPointsPince ... l=0.438869 coeff=1.000057
+ 10 dist rp=0.001502
+ getReperPointsPince ... l=0.920557 coeff=1.000057
+ 11 dist rp=0.001503
+ getReperPointsPince ... l=0.159740 coeff=1.000055
+ 0 dist rp=0.001141
+ getReperPointsPince ... l=0.678086 coeff=1.000055
+ 1 dist rp=0.001505
+ getReperPointsPince ... l=1.149001 coeff=1.000055
+ 2 dist rp=0.001506
+ getReperPointsPince ... l=1.582777 coeff=1.000055
+ 3 dist rp=0.000072
+ getReperPointsPince ... l=0.142200 coeff=1.000055
+ 4 dist rp=0.001026
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000205
+ getReperPointsPince ... l=0.071650 coeff=1.000055
+ 6 dist rp=0.000584
+ getReperPointsPince ... l=0.247307 coeff=1.000055
+ 7 dist rp=0.001504
+ getReperPointsPince ... l=0.438100 coeff=1.000055
+ 8 dist rp=0.001505
+ getReperPointsPince ... l=0.918944 coeff=1.000055
+ 9 dist rp=0.001505
+
+ t=105 p[ 1.5  1.5  1.5  1.5] 6 7 [  0.0(2)   2.0(2)] [  0.0(2)   2.0(2)]
+ text=V6F2t7F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.051787 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.051786
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.051632 coeff=1.000056
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.203065
+
+ t=106 p[ 1.5  1.5  1.5  1.5] 6 7 [  2.0(2)   6.0(2)] [  2.0(2)   6.0(2)]
+ text=V6F2t7F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000201
+ getReperPointsPince ... l=0.071650 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.071650
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 0 dist rp=0.000201
+ getReperPointsPince ... l=0.071437 coeff=1.000056
+ 1 dist rp=0.000572
+
+ t=107 p[ 1.5  1.5  1.5  1.5] 6 7 [  6.0(2) 100.0(2)] [  6.0(2) 100.0(2)]
+ text=P6F2t7F2
+ getReperPointsPince ... l=0.088090 coeff=1.000055
+ 0 dist rp=0.001119
+ getReperPointsPince ... l=0.606436 coeff=1.000055
+ 1 dist rp=0.001475
+ getReperPointsPince ... l=1.077350 coeff=1.000055
+ 2 dist rp=0.001475
+ getReperPointsPince ... l=1.511127 coeff=1.000055
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.070550 coeff=1.000055
+ 4 dist rp=0.001006
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000572
+ getReperPointsPince ... l=0.175657 coeff=1.000055
+ 6 dist rp=0.001474
+ getReperPointsPince ... l=0.366450 coeff=1.000055
+ 7 dist rp=0.001475
+ getReperPointsPince ... l=0.847294 coeff=1.000055
+ 8 dist rp=0.001475
+ getReperPointsPince ... l=0.087829 coeff=1.000056
+ 0 dist rp=0.001119
+ getReperPointsPince ... l=0.609760 coeff=1.000056
+ 1 dist rp=0.001476
+ getReperPointsPince ... l=1.074194 coeff=1.000056
+ 2 dist rp=0.001477
+ getReperPointsPince ... l=1.506713 coeff=1.000056
+ 3 dist rp=0.000087
+ getReperPointsPince ... l=0.070340 coeff=1.000056
+ 4 dist rp=0.001006
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000573
+ getReperPointsPince ... l=0.175136 coeff=1.000056
+ 6 dist rp=0.001475
+ getReperPointsPince ... l=0.365366 coeff=1.000056
+ 7 dist rp=0.001475
+ getReperPointsPince ... l=0.844805 coeff=1.000056
+ 8 dist rp=0.001476
+
+ t=108  c[0.000000] 6 7 ff1=2 ff2=2
+ text=K6F2t7F2
+
+ t=109  c[0.000000] 6 7 ff1=2 ff2=2
+ text=K6F2t7F2
+
+ t=110  c[0.000000] 6 7 ff1=2 ff2=2
+ text=K6F2t7F2
+
+ t=111 p[ 1.4  1.4  1.5  1.5] 7 8 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P7F2t8F2
+ getReperPointsPince ... l=0.159266 coeff=1.000056
+ 0 dist rp=0.001095
+ getReperPointsPince ... l=0.681197 coeff=1.000056
+ 1 dist rp=0.001446
+ getReperPointsPince ... l=1.145631 coeff=1.000056
+ 2 dist rp=0.001447
+ getReperPointsPince ... l=1.578150 coeff=1.000056
+ 3 dist rp=0.000072
+ getReperPointsPince ... l=0.141777 coeff=1.000056
+ 4 dist rp=0.000985
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000196
+ getReperPointsPince ... l=0.071437 coeff=1.000056
+ 6 dist rp=0.000560
+ getReperPointsPince ... l=0.246573 coeff=1.000056
+ 7 dist rp=0.001445
+ getReperPointsPince ... l=0.436803 coeff=1.000056
+ 8 dist rp=0.001445
+ getReperPointsPince ... l=0.916242 coeff=1.000056
+ 9 dist rp=0.001447
+ getReperPointsPince ... l=0.158705 coeff=1.000055
+ 0 dist rp=0.001099
+ getReperPointsPince ... l=0.682195 coeff=1.000055
+ 1 dist rp=0.001452
+ getReperPointsPince ... l=1.141597 coeff=1.000055
+ 2 dist rp=0.001453
+ getReperPointsPince ... l=1.572593 coeff=1.000055
+ 3 dist rp=0.000080
+ getReperPointsPince ... l=0.141278 coeff=1.000055
+ 4 dist rp=0.000988
+ getReperPointsPince ... l=0.106384 coeff=1.000055
+ 5 dist rp=0.000776
+ getReperPointsPince ... l=1.187933 coeff=1.000055
+ 6 dist rp=0.001453
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000197
+ getReperPointsPince ... l=0.071186 coeff=1.000055
+ 8 dist rp=0.000562
+ getReperPointsPince ... l=0.245705 coeff=1.000055
+ 9 dist rp=0.001451
+ getReperPointsPince ... l=0.435265 coeff=1.000055
+ 10 dist rp=0.001451
+ getReperPointsPince ... l=0.913016 coeff=1.000055
+ 11 dist rp=0.001452
+
+ t=112 p[ 1.4  1.4  1.4  1.4] 8 9 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P8F2t9F2
+ getReperPointsPince ... l=0.158705 coeff=1.000055
+ 0 dist rp=0.001079
+ getReperPointsPince ... l=0.682195 coeff=1.000055
+ 1 dist rp=0.001422
+ getReperPointsPince ... l=1.141597 coeff=1.000055
+ 2 dist rp=0.001423
+ getReperPointsPince ... l=1.572593 coeff=1.000055
+ 3 dist rp=0.000060
+ getReperPointsPince ... l=0.141278 coeff=1.000055
+ 4 dist rp=0.000970
+ getReperPointsPince ... l=0.106384 coeff=1.000055
+ 5 dist rp=0.000762
+ getReperPointsPince ... l=1.187933 coeff=1.000055
+ 6 dist rp=0.001423
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000194
+ getReperPointsPince ... l=0.071186 coeff=1.000055
+ 8 dist rp=0.000552
+ getReperPointsPince ... l=0.245705 coeff=1.000055
+ 9 dist rp=0.001422
+ getReperPointsPince ... l=0.435265 coeff=1.000055
+ 10 dist rp=0.001422
+ getReperPointsPince ... l=0.913016 coeff=1.000055
+ 11 dist rp=0.001423
+ getReperPointsPince ... l=0.158051 coeff=1.000055
+ 0 dist rp=0.001083
+ getReperPointsPince ... l=0.681074 coeff=1.000055
+ 1 dist rp=0.001428
+ getReperPointsPince ... l=1.136891 coeff=1.000055
+ 2 dist rp=0.001430
+ getReperPointsPince ... l=1.566110 coeff=1.000055
+ 3 dist rp=0.000082
+ getReperPointsPince ... l=0.140696 coeff=1.000055
+ 4 dist rp=0.000974
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000195
+ getReperPointsPince ... l=0.070892 coeff=1.000055
+ 6 dist rp=0.000554
+ getReperPointsPince ... l=0.244692 coeff=1.000055
+ 7 dist rp=0.001428
+ getReperPointsPince ... l=0.433470 coeff=1.000055
+ 8 dist rp=0.001428
+ getReperPointsPince ... l=0.909252 coeff=1.000055
+ 9 dist rp=0.001429
+
+ t=113 p[ 1.4  1.4  1.4  1.4] 9 10 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P9F2t10F2
+ getReperPointsPince ... l=0.158051 coeff=1.000055
+ 0 dist rp=0.001060
+ getReperPointsPince ... l=0.681074 coeff=1.000055
+ 1 dist rp=0.001399
+ getReperPointsPince ... l=1.136891 coeff=1.000055
+ 2 dist rp=0.001401
+ getReperPointsPince ... l=1.566110 coeff=1.000055
+ 3 dist rp=0.000059
+ getReperPointsPince ... l=0.140696 coeff=1.000055
+ 4 dist rp=0.000953
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000190
+ getReperPointsPince ... l=0.070892 coeff=1.000055
+ 6 dist rp=0.000541
+ getReperPointsPince ... l=0.244692 coeff=1.000055
+ 7 dist rp=0.001398
+ getReperPointsPince ... l=0.433470 coeff=1.000055
+ 8 dist rp=0.001399
+ getReperPointsPince ... l=0.909252 coeff=1.000055
+ 9 dist rp=0.001400
+ getReperPointsPince ... l=0.157023 coeff=1.000055
+ 0 dist rp=0.001059
+ getReperPointsPince ... l=0.680004 coeff=1.000055
+ 1 dist rp=0.001400
+ getReperPointsPince ... l=1.129496 coeff=1.000055
+ 2 dist rp=0.001402
+ getReperPointsPince ... l=1.555922 coeff=1.000055
+ 3 dist rp=0.000093
+ getReperPointsPince ... l=0.139780 coeff=1.000055
+ 4 dist rp=0.000952
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000190
+ getReperPointsPince ... l=0.070431 coeff=1.000055
+ 6 dist rp=0.000541
+ getReperPointsPince ... l=0.243100 coeff=1.000055
+ 7 dist rp=0.001398
+ getReperPointsPince ... l=0.430651 coeff=1.000055
+ 8 dist rp=0.001399
+ getReperPointsPince ... l=0.903337 coeff=1.000055
+ 9 dist rp=0.001401
+
+ t=114 p[ 1.4  1.4  1.4  1.4] 10 11 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P10F2t11F2
+ getReperPointsPince ... l=0.157023 coeff=1.000055
+ 0 dist rp=0.001038
+ getReperPointsPince ... l=0.680004 coeff=1.000055
+ 1 dist rp=0.001371
+ getReperPointsPince ... l=1.129496 coeff=1.000055
+ 2 dist rp=0.001373
+ getReperPointsPince ... l=1.555922 coeff=1.000055
+ 3 dist rp=0.000067
+ getReperPointsPince ... l=0.139780 coeff=1.000055
+ 4 dist rp=0.000934
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000186
+ getReperPointsPince ... l=0.070431 coeff=1.000055
+ 6 dist rp=0.000531
+ getReperPointsPince ... l=0.243100 coeff=1.000055
+ 7 dist rp=0.001369
+ getReperPointsPince ... l=0.430651 coeff=1.000055
+ 8 dist rp=0.001370
+ getReperPointsPince ... l=0.903337 coeff=1.000055
+ 9 dist rp=0.001372
+ getReperPointsPince ... l=0.155995 coeff=1.000054
+ 0 dist rp=0.001040
+ getReperPointsPince ... l=0.677224 coeff=1.000054
+ 1 dist rp=0.001374
+ getReperPointsPince ... l=1.122100 coeff=1.000054
+ 2 dist rp=0.001376
+ getReperPointsPince ... l=1.545735 coeff=1.000054
+ 3 dist rp=0.000079
+ getReperPointsPince ... l=0.138865 coeff=1.000054
+ 4 dist rp=0.000935
+ getReperPointsPince ... l=0.104567 coeff=1.000054
+ 5 dist rp=0.000734
+ getReperPointsPince ... l=1.167644 coeff=1.000054
+ 6 dist rp=0.001376
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 7 dist rp=0.000187
+ getReperPointsPince ... l=0.069970 coeff=1.000054
+ 8 dist rp=0.000532
+ getReperPointsPince ... l=0.241509 coeff=1.000054
+ 9 dist rp=0.001372
+ getReperPointsPince ... l=0.427831 coeff=1.000054
+ 10 dist rp=0.001373
+ getReperPointsPince ... l=0.897422 coeff=1.000054
+ 11 dist rp=0.001375
+
+ t=115 p[ 1.3  1.3  1.3  1.3] 11 12 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P11F2t12F2
+ getReperPointsPince ... l=0.155995 coeff=1.000054
+ 0 dist rp=0.001018
+ getReperPointsPince ... l=0.677224 coeff=1.000054
+ 1 dist rp=0.001345
+ getReperPointsPince ... l=1.122100 coeff=1.000054
+ 2 dist rp=0.001347
+ getReperPointsPince ... l=1.545735 coeff=1.000054
+ 3 dist rp=0.000044
+ getReperPointsPince ... l=0.138865 coeff=1.000054
+ 4 dist rp=0.000915
+ getReperPointsPince ... l=0.104567 coeff=1.000054
+ 5 dist rp=0.000719
+ getReperPointsPince ... l=1.167644 coeff=1.000054
+ 6 dist rp=0.001347
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 7 dist rp=0.000183
+ getReperPointsPince ... l=0.069970 coeff=1.000054
+ 8 dist rp=0.000520
+ getReperPointsPince ... l=0.241509 coeff=1.000054
+ 9 dist rp=0.001344
+ getReperPointsPince ... l=0.427831 coeff=1.000054
+ 10 dist rp=0.001344
+ getReperPointsPince ... l=0.897422 coeff=1.000054
+ 11 dist rp=0.001346
+ getReperPointsPince ... l=0.154586 coeff=1.000055
+ 0 dist rp=0.001020
+ getReperPointsPince ... l=0.674436 coeff=1.000055
+ 1 dist rp=0.001349
+ getReperPointsPince ... l=1.112008 coeff=1.000055
+ 2 dist rp=0.001352
+ getReperPointsPince ... l=1.531846 coeff=1.000055
+ 3 dist rp=0.000104
+ getReperPointsPince ... l=0.137611 coeff=1.000055
+ 4 dist rp=0.000917
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000183
+ getReperPointsPince ... l=0.069337 coeff=1.000055
+ 6 dist rp=0.000521
+ getReperPointsPince ... l=0.239328 coeff=1.000055
+ 7 dist rp=0.001347
+ getReperPointsPince ... l=0.423970 coeff=1.000055
+ 8 dist rp=0.001348
+ getReperPointsPince ... l=0.889343 coeff=1.000055
+ 9 dist rp=0.001351
+
+ t=116 p[ 1.3  1.3  1.3  1.3] 12 13 [  0.0(2)   2.0(2)] [  0.0(2)   2.0(2)]
+ text=V12F2t13F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.050113 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.050108
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.049629 coeff=1.000054
+ 1 dist rp=0.000179
+
+ t=117 p[ 1.3  1.3  1.3  1.3] 12 13 [  2.0(2)   6.0(2)] [  2.0(2)   6.0(2)]
+ text=V12F2t13F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000179
+ getReperPointsPince ... l=0.069337 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.069337
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 0 dist rp=0.000180
+ getReperPointsPince ... l=0.068667 coeff=1.000054
+ 1 dist rp=0.000512
+
+ t=118 p[ 1.3  1.3  1.3  1.3] 12 13 [  6.0(2) 100.0(2)] [  6.0(2) 100.0(2)]
+ text=P12F2t13F2
+ getReperPointsPince ... l=0.085248 coeff=1.000055
+ 0 dist rp=0.001000
+ getReperPointsPince ... l=0.605099 coeff=1.000055
+ 1 dist rp=0.001321
+ getReperPointsPince ... l=1.042670 coeff=1.000055
+ 2 dist rp=0.001323
+ getReperPointsPince ... l=1.462508 coeff=1.000055
+ 3 dist rp=0.000032
+ getReperPointsPince ... l=0.068273 coeff=1.000055
+ 4 dist rp=0.000899
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000511
+ getReperPointsPince ... l=0.169991 coeff=1.000055
+ 6 dist rp=0.001319
+ getReperPointsPince ... l=0.354633 coeff=1.000055
+ 7 dist rp=0.001320
+ getReperPointsPince ... l=0.820006 coeff=1.000055
+ 8 dist rp=0.001322
+ getReperPointsPince ... l=0.084423 coeff=1.000054
+ 0 dist rp=0.001004
+ getReperPointsPince ... l=0.600888 coeff=1.000054
+ 1 dist rp=0.001329
+ getReperPointsPince ... l=1.032584 coeff=1.000054
+ 2 dist rp=0.001332
+ getReperPointsPince ... l=1.448361 coeff=1.000054
+ 3 dist rp=0.000107
+ getReperPointsPince ... l=0.067613 coeff=1.000054
+ 4 dist rp=0.000903
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 5 dist rp=0.000514
+ getReperPointsPince ... l=0.168346 coeff=1.000054
+ 6 dist rp=0.001326
+ getReperPointsPince ... l=0.351202 coeff=1.000054
+ 7 dist rp=0.001327
+ getReperPointsPince ... l=0.812074 coeff=1.000054
+ 8 dist rp=0.001330
+
+ t=119  c[0.000000] 12 13 ff1=2 ff2=2
+ text=K12F2t13F2
+
+ t=120  c[0.000000] 12 13 ff1=2 ff2=2
+ text=K12F2t13F2
+
+ t=121  c[0.000000] 12 13 ff1=2 ff2=2
+ text=K12F2t13F2
+
+ t=122 p[ 1.3  1.3  1.3  1.3] 13 14 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P13F2t14F2
+ getReperPointsPince ... l=0.153090 coeff=1.000054
+ 0 dist rp=0.000983
+ getReperPointsPince ... l=0.669555 coeff=1.000054
+ 1 dist rp=0.001299
+ getReperPointsPince ... l=1.101251 coeff=1.000054
+ 2 dist rp=0.001301
+ getReperPointsPince ... l=1.517028 coeff=1.000054
+ 3 dist rp=0.000040
+ getReperPointsPince ... l=0.136280 coeff=1.000054
+ 4 dist rp=0.000884
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 5 dist rp=0.000177
+ getReperPointsPince ... l=0.068667 coeff=1.000054
+ 6 dist rp=0.000502
+ getReperPointsPince ... l=0.237013 coeff=1.000054
+ 7 dist rp=0.001297
+ getReperPointsPince ... l=0.419869 coeff=1.000054
+ 8 dist rp=0.001298
+ getReperPointsPince ... l=0.880740 coeff=1.000054
+ 9 dist rp=0.001300
+ getReperPointsPince ... l=0.151314 coeff=1.000055
+ 0 dist rp=0.000984
+ getReperPointsPince ... l=0.665035 coeff=1.000055
+ 1 dist rp=0.001302
+ getReperPointsPince ... l=1.088477 coeff=1.000055
+ 2 dist rp=0.001305
+ getReperPointsPince ... l=1.499431 coeff=1.000055
+ 3 dist rp=0.000103
+ getReperPointsPince ... l=0.134699 coeff=1.000055
+ 4 dist rp=0.000884
+ getReperPointsPince ... l=0.101430 coeff=1.000055
+ 5 dist rp=0.000695
+ getReperPointsPince ... l=1.132658 coeff=1.000055
+ 6 dist rp=0.001306
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000177
+ getReperPointsPince ... l=0.067870 coeff=1.000055
+ 8 dist rp=0.000503
+ getReperPointsPince ... l=0.234264 coeff=1.000055
+ 9 dist rp=0.001299
+ getReperPointsPince ... l=0.414999 coeff=1.000055
+ 10 dist rp=0.001300
+ getReperPointsPince ... l=0.870524 coeff=1.000055
+ 11 dist rp=0.001304
+
+ t=123 p[ 1.3  1.3  1.3  1.3] 14 15 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P14F2t15F2
+ getReperPointsPince ... l=0.151314 coeff=1.000055
+ 0 dist rp=0.000962
+ getReperPointsPince ... l=0.665035 coeff=1.000055
+ 1 dist rp=0.001274
+ getReperPointsPince ... l=1.088477 coeff=1.000055
+ 2 dist rp=0.001277
+ getReperPointsPince ... l=1.499431 coeff=1.000055
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.134699 coeff=1.000055
+ 4 dist rp=0.000864
+ getReperPointsPince ... l=0.101430 coeff=1.000055
+ 5 dist rp=0.000678
+ getReperPointsPince ... l=1.132658 coeff=1.000055
+ 6 dist rp=0.001277
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000173
+ getReperPointsPince ... l=0.067870 coeff=1.000055
+ 8 dist rp=0.000491
+ getReperPointsPince ... l=0.234264 coeff=1.000055
+ 9 dist rp=0.001270
+ getReperPointsPince ... l=0.414999 coeff=1.000055
+ 10 dist rp=0.001272
+ getReperPointsPince ... l=0.870524 coeff=1.000055
+ 11 dist rp=0.001276
+ getReperPointsPince ... l=0.149252 coeff=1.000054
+ 0 dist rp=0.000958
+ getReperPointsPince ... l=0.657582 coeff=1.000054
+ 1 dist rp=0.001270
+ getReperPointsPince ... l=1.073679 coeff=1.000054
+ 2 dist rp=0.001274
+ getReperPointsPince ... l=1.479059 coeff=1.000054
+ 3 dist rp=0.000098
+ getReperPointsPince ... l=0.132863 coeff=1.000054
+ 4 dist rp=0.000861
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 5 dist rp=0.000172
+ getReperPointsPince ... l=0.066945 coeff=1.000054
+ 6 dist rp=0.000489
+ getReperPointsPince ... l=0.231071 coeff=1.000054
+ 7 dist rp=0.001266
+ getReperPointsPince ... l=0.409345 coeff=1.000054
+ 8 dist rp=0.001268
+ getReperPointsPince ... l=0.858682 coeff=1.000054
+ 9 dist rp=0.001272
+
+ t=124 p[ 1.3  1.3  1.3  1.3] 15 16 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P15F2t16F2
+ getReperPointsPince ... l=0.149252 coeff=1.000054
+ 0 dist rp=0.000957
+ getReperPointsPince ... l=0.657582 coeff=1.000054
+ 1 dist rp=0.001267
+ getReperPointsPince ... l=1.073679 coeff=1.000054
+ 2 dist rp=0.001271
+ getReperPointsPince ... l=1.479059 coeff=1.000054
+ 3 dist rp=0.000038
+ getReperPointsPince ... l=0.132863 coeff=1.000054
+ 4 dist rp=0.000860
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 5 dist rp=0.000172
+ getReperPointsPince ... l=0.066945 coeff=1.000054
+ 6 dist rp=0.000488
+ getReperPointsPince ... l=0.231071 coeff=1.000054
+ 7 dist rp=0.001263
+ getReperPointsPince ... l=0.409345 coeff=1.000054
+ 8 dist rp=0.001265
+ getReperPointsPince ... l=0.858682 coeff=1.000054
+ 9 dist rp=0.001269
+ getReperPointsPince ... l=0.147009 coeff=1.000055
+ 0 dist rp=0.000950
+ getReperPointsPince ... l=0.649277 coeff=1.000055
+ 1 dist rp=0.001261
+ getReperPointsPince ... l=1.057543 coeff=1.000055
+ 2 dist rp=0.001266
+ getReperPointsPince ... l=1.456831 coeff=1.000055
+ 3 dist rp=0.000103
+ getReperPointsPince ... l=0.130866 coeff=1.000055
+ 4 dist rp=0.000854
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000171
+ getReperPointsPince ... l=0.065939 coeff=1.000055
+ 6 dist rp=0.000486
+ getReperPointsPince ... l=0.227598 coeff=1.000055
+ 7 dist rp=0.001256
+ getReperPointsPince ... l=0.403193 coeff=1.000055
+ 8 dist rp=0.001258
+ getReperPointsPince ... l=0.845778 coeff=1.000055
+ 9 dist rp=0.001263
+
+ t=125 p[ 1.2  1.2  1.2  1.2] 16 17 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P16F2t17F2
+ getReperPointsPince ... l=0.147009 coeff=1.000055
+ 0 dist rp=0.000928
+ getReperPointsPince ... l=0.649277 coeff=1.000055
+ 1 dist rp=0.001233
+ getReperPointsPince ... l=1.057543 coeff=1.000055
+ 2 dist rp=0.001238
+ getReperPointsPince ... l=1.456831 coeff=1.000055
+ 3 dist rp=0.000033
+ getReperPointsPince ... l=0.130866 coeff=1.000055
+ 4 dist rp=0.000834
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000167
+ getReperPointsPince ... l=0.065939 coeff=1.000055
+ 6 dist rp=0.000473
+ getReperPointsPince ... l=0.227598 coeff=1.000055
+ 7 dist rp=0.001226
+ getReperPointsPince ... l=0.403193 coeff=1.000055
+ 8 dist rp=0.001229
+ getReperPointsPince ... l=0.845778 coeff=1.000055
+ 9 dist rp=0.001236
+ getReperPointsPince ... l=0.144198 coeff=1.000054
+ 0 dist rp=0.000923
+ getReperPointsPince ... l=0.636878 coeff=1.000054
+ 1 dist rp=0.001228
+ getReperPointsPince ... l=1.037367 coeff=1.000054
+ 2 dist rp=0.001234
+ getReperPointsPince ... l=1.429050 coeff=1.000054
+ 3 dist rp=0.000109
+ getReperPointsPince ... l=0.128364 coeff=1.000054
+ 4 dist rp=0.000829
+ getReperPointsPince ... l=0.096659 coeff=1.000054
+ 5 dist rp=0.000651
+ getReperPointsPince ... l=1.079476 coeff=1.000054
+ 6 dist rp=0.001234
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 7 dist rp=0.000166
+ getReperPointsPince ... l=0.064678 coeff=1.000054
+ 8 dist rp=0.000471
+ getReperPointsPince ... l=0.223248 coeff=1.000054
+ 9 dist rp=0.001221
+ getReperPointsPince ... l=0.395489 coeff=1.000054
+ 10 dist rp=0.001224
+ getReperPointsPince ... l=0.829634 coeff=1.000054
+ 11 dist rp=0.001231
+
+ t=126 p[ 1.2  1.2  1.2  1.2] 17 18 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P17F2t18F2
+ getReperPointsPince ... l=0.144198 coeff=1.000054
+ 0 dist rp=0.000922
+ getReperPointsPince ... l=0.636878 coeff=1.000054
+ 1 dist rp=0.001225
+ getReperPointsPince ... l=1.037367 coeff=1.000054
+ 2 dist rp=0.001230
+ getReperPointsPince ... l=1.429050 coeff=1.000054
+ 3 dist rp=0.000032
+ getReperPointsPince ... l=0.128364 coeff=1.000054
+ 4 dist rp=0.000828
+ getReperPointsPince ... l=0.096659 coeff=1.000054
+ 5 dist rp=0.000650
+ getReperPointsPince ... l=1.079476 coeff=1.000054
+ 6 dist rp=0.001230
+ getReperPointsPince ... l=0.000000 coeff=1.000054
+ 7 dist rp=0.000166
+ getReperPointsPince ... l=0.064678 coeff=1.000054
+ 8 dist rp=0.000470
+ getReperPointsPince ... l=0.223248 coeff=1.000054
+ 9 dist rp=0.001217
+ getReperPointsPince ... l=0.395489 coeff=1.000054
+ 10 dist rp=0.001221
+ getReperPointsPince ... l=0.829634 coeff=1.000054
+ 11 dist rp=0.001228
+ getReperPointsPince ... l=0.141389 coeff=1.000055
+ 0 dist rp=0.000918
+ getReperPointsPince ... l=0.624479 coeff=1.000055
+ 1 dist rp=0.001222
+ getReperPointsPince ... l=1.017191 coeff=1.000055
+ 2 dist rp=0.001228
+ getReperPointsPince ... l=1.401268 coeff=1.000055
+ 3 dist rp=0.000106
+ getReperPointsPince ... l=0.125863 coeff=1.000055
+ 4 dist rp=0.000825
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000166
+ getReperPointsPince ... l=0.063417 coeff=1.000055
+ 6 dist rp=0.000469
+ getReperPointsPince ... l=0.218898 coeff=1.000055
+ 7 dist rp=0.001215
+ getReperPointsPince ... l=0.387785 coeff=1.000055
+ 8 dist rp=0.001218
+ getReperPointsPince ... l=0.813492 coeff=1.000055
+ 9 dist rp=0.001225
+
+ t=127 p[ 1.2  1.2  1.2  1.2] 18 19 [  0.0(2)   2.0(2)] [  0.0(2)   2.0(2)]
+ text=V18F2t19F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.045832 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.045771
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.044741 coeff=1.000055
+ 1 dist rp=0.000159
+
+ t=128 p[ 1.2  1.2  1.2  1.2] 18 19 [  2.0(2)   6.0(2)] [  2.0(2)   6.0(2)]
+ text=V18F2t19F2
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000162
+ getReperPointsPince ... l=0.063417 coeff=1.000055
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.063417
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 0 dist rp=0.000161
+ getReperPointsPince ... l=0.061908 coeff=1.000055
+ 1 dist rp=0.000454
+
+ t=129 p[ 1.2  1.2  1.2  1.2] 18 19 [  6.0(2) 100.0(2)] [  6.0(2) 100.0(2)]
+ text=P18F2t19F2
+ getReperPointsPince ... l=0.077971 coeff=1.000055
+ 0 dist rp=0.000899
+ getReperPointsPince ... l=0.561062 coeff=1.000055
+ 1 dist rp=0.001195
+ getReperPointsPince ... l=0.953774 coeff=1.000055
+ 2 dist rp=0.001201
+ getReperPointsPince ... l=1.337851 coeff=1.000055
+ 3 dist rp=0.000039
+ getReperPointsPince ... l=0.062445 coeff=1.000055
+ 4 dist rp=0.000808
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000464
+ getReperPointsPince ... l=0.155481 coeff=1.000055
+ 6 dist rp=0.001187
+ getReperPointsPince ... l=0.324368 coeff=1.000055
+ 7 dist rp=0.001190
+ getReperPointsPince ... l=0.750075 coeff=1.000055
+ 8 dist rp=0.001199
+ getReperPointsPince ... l=0.076116 coeff=1.000055
+ 0 dist rp=0.000894
+ getReperPointsPince ... l=0.546231 coeff=1.000055
+ 1 dist rp=0.001193
+ getReperPointsPince ... l=0.931080 coeff=1.000055
+ 2 dist rp=0.001202
+ getReperPointsPince ... l=1.306019 coeff=1.000055
+ 3 dist rp=0.000168
+ getReperPointsPince ... l=0.060960 coeff=1.000055
+ 4 dist rp=0.000804
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000460
+ getReperPointsPince ... l=0.151782 coeff=1.000055
+ 6 dist rp=0.001181
+ getReperPointsPince ... l=0.316650 coeff=1.000055
+ 7 dist rp=0.001186
+ getReperPointsPince ... l=0.732228 coeff=1.000055
+ 8 dist rp=0.001198
+
+ t=130  c[0.000000] 18 19 ff1=2 ff2=2
+ text=K18F2t19F2
+
+ t=131  c[0.000000] 18 19 ff1=2 ff2=2
+ text=K18F2t19F2
+
+ t=132  c[0.000000] 18 19 ff1=2 ff2=2
+ text=K18F2t19F2
+
+ t=133 p[ 1.2  1.2  1.2  1.2] 19 20 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P19F2t20F2
+ getReperPointsPince ... l=0.138024 coeff=1.000055
+ 0 dist rp=0.000886
+ getReperPointsPince ... l=0.608139 coeff=1.000055
+ 1 dist rp=0.001183
+ getReperPointsPince ... l=0.992988 coeff=1.000055
+ 2 dist rp=0.001192
+ getReperPointsPince ... l=1.367927 coeff=1.000055
+ 3 dist rp=0.000021
+ getReperPointsPince ... l=0.122868 coeff=1.000055
+ 4 dist rp=0.000795
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 5 dist rp=0.000161
+ getReperPointsPince ... l=0.061908 coeff=1.000055
+ 6 dist rp=0.000451
+ getReperPointsPince ... l=0.213690 coeff=1.000055
+ 7 dist rp=0.001171
+ getReperPointsPince ... l=0.378558 coeff=1.000055
+ 8 dist rp=0.001176
+ getReperPointsPince ... l=0.794136 coeff=1.000055
+ 9 dist rp=0.001188
+ getReperPointsPince ... l=0.134467 coeff=1.000055
+ 0 dist rp=0.000885
+ getReperPointsPince ... l=0.591035 coeff=1.000055
+ 1 dist rp=0.001185
+ getReperPointsPince ... l=0.967434 coeff=1.000055
+ 2 dist rp=0.001195
+ getReperPointsPince ... l=1.332736 coeff=1.000055
+ 3 dist rp=0.000112
+ getReperPointsPince ... l=0.119701 coeff=1.000055
+ 4 dist rp=0.000795
+ getReperPointsPince ... l=0.090136 coeff=1.000055
+ 5 dist rp=0.000624
+ getReperPointsPince ... l=1.006707 coeff=1.000055
+ 6 dist rp=0.001196
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000161
+ getReperPointsPince ... l=0.060312 coeff=1.000055
+ 8 dist rp=0.000451
+ getReperPointsPince ... l=0.208183 coeff=1.000055
+ 9 dist rp=0.001173
+ getReperPointsPince ... l=0.368806 coeff=1.000055
+ 10 dist rp=0.001178
+ getReperPointsPince ... l=0.773693 coeff=1.000055
+ 11 dist rp=0.001190
+
+ t=134 p[ 1.2  1.2  1.2  1.2] 20 21 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P20F2t21F2
+ getReperPointsPince ... l=0.134467 coeff=1.000055
+ 0 dist rp=0.000864
+ getReperPointsPince ... l=0.591035 coeff=1.000055
+ 1 dist rp=0.001157
+ getReperPointsPince ... l=0.967434 coeff=1.000055
+ 2 dist rp=0.001166
+ getReperPointsPince ... l=1.332736 coeff=1.000055
+ 3 dist rp=0.000010
+ getReperPointsPince ... l=0.119701 coeff=1.000055
+ 4 dist rp=0.000776
+ getReperPointsPince ... l=0.090136 coeff=1.000055
+ 5 dist rp=0.000608
+ getReperPointsPince ... l=1.006707 coeff=1.000055
+ 6 dist rp=0.001167
+ getReperPointsPince ... l=0.000000 coeff=1.000055
+ 7 dist rp=0.000157
+ getReperPointsPince ... l=0.060312 coeff=1.000055
+ 8 dist rp=0.000440
+ getReperPointsPince ... l=0.208183 coeff=1.000055
+ 9 dist rp=0.001143
+ getReperPointsPince ... l=0.368806 coeff=1.000055
+ 10 dist rp=0.001149
+ getReperPointsPince ... l=0.773693 coeff=1.000055
+ 11 dist rp=0.001162
+ getReperPointsPince ... l=0.130630 coeff=1.000056
+ 0 dist rp=0.000863
+ getReperPointsPince ... l=0.572778 coeff=1.000056
+ 1 dist rp=0.001157
+ getReperPointsPince ... l=0.939864 coeff=1.000056
+ 2 dist rp=0.001169
+ getReperPointsPince ... l=1.294766 coeff=1.000056
+ 3 dist rp=0.000120
+ getReperPointsPince ... l=0.116286 coeff=1.000056
+ 4 dist rp=0.000775
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000157
+ getReperPointsPince ... l=0.058591 coeff=1.000056
+ 6 dist rp=0.000440
+ getReperPointsPince ... l=0.202243 coeff=1.000056
+ 7 dist rp=0.001143
+ getReperPointsPince ... l=0.358284 coeff=1.000056
+ 8 dist rp=0.001149
+ getReperPointsPince ... l=0.751637 coeff=1.000056
+ 9 dist rp=0.001163
+
+ t=135 p[ 1.2  1.2  1.2  1.2] 21 22 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P21F2t22F2
+ getReperPointsPince ... l=0.130630 coeff=1.000056
+ 0 dist rp=0.000857
+ getReperPointsPince ... l=0.572778 coeff=1.000056
+ 1 dist rp=0.001151
+ getReperPointsPince ... l=0.939864 coeff=1.000056
+ 2 dist rp=0.001163
+ getReperPointsPince ... l=1.294766 coeff=1.000056
+ 3 dist rp=0.000008
+ getReperPointsPince ... l=0.116286 coeff=1.000056
+ 4 dist rp=0.000769
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000157
+ getReperPointsPince ... l=0.058591 coeff=1.000056
+ 6 dist rp=0.000436
+ getReperPointsPince ... l=0.202243 coeff=1.000056
+ 7 dist rp=0.001134
+ getReperPointsPince ... l=0.358284 coeff=1.000056
+ 8 dist rp=0.001142
+ getReperPointsPince ... l=0.751637 coeff=1.000056
+ 9 dist rp=0.001158
+ getReperPointsPince ... l=0.126326 coeff=1.000056
+ 0 dist rp=0.000852
+ getReperPointsPince ... l=0.549850 coeff=1.000056
+ 1 dist rp=0.001148
+ getReperPointsPince ... l=0.908932 coeff=1.000056
+ 2 dist rp=0.001162
+ getReperPointsPince ... l=1.252166 coeff=1.000056
+ 3 dist rp=0.000119
+ getReperPointsPince ... l=0.112454 coeff=1.000056
+ 4 dist rp=0.000766
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000156
+ getReperPointsPince ... l=0.056660 coeff=1.000056
+ 6 dist rp=0.000434
+ getReperPointsPince ... l=0.195580 coeff=1.000056
+ 7 dist rp=0.001131
+ getReperPointsPince ... l=0.346483 coeff=1.000056
+ 8 dist rp=0.001139
+ getReperPointsPince ... l=0.726894 coeff=1.000056
+ 9 dist rp=0.001156
+
+ t=136 p[ 1.1  1.1  1.1  1.1] 22 23 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P22F2t23F2
+ getReperPointsPince ... l=0.126326 coeff=1.000056
+ 0 dist rp=0.000832
+ getReperPointsPince ... l=0.549850 coeff=1.000056
+ 1 dist rp=0.001120
+ getReperPointsPince ... l=0.908932 coeff=1.000056
+ 2 dist rp=0.001133
+ getReperPointsPince ... l=1.252166 coeff=1.000056
+ 3 dist rp=0.000002
+ getReperPointsPince ... l=0.112454 coeff=1.000056
+ 4 dist rp=0.000747
+ getReperPointsPince ... l=0.000000 coeff=1.000056
+ 5 dist rp=0.000153
+ getReperPointsPince ... l=0.056660 coeff=1.000056
+ 6 dist rp=0.000423
+ getReperPointsPince ... l=0.195580 coeff=1.000056
+ 7 dist rp=0.001102
+ getReperPointsPince ... l=0.346483 coeff=1.000056
+ 8 dist rp=0.001110
+ getReperPointsPince ... l=0.726894 coeff=1.000056
+ 9 dist rp=0.001128
+ getReperPointsPince ... l=0.121836 coeff=1.000058
+ 0 dist rp=0.000831
+ getReperPointsPince ... l=0.527700 coeff=1.000058
+ 1 dist rp=0.001122
+ getReperPointsPince ... l=0.876656 coeff=1.000058
+ 2 dist rp=0.001138
+ getReperPointsPince ... l=1.207713 coeff=1.000058
+ 3 dist rp=0.000126
+ getReperPointsPince ... l=0.108457 coeff=1.000058
+ 4 dist rp=0.000747
+ getReperPointsPince ... l=0.081668 coeff=1.000058
+ 5 dist rp=0.000585
+ getReperPointsPince ... l=0.912248 coeff=1.000058
+ 6 dist rp=0.001139
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 7 dist rp=0.000153
+ getReperPointsPince ... l=0.054646 coeff=1.000058
+ 8 dist rp=0.000424
+ getReperPointsPince ... l=0.188629 coeff=1.000058
+ 9 dist rp=0.001104
+ getReperPointsPince ... l=0.334169 coeff=1.000058
+ 10 dist rp=0.001112
+ getReperPointsPince ... l=0.701077 coeff=1.000058
+ 11 dist rp=0.001131
+
+ t=137 p[ 1.1  1.1  1.1  1.1] 23 24 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P23F2t24F2
+ getReperPointsPince ... l=0.121836 coeff=1.000058
+ 0 dist rp=0.000821
+ getReperPointsPince ... l=0.527700 coeff=1.000058
+ 1 dist rp=0.001112
+ getReperPointsPince ... l=0.876656 coeff=1.000058
+ 2 dist rp=0.001130
+ getReperPointsPince ... l=1.207713 coeff=1.000058
+ 3 dist rp=0.000005
+ getReperPointsPince ... l=0.108457 coeff=1.000058
+ 4 dist rp=0.000737
+ getReperPointsPince ... l=0.081668 coeff=1.000058
+ 5 dist rp=0.000577
+ getReperPointsPince ... l=0.912248 coeff=1.000058
+ 6 dist rp=0.001131
+ getReperPointsPince ... l=0.000000 coeff=1.000058
+ 7 dist rp=0.000152
+ getReperPointsPince ... l=0.054646 coeff=1.000058
+ 8 dist rp=0.000417
+ getReperPointsPince ... l=0.188629 coeff=1.000058
+ 9 dist rp=0.001089
+ getReperPointsPince ... l=0.334169 coeff=1.000058
+ 10 dist rp=0.001099
+ getReperPointsPince ... l=0.701077 coeff=1.000058
+ 11 dist rp=0.001122
+ getReperPointsPince ... l=0.116873 coeff=1.000057
+ 0 dist rp=0.000817
+ getReperPointsPince ... l=0.501220 coeff=1.000057
+ 1 dist rp=0.001109
+ getReperPointsPince ... l=0.841014 coeff=1.000057
+ 2 dist rp=0.001129
+ getReperPointsPince ... l=1.158631 coeff=1.000057
+ 3 dist rp=0.000125
+ getReperPointsPince ... l=0.104039 coeff=1.000057
+ 4 dist rp=0.000734
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000151
+ getReperPointsPince ... l=0.052420 coeff=1.000057
+ 6 dist rp=0.000416
+ getReperPointsPince ... l=0.180947 coeff=1.000057
+ 7 dist rp=0.001087
+ getReperPointsPince ... l=0.320564 coeff=1.000057
+ 8 dist rp=0.001097
+ getReperPointsPince ... l=0.672562 coeff=1.000057
+ 9 dist rp=0.001121
+
+ t=138 p[ 1.1  1.1  1.1  1.1] 24 25 [  0.0(2)   2.0(2)] [  0.0(2)   2.0(2)]
+ text=V24F2t25F2
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.037879 coeff=1.000057
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.037737
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 0 dist rp=0.000000
+ getReperPointsPince ... l=0.036242 coeff=1.000060
+ 1 dist rp=0.000143
+
+ t=139 p[ 1.1  1.1  1.1  1.1] 24 25 [  2.0(2)   6.0(2)] [  2.0(2)   6.0(2)]
+ text=V24F2t25F2
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 0 dist rp=0.000151
+ getReperPointsPince ... l=0.052420 coeff=1.000057
+ Ahtung! calcRepPointByLength() == 1 
+ 1 dist rp=0.052420
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 0 dist rp=0.000150
+ getReperPointsPince ... l=0.050155 coeff=1.000060
+ 1 dist rp=0.000412
+
+ t=140 p[ 1.1  1.1  1.1  1.1] 24 25 [  6.0(2) 100.0(2)] [  6.0(2) 100.0(2)]
+ text=P24F2t25F2
+ getReperPointsPince ... l=0.064454 coeff=1.000057
+ 0 dist rp=0.000825
+ getReperPointsPince ... l=0.448800 coeff=1.000057
+ 1 dist rp=0.001111
+ getReperPointsPince ... l=0.788594 coeff=1.000057
+ 2 dist rp=0.001129
+ getReperPointsPince ... l=1.106211 coeff=1.000057
+ 3 dist rp=0.000105
+ getReperPointsPince ... l=0.051619 coeff=1.000057
+ 4 dist rp=0.000743
+ getReperPointsPince ... l=0.000000 coeff=1.000057
+ 5 dist rp=0.000434
+ getReperPointsPince ... l=0.128527 coeff=1.000057
+ 6 dist rp=0.001089
+ getReperPointsPince ... l=0.268144 coeff=1.000057
+ 7 dist rp=0.001099
+ getReperPointsPince ... l=0.620142 coeff=1.000057
+ 8 dist rp=0.001121
+ getReperPointsPince ... l=0.061669 coeff=1.000060
+ 0 dist rp=0.000818
+ getReperPointsPince ... l=0.424628 coeff=1.000060
+ 1 dist rp=0.001108
+ getReperPointsPince ... l=0.754551 coeff=1.000060
+ 2 dist rp=0.001131
+ getReperPointsPince ... l=1.058466 coeff=1.000060
+ 3 dist rp=0.000209
+ getReperPointsPince ... l=0.049389 coeff=1.000060
+ 4 dist rp=0.000737
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 5 dist rp=0.000430
+ getReperPointsPince ... l=0.122974 coeff=1.000060
+ 6 dist rp=0.001083
+ getReperPointsPince ... l=0.256561 coeff=1.000060
+ 7 dist rp=0.001094
+ getReperPointsPince ... l=0.593366 coeff=1.000060
+ 8 dist rp=0.001121
+
+ t=141  c[0.000000] 24 25 ff1=2 ff2=2
+ text=K24F2t25F2
+
+ t=142  c[0.000000] 24 25 ff1=2 ff2=2
+ text=K24F2t25F2
+
+ t=143  c[0.000000] 24 25 ff1=2 ff2=2
+ text=K24F2t25F2
+
+ t=144 p[ 1.1  1.1  1.1  1.1] 25 26 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P25F2t26F2
+ getReperPointsPince ... l=0.111824 coeff=1.000060
+ 0 dist rp=0.000799
+ getReperPointsPince ... l=0.474783 coeff=1.000060
+ 1 dist rp=0.001088
+ getReperPointsPince ... l=0.804706 coeff=1.000060
+ 2 dist rp=0.001112
+ getReperPointsPince ... l=1.108621 coeff=1.000060
+ 3 dist rp=0.000023
+ getReperPointsPince ... l=0.099544 coeff=1.000060
+ 4 dist rp=0.000716
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 5 dist rp=0.000149
+ getReperPointsPince ... l=0.050155 coeff=1.000060
+ 6 dist rp=0.000406
+ getReperPointsPince ... l=0.173129 coeff=1.000060
+ 7 dist rp=0.001061
+ getReperPointsPince ... l=0.306716 coeff=1.000060
+ 8 dist rp=0.001073
+ getReperPointsPince ... l=0.643521 coeff=1.000060
+ 9 dist rp=0.001102
+ getReperPointsPince ... l=0.106209 coeff=1.000060
+ 0 dist rp=0.000798
+ getReperPointsPince ... l=0.445273 coeff=1.000060
+ 1 dist rp=0.001090
+ getReperPointsPince ... l=0.764359 coeff=1.000060
+ 2 dist rp=0.001117
+ getReperPointsPince ... l=1.053055 coeff=1.000060
+ 3 dist rp=0.000134
+ getReperPointsPince ... l=0.094545 coeff=1.000060
+ 4 dist rp=0.000716
+ getReperPointsPince ... l=0.071192 coeff=1.000060
+ 5 dist rp=0.000561
+ getReperPointsPince ... l=0.795396 coeff=1.000060
+ 6 dist rp=0.001119
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 7 dist rp=0.000149
+ getReperPointsPince ... l=0.047636 coeff=1.000060
+ 8 dist rp=0.000406
+ getReperPointsPince ... l=0.164437 coeff=1.000060
+ 9 dist rp=0.001064
+ getReperPointsPince ... l=0.291320 coeff=1.000060
+ 10 dist rp=0.001076
+ getReperPointsPince ... l=0.611246 coeff=1.000060
+ 11 dist rp=0.001106
+
+ t=145 p[ 1.1  1.1  1.1  1.1] 26 27 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P26F2t27F2
+ getReperPointsPince ... l=0.106209 coeff=1.000060
+ 0 dist rp=0.000779
+ getReperPointsPince ... l=0.445273 coeff=1.000060
+ 1 dist rp=0.001063
+ getReperPointsPince ... l=0.764359 coeff=1.000060
+ 2 dist rp=0.001088
+ getReperPointsPince ... l=1.053055 coeff=1.000060
+ 3 dist rp=0.000022
+ getReperPointsPince ... l=0.094545 coeff=1.000060
+ 4 dist rp=0.000698
+ getReperPointsPince ... l=0.071192 coeff=1.000060
+ 5 dist rp=0.000547
+ getReperPointsPince ... l=0.795396 coeff=1.000060
+ 6 dist rp=0.001090
+ getReperPointsPince ... l=0.000000 coeff=1.000060
+ 7 dist rp=0.000146
+ getReperPointsPince ... l=0.047636 coeff=1.000060
+ 8 dist rp=0.000396
+ getReperPointsPince ... l=0.164437 coeff=1.000060
+ 9 dist rp=0.001034
+ getReperPointsPince ... l=0.291320 coeff=1.000060
+ 10 dist rp=0.001048
+ getReperPointsPince ... l=0.611246 coeff=1.000060
+ 11 dist rp=0.001078
+ getReperPointsPince ... l=0.100502 coeff=1.000062
+ 0 dist rp=0.000778
+ getReperPointsPince ... l=0.414904 coeff=1.000062
+ 1 dist rp=0.001065
+ getReperPointsPince ... l=0.723342 coeff=1.000062
+ 2 dist rp=0.001093
+ getReperPointsPince ... l=0.996563 coeff=1.000062
+ 3 dist rp=0.000124
+ getReperPointsPince ... l=0.089465 coeff=1.000062
+ 4 dist rp=0.000698
+ getReperPointsPince ... l=0.000000 coeff=1.000062
+ 5 dist rp=0.000146
+ getReperPointsPince ... l=0.045076 coeff=1.000062
+ 6 dist rp=0.000396
+ getReperPointsPince ... l=0.155602 coeff=1.000062
+ 7 dist rp=0.001037
+ getReperPointsPince ... l=0.275671 coeff=1.000062
+ 8 dist rp=0.001050
+ getReperPointsPince ... l=0.578435 coeff=1.000062
+ 9 dist rp=0.001081
+
+ t=146 p[ 1.1  1.1  1.1  1.1] 27 28 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P27F2t28F2
+ getReperPointsPince ... l=0.100502 coeff=1.000062
+ 0 dist rp=0.000770
+ getReperPointsPince ... l=0.414904 coeff=1.000062
+ 1 dist rp=0.001055
+ getReperPointsPince ... l=0.723342 coeff=1.000062
+ 2 dist rp=0.001085
+ getReperPointsPince ... l=0.996563 coeff=1.000062
+ 3 dist rp=0.000037
+ getReperPointsPince ... l=0.089465 coeff=1.000062
+ 4 dist rp=0.000690
+ getReperPointsPince ... l=0.000000 coeff=1.000062
+ 5 dist rp=0.000146
+ getReperPointsPince ... l=0.045076 coeff=1.000062
+ 6 dist rp=0.000391
+ getReperPointsPince ... l=0.155602 coeff=1.000062
+ 7 dist rp=0.001024
+ getReperPointsPince ... l=0.275671 coeff=1.000062
+ 8 dist rp=0.001039
+ getReperPointsPince ... l=0.578435 coeff=1.000062
+ 9 dist rp=0.001073
+ getReperPointsPince ... l=0.094418 coeff=1.000064
+ 0 dist rp=0.000763
+ getReperPointsPince ... l=0.383739 coeff=1.000064
+ 1 dist rp=0.001049
+ getReperPointsPince ... l=0.679632 coeff=1.000064
+ 2 dist rp=0.001083
+ getReperPointsPince ... l=0.936368 coeff=1.000064
+ 3 dist rp=0.000138
+ getReperPointsPince ... l=0.084049 coeff=1.000064
+ 4 dist rp=0.000685
+ getReperPointsPince ... l=0.000000 coeff=1.000064
+ 5 dist rp=0.000144
+ getReperPointsPince ... l=0.042347 coeff=1.000064
+ 6 dist rp=0.000388
+ getReperPointsPince ... l=0.146183 coeff=1.000064
+ 7 dist rp=0.001019
+ getReperPointsPince ... l=0.258989 coeff=1.000064
+ 8 dist rp=0.001034
+ getReperPointsPince ... l=0.543468 coeff=1.000064
+ 9 dist rp=0.001069
+
+ t=147 p[ 1.1  1.1  1.1  1.1] 28 29 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P28F2t29F2
+ getReperPointsPince ... l=0.094418 coeff=1.000064
+ 0 dist rp=0.000757
+ getReperPointsPince ... l=0.383739 coeff=1.000064
+ 1 dist rp=0.001042
+ getReperPointsPince ... l=0.679632 coeff=1.000064
+ 2 dist rp=0.001075
+ getReperPointsPince ... l=0.936368 coeff=1.000064
+ 3 dist rp=0.000031
+ getReperPointsPince ... l=0.084049 coeff=1.000064
+ 4 dist rp=0.000678
+ getReperPointsPince ... l=0.000000 coeff=1.000064
+ 5 dist rp=0.000144
+ getReperPointsPince ... l=0.042347 coeff=1.000064
+ 6 dist rp=0.000384
+ getReperPointsPince ... l=0.146183 coeff=1.000064
+ 7 dist rp=0.001007
+ getReperPointsPince ... l=0.258989 coeff=1.000064
+ 8 dist rp=0.001024
+ getReperPointsPince ... l=0.543468 coeff=1.000064
+ 9 dist rp=0.001063
+ getReperPointsPince ... l=0.088153 coeff=1.000066
+ 0 dist rp=0.000753
+ getReperPointsPince ... l=0.350734 coeff=1.000066
+ 1 dist rp=0.001039
+ getReperPointsPince ... l=0.634583 coeff=1.000066
+ 2 dist rp=0.001076
+ getReperPointsPince ... l=0.874317 coeff=1.000066
+ 3 dist rp=0.000127
+ getReperPointsPince ... l=0.078472 coeff=1.000066
+ 4 dist rp=0.000676
+ getReperPointsPince ... l=0.059088 coeff=1.000066
+ 5 dist rp=0.000529
+ getReperPointsPince ... l=0.660356 coeff=1.000066
+ 6 dist rp=0.001079
+ getReperPointsPince ... l=0.000000 coeff=1.000066
+ 7 dist rp=0.000143
+ getReperPointsPince ... l=0.039536 coeff=1.000066
+ 8 dist rp=0.000383
+ getReperPointsPince ... l=0.136484 coeff=1.000066
+ 9 dist rp=0.001007
+ getReperPointsPince ... l=0.241808 coeff=1.000066
+ 10 dist rp=0.001024
+ getReperPointsPince ... l=0.507436 coeff=1.000066
+ 11 dist rp=0.001062
+
+ t=148 p[ 1.1  1.1  1.1  1.1] 29 30 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P29F2t30F2
+ getReperPointsPince ... l=0.088153 coeff=1.000066
+ 0 dist rp=0.000749
+ getReperPointsPince ... l=0.350734 coeff=1.000066
+ 1 dist rp=0.001031
+ getReperPointsPince ... l=0.634583 coeff=1.000066
+ 2 dist rp=0.001069
+ getReperPointsPince ... l=0.874317 coeff=1.000066
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.078472 coeff=1.000066
+ 4 dist rp=0.000671
+ getReperPointsPince ... l=0.059088 coeff=1.000066
+ 5 dist rp=0.000525
+ getReperPointsPince ... l=0.660356 coeff=1.000066
+ 6 dist rp=0.001071
+ getReperPointsPince ... l=0.000000 coeff=1.000066
+ 7 dist rp=0.000144
+ getReperPointsPince ... l=0.039536 coeff=1.000066
+ 8 dist rp=0.000380
+ getReperPointsPince ... l=0.136484 coeff=1.000066
+ 9 dist rp=0.000997
+ getReperPointsPince ... l=0.241808 coeff=1.000066
+ 10 dist rp=0.001014
+ getReperPointsPince ... l=0.507436 coeff=1.000066
+ 11 dist rp=0.001054
+ getReperPointsPince ... l=0.081601 coeff=1.000069
+ 0 dist rp=0.000746
+ getReperPointsPince ... l=0.318568 coeff=1.000069
+ 1 dist rp=0.001032
+ getReperPointsPince ... l=0.587511 coeff=1.000069
+ 2 dist rp=0.001073
+ getReperPointsPince ... l=0.809491 coeff=1.000069
+ 3 dist rp=0.000133
+ getReperPointsPince ... l=0.072640 coeff=1.000069
+ 4 dist rp=0.000669
+ getReperPointsPince ... l=0.000000 coeff=1.000069
+ 5 dist rp=0.000143
+ getReperPointsPince ... l=0.036597 coeff=1.000069
+ 6 dist rp=0.000380
+ getReperPointsPince ... l=0.126342 coeff=1.000069
+ 7 dist rp=0.000998
+ getReperPointsPince ... l=0.223845 coeff=1.000069
+ 8 dist rp=0.001016
+ getReperPointsPince ... l=0.469780 coeff=1.000069
+ 9 dist rp=0.001057
+
+ t=149 p[ 1.1  1.1  1.1  1.1] 30 31 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P30F2t31F2
+ getReperPointsPince ... l=0.081601 coeff=1.000069
+ 0 dist rp=0.000727
+ getReperPointsPince ... l=0.318568 coeff=1.000069
+ 1 dist rp=0.001004
+ getReperPointsPince ... l=0.587511 coeff=1.000069
+ 2 dist rp=0.001045
+ getReperPointsPince ... l=0.809491 coeff=1.000069
+ 3 dist rp=0.000050
+ getReperPointsPince ... l=0.072640 coeff=1.000069
+ 4 dist rp=0.000651
+ getReperPointsPince ... l=0.000000 coeff=1.000069
+ 5 dist rp=0.000140
+ getReperPointsPince ... l=0.036597 coeff=1.000069
+ 6 dist rp=0.000369
+ getReperPointsPince ... l=0.126342 coeff=1.000069
+ 7 dist rp=0.000968
+ getReperPointsPince ... l=0.223845 coeff=1.000069
+ 8 dist rp=0.000987
+ getReperPointsPince ... l=0.469780 coeff=1.000069
+ 9 dist rp=0.001030
+ getReperPointsPince ... l=0.074962 coeff=1.000077
+ 0 dist rp=0.000725
+ getReperPointsPince ... l=0.285434 coeff=1.000077
+ 1 dist rp=0.001005
+ getReperPointsPince ... l=0.539773 coeff=1.000077
+ 2 dist rp=0.001050
+ getReperPointsPince ... l=0.743736 coeff=1.000077
+ 3 dist rp=0.000137
+ getReperPointsPince ... l=0.066729 coeff=1.000077
+ 4 dist rp=0.000650
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 5 dist rp=0.000140
+ getReperPointsPince ... l=0.033619 coeff=1.000077
+ 6 dist rp=0.000369
+ getReperPointsPince ... l=0.116064 coeff=1.000077
+ 7 dist rp=0.000972
+ getReperPointsPince ... l=0.205638 coeff=1.000077
+ 8 dist rp=0.000990
+ getReperPointsPince ... l=0.431597 coeff=1.000077
+ 9 dist rp=0.001033
+
+ t=150 p[ 1.1  1.1  1.1  1.1] 31 32 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P31F2t32F2
+ getReperPointsPince ... l=0.074962 coeff=1.000077
+ 0 dist rp=0.000717
+ getReperPointsPince ... l=0.285434 coeff=1.000077
+ 1 dist rp=0.000994
+ getReperPointsPince ... l=0.539773 coeff=1.000077
+ 2 dist rp=0.001042
+ getReperPointsPince ... l=0.743736 coeff=1.000077
+ 3 dist rp=0.000049
+ getReperPointsPince ... l=0.066729 coeff=1.000077
+ 4 dist rp=0.000642
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 5 dist rp=0.000140
+ getReperPointsPince ... l=0.033619 coeff=1.000077
+ 6 dist rp=0.000364
+ getReperPointsPince ... l=0.116064 coeff=1.000077
+ 7 dist rp=0.000956
+ getReperPointsPince ... l=0.205638 coeff=1.000077
+ 8 dist rp=0.000977
+ getReperPointsPince ... l=0.431597 coeff=1.000077
+ 9 dist rp=0.001025
+ getReperPointsPince ... l=0.067986 coeff=1.000077
+ 0 dist rp=0.000718
+ getReperPointsPince ... l=0.254612 coeff=1.000077
+ 1 dist rp=0.001000
+ getReperPointsPince ... l=0.489869 coeff=1.000077
+ 2 dist rp=0.001051
+ getReperPointsPince ... l=0.675013 coeff=1.000077
+ 3 dist rp=0.000130
+ getReperPointsPince ... l=0.060517 coeff=1.000077
+ 4 dist rp=0.000644
+ getReperPointsPince ... l=0.045563 coeff=1.000077
+ 5 dist rp=0.000504
+ getReperPointsPince ... l=0.509773 coeff=1.000077
+ 6 dist rp=0.001054
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 7 dist rp=0.000140
+ getReperPointsPince ... l=0.030484 coeff=1.000077
+ 8 dist rp=0.000365
+ getReperPointsPince ... l=0.105274 coeff=1.000077
+ 9 dist rp=0.000964
+ getReperPointsPince ... l=0.186556 coeff=1.000077
+ 10 dist rp=0.000984
+ getReperPointsPince ... l=0.391675 coeff=1.000077
+ 11 dist rp=0.001032
+
+ t=151 p[ 1.0  1.0  1.0  1.0] 32 33 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P32F2t33F2
+ getReperPointsPince ... l=0.067986 coeff=1.000077
+ 0 dist rp=0.000704
+ getReperPointsPince ... l=0.254612 coeff=1.000077
+ 1 dist rp=0.000975
+ getReperPointsPince ... l=0.489869 coeff=1.000077
+ 2 dist rp=0.001023
+ getReperPointsPince ... l=0.675013 coeff=1.000077
+ 3 dist rp=0.000059
+ getReperPointsPince ... l=0.060517 coeff=1.000077
+ 4 dist rp=0.000630
+ getReperPointsPince ... l=0.045563 coeff=1.000077
+ 5 dist rp=0.000493
+ getReperPointsPince ... l=0.509773 coeff=1.000077
+ 6 dist rp=0.001026
+ getReperPointsPince ... l=0.000000 coeff=1.000077
+ 7 dist rp=0.000138
+ getReperPointsPince ... l=0.030484 coeff=1.000077
+ 8 dist rp=0.000357
+ getReperPointsPince ... l=0.105274 coeff=1.000077
+ 9 dist rp=0.000938
+ getReperPointsPince ... l=0.186556 coeff=1.000077
+ 10 dist rp=0.000959
+ getReperPointsPince ... l=0.391675 coeff=1.000077
+ 11 dist rp=0.001006
+ getReperPointsPince ... l=0.061024 coeff=1.000088
+ 0 dist rp=0.000704
+ getReperPointsPince ... l=0.222744 coeff=1.000088
+ 1 dist rp=0.000979
+ getReperPointsPince ... l=0.439999 coeff=1.000088
+ 2 dist rp=0.001031
+ getReperPointsPince ... l=0.606329 coeff=1.000088
+ 3 dist rp=0.000132
+ getReperPointsPince ... l=0.054318 coeff=1.000088
+ 4 dist rp=0.000631
+ getReperPointsPince ... l=0.000000 coeff=1.000088
+ 5 dist rp=0.000138
+ getReperPointsPince ... l=0.027357 coeff=1.000088
+ 6 dist rp=0.000358
+ getReperPointsPince ... l=0.094504 coeff=1.000088
+ 7 dist rp=0.000945
+ getReperPointsPince ... l=0.167503 coeff=1.000088
+ 8 dist rp=0.000965
+ getReperPointsPince ... l=0.351784 coeff=1.000088
+ 9 dist rp=0.001012
+
+ t=152 p[ 1.0  1.0  1.1  1.1] 33 34 [  2.0(2) 100.0(2)] [  2.0(2) 100.0(2)]
+ text=P33F2t34F2
+ getReperPointsPince ... l=0.061024 coeff=1.000088
+ 0 dist rp=0.000693
+ getReperPointsPince ... l=0.222744 coeff=1.000088
+ 1 dist rp=0.000964
+ getReperPointsPince ... l=0.439999 coeff=1.000088
+ 2 dist rp=0.001021
+ getReperPointsPince ... l=0.606329 coeff=1.000088
+ 3 dist rp=0.000063
+ getReperPointsPince ... l=0.054318 coeff=1.000088
+ 4 dist rp=0.000620
+ getReperPointsPince ... l=0.000000 coeff=1.000088
+ 5 dist rp=0.000138
+ getReperPointsPince ... l=0.027357 coeff=1.000088
+ 6 dist rp=0.000352
+ getReperPointsPince ... l=0.094504 coeff=1.000088
+ 7 dist rp=0.000925
+ getReperPointsPince ... l=0.167503 coeff=1.000088
+ 8 dist rp=0.000947
+ getReperPointsPince ... l=0.351784 coeff=1.000088
+ 9 dist rp=0.001002
+ getReperPointsPince ... l=0.053774 coeff=1.000210
+ 0 dist rp=0.000701
+ getReperPointsPince ... l=0.194090 coeff=1.000210
+ 1 dist rp=0.000982
+ getReperPointsPince ... l=0.388089 coeff=1.000210
+ 2 dist rp=0.001047
+ getReperPointsPince ... l=0.534834 coeff=1.000210
+ 3 dist rp=0.000196
+ getReperPointsPince ... l=0.047863 coeff=1.000210
+ 4 dist rp=0.000628
+ getReperPointsPince ... l=0.000000 coeff=1.000210
+ 5 dist rp=0.000139
+ getReperPointsPince ... l=0.024100 coeff=1.000210
+ 6 dist rp=0.000357
+ getReperPointsPince ... l=0.083290 coeff=1.000210
+ 7 dist rp=0.000943
+ getReperPointsPince ... l=0.147668 coeff=1.000210
+ 8 dist rp=0.000966
+ getReperPointsPince ... l=0.310264 coeff=1.000210
+ 9 dist rp=0.001023
+
+ t=153 p[ 1.0  1.0  0.0  0.0] 34 35 [  2.0(2) 100.0(2)] [  0.0(2) 100.0(2)]
+ text=P34F2t35F2
+ getReperPointsPince ... l=0.035617 coeff=1.000210
+ 0 dist rp=0.017065
+ getReperPointsPince ... l=0.093795 coeff=1.000210
+ 1 dist rp=0.017089
+ getReperPointsPince ... l=0.264281 coeff=1.000210
+ 2 dist rp=0.017039
+ getReperPointsPince ... l=0.431937 coeff=1.000210
+ 3 dist rp=0.017056
+ getReperPointsPince ... l=0.032628 coeff=1.000210
+ 4 dist rp=0.017064
+ getReperPointsPince ... l=0.000000 coeff=1.000210
+ 5 dist rp=0.016918
+ getReperPointsPince ... l=0.017127 coeff=1.000210
+ 6 dist rp=0.017058
+ getReperPointsPince ... l=0.049250 coeff=1.000210
+ 7 dist rp=0.017069
+ getReperPointsPince ... l=0.074726 coeff=1.000210
+ 8 dist rp=0.017086
+ getReperPointsPince ... l=0.202419 coeff=1.000210
+ 9 dist rp=0.017070
+ getReperPointsPince ... l=0.005020 coeff=0.000000
+ 0 dist rp=0.005020
+ getReperPointsPince ... l=0.173190 coeff=0.000000
+ 1 dist rp=0.173180
+ getReperPointsPince ... l=0.342866 coeff=0.000000
+ 2 dist rp=0.342847
+ getReperPointsPince ... l=0.468868 coeff=0.000000
+ 3 dist rp=0.468830
+ getReperPointsPince ... l=0.050200 coeff=0.000000
+ 4 dist rp=0.050198
+ getReperPointsPince ... l=0.000000 coeff=0.000000
+ 5 dist rp=0.000000
+ getReperPointsPince ... l=0.010040 coeff=0.000000
+ 6 dist rp=0.010039
+ getReperPointsPince ... l=0.030120 coeff=0.000000
+ 7 dist rp=0.030119
+ getReperPointsPince ... l=0.080320 coeff=0.000000
+ 8 dist rp=0.080316
+ getReperPointsPince ... l=0.135540 coeff=0.000000
+ 9 dist rp=0.135532
+ getReperPointsPince ... l=0.276100 coeff=0.000000
+ 10 dist rp=0.276085
