@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Forme" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoABAAAAAACBAEBAAgACEAFgECAAIwDYAEAAEEIAY=</HashCode>
+      <FileName>c:\windwax\commun\fichier.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Logger" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAIACAAAACAACAAAAAAAAAAAAIAAAAAAQAA=</HashCode>
+      <FileName>c:\windwax\commun\logger.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matrice" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAgJAIACAAgAAAkAAAACAAEAAAAAAAAQAAA=</HashCode>
+      <FileName>c:\windwax\commun\matrice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindPatternsProject" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>P0QQRYAkAAAAwMfYIRGAAAoQCgCEQRAHEDoIJ8ISQ8Y=</HashCode>
+      <FileName>c:\windwax\commun\patternsproject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pince" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SIQAAAAAgBIAECiADwCEAeAAIACAAAAAAACAIiAASAg=</HashCode>
+      <FileName>c:\windwax\commun\pince.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Courbe" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAABCAAAAAAAAAYAWAIEAAAAAFAEAAAAAACACAAAA=</HashCode>
+      <FileName>c:\windwax\commun\plot.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rasklad" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gACIgAEAEEAACABgAAAAEBAEAEAAQBAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\rasklad.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="InfoForme" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAACAAAAkAAAQAAICAAAAAAAAAAAQAAAAAQAA=</HashCode>
+      <FileName>c:\windwax\commun\fichier.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Mesh" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gACAAACAAAAAAAAAZAWAIAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\plot.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Axe" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAJABAAAACAABoAAACAAgAABAKCEAoAAQAMAEABFkA=</HashCode>
+      <FileName>c:\windwax\commun\plot.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="TInfoForme" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\fichier.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="TMesh" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\plot.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="TAxe" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\plot.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="trim_type" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAgAAAAAIAAAAA=</HashCode>
+      <FileName>c:\windwax\commun\fichier.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
