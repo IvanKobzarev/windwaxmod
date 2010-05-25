@@ -104,3 +104,9 @@ void makePosProfile(Matrice* Ext, Matrice* Int, double percent, Matrice** ExtRes
 void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, int noNerv2, int face2, double lp1, double lp2, double *rcoeff);
 
 void goCalcIndepPince(int noNerv, int face, double *pLA, double *pLF, double *pRA, double *pRF, double *len);
+
+double calculPolyLength(Matrice* X, Matrice* Y, double xrp, double yrp);
+
+int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* y);
+
+void printM(Matrice* m);
