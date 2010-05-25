@@ -34,15 +34,11 @@
 /**********/
 /* define */
 /**********/
-#define AUTEUR_DATE "(Thierry Pebayle - 18/08/2002)\n[Export FGen + Refactoring Olivier REMAUD 2007] [ ++ Ivan Kobzarev 2009]"
+#define AUTEUR_DATE "(Thierry Pebayle - 18/08/2002)\n[Export FGen + Refactoring Olivier REMAUD 2007]\n[ Roman Lybimcev, Ivan Kobzarev 2009]"
 #define sqr(f1) ((f1)*(f1))
 #define pi	3.141592675f
-
 #define DEBUG 0
-
 #define TEST_BUTTON true
-
-
 
 /**********************/
 /* variables globales */
@@ -80,6 +76,7 @@ int Numerotation = 0;
 int Ventilation = 0;
 int RepPoints = 1;
 int VentilationLayout = 1;
+int CorrectRepPoints = 1;
 
 int PincePowerA = 0;
 int PincePowerF = 1;
@@ -293,6 +290,7 @@ WindPatternsProject* getWindPatternsProject() {
     gfd->ReperesProfile[1]=ReperesProfile[1];
     gfd->XMashtab=XMashtab;
 
+	gfd->CorrectRepPoints = CorrectRepPoints;
     gfd->Ventilation=Ventilation;
     gfd->VentilationLayout=VentilationLayout;
     gfd->textX=textX;
@@ -1265,11 +1263,52 @@ void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
 void Test(int control) {
     printf ("\n TEST()");
 
-    char filename[255];
+	// calculPolyLength(Xd0, Yd0, xrp, yrp);
+
+	Matrice* Xd0 = new Matrice(4, 0);
+	Matrice* Yd0 = new Matrice(4, 0);
+
+	Xd0->SetElement (0, 0, 0.0);
+	Yd0->SetElement (0, 0, 0.0);
+
+	Xd0->SetElement (1, 0, 2.0);
+	Yd0->SetElement (1, 0, 2.0);
+
+	Xd0->SetElement (2, 0, 2.0);
+	Yd0->SetElement (2, 0, 0.0);
+
+	Xd0->SetElement (3, 0, 5.0);
+	Yd0->SetElement (3, 0, 0.0);
+
+	printf ("\n 0.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 0.0, 0.0));
+	printf ("\n 2.0, 2.0: %f", calculPolyLength(Xd0, Yd0, 2.0, 2.0));
+	printf ("\n 2.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 2.0, 0.0));
+	printf ("\n 4.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 4.0, 0.0));
+	printf ("\n 5.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 5.0, 0.0));
+
+	// int res = calcRepPointByLength(Xd, Yd, l*coeff, &newx, &newy);
+	int res=0;
+	double x=0, y=0;
+	res = calcRepPointByLength(Xd0, Yd0, 0.0, &x, &y);
+	printf ("\n 0.0: res=%d x=%f y=%f", res, x, y);
+
+	res = calcRepPointByLength(Xd0, Yd0, 2.82, &x, &y);
+	printf ("\n 2.82: res=%d x=%f y=%f", res, x, y);
+
+	res = calcRepPointByLength(Xd0, Yd0, 4.828427, &x, &y);
+	printf ("\n 4.828427: res=%d x=%f y=%f", res, x, y);
+
+	res = calcRepPointByLength(Xd0, Yd0, 6.82, &x, &y);
+	printf ("\n 6.82: res=%d x=%f y=%f", res, x, y);
+
+	res = calcRepPointByLength(Xd0, Yd0, 6.828427, &x, &y);
+	printf ("\n 6.828427: res=%d x=%f y=%f", res, x, y);
+
+/*    char filename[255];
     strcpy(filename, "bu.dxf");
     strcat (filename,".log");
     printf ("\n logfilename=[%s]", filename);
-    CopyFile("ConfigDefaut.txt", filename, true);
+    CopyFile("ConfigDefaut.txt", filename, true); */
 
 /*     int n = F -> m_nbProfils;
 
@@ -3776,6 +3815,7 @@ int main(int argc, char** argv) {
     glui->add_button_to_panel(panel_rasklad2, "Layout to DXF", 0, &AppliquerMagic2);
     //glui->add_checkbox_to_panel(panel_rasklad2, "sym layout", &RaskladSymetrique, 0, &ModifRaskladSymetrique);
     glui->add_checkbox_to_panel(panel_rasklad2, "ventilation", &VentilationLayout, 0, &ModifVentilationLayout);
+	glui->add_checkbox_to_panel(panel_rasklad2, "correct rep points", &CorrectRepPoints, 0, &ModifVentilationLayout);
 
     GLUI_Spinner *SpinTochnostRasklad2 = glui->add_spinner_to_panel(panel_rasklad2, "Accuracy", GLUI_SPINNER_FLOAT, &(tochnostRasklad2));
     SpinTochnostRasklad2 -> set_float_limits(0.0, 3.0);

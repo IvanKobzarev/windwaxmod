@@ -152,7 +152,7 @@ Rasklad* CalculIndepPinceRasklad(WindPatternsProject* gfd, Forme* F) {
 void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     if (gfd->debug) printf("\n SaveRasklad2()");
     int startNoNerv = 0, noNerv = 0, face = 1;
-    Matrice * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2];
+    Matrice * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrice * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
     int n = gfd->Forme->m_nbProfils;
     int size = 6 * n + 2 + 10;
@@ -876,7 +876,9 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     bool debug = false;
 
     char* charname = new char[1];
-    for (int t = 0; t < q; t++) {
+    
+	for (int t = 0; t < q; t++) {
+	//for (int t = 68; t < 70; t++) {
         //if (t==35) debug = true;
         //if (t==36) debug = false;
         //if (t==0) t=112;
@@ -992,9 +994,26 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     delete(Ydp[1]);
                     Ydp[1]=rYdp[1];
 
+
+                    rXd[0] = GetFunctionSrezDeb(P[0], Xd[0], posDeb1[t]);
+                    rYd[0] = GetFunctionSrezDeb(P[0], Yd[0], posDeb1[t]);
+                    delete(Xd[0]);
+                    Xd[0]=rXd[0];
+                    delete(Yd[0]);
+                    Yd[0]=rYd[0];
+
+
+                    rXd[1] = GetFunctionSrezDeb(P[1], Xd[1], posDeb2[t]);
+                    rYd[1] = GetFunctionSrezDeb(P[1], Yd[1], posDeb2[t]);
+                    delete(Xd[1]);
+                    Xd[1]=rXd[1];
+                    delete(Yd[1]);
+                    Yd[1]=rYd[1];
+
                     rP[0] = GetFunctionSrezDeb(P[0], P[0], posDeb1[t]);
                     delete(P[0]);
                     P[0]=rP[0];
+
                     rP[1] = GetFunctionSrezDeb(P[1], P[1], posDeb2[t]);
                     delete(P[1]);
                     P[1]=rP[1];
@@ -1075,10 +1094,17 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
         getLayoutLogger()->logprintf ("\n text=%s", text);
         if (!isKlapan[t]) {
             if (isPince[t]) {
+
+				double coeff1 = rasklad->coeffn[n1[t]];
+				double coeff2 = rasklad->coeffn[n2[t]];
+
+				if (n1[t] == -1) coeff1 = rasklad->coeffn[0];
+				if (n2[t] == n-1) coeff2 = -1;
+
                 GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
                     Xdp[1], Ydp[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
                     &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug,
-					true, Xd[0], Yd[0], rasklad->coeffn[n1[t]], Xd[1], Yd[1], rasklad->coeffn[n2[t]]);
+					true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
                 CalculMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
                 if (debug) printf("\n go delete isPince");
                 delete (Xdp[0]);
@@ -1994,6 +2020,7 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
     delete (lenm2);
 }
 
+
 void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, int noNerv2, int face2, double lp1, double lp2, double *rcoeff) {
     Matrice * Xd[2], *Yd[2], *newXd[2], *newYd[2];
     Matrice * X[2], *Y[2], *Z[2], *P[2];
@@ -2033,6 +2060,8 @@ void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, in
     delete (long2);
     *rcoeff = coeff;
 }
+
+
 
 void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, double *pRA, double *pRF, double *len) {
     double mode1 = gfd->modePinces;
@@ -2169,20 +2198,30 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
     delete (lenm2);
 }
 
+
 int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* y) {
+
 	if (l < 0) {
 		getLayoutLogger()->logprintf("\n calcRepPointByLength l=%f return -1", l);
 		return -1;
 	}
+	if (l == 0) {
+		*x = Xd -> Element(0, 0);
+		*y = Yd -> Element(0, 0);
+		return 0;
+	}
 	int i = 0;
 	double sumLength = 0;
+
 	while ( (i < (Xd->GetLignes() - 1)) && (sumLength < l) ) {
 		sumLength += dist2d (Xd->Element(i, 0), Yd->Element(i, 0), Xd->Element(i + 1, 0), Yd->Element(i + 1, 0));
 		i++;
 	}
 
 	if ((i == (Xd->GetLignes() - 1)) && (sumLength < l)) {
-		getLayoutLogger()->logprintf("\n calcRepPointByLength l=%f sumLength=%f return 1", l, sumLength);
+		//getLayoutLogger()->logprintf("\n calcRepPointByLength l=%f sumLength=%f return 1 (put point to the end:))", l, sumLength);
+		*x = Xd -> Element(i, 0);
+		*y = Yd -> Element(i, 0);
 		return 1;
 	}
 
@@ -2202,10 +2241,33 @@ int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* 
 
 
 
+
+
+void printXY(Matrice* X, Matrice* Y) {
+	//printf ("\n printXY");
+	for (int i = 0; i < X->GetLignes(); i++) {
+		printf ("\n$ %d (%f, %f)", i, X->Element(i, 0), Y->Element(i, 0));
+	}
+}
+
+void printM(Matrice* m) {
+	printf ("\n printM");
+	for (int i = 0; i < m->GetLignes(); i++) {
+		printf ("\n$ %d (%f)", i, m->Element(i, 0));
+	}
+}
+
+
 Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matrice* P, 
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
-    //printf ("\nin get Reper Points()");
+    //printf ("\nget Reper Points()");
+	//printf ("\n P:");
+	//printM (P);
+	
+	//printf ("\nP");
+	//printM(P);
+	//printf ("\n...");
     Matrice *interpXSuspente, *interpYSuspente, *interpXSuspente0, *interpYSuspente0;
     bool cerezNos = false;
     int i0 = 0;
@@ -2217,7 +2279,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
             i0++;
          }
      }
-    //printf ("...1");
+    //printf ("...1 i0=%d", i0);
     interpXSuspente = Zeros(P -> GetLignes() - i0, 2);
     interpYSuspente = Zeros(P -> GetLignes() - i0, 2);
     for (int j = i0; j < P->GetLignes(); j++) {
@@ -2229,6 +2291,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     //printf ("...2");
     int isave = 0;
     if (cerezNos) {
+		printf ("\n cerezNos");
         interpXSuspente0 = Zeros(i0 + 1, 2);
         interpYSuspente0 = Zeros(i0 + 1, 2);
         for (int j = i0; j >= 0; j--) {
@@ -2276,7 +2339,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     if (gfd->ReperPointsFromFile) nrp = gfd->ReperPoints[1] -> GetLignes();
     else nrp = P -> GetLignes();
     int n = 20 * nrp + 12;
-    Matrice* res = new Matrice(n, 4);
+    Matrice* res = new Matrice(n, 5);
     isave = 0;
     double posSuspente, x, y;
     int mark, MARK_SUSPENTE=REP_TRIANGLE, MARK_REP=REP_CROSS, MARK_DIAG=REP_LINE;
@@ -2343,7 +2406,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
             } else {
                 res->SetElement(isave, 3, 0);
             }
-
+			res->SetElement(isave, 4, posSuspente);
             isave++;
         }
         //printf ("...5.3 posSuspente=%f deb=%f", posSuspente, deb);
@@ -2356,6 +2419,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
             res->SetElement(isave, 1, y);
             res->SetElement(isave, 2, mark);
             res->SetElement(isave, 3, 0);
+			res->SetElement(isave, 4, posSuspente);
             isave++;
         }
     }
@@ -2379,6 +2443,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
                     res->SetElement(isave, 1, y);
                     res->SetElement(isave, 2, MARK_REP);
                     res->SetElement(isave, 3, 0);
+					res->SetElement(isave, 4, posSuspente);
                     isave++;
                 }
             }
@@ -2394,6 +2459,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
                 res->SetElement(isave, 1, y);
                 res->SetElement(isave, 2, MARK_REP);
                 res->SetElement(isave, 3, 0);
+				res->SetElement(isave, 4, posSuspente);
                 isave++;
             }
         }
@@ -2409,6 +2475,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
                 res->SetElement(isave, 1, y);
                 res->SetElement(isave, 2, MARK_REP);
                 res->SetElement(isave, 3, 0);
+				res->SetElement(isave, 4, posSuspente);
                 isave++;
             }
         }
@@ -2420,14 +2487,15 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
             res->SetElement(isave, 1, y);
             res->SetElement(isave, 2, MARK_REP);
             res->SetElement(isave, 3, 0);
+			res->SetElement(isave, 4, posSuspente);
             isave++;
         }
     }
     //printf ("...7");
     //printf ("\n isave=%d", isave);
-    Matrice* resexit = new Matrice(isave, 4);
+    Matrice* resexit = new Matrice(isave, 5);
     for (int i = 0; i < isave; i++)
-        for (int j = 0; j < 4; j++) resexit->SetElement(i, j, res->Element(i, j));
+        for (int j = 0; j < 5; j++) resexit->SetElement(i, j, res->Element(i, j));
     //printf ("\n dels");
     delete (res);
     delete (interpXSuspente);
@@ -2441,40 +2509,96 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
    return resexit;
 }
 
+
 double calculPolyLength(Matrice* X, Matrice* Y, double xrp, double yrp) {
-	//printf ("\n calculPolyLength() RP (%f, %f)", xrp, yrp);
-	int i  = 0;
+	int i  = 0, res = 0;
+	int n = X->GetLignes();
 	double sumLength = 0;
+	if ( (xrp==X->Element(0, 0)) && (yrp==Y->Element(0, 0)) ) return 0;
 
 	if (X->Element(0,0) > X->Element(X->GetLignes() - 1,0)) getLayoutLogger()->logprintf ("\n calculPolyLength()... Achtung! X->Element(0,0) > X->Element(%d,0)", X->GetLignes() - 1);
 
-	while ((i < (X->GetLignes()-1)) && (xrp > X->Element(i,0)) ) {
-		//printf ("\n i=%d (%f, %f) ", i, X->Element(i,0), Y->Element(i,0));
+	for (i = 0; i < n-1;i++ ) {
+		res = pointAtSegment(xrp, yrp, X->Element(i,0), Y->Element(i,0), X->Element(i+1,0), Y->Element(i+1,0));
+		if (1 == res ) break;
 		sumLength += dist2d (X->Element(i,0), Y->Element(i,0), X->Element(i+1,0), Y->Element(i+1,0));
-		i++;
 	}
-	return (sumLength - dist2d(xrp, yrp, X->Element(i,0), Y->Element(i,0)));
+	
+	if (1 == res) 
+		return sumLength + dist2d(xrp, yrp, X->Element(i,0), Y->Element(i,0));
+
+	return -1;
 }
 
 Matrice* getReperPointsPince(WindPatternsProject* gfd,  Matrice* Xd0, Matrice* Yd0, double coeff, Matrice* Xd, Matrice* Yd, Matrice* P, 
 								int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
+	// printf ("\n\n\n Xd0 Yd0");
+	// printXY (Xd0, Yd0);
+
+	// printf ("\n\n\n Xd Yd");
+	// printXY (Xd, Yd);
+
+	if (Xd0->GetLignes() != P->GetLignes()) {
+		printf ("\n!!!\n!!!\n!!!ACHTUNG! getRepPointsPince() Xd0->GetL[%d] != P->GetL[%d]\n!!!", Xd0->GetLignes(), P->GetLignes());
+	}
+
 	Matrice *reperPoints0 = getReperPoints(gfd, Xd0, Yd0, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
 
+	//printf ("\n=1===============================================");
+	Matrice *reperPointsP = getReperPoints(gfd, Xd, Yd, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
+	//printf ("\n=2===============================================");
+	
+	//printf ("\n\n Xd0 Yd0");
+    //printXY(Xd0, Yd0);
+
+	printf ("\n(Xd0, Yd0).length=%f coeff=%f", 1000*calculCourbeLength(Xd0, Yd0), coeff);
+
 	for (int i = 0; i < reperPoints0->GetLignes(); i++) {
+		// printf ("\n ");
 		double xrp = reperPoints0 -> Element(i, 0);
 		double yrp = reperPoints0 -> Element(i, 1);
 
+		double xrpP = reperPointsP -> Element(i, 0);
+		double yrpP = reperPointsP -> Element(i, 1);
+
 		double l = calculPolyLength(Xd0, Yd0, xrp, yrp);
+		// printf ("\n l=%f l*coeff=%f", l, l*coeff);
+		// printf ("\n xrp, yrp (%f, %f)", xrp, yrp);
+		double lP0 = calculPolyLength(Xd, Yd, xrpP, yrpP);
 
 		double newx = 0, newy = 0;
-
+		
 		int res = calcRepPointByLength(Xd, Yd, l*coeff, &newx, &newy);
-		//getLayoutLogger()->logprintf ("\n getReperPointsPince ... l=%f coeff=%f", l, coeff);
+
+		// printf ("\n res=%d newx, newy (%f, %f)", res, newx, newy);
+
 		if (res) {
-			getLayoutLogger()->logprintf ("\n Ahtung! calcRepPointByLength() == %d ", res);
+			//getLayoutLogger()->logprintf ("\n Ahtung! calcRepPointByLength() == %d ", res);
+			//getLayoutLogger()->logprintf (" l=%f   coeff=%f", l, coeff);
+			double XY0length =  calculCourbeLength(Xd0, Yd0);
+			double XYlength =  calculCourbeLength(Xd, Yd);
+			double realCoeff = XYlength / XY0length;
+
+			if (res == -1) {
+
+			}
+
+			if (res == 1) {
+				//getLayoutLogger()->logprintf ("\n! XY0length=%f  XYlength=%f coeff=%f", XY0length, XYlength, realCoeff);
+				//getLayoutLogger()->logprintf ("\n delta=%f", abs(XYlength-XY0length));
+				/*if (abs(XYlength - XY0length) < 0.0005)  
+					getLayoutLogger()->logprintf(" OK:)!");
+				else 
+					getLayoutLogger()->logprintf(" BAD:(!");*/
+			}
 		}
-		//getLayoutLogger()->logprintf ("\n %d dist rp=%f", i, dist2d(xrp, yrp, newx, newy));
+		
+		//getLayoutLogger()->logprintf ("\n%2d R res=%d pS=%6.2f l=%6.2f (%6.2f, %6.2f)", i, res, reperPoints0->Element(i,4), 1000*l, 1000*xrp, 1000*yrp); 
+
+		/*getLayoutLogger()->logprintf ("\n%d R res=%d pS=%f cf=%f newl=%f  dxyrp=%f  dl=%f",
+										  i,     res, reperPoints0->Element(i,4), coeff, 1000*l*coeff, 1000*dist2d(xrpP,yrpP,newx,newy), 1000*(lP0-l*coeff));
+		getLayoutLogger()->logprintf ("\n l==%f l*coeff=%f (%f, %f)", 1000*l, 1000*l*coeff, xrp, yrp);*/
 		reperPoints0->SetElement(i, 0, newx);
 		reperPoints0->SetElement(i, 1, newy);
 	}

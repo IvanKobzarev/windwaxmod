@@ -1336,6 +1336,7 @@ Matrice* Cercle(double xo, double yo, double rayon, int nbp)
 }
 
 
+
 void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double *width, double *height) {
     // calculate width and height of (Xd[0],Yd[0]) (Xd[1],Yd[1])
     // calcul minX, maxX, minY, maxY
@@ -1367,6 +1368,7 @@ void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double 
     *height = fabs(maxY - minY);
 }
 
+
 void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr) {
     Matrice *interpXSuspente, *interpYSuspente;
     interpXSuspente = Zeros(P->GetLignes(), 2);
@@ -1382,6 +1384,7 @@ void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr
     *yr = InterpLinX(interpYSuspente, Pos);
 }
 
+
 void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1) {
     /*    Matrice *Xd[2], *Yd[2], *newXd[2], *newYd[2];
         Matrice *X[2], *Y[2], *Z[2], *P[2];
@@ -1396,4 +1399,24 @@ void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd
     *newYd1 = MultReelMat(Yd1, coeff);
     //delete (Xd[0]);delete (Yd[0]);delete (X[0]); delete (Y[0]);delete (Z[0]); delete(P[0]);
     //delete (Xd[1]);delete (Yd[1]);delete (X[1]); delete (Y[1]);delete (Z[1]); delete(P[1]);
+}
+
+double calculCourbeLength(Matrice* X, Matrice* Y) {
+	double res = 0;
+
+	for (int i = 0; i < X->GetLignes()-1; i++) {
+		res += dist2d(X->Element(i,0), Y->Element(i,0), X->Element(i+1,0), Y->Element(i+1,0));
+	}
+
+	return res;
+}
+
+int pointAtSegment(double x, double y, double x1, double y1, double x2, double y2 ) {
+	if ((x >= x1) && (x <= x2)) {
+		if (  abs(y - ( y1 + (y2-y1)*(x-x1)/(x2-x1) )) < 0.000001  )
+			return 1;
+	} else
+		return -1;
+
+	return 0;
 }
