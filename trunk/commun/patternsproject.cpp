@@ -1,7 +1,6 @@
 
 
 #pragma warning(disable:4514)
-#include "C:\windwax\XFLR5\stdafx.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>

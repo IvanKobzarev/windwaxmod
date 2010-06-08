@@ -1,9 +1,3 @@
-
-
-/*  WindPattern.c			
- * calcul patrons de la forme 3d  ...
- */
-
 #pragma warning(disable:4786)
 #pragma warning(disable:4514)
 
@@ -37,14 +31,14 @@
 #define AUTEUR_DATE "(Thierry Pebayle - 18/08/2002)\n[Export FGen + Refactoring Olivier REMAUD 2007]\n[ Roman Lybimcev, Ivan Kobzarev 2009]"
 #define sqr(f1) ((f1)*(f1))
 #define pi	3.141592675f
-#define DEBUG 0
+//#define DEBUG 0
 #define TEST_BUTTON true
 
 /**********************/
 /* variables globales */
 /**********************/
 
-CFoil *g_pCurFoil;
+//CFoil *g_pCurFoil;
 
 /*live-variable GLUI*/
 int VisuFace = 0; /*choix visu nervures(0) ou surfaces(1)*/
@@ -1070,7 +1064,7 @@ void SauverFichier3dDXF( int ) //
 
 void ExportWpa( int ) //
 {
-	CString NomFichier;
+/*	CString NomFichier;
 	LPTSTR PtrNomFichier;
 	//ouverture boite de dialogue
 	CFileDialog DlgOpen(FALSE, NULL, "*.wpa", OFN_OVERWRITEPROMPT, NULL, NULL);
@@ -1087,7 +1081,7 @@ void ExportWpa( int ) //
 
 		if (EcritureFichierWpa(PtrNomFichier, F))
 			printf ("\nForme exported in WPA sucessfully");
-	}
+	}*/
 }
 
 
@@ -1580,8 +1574,6 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
             printf("\n1 %d(%7.4f, %7.4f)", jt, Xd1[1]->Element(jt, 0), Yd1[1]->Element(jt, 0));
         }
     }
-    if (DEBUG) printf("\n w1=%f", w1);
-    if (DEBUG) printf("\n lenXYd1[1]=%f", len1);
     CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &width);
     CalculPatron(getWindPatternsProject(),noNerv1, false, face, face, Deb[0], Fin[0],
             noNerv1 + 1, false, face, face, Deb[1], Fin[1],
@@ -1608,13 +1600,11 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
             printf("\n1 %d(%7.4f, %7.4f)", jt, Xd2[1]->Element(jt, 0), Yd2[1]->Element(jt, 0));
         }
     }
-    if (DEBUG) printf("\n w2=%f", w2);
+
     CalculPinceAlone(getWindPatternsProject(),Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
             ppA, apA*perc, ppF, apF*perc, mode1, &Xd1p[1], &Yd1p[1], &newP1[1]);
     long1p1 = Longueur(Xd1p[1], Yd1p[1]);
     l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
-    if (DEBUG) printf("\n lenP1=%f", l1p1);
-    if (DEBUG) printf("\n lenXYd2[0]=%f", len2);
 
     for (double apAI1 = startPerc; apAI1 <= endPerc; apAI1 += hPerc) {
         CalculPinceAlone(getWindPatternsProject(),Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
@@ -1632,7 +1622,6 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
         delete (Yd2p[0]);
         delete (newP2[0]);
     }
-    if (DEBUG) printf("\n lenP2=%f", l2p0);
     delete (long1p1);
     delete (Xd1p[1]);
     delete (Yd1p[1]);
@@ -1803,8 +1792,6 @@ void CalculVue3dEtPatron(void)
     LibererCourbesAxe(Axe3d);
     LibererMeshsAxe(Axe3d);
 
-    if (DEBUG) printf ("\n before CalculForme3D");
-
     CalculForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
@@ -1856,12 +1843,10 @@ void CalculVue3dEtPatron(void)
     xExtProf = new Matrice(ExtProfCent->GetLignes(), 1);
     xIntProf = new Matrice(IntProfCent->GetLignes(), 1);
 
-    if (DEBUG) printf ("\n ExtProfCent->GetLignes()=%d",  ExtProfCent->GetLignes());
     for (i = 0; i < ExtProfCent->GetLignes(); i++) {
         xExtProf->SetElement(i, 0, ExtProfCent->Element(i, 0));
     //    printf ("\n ExtProf[%d]=%f %f", i, ExtProfCent->Element(i, 0), ExtProfCent->Element(i,1));
     }
-    if (DEBUG) printf ("\n IntProfCent->GetLignes()=%d",  IntProfCent->GetLignes());
     for (i = 0; i < IntProfCent->GetLignes(); i++) {
         xIntProf->SetElement(i, 0, IntProfCent->Element(i, 0));
       //  printf ("\n IntProf[%d]=%f %f", i, xIntProf->Element(i, 0),  IntProfCent->Element(i,1));
@@ -2113,9 +2098,6 @@ void CalculVue3dEtPatron(void)
                 pince -> SetDiffAmps(pince->AmpA, pince->AmpF, pince->AmpA, pince->AmpF);
                 if (pince -> glue) pince -> SetDiffAmps0(pince->AmpA0, pince->AmpA0);
                 
-                if (DEBUG) printf ("\n pince->AmpA0 = %f", pince -> AmpA0);
-                if (DEBUG) printf ("\n pince->AmpA = %f", pince -> AmpA);
-                if (DEBUG) printf ("\n pince->AmpF = %f", pince -> AmpF);
                 //printf ("\nbefore CalculPincePlusNew");
                 CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1],  pince, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
                 //printf ("\nafter CalculPincePlusNew");
@@ -3418,7 +3400,6 @@ int main(int argc, char** argv) {
     //applique distribution des x du profil du bout comme au centre
     InterpoleProfilBout(&ExtProfBout, ExtProfCent);
     InterpoleProfilBout(&IntProfBout, IntProfCent);
-    if (DEBUG) printf("\n Before GLUI code");
     /****************************************/
     /*         Here's the GLUI code         */
     /****************************************/
@@ -3827,7 +3808,7 @@ int main(int argc, char** argv) {
     glui->add_button("Sauver Poly DXF", 2, &Sauver);
     glui->add_button( "3D->DXF", 0, &SauverFichier3dDXF );
 
-    glui->add_button("Export to WPA", 0, &ExportWpa);
+    //glui->add_button("Export to WPA", 0, &ExportWpa);
     /* bouton quitter */
     glui->add_button("Quitter", 0, &Quitter);
     if (TEST_BUTTON) glui->add_button("Test", 0, &Test);
@@ -3836,7 +3817,6 @@ int main(int argc, char** argv) {
     /* We register the idle callback with GLUI, not with GLUT */
     GLUI_Master.set_glutIdleFunc(NULL);
     /*init valeurs boite de dialogue*/
-    if (DEBUG) printf ("\n before InitValeursDialogue()");
     InitValeursDialogue();
     glui->sync_live();
     /*premiers calculs et trace des axes*/
