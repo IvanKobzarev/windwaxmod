@@ -6,7 +6,6 @@
 
 #include <string>
 
-#include "..\QFLR5\src\Design\AFoil.h"
 #include "plot.h"
 #include "pince.h"
 #include "matrice.h"
@@ -21,7 +20,6 @@ class WindPatternsProject;
 
 class Forme
 {
-	friend class CAFoil;
 
 public:
 	Forme();
@@ -40,8 +38,7 @@ public:
 	Matrice *mCtrlDiedre, *mCtrlMorphing, *mCtrlVrillage, *mCtrlEpaiRel;
 	Matrice *mCourbDiedre, *mCourbMorphing, *mCourbVrillage, *mCourbEpaiRel;
 
-	QAFoil* AFoil;
-	
+
 	// used only for Serialize
     Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
 
@@ -57,10 +54,10 @@ public:
 	Profil** m_pProfils;
 	int m_nbProfils;
 
-	void SerializeToWpa(QDataStream &ar);
+/*	void SerializeToWpa(QDataStream &ar);
 	void SerializeFoil(QDataStream &ar, Matrice* ExtProf, Matrice* IntProf);
 	void SerializeWing (QDataStream &ar);
-	void WritePolars (QDataStream &ar);
+	void WritePolars (QDataStream &ar);*/
 	void DeleteProfils();
 	void AllocateProfils( int i );
 };

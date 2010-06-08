@@ -22,12 +22,6 @@
 #define DEBUG false
 #endif
 
-#include "C:\windwax\QFLR5\src\Design\AFoil.h"
-#include "C:\windwax\QFLR5\src\Objects\Wing.h"
-#include "C:\windwax\QFLR5\src\Objects\WOpp.h"
-#include "C:\windwax\QFLR5\src\Objects\Sf.h"
-#include "C:\windwax\QFLR5\src\Objects\Pf.h"
-
 #include "fichier.h"
 #include "plot.h"
 #include "matrice.h"
@@ -147,7 +141,7 @@ Forme::~Forme()
 	mCtrlVrillage = NULL;
 }
 
-void Forme::SerializeWing (QDataStream &ar) {
+/* void Forme::SerializeWing (QDataStream &ar) {
 	printf ("\nin Forme::SerializeWing()");
 
 	CWing* wing = new CWing ();
@@ -159,68 +153,6 @@ void Forme::SerializeWing (QDataStream &ar) {
 	double LongNerv, EpaiRel, xp,yp, xo,yo,zo, a,v,m;
 
 
-
-/*
-
-    Matrice *ExtProfCentN, *ExtProfBoutN;
-
-	double EpaiRelProfCent, EpaiRelProfBout;
-	double coeffx, coeffyCent, coeffyBout;
-	int i,j;
-
-
-	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
-	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
-
-
-	for (i=0; i<forme->m_nbProfils; i++)
-	{
-		//longueur nervure courante
-		LongNerv = forme->m_pProfils[i]->m_fLength;
-		//epaisseur relative
-		EpaiRel = forme->m_pProfils[i]->m_fWidth;
-		//position xo,yo,zo du nez
-		xo = forme->m_pProfils[i]->m_fNezX;
-		yo = forme->m_pProfils[i]->m_fNezY;
-		zo = forme->m_pProfils[i]->m_fNezZ;
-                //printf ("\n %d long=%f width=%f (%f, %f, %f)", i, forme->m_pProfils[i]->m_fLength, forme->m_pProfils[i]->m_fWidth, xo, yo, zo);
-		//inclinaison de la nervure par rapport a l'horizontale
-		a = forme->m_pProfils[i]->m_fInclin;
-        if ((isCenterPanel) && (i == 0)) a = forme->m_pProfils[0]->m_fInclin - 0.33333333f * fabs(forme->m_pProfils[0]->m_fInclin - forme->m_pProfils[1]->m_fInclin);
-                
-		//angle vrillage
-		v = forme->m_pProfils[i]->m_fWash;
-		//coeff morphing
-		m = forme->m_pProfils[i]->m_fMorph;
-		coeffx = LongNerv/100.0f;
-		coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
-		coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
-
-		for (j=0; j<IntProfCent->GetLignes(); j++)
-		{
-			xp = IntProfCent->Element(j,0)*coeffx;
-			yp = IntProfCent->Element(j,1)*coeffyCent*m
-				+ IntProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-			(*XInt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YInt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZInt)->SetElement(i,j, zo-(xp*(double)cos(v)));
-
-		}
-
-		for (j=0; j<ExtProfCent->GetLignes(); j++)
-		{
-            xp = ExtProfCent->Element(j,0)*coeffx;
-            yp = ExtProfCent->Element(j,1)*coeffyCent*m
-                    + ExtProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-			(*XExt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YExt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZExt)->SetElement(i,j, zo-(xp*(double)cos(v)));
-		}
-
-	}
-
-
-*/
 
         int isCenterPanel = (1 & NbCaiss);
 		double positionSum = 0;
@@ -286,18 +218,7 @@ void Forme::SerializeWing (QDataStream &ar) {
 			wing->m_RFoil[i+isCenterPanel]= foilNameL;
 			wing->m_LFoil[i+isCenterPanel]= foilNameR;
 
-			/*
-			if (i < m_nbProfils-1) {
-				wing->m_RFoil[i+isCenterPanel]= foilNameL;
-				wing->m_LFoil[i+isCenterPanel]= foilNameR;
-			} else {
-				sprintf(foilNameL, "P%03d", i);
-				sprintf(foilNameR, "P%03d", i);
-				wing->m_RFoil[i+isCenterPanel]= foilNameL;
-				wing->m_LFoil[i+isCenterPanel]= foilNameR;
-			} 
-			*/
-			
+	
 
 			wing->m_TChord[i+isCenterPanel] = LongNerv;
 			wing->m_TPos[i+isCenterPanel] = positionSum;
@@ -322,10 +243,10 @@ void Forme::SerializeWing (QDataStream &ar) {
 		wing -> SerializeWing(ar, true, 5);
  		printf ("\n...SerializeWing()");
 }
+*/
 
 
-
-void Forme::SerializeToWpa(QDataStream &ar) 
+/* void Forme::SerializeToWpa(QDataStream &ar) 
 {
 	printf ("\nSerializeToWpa()");
 	int m_LengthUnit;
@@ -401,30 +322,9 @@ void Forme::SerializeToWpa(QDataStream &ar)
 
 	// now store all the WPolars
 	ar << (int)polarSize;
-	/*for (i=0; i<m_oaWPolar.GetSize();i++)
-	{
-		pWPolar = (CWPolar*)m_oaWPolar.GetAt(i);
-		pWPolar->m_pParent = this;
-		pWPolar->SerializeWPlr(ar);
-	}*/
 
 	// next store all the WOpps
-	/*if(m_bSaveWOpps)
-	{
-		ar << (int)m_oaWOpp.GetSize();
-		for (i=0; i<m_oaWOpp.GetSize();i++)
-		{
-			pWOpp = (CWOpp*)m_oaWOpp.GetAt(i);
-			pWOpp->SerializeWOpp(ar);
-		}
-	}
-	else */
     ar << 0;
-
-	/*ar << 1;
-	CWOpp* wopp = new CWOpp();
-	wopp->m_WingName="Kite";
-	wopp->SerializeWOpp(ar);*/
 
 	// then the foils,  polars and Opps
 		
@@ -432,31 +332,9 @@ void Forme::SerializeToWpa(QDataStream &ar)
 
 	// next the bodies
 	ar << (int)bodySize;
-	/*for (i=0; i<bodySize;i++)
-	{
-		pBody = (CBody*)m_oaBody.GetAt(i);
-		pBody->SerializeBody(ar);
-	}*/
 
 	// last write the planes...
 	ar << (int)planeSize;
-	/*for (i=0; i<m_oaPlane.GetSize();i++)
-	{
-		pPlane = (CPlane*)m_oaPlane.GetAt(i);
-		pPlane->SerializePlane(ar);
-	}*/
-
-	/* if(m_bSaveWOpps)
-	{
-		// not forgetting their POpps
-		ar << (int)m_oaPOpp.GetSize();
-		for (i=0; i<m_oaPOpp.GetSize();i++)
-		{
-			pPOpp = (CPOpp*)m_oaPOpp.GetAt(i);
-			pPOpp->SerializePOpp(ar);
-		}
-	}
-	else */
 
     ar << 0;
 
@@ -476,6 +354,7 @@ void Forme::SerializeToWpa(QDataStream &ar)
 
 	printf ("\n...SerializeToWpa()");
 }
+*/
 
 void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
 
@@ -2107,12 +1986,12 @@ void EcritureFichierFGen(char *NomFichier, Forme *foil)
 
 
 
-void Forme::SerializeFoil (QDataStream &ar, Matrice* ExtProf, Matrice* IntProf) { 
+/*void Forme::SerializeFoil (QDataStream &ar, Matrice* ExtProf, Matrice* IntProf) { 
 	CFoil* foil = new CFoil();
 	foil->InitFromWindWax(ExtProf, IntProf);
 	foil->m_FoilName="DummyFoil";
 	foil->Serialize(ar, true);
-}
+}*/
 
 /*
 void CalculForme3D(Forme *forme, int isPercent, double percent,
@@ -2182,6 +2061,7 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 }
 */
 
+/*
 void Forme::WritePolars (QDataStream &ar) {
 		printf ("\n WritePolars..");
 	    ar << 100003;
@@ -2267,9 +2147,9 @@ void Forme::WritePolars (QDataStream &ar) {
         ar << 0;
 		printf ("\n ...WritePolars..");
 }
+*/
 
-
-
+/*
 bool EcritureFichierWpa(char *NomFichier, Forme *forme)
 {
 	//CWaitCursor wait;
@@ -2291,7 +2171,7 @@ bool EcritureFichierWpa(char *NomFichier, Forme *forme)
 	//ar.Close();
 	fp.close();
 	return true;
-}
+}*/
 
 
 /**********************/
