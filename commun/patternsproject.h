@@ -24,7 +24,7 @@ class WindPatternsProject
         char fromFile[255];
         int isPinces;
         int PincePowerA, PincePowerF, PinceArctanA, PinceArctanF;
-        double PincePowerValueA, PincePowerValueF,PinceArctanK1ValueA, PinceArctanK2ValueA, PinceArctanK3ValueA, PinceArctanK1ValueF, PinceArctanK2ValueF, PinceArctanK3ValueF;
+        float PincePowerValueA, PincePowerValueF,PinceArctanK1ValueA, PinceArctanK2ValueA, PinceArctanK3ValueA, PinceArctanK1ValueF, PinceArctanK2ValueF, PinceArctanK3ValueF;
         float Deb[2];
         float Fin[2];
 
