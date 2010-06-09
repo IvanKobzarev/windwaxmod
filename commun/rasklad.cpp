@@ -1231,6 +1231,8 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
                    Matrice** X0,Matrice** Y0, Matrice** Z0,Matrice** P0,
 		   Matrice** X1,Matrice** Y1, Matrice** Z1,Matrice** P1) {
     Matrice * X[2], *Y[2], *Z[2], *P[2];
+	//printf ("\n DebT[%f, %f]", DebT[0], DebT[1]);
+	//printf ("\n FinT[%f, %f]", FinT[0], FinT[1]);
     int iDeb, iFin, iCol;
 	int i, j;
     for (i = 0; i < 2; i++) {
@@ -1272,6 +1274,7 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
         {
             Ind(DebT[i], xIntProf, &iDeb, &iCol);
             Ind(FinT[i], xExtProf, &iFin, &iCol);
+			printf ("\n iDeb=%d iFin=%d", iDeb, iFin);
             X[i] = new Matrice(iFin + iDeb + 1, 1);
             Y[i] = new Matrice(iFin + iDeb + 1, 1);
             Z[i] = new Matrice(iFin + iDeb + 1, 1);
@@ -1593,6 +1596,9 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
 {
 
     //printf ("\n CalculPatron()");
+	//printf ("\n FaceDeb1=%d FaceFin1=%d FaceDeb2=%d FaceFin2=%d", FaceDeb1, FaceFin1, FaceDeb2, FaceFin2);
+	//printf ("\n[%f, %f] [%f, %f]", Deb1, Fin1, Deb2, Fin2);
+
     Matrice *XExt, *YExt, *ZExt;
     Matrice *XInt, *YInt, *ZInt;
 
@@ -1637,9 +1643,12 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
         }
     }
 
-    fillXYZP(nerv, DebT, FaceDebT, FinT, FaceFinT, xExtProf, XExt, YExt, ZExt, xIntProf, XInt, YInt, ZInt, 
-                   &X[0], &Y[0], &Z[0], &P[0],
-		   &X[1], &Y[1], &Z[1], &P[1]) ;
+	//printf ("\n FaceDebT=%d FaceFinT=%d", FaceDebT, FaceFinT);
+    fillXYZP(nerv, DebT, FaceDebT, FinT, FaceFinT,
+				xExtProf, XExt, YExt, ZExt, xIntProf,
+				XInt, YInt, ZInt, 
+	           &X[0], &Y[0], &Z[0], &P[0],
+			   &X[1], &Y[1], &Z[1], &P[1]) ;
 
 
 /*

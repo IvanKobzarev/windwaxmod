@@ -30,7 +30,7 @@ public:
 	double CoeffProgGeom;
 	double CoeffExp;
 	double EpaiRelCent;	//epaisseur relative du profil central 
-	int NbCaiss;	//nombre des alv�oles
+	int NbCaiss;
 
 	//points de controle = courbes de 4 pts(x,y)
 	Matrice *mCtrlNez, *mCtrlFui, *mCtrlA, *mCtrlB, *mCtrlC, *mCtrlD, *mCtrlE;
@@ -60,13 +60,11 @@ public:
 	void WritePolars (QDataStream &ar);*/
 	void DeleteProfils();
 	void AllocateProfils( int i );
+	void Validate();
 };
 
-
-
-//structure info de la forme
-
 typedef struct InfoForme TInfoForme;
+
 struct InfoForme
 {
 	double surface, envergure;
@@ -77,10 +75,6 @@ struct InfoForme
 	double largMin, largMax;
 
 };
-
-/**************/
-/* procedures */
-/**************/
 
 void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** intrados);
 

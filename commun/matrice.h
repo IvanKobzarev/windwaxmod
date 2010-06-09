@@ -1,11 +1,4 @@
 #pragma once
-/*************************************/
-/* def type matrice et operateurs ...*/
-/*************************************/
-
-/****************/
-/* def matrices */
-/****************/
 
 class Matrice
 {
@@ -27,19 +20,11 @@ public:
 	int GetColonnes() { return m_nCol; }
 
 protected:
-	int m_nLig, m_nCol;	/*nombre de lignes et colonnes*/
+	int m_nLig, m_nCol;
 
-	double **m_fTab;	/*tableau a 2 dimensions*/
+	double **m_fTab;
 
 };
-
-
-
-/**************/
-
-/* procedures */
-
-/**************/
 
 Matrice* AddMat(Matrice *m1,Matrice *m2);
 
@@ -80,6 +65,3 @@ bool ValeurPresente(double val, Matrice *m);
 void AjouteValeurCroissant(double val, Matrice **m);
 
 void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x);
-
-
-
