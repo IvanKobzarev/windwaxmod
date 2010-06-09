@@ -407,7 +407,9 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 	if( (fid = fopen( NomProf, "rt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier: '%s'", NomProf );
-		//fflush(stdin); getch();
+		char ex[100];
+		sprintf (ex, " could not open `%s`", NomProf);
+		throw ex;
 	}
 	else
 	{
@@ -510,76 +512,45 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 
 		}
 
-		
-
 		//fermeture fichier
-
 		if(fclose(fid))
-
 		{
-
-			printf("\nProbleme ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ la fermeture du fichier '%s'", NomProf);
-
+			printf("\nProbleme fermeture du fichier '%s'", NomProf);
 			fflush(stdin); getch();
-
 		}
 
-
-
 		//met bord d'attaque en x=0.0f
-
 		if((*extrados)->Element(0,0) != 0.0f){
-
 			for(i=0; i<NbExt; i++) (*extrados)->RemoveElement(i,0,(*extrados)->Element(0,0));}
 
 		if((*intrados)->Element(0,0) != 0.0f){
-
 			for(i=0; i<NbInt; i++) (*intrados)->RemoveElement(i,0, (*intrados)->Element(0,0));}
 
-		
 
 		//met bord de fuite en x=100.0f
-
 		if((*extrados)->Element(NbExt-1,0) != 100.0f)
-
 		{
-
 			coeff = 100.0f/(*extrados)->Element(NbExt-1,0);
-
 			for(i=0; i<NbExt; i++)
-
 			{
-
 				(*extrados)->MultiplyElement(i,0, coeff);
-
 				(*extrados)->MultiplyElement(i,1, coeff);
-
 			}
-
 		}
 
 		if((*intrados)->Element(NbInt-1,0) != 100.0f)
-
 		{
-
 			coeff = 100.0f/(*intrados)->Element(NbInt-1,0);
-
 			for(i=0; i<NbInt; i++)
-
 			{
-
 				(*intrados)->MultiplyElement(i,0, coeff);
-
 				(*intrados)->MultiplyElement(i,1, coeff);
-
 			}
-
 		}
 
 	}
-//        if (DEBUG) printf ("\n...LectureFichierProfil()");
-
 }
+
 int* LectureFichierVentHoles(char* NomFic, int* quant, int* central) {
     FILE *fid;
     int* m = new int[1000];
@@ -590,6 +561,9 @@ int* LectureFichierVentHoles(char* NomFic, int* quant, int* central) {
     if( (fid = fopen( NomFic, "rt" )) == NULL )
     {
             printf( "\nErreur ouverture fichier '%s'", NomFic);
+			char ex[100];
+			sprintf (ex, " could not open `%s`", NomFic);
+			throw (ex);
     } else {
             fscanf(fid,"%d", &n);
             //printf ("\n n=%d", n);
@@ -617,6 +591,9 @@ Matrice** LectureFichierReperPoints(char* NomFic) {
     if( (fid = fopen( NomFic, "rt" )) == NULL )
     {
             printf( "\nErreur ouverture fichier '%s'", NomFic);
+			char ex[100];
+			sprintf (ex, " could not open `%s`", NomFic);
+			throw (ex);
     } else {
         for (int i=1;i<3;i++) {
             fscanf(fid,"%d", &n);
@@ -639,6 +616,9 @@ int* LectureFichierDiagNervs(char* NomFic, int* quant) {
     if( (fid = fopen( NomFic, "rt" )) == NULL )
     {
             printf( "\nErreur ouverture fichier '%s'", NomFic);
+			char ex[100];
+			sprintf (ex, " could not open `%s`", NomFic);
+			throw (ex);
     } else {
 
             fscanf(fid,"%d", &n);
@@ -714,7 +694,7 @@ LAYOUT_MARGE_EXT_FIN 4.0
 LAYOUT_ACCURACY 0.7
  */
 WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
-    printf ("\nLectureWindPatternsProject(%s)", NomFic);
+    //printf ("\nLectureWindPatternsProject(%s)", NomFic);
     FILE *fid;
     WindPatternsProject *wpp = NULL;
     char* motsClef[54] =
@@ -970,6 +950,9 @@ Forme* LectureFichierForme(char* NomFic)
 	if( (fid = fopen( NomFic, "rt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", NomFic);
+		char ex[100];
+		sprintf (ex, " could not open `%s`", NomFic);
+		throw (ex);
 	}
 	else
 	{
@@ -1103,21 +1086,14 @@ Forme* LectureFichierForme(char* NomFic)
 
                     }//test trouve mot clef
 
-		}//boucle
+		}
 
-		printf ("\n f->m_strNomProfilCent=%s", f->m_strNomProfilCent.c_str());
-		printf ("\n f->m_strNomProfilBout=%s", f->m_strNomProfilBout.c_str());
-
-		/**** fermeture fichier ****/
 		if(fclose(fid))
 		{
 			printf("\nProbleme  la fermeture du fichier");
 		}
 
 	}
-	//test ouverture fichier ok
-	// if (DEBUG) printf ("\n pg=%f ce=%f er=%f", f->CoeffProgGeom, f->CoeffExp, f->EpaiRelCent);
-    // if (DEBUG) printf ("\n ...LectureFichierForme");
 	return f;
 }
 

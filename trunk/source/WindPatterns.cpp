@@ -340,10 +340,52 @@ WindPatternsProject* getWindPatternsProject() {
 }
 
 void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
-    printf ("\n LoadWindPatternsProject()");
-    strcpy(ProjectName, gfd -> name);
-    strcpy(NomFichierForme, gfd->NomFichierForme);
-    PincePowerA = gfd->PincePowerA;
+	Forme* tmpF=0;
+	Matrice *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
+	Matrice** tmpReperPoints=0;
+	int tmpquantDiag=0;
+	int tmpquantVH=0;
+	int *tmpnoNervD=0;
+	int *tmpnoNervVH=0;
+	int tmpVentCentralNerv=0;
+
+	try {
+		tmpF = LectureFichierForme(gfd->NomFichierForme);
+		LectureFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
+		LectureFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
+		tmpnoNervVH = LectureFichierVentHoles(gfd->NomFichierVentHoles, &tmpquantVH, &tmpVentCentralNerv);
+		tmpnoNervD = LectureFichierDiagNervs(gfd->NomFichierDiagNerv, &tmpquantDiag);
+		tmpReperPoints = LectureFichierReperPoints(gfd->NomFichierRepPoints);
+	} catch (char* sexception) {
+		printf ("\n Problem loading project: %s", sexception);
+		char msg[100];
+		sprintf (msg, "Problem loading project: %s", sexception);
+		AfxMessageBox(msg);
+		return;
+	}
+
+
+	/* -------- seems that loading file success ------------ */
+	F = tmpF;
+	ExtProfCent = tmpExtProfCent;
+	IntProfCent = tmpIntProfCent;
+	ExtProfBout = tmpExtProfBout;
+	IntProfBout = tmpIntProfBout;
+	noNervVH = tmpnoNervVH;
+	quantVH = tmpquantVH;
+	VentCentralNerv = tmpVentCentralNerv;
+	noNervD = tmpnoNervD;
+	quantDiag = tmpquantDiag;
+	ReperPoints = tmpReperPoints;
+	/* --------                                 ------------ */
+
+    
+    strcpy(NomFichierRepPoints, gfd->NomFichierRepPoints);
+    strcpy(NomFichierDiagNerv, gfd->NomFichierDiagNerv);
+    strcpy(NomFichierVentHoles, gfd->NomFichierVentHoles);
+	strcpy(NomFichierForme, gfd->NomFichierForme);
+    strcpy(ProjectName, gfd -> name);	
+	PincePowerA = gfd->PincePowerA;
     PincePowerF = gfd->PincePowerF;
     PinceArctanA = gfd->PinceArctanA;
     PinceArctanF = gfd->PinceArctanF;
@@ -387,69 +429,29 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
     Marge[0] = gfd->Marge[0];
     Marge[1] = gfd->Marge[1];
     
-    ReperPointsFromFile=gfd->ReperPointsFromFile;
+    ReperPointsFromFile = gfd->ReperPointsFromFile;
     RepPoints = gfd -> RepPoints;
 
-    strcpy(NomFichierRepPoints, gfd->NomFichierRepPoints);
-    ReperPoints = LectureFichierReperPoints(NomFichierRepPoints);
     ReperesProfile[0]=gfd->RepPoints;
     ReperesProfile[1]=gfd->RepPoints;
     ReperesSuspentes[0]=gfd->RepPoints;
     ReperesSuspentes[1]=gfd->RepPoints;
 
     XMashtab=gfd->XMashtab;
-    //printf ("Load XMashtab=%f", XMashtab);
     Ventilation=gfd->Ventilation;
     VentilationLayout=gfd->VentilationLayout;
     textX=gfd->textX;
     textY=gfd->textY;
 
     tochnostRasklad2=gfd->tochnostRasklad2;
-
-
     PinceNosEqualAmp=gfd->PinceNosEqualAmp;
     PinceHvostEqualAmp=gfd->PinceHvostEqualAmp;
-
     VentHoles = gfd->VentHoles;
     VentHolesDeb = gfd->VentHolesDeb;
     VentHolesFin = gfd->VentHolesFin;
     VentHolesDouble = gfd->VentHolesDouble;
-
-    strcpy(NomFichierVentHoles, gfd->NomFichierVentHoles);
-    noNervVH = LectureFichierVentHoles(NomFichierVentHoles, &quantVH, &VentCentralNerv);
     RaskladKlapans = gfd->RaskladKlapans;
-
-    strcpy(NomFichierDiagNerv, gfd->NomFichierDiagNerv);
-    noNervD = LectureFichierDiagNervs(NomFichierDiagNerv, &quantDiag);
-
     PosKlapanFin = gfd->PosKlapanFin;
-
-    ReperPoints = LectureFichierReperPoints(NomFichierRepPoints);
-    noNervD = LectureFichierDiagNervs(NomFichierDiagNerv, &quantDiag);
-    noNervVH = LectureFichierVentHoles(NomFichierVentHoles, &quantVH, &VentCentralNerv);
-
-	F = LectureFichierForme(NomFichierForme);
-    LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
-    LectureFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
-
-	/*
-	  printf ("\nEPC = %d", ExtProfCent->GetLignes());
-	  for (int i = 0; i < ExtProfCent->GetLignes(); i++) {
-		  printf ("\nEPC%d = (%f, %f)", i, ExtProfCent->Element(i, 0), ExtProfCent->Element(i, 1));
-	  }
-	  printf ("\nIPC = %d", IntProfCent->GetLignes());
-	  for (int i = 0; i < IntProfCent->GetLignes(); i++) {
-		  printf ("\nIPC%d = (%f, %f)", i, IntProfCent->Element(i, 0), IntProfCent->Element(i, 1));
-	  }
-	  printf ("\nEPB = %d", ExtProfBout->GetLignes());
-	  for (int i = 0; i < ExtProfBout->GetLignes(); i++) {
-		  printf ("\nEPB%d = (%f, %f)", i, ExtProfBout->Element(i, 0), ExtProfBout->Element(i, 1));
-	  }
-	  printf ("\nIPB = %d", IntProfBout->GetLignes());
-	  for (int i = 0; i < IntProfBout->GetLignes(); i++) {
-		 printf ("\nIPB%d = (%f, %f)", i, IntProfBout->Element(i, 0), IntProfBout->Element(i, 1));
-	 }
-	*/
 }
 
 
@@ -889,69 +891,6 @@ void Appliquer(int /*control*/) {
 
 }
 
-/*
-Matrice* getAddRepPts() {
-    //printf ("\n bergin getAddRepPts()");
-    double* val = new double[8];
-    val[0] =  Deb[0];
-    val[1] =  PosPinceBA[0];
-    val[2] =  PosPinceBF[0];
-    val[3] =  Fin[0];
-    val[4] =  PosDiagNerv1A;
-    val[5] =  PosDiagNerv2A;
-    val[6] =  PosDiagNerv1F;
-    val[7] =  PosDiagNerv2F;
-	
-    double* valnew = new double[8];
-
-    int isave=0, i=0, j=0,k=0;
-    for (i = 0; i < 8; i++)
-    {
-        double min = 10000.0f;
-        for (j = 0; j < 8;j++){
-        	bool exist = false;
-		for (k = 0; k < isave;k++)
-                    if (valnew[k] == val[j]) exist = true;
-                
-		if (!exist) if ((val[j]>0.0f)&&(val[j]<100.0f)&&(val[j] < min)) min = val[j];
-	}
-	if (min != 10000.0f) {
-		valnew[isave] = min;
-		isave++;
-	} else {
-            break;
-        }
-    }
-
-    Matrice* pts = new Matrice (isave, 0);
-    for (i = 0; i < isave; i++) {
-        pts->SetElement(i, 0, valnew[i]);
-      //  printf ("\n gar %d -> %f", i , valnew[i]);
-    }
-    //	printf ("\n ... getAddRepPts()");
-    return pts;
-}
-*/
-
-/*
-void ModifyProfs() {
-    Matrice* addRepPts = getAddRepPts();
-    Matrice *newExtProfCent, *newIntProfCent, *newExtProfBout, *newIntProfBout;
-    AddPointsToCourb (ExtProfCent, addRepPts, &newExtProfCent);
-    AddPointsToCourb (IntProfCent, addRepPts, &newIntProfCent);
-    AddPointsToCourb (ExtProfBout, addRepPts, &newExtProfBout);
-    AddPointsToCourb (IntProfBout, addRepPts, &newIntProfBout);
-    delete (ExtProfCent);
-    delete (IntProfCent);
-    delete (ExtProfBout);
-    delete (IntProfBout);
-    ExtProfCent = newExtProfCent;
-    IntProfCent = newIntProfCent;
-    ExtProfBout = newExtProfBout;
-    IntProfBout = newIntProfBout;
-}
-*/
-
 
 void AppliquerMagic2(int /*control*/) {
     int i; //,j;
@@ -1005,46 +944,6 @@ void AppliquerMagic2(int /*control*/) {
 
     SaveRasklad2(getWindPatternsProject(), rasklad);
 }
-
-/*
-void AppliquerMagic(int ) {
-    int i; //,j;
-    Matrice *xe, *xi;
-    Matrice *extProf, *intProf;
-    xe = new Matrice(ExtProfCent->GetLignes(), 1);
-    xi = new Matrice(IntProfCent->GetLignes(), 1);
-    for (i = 0; i < ExtProfCent->GetLignes(); i++)
-        xe->SetElement(i, 0, ExtProfCent->Element(i, 0));
-    for (i = 0; i < IntProfCent->GetLignes(); i++)
-        xi->SetElement(i, 0, IntProfCent->Element(i, 0));
-    for (i = 0; i < 2; i++) {
-        if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe)))
-            AjouteValeurCroissant(Deb[i], &xe);
-        if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi)))
-            AjouteValeurCroissant(Deb[i], &xi);
-        if ((FaceFin[i] == 1) && (!ValeurPresente(Fin[i], xe)))
-            AjouteValeurCroissant(Fin[i], &xe);
-        if ((FaceFin[i] == 2) && (!ValeurPresente(Fin[i], xi)))
-            AjouteValeurCroissant(Fin[i], &xi);
-    }
-    extProf = Zeros(xe->GetLignes(), 2);
-    intProf = Zeros(xi->GetLignes(), 2);
-    for (i = 0; i < extProf->GetLignes(); i++)
-        extProf->SetElement(i, 0, xe->Element(i, 0));
-    for (i = 0; i < intProf->GetLignes(); i++)
-        intProf->SetElement(i, 0, xi->Element(i, 0));
-    InterpoleProfilBout(&ExtProfBout, extProf);
-    InterpoleProfilBout(&IntProfBout, intProf);
-    InterpoleProfilBout(&ExtProfCent, extProf);
-    InterpoleProfilBout(&IntProfCent, intProf);
-    delete(xe);
-    delete(xi);
-    delete(extProf);
-    delete(intProf);
-    CalculMagicPincesRasklad();
-    SaveRasklad();
-}
-*/
 
 void SauverFichier3dDXF( int ) //
 {
@@ -1257,8 +1156,6 @@ void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
 void Test(int control) {
     printf ("\n TEST()");
 
-	// calculPolyLength(Xd0, Yd0, xrp, yrp);
-
 	Matrice* Xd0 = new Matrice(4, 0);
 	Matrice* Yd0 = new Matrice(4, 0);
 
@@ -1338,6 +1235,7 @@ void Test(int control) {
     }*/
     //EcritureWindPatternsProject("testproject.txt", getWindPatternsProject());
 }
+
 
 void SaveRasklad() {
     int startNoNerv = 0, noNerv = 0, face = 1;
@@ -1547,6 +1445,7 @@ void SaveRasklad() {
     }
     //printf("\n end of liberer...");
 }
+
 
 void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
     Matrice * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
@@ -3275,11 +3174,6 @@ void InitFenetre(void) {
 
 
 
-/*****************/
-
-/* InitLumiere   */
-
-/*****************/
 
 void InitLumiere(void) {
     float mat_specular[] = {1.0, 1.0, 1.0, 1.0};
@@ -3299,9 +3193,6 @@ void InitLumiere(void) {
     glEnable(GL_NORMALIZE);
 }
 
-/*****************/
-/* M A I N       */
-/*****************/
 
 int main(int argc, char** argv) {
    
@@ -3354,57 +3245,13 @@ int main(int argc, char** argv) {
 
     LoadFromWindPatternsProject(gfd);
 
-    //MargeFin = 0.0f;
-    //printf ("\nbefore FicProject->set");
-    //FicProject->set_text(NomFichierProject);
-    //printf ("\n after LoadFromWindPatternsProject()");
-
-    //strcpy(NomFichierRepPoints, "rep_points.txt");
-    //ReperPoints = LectureFichierReperPoints(NomFichierRepPoints);
-
-    //printf ("\n Load Diag Nervures");
-    //strcpy(NomFichierDiagNerv, "diagnervs.txt");
-    //noNervD = LectureFichierDiagNervs(NomFichierDiagNerv, &quantDiag);
-/*	for (int i = 0; i < quantDiag; i++) {
-		printf ("\n%d -> %d", i, noNervD[i]);
-	}
-    printf ("\n... Load Diag Nervures");*/
-    //Matrice *t = ReperPoints[0];
-    //t = ReperPoints[1];
-    //strcpy(NomFichierVentHoles, "ventholes.txt");
-    //noNervVH = LectureFichierVentHoles(NomFichierVentHoles, &quantVH, &VentCentralNerv);
-    /*printf ("\n VentCentralNerv=%d", VentCentralNerv);
-    printf ("\n quantVH=%d", quantVH);
-	for (i = 0; i < quantVH; i++) {
-		printf ("\nvh %d -> %d", i, noNervVH[i]);
-	}*/
-
-    //lecture fichier de forme
-    //strcpy(NomFichierForme, "f17v2.txt");
-    //F = LectureFichierForme(NomFichierForme);
-
-//    printf ("\n NomFichierForme=%s", NomFichierForme);
-    //exit(0);
-    //chargement profils
-  //  LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
-//    printf ("\n F->m_strNomProfilCent.c_str()=%s", F->m_strNomProfilCent.c_str());
-//    LectureFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
-//    printf ("\n F->m_strNomProfilBout.c_str()=%s", F->m_strNomProfilBout.c_str());
-
-  
-
-
-    //calcul epaisseur relative ?
     EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
     EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
-    //applique distribution des x du profil du bout comme au centre
+
     InterpoleProfilBout(&ExtProfBout, ExtProfCent);
     InterpoleProfilBout(&IntProfBout, IntProfCent);
-    /****************************************/
-    /*         Here's the GLUI code         */
-    /****************************************/
-    /*affichage No de version et creation fenetre*/
-    printf("Ce programme utilise GLUI version: %3.2f\n", GLUI_Master.get_version());
+
+	//printf("Ce programme utilise GLUI version: %3.2f\n", GLUI_Master.get_version());
     glui = GLUI_Master.create_glui("Boite de dialogue", 0, 0, 0);
 
     /*cote 1*/
