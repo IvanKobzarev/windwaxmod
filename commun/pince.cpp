@@ -207,6 +207,7 @@ void makePointPince(Matrice *Xd, Matrice *Yd, Matrice *P,
     delete (interpYSuspente);
 }
 
+
 double pinceFunctionA(WindPatternsProject* gfd, double x) {
     double sum = 0.0f;
     double k=0.0f;
@@ -508,6 +509,7 @@ void CalculPinceNew(Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
     if (p->debug) printf ("\n end calculPinceNew...");
 
 }
+
 void CalculPincePlusNew(Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
         Pince* p,
         Matrice **Xdp1, Matrice **Ydp1,
@@ -576,18 +578,14 @@ Matrice* GetFunctionSrezDeb(Matrice *X, Matrice *Y, double pa) {
 
 Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double pos2)
 {
-    if (DEBUG) printf ("\n begin in getGluePinceOnlyFuncs()");
     Pince* res = new Pince();
     int i = 0;
-    if (DEBUG) printf ("\n P1->GetLignes=%d", pince1->P1->GetLignes());
     while (pince1 -> P1 -> Element(i, 0) != pos1) i++;
     int i1 = i;
-    if (DEBUG) printf ("\n i1=%d", i1);
     i = pince2->P1->GetLignes()-1;
     while (pince2 -> P1->Element(i, 0) != pos2) i--;
    
     int i2 = i;
-    if (DEBUG) printf ("\n i2=%d", i2);
     
     int n = i2 + i1 + 1;
     Matrice* func1 = new Matrice (n, 1);
@@ -715,7 +713,6 @@ Pince* getPince(WindPatternsProject* gfd, int nerv1, int nerv2, int face)
                         &RadiusFunction, &ampRfA, &ampRfF);
     //printf ("\n   in getPince(): P->GetLignes()=%d", P->GetLignes());
     int n = FuncFunction1->GetLignes();
-    if (DEBUG) printf ("\n ipa=%d ipf=%d", ipa, ipf);
     int _ipai=ipa, _ipfi=ipf;
 
     ResFunction1 = new Matrice(n, 1);
@@ -879,10 +876,6 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
             }
         }
     }
-    if (DEBUG) {
-        printf ("\n FF1");
-        (*FuncFunction1) ->print(0);
-    }
 
     for (i = 0; i < n; i++) {
         if (i <= ipai[1]) {
@@ -899,10 +892,6 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
             }
         }
 
-    }
-    if (DEBUG) {
-        printf ("\n FF2");
-        (*FuncFunction2) ->print(0);
     }
 
     // ==============RadiusFunction=============
@@ -958,18 +947,14 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
     double dkh = 1.0f/(CalculW0byHW1(Hh->Element(i2, 0), w)-w);
 
     double wi = 0.0f;
-    if (DEBUG) printf ("\n i1=%d i2=%d", i1, i2);
+
     for (i=0; i < newXd[0]->GetLignes();i++) {
         wi = dist2d(newXd[0]->Element(i,0), newYd[0]->Element(i,0),  newXd[1]->Element(i,0), newYd[1]->Element(i,0));
 
 
         if ( i <= i1) {
-            if (DEBUG) printf ("\n %d->",i);
-            if (DEBUG) printf (" hn=%f", Hn->Element(i, 0));
-            if (DEBUG) printf (" wi=%f", wi);
             (*RadiusFunction) -> SetElement(i,0,
                     (CalculW0byHW1(Hn->Element(i, 0), wi)-wi) * dkn);
-            if (DEBUG) printf (" RF=%f", (*RadiusFunction) -> Element(i, 0));
         } else {
             if ( i >= i2){
             //    printf (" hh=%f", Hh->Element(i, 0));
@@ -978,10 +963,6 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
             } else (*RadiusFunction) -> SetElement(i,0, 0.0f);
         }
        //printf ("\n RF=%f", (*RadiusFunction) -> Element(i, 0));
-    }
-    if (DEBUG) {
-        printf ("\n RF");
-        (*RadiusFunction) ->print(0);
     }
 
 }
@@ -1070,7 +1051,6 @@ void getPinceRadiusFunction(WindPatternsProject* gfd, int nerv1, int nerv2, int 
         // need to calculate on normal!!!!
         double wi = dist2d(Xd[0]->Element(i,0),Yd[0]->Element(i,0), Xd[1]->Element(i,0), Yd[1]->Element(i,0));
         double funcPosPincei = CalculW0byHW1(hi, wi);
-        if (DEBUG) printf ("\n%d hi=%f wi=%f -> %f (%f)", i, hi, wi, funcPosPincei, (funcPosPincei-1.0f)*wi );
     }
 
 

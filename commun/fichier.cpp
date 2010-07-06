@@ -3,9 +3,6 @@
 * forme ,profil, patrons ...
 ***************************************/
 
-//#include <afx.h>		//class CString
-//#include <afxdlgs.h>	//class CFileDialog
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,12 +20,8 @@
 #endif
 
 #include "fichier.h"
-#include "plot.h"
-#include "matrice.h"
 #include "profil.h"
 #include "geom.h"
-#include "rasklad.h"
-#include "patternsproject.h"
 
 
 /////////////////////////////////////////////////////////////
@@ -153,6 +146,24 @@ Forme::~Forme()
 		delete(mCtrlVrillage);
 	mCtrlVrillage = NULL;
 }
+
+void Ballonement::loadFromFile(const char* fileName) {
+	FILE *fid;
+
+	if( (fid = fopen( fileName, "rt" )) == NULL )
+	{
+		printf( "\nErreur ouverture fichier: '%s'", fileName );
+		char ex[100];
+		sprintf (ex, " could not open `%s`", fileName);
+		throw ex;
+	}
+	else
+	{
+		//fscanf(fid,"%d %lf %lf %lf",&x);
+	}
+	 
+}
+
 
 /* void Forme::SerializeWing (QDataStream &ar) {
 	printf ("\nin Forme::SerializeWing()");
@@ -707,7 +718,6 @@ LAYOUT_MARGE_EXT_FIN 4.0
 LAYOUT_ACCURACY 0.7
  */
 WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
-    //printf ("\nLectureWindPatternsProject(%s)", NomFic);
     FILE *fid;
     WindPatternsProject *wpp = NULL;
     char* motsClef[54] =
@@ -824,11 +834,11 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
         }
 
 	}
+
     if(fclose(fid))
     {
         printf("\nProbleme  la fermeture du fichier");
     }
-    //printf ("\n..LectureWindPatternsProject(%s)", NomFic);
     return wpp;
 }
 

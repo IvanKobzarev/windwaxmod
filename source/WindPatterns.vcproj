@@ -3,8 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="WindPatterns"
-	ProjectGUID="{60ED1B0C-9DD2-4C34-AB11-EA6B74D6AE92}"
-	RootNamespace="WindPatterns"
+	ProjectGUID="{734A0B9E-20B8-42AD-9D23-09889A9EB4C3}"
 	Keyword="MFCProj"
 	TargetFrameworkVersion="0"
 	>
@@ -23,7 +22,6 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
-			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -46,11 +44,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zc:wchar_t-"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="C:\Qt\4.6.2\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -76,16 +71,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				UseLibraryDependencyInputs="true"
-				AdditionalDependencies="glui32.lib glut32.lib qtmain.lib QtCore4.lib QtGui4.lib QtOpenGL4.lib"
+				AdditionalDependencies="glui32.lib glut32.lib"
 				OutputFile=".\Release/WindPatterns.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="C:\qt\4.6.2\lib"
-				IgnoreAllDefaultLibraries="false"
 				ProgramDatabaseFile=".\Release/WindPatterns.pdb"
 				SubSystem="1"
-				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -168,11 +159,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glut32.lib"
+				AdditionalDependencies="glui32d.lib glut32.lib"
 				OutputFile=".\Debug/WindPatterns.exe"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				IgnoreAllDefaultLibraries="true"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/WindPatterns.pdb"
@@ -207,31 +197,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="System.dll"
-			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Data.dll"
-			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Drawing.dll"
-			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Windows.Forms.dll"
-			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.XML.dll"
-			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
 	</References>
 	<Files>
 		<File
@@ -333,6 +298,22 @@
 		<File
 			RelativePath="..\commun\patternsproject.cpp"
 			>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\commun\patternsproject.h"
@@ -407,10 +388,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\commun\profil.h"
-			>
-		</File>
-		<File
 			RelativePath="..\commun\rasklad.cpp"
 			>
 			<FileConfiguration
@@ -435,8 +412,24 @@
 			>
 		</File>
 		<File
-			RelativePath=".\WindPatterns.cpp"
+			RelativePath="WindPatterns.cpp"
 			>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

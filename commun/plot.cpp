@@ -1480,7 +1480,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			 Matrice *XInt, Matrice *YInt, Matrice *ZInt,
 			 int mesh, int symetrie)
 {
-        if (DEBUG) printf ("\n AjoutForme3D");
+        
 	Courbe *CourbCour;
 	TMesh *MeshExt, *MeshInt;
 	int NbNerv, i, j;
@@ -1501,23 +1501,9 @@ void AjoutForme3D( TAxe *Axe3d,
               //      printf ("\ni=%d", i);
 			/*extrados*/
 			CourbCour = new Courbe("Extrados");
-                        if (DEBUG) printf ("\nCourbCour = new Courbe(Extrados);");
-			CourbCour->points = OFF;
-                        if (DEBUG) {
-                            printf ("\nCourbCour->points = OFF;");
-                            printf ("\n XExt->GetColonnes()=%d", XExt->GetColonnes());
-                            printf ("\n matrice m");
 
-                            //Matrice* m = Zeros(XExt->GetColonnes(),3);
-                            Matrice* m = Zeros(12,3);
-                            m->print(0);
-                            m->print(1);
-                            m->print(2);
-                            printf ("\n... matrice m");
-                            printf ("\nCourbCour->pts = Zeros(XExt->GetColonnes(),3);");
-                        }
+			CourbCour->points = OFF;
 			CourbCour->pts = Zeros(XExt->GetColonnes(),3);
-                        if (DEBUG) printf ("\n...");
                         //printf ("\n after Zeros()");
 			for(j=0; j<XExt->GetColonnes(); j++)
 			{
@@ -1540,9 +1526,7 @@ void AjoutForme3D( TAxe *Axe3d,
 				CourbCour->pts->SetElement(j,1,YInt->Element(i,j));
 				CourbCour->pts->SetElement(j,2,ZInt->Element(i,j));
 			}
-                    if (DEBUG) printf ("\nbefore 2");
 			AjoutCourbe(Axe3d, CourbCour);
-                    if (DEBUG) printf ("\nafter 2");
 			if(symetrie==1) CourbCour->symX = ON;
 		}
 
@@ -1624,7 +1608,6 @@ void AjoutForme3D( TAxe *Axe3d,
 		/*ajout mesh a l'axe3d*/
 		AjoutMesh(Axe3d, MeshExt); AjoutMesh(Axe3d, MeshInt);
 	}
-        if (DEBUG) printf ("\n ...AjoutForme3D");
 }
 
 
@@ -1642,7 +1625,6 @@ void AjoutPtsSuspentage(
 						int symetrie, Matrice **PosSuspentes)
 
 {
-        if (DEBUG) printf ("\n AjoutPtsSuspentage");
 	Courbe *CourbCour = NULL;
 	Matrice *interpSuspente = NULL;
 	int NbNerv, i, j;
@@ -1703,5 +1685,4 @@ void AjoutPtsSuspentage(
 	*PosSuspentes = CourbCour->pts;
 
 	delete(interpSuspente);
-        if (DEBUG) printf ("\n ..AjoutPtsSuspentage");
 }
