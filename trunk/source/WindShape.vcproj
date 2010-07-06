@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="WindShape"
-	ProjectGUID="{CB7B92C9-7FCA-4452-AFD1-B94D4366A1E8}"
+	ProjectGUID="{3BD7A10B-9670-4A16-AFD8-19CA21A833E8}"
 	Keyword="MFCProj"
 	TargetFrameworkVersion="0"
 	>
@@ -247,14 +247,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\commun\logger.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\commun\logger.h"
-			>
-		</File>
-		<File
 			RelativePath="..\commun\matrice.cpp"
 			>
 			<FileConfiguration
@@ -276,14 +268,6 @@
 		</File>
 		<File
 			RelativePath="..\commun\matrice.h"
-			>
-		</File>
-		<File
-			RelativePath="..\commun\patternsproject.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\commun\patternsproject.h"
 			>
 		</File>
 		<File

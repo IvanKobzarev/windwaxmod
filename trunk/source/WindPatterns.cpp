@@ -4,13 +4,15 @@
 /***********/
 /* include */
 /***********/
+#include "afx.h"		//class CString
+#include "afxdlgs.h"	//class CFileDialog
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 
-#include "afx.h"		//class CString
-#include "afxdlgs.h"	//class CFileDialog
 
 #include "../commun/plot.h"
 #include "../commun/matrice.h"
@@ -37,8 +39,6 @@
 /**********************/
 /* variables globales */
 /**********************/
-
-//CFoil *g_pCurFoil;
 
 /*live-variable GLUI*/
 int VisuFace = 0; /*choix visu nervures(0) ou surfaces(1)*/
@@ -111,8 +111,6 @@ float PosPinceBF[2] = {25.0, 25.0};
 float AmpPinceBA[2] = {2.5f, 2.5f};
 float AmpPinceBF[2] = {2.0f, 2.0f};
 
-//float modePinces = 0.66f;
-//float modePinces2 = 0.66f;
 float tochnostRasklad2 = 0.7f;
 float margeFinExt = 4.0f;
 float margeFinInt = 1.0f;
@@ -124,7 +122,6 @@ float textY = 0.3f;
 
 double *pincePercentage1, *pincePercentage2;
 bool *pinceCalc;
-//pour zoom patron
 
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
 
@@ -223,12 +220,8 @@ Matrice** LectureFichierReperPoints(char* NomFic);
 void InitValeursDialogue(void);
 void Ajouter(int control);
 void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr);
-//void ParseDiagNervs();
-//void ParseVentHolesNervs();
 void CalculMagicPincesRasklad();
-/***********************/
-/* InitValeursDialogue */
-/***********************/
+
 WindPatternsProject* gfd = new WindPatternsProject();
 
 WindPatternsProject* getWindPatternsProject() {
@@ -459,7 +452,6 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
     PosKlapanFin = gfd->PosKlapanFin;
 }
 
-
 void InitValeursDialogue(void) {
     NoNerv[0] = 7;
     NoNerv[1] = 7;
@@ -476,58 +468,23 @@ void InitValeursDialogue(void) {
     FaceFin[0] = 2;
     FaceFin[1] = 1;
 
-/*    Marge[0] = 1.0f;
-    Marge[1] = 1.0f;*/
-
-/*    PosRep[0] = 0.0f;
-    PosRep[1] = 0.0f;*/
-
-/*    FaceRep[0] = 1;
-    FaceRep[1] = 1;*/
-
-/*    PosPinceBA[0] = 14.0f;
-    PosPinceBA[1] = 14.0f;
-    PosPinceBF[0] = 25.0f;
-    PosPinceBF[1] = 25.0f;
-
-    AmpPinceBA[0] = 2.5f;
-    AmpPinceBA[1] =  2.5f;
-
-    AmpPinceBF[0] = 2.0f;
-    AmpPinceBF[1] = 2.0f;*/
-
-  //  PinceNosRadio = 0;
-//    PinceHvostRadio = 1;
-
-  //  PinceNosEqualAmp = 1;
-//    PinceHvostEqualAmp = 0;
-
-//    MargeDeb = 1.0f, MargeFin = 1.0f;
     SpinNoNerv[0] -> set_int_limits(-1, F->m_nbProfils - 1);
     SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
-
-    //char* vhText = new char[F->m_nbProfils-1];
-    //for (int i = 0; i < F->m_nbProfils-1; i++) vhText[i]='1';
-    //VentHolesNervsText -> set_text(vhText);
 }
 
 
 
 void ChargerFichierRepPoints(int /*control*/) {
-    //printf ("\nCharger Fichier Rep Points()");
     CString NomFichier;
     char* PtrNomFichier;
     Matrice** oldRP;
-    //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        //recupere nom de fichier
         NomFichier = DlgOpen.GetPathName();
         PtrNomFichier = NomFichier.GetBuffer(1);
         strcpy(NomFichierRepPoints, PtrNomFichier);
         oldRP = ReperPoints;
         ReperPoints = LectureFichierReperPoints(NomFichierRepPoints);
-	//	oldRP = LectureFichierReperPoints(NomFichierRepPoints);
         delete(oldRP);
         FicRepPoints->set_text(NomFichierRepPoints);
     }
@@ -536,14 +493,11 @@ void ChargerFichierRepPoints(int /*control*/) {
 
 
 void ChargerFichierDiagNervs(int /*control*/) {
-    //printf ("\nCharger Fichier Diag Nervs");
     CString NomFichier;
     char* PtrNomFichier;
     int* oldNoNervD;
-    //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        //recupere nom de fichier
         NomFichier = DlgOpen.GetPathName();
         PtrNomFichier = NomFichier.GetBuffer(1);
         strcpy(NomFichierDiagNerv, PtrNomFichier);
@@ -572,7 +526,6 @@ void ChargerFichierVentHoles(int /*control*/) {
         oldVH = noNervVH;
         VentCentralNerv = 0;
         noNervVH = LectureFichierVentHoles(NomFichierVentHoles, &quantVH, &VentCentralNerv);
-        //printf ("\n VentCentralNerv=%d", VentCentralNerv);
         delete(oldVH);
         FicVentHoles->set_text(NomFichierVentHoles);
     }
@@ -600,7 +553,6 @@ void ChargerFichierProject(int /*control*/) {
     display();
     glui->sync_live();
 }
-
 
 void ChargerFichierForme(int /*control*/) {
     CString NomFichier;
@@ -698,15 +650,11 @@ void ModifPinceNosRadio(int /*control*/) {
 }
 
 void ModifRepPts(int /*control*/) {
-    //ChargerFichierRepPoints(0);
     CalculVue3dEtPatron();
     display();
 }
 
 void ModifVentilation(int /*control*/) {
-    //ChargerFichierRepPoints(0);
-    //CalculVue3dEtPatron();
-    //display();
     Appliquer(0);
 }
 
@@ -729,7 +677,6 @@ void ModifProjection3d(int /*control*/) {
 /***************/
 /* ModifVisu3d */
 /***************/
-
 void ModifVisu3d(int /*control*/) {
     /*recalcul et retrace la vue 3d*/
     CalculVue3dEtPatron();
@@ -741,7 +688,6 @@ void ModifVisu3d(int /*control*/) {
 /***********************/
 /* ModifVisuSymetrique */
 /***********************/
-
 void ModifVisuSymetrique(int /*control*/) {
     /*recalcul et retrace la vue 3d*/
     CalculVue3dEtPatron();
@@ -751,11 +697,8 @@ void ModifVisuSymetrique(int /*control*/) {
 }
 
 void ModifGoPince(int /*control*/) {
-    //Appliquer(0);
     CalculVue3dEtPatron();
     display();
-    //VisuAxe(Axe3d);
-    //glutSwapBuffers();
 }
 
 void ModifRaskladSymetrique(int /*control*/) {
@@ -766,17 +709,9 @@ void ModifVentilationLayout(int /*control*/) {
 
 }
 
-/***********/
-/* Ajouter */
-/***********/
-
 void Ajouter(int /*control*/) {
 
 }
-
-/*************/
-/* Appliquer */
-/*************/
 
 void Appliquer(int /*control*/) {
     int i; //,j;
@@ -1615,7 +1550,7 @@ void CalculPinces(Matrice *Xd1, Matrice *Yd1,
 
 void CalculVue3dEtPatron(void)
 {
-    printf ("\n CalculVue3dEtPatron");
+    //printf ("\n CalculVue3dEtPatron");
     Matrice *XExt, *YExt, *ZExt;
     Matrice *XInt, *YInt, *ZInt;
     Matrice *PtsSuspentes; //pour recuperer la position 3D des pts de suspentage
@@ -1653,30 +1588,6 @@ void CalculVue3dEtPatron(void)
     CalculForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-/*
-    if (DEBUG) {
-        printf ("\nExtProfCent");
-        ExtProfCent->print(0);
-        printf ("\nIntProfCent");
-        IntProfCent->print(0);
-		for (int i = 0; i < F->m_nbProfils; i++) {
-			printf ("\nXExt %d", i);
-			XExt->print(i);
-			printf ("\nYExt %d", i);
-			YExt->print(i);
-			printf ("\nZExt %d", i);
-			ZExt->print(i);
-			printf ("\nXInt %d", i);
-			XInt->print(i);
-			printf ("\nYInt %d", i);
-			YInt->print(i);
-			printf ("\nZInt %d", i);
-			ZInt->print(i);
-		}
-
-    }
- */
-   
     /*ajoute visu 3D de la forme*/
     AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
     /*ajoute points de suspentage*/
@@ -1684,10 +1595,6 @@ void CalculVue3dEtPatron(void)
         AjoutPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
                 VisuSymetrique, &PtsSuspentes);
     }
-    /***********************/
-    /* calcul du patron !!!*/
-    /***********************/
-    //suppression de l'ancien patron
     LibererCourbesAxe(AxePatron);
     LibererCourbesAxe(AxeRepDXF);
     LibererCourbesAxe(AxePatronDXF);
@@ -1695,9 +1602,6 @@ void CalculVue3dEtPatron(void)
     LibererCourbesAxe(AxeMarginDXF);
     LibererCourbesAxe(AxeCercleDXF);
 
-    //recopie des X du profil dans 2 vecteurs colonnes
-    //pour faciliter ecriture par la suite
-  //  printf ("before xExtProf, xIntProf");
     xExtProf = new Matrice(ExtProfCent->GetLignes(), 1);
     xIntProf = new Matrice(IntProfCent->GetLignes(), 1);
 
@@ -1744,11 +1648,10 @@ void CalculVue3dEtPatron(void)
         else {
             if (isPosNerv[0] || isPosNerv[1]) {
                 if (!isPosNerv[0])
-                    if (FaceDeb[0]==1) PosNerv[0]==100.0f; else PosNerv[0]=0.0f;
+                    if (FaceDeb[0]==1) PosNerv[0]=100.0f; else PosNerv[0]=0.0f;
                 if (!isPosNerv[1])
-                    if (FaceDeb[1]==1) PosNerv[1]==100.0f; else PosNerv[1]=0.0f;
+                    if (FaceDeb[1]==1) PosNerv[1]=100.0f; else PosNerv[1]=0.0f;
 
-                //printf ("\n go CalculPatronPosNerv");
                 CalculPatronPosNerv(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
                             nerv[1], symetrique[1], FaceDeb[1], FaceFin[1], Deb[1], Fin[1],
                             &Xd[0], &Yd[0], &Xd[1], &Yd[1],
@@ -1757,8 +1660,6 @@ void CalculVue3dEtPatron(void)
             }
             else
             {
-                //printf ("\n go CalculPatron");
-                //printf ("\n nerv: %d %d", nerv[0], nerv[1]);
             CalculPatron(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
                         nerv[1], symetrique[1], FaceDeb[1], FaceFin[1], Deb[1], Fin[1],
                         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
@@ -3350,10 +3251,6 @@ int main(int argc, char** argv) {
     GLUI_Button *boutonLoadDiagNervs =
             glui->add_button_to_panel(panel_DiagNerv, "Load", 0, &ChargerFichierDiagNervs);
     boutonLoadDiagNervs->set_w(10);
-
-
-
-
 
     GLUI_Rollout *panel_Klapan = glui->add_rollout("Klapan",false);
     glui->add_checkbox_to_panel(panel_Klapan, "Klapan", &isKlapan);

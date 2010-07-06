@@ -17,6 +17,7 @@
 class Matrice;
 class Profil;
 class WindPatternsProject;
+class Ballonement;
 
 class Forme
 {
@@ -54,6 +55,8 @@ public:
 	Profil** m_pProfils;
 	int m_nbProfils;
 
+	Ballonement *ballon;
+
 /*	void SerializeToWpa(QDataStream &ar);
 	void SerializeFoil(QDataStream &ar, Matrice* ExtProf, Matrice* IntProf);
 	void SerializeWing (QDataStream &ar);
@@ -61,6 +64,17 @@ public:
 	void DeleteProfils();
 	void AllocateProfils( int i );
 	void Validate();
+};
+
+class Ballonement
+{
+	public:
+		Ballonement();
+		virtual ~Ballonement();
+		double* kNose;
+		double* kBack;
+		double* kTail;
+		void loadFromFile(const char* fileName);
 };
 
 typedef struct InfoForme TInfoForme;

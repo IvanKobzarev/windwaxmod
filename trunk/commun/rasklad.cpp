@@ -1,12 +1,12 @@
 #pragma warning(disable:4514)
 
+#include "afx.h"		//class CString
+#include "afxdlgs.h"	//class CFileDialog
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
 #include <math.h>
-
-#include "afx.h"		//class CString
-#include "afxdlgs.h"	//class CFileDialog
 
 #include "rasklad.h"
 #include "geom.h"
@@ -25,7 +25,6 @@
     #define DEBUG false
 #endif
 
-//Logger* layoutLogger = NULL;
 
 Rasklad::~Rasklad() {
 
@@ -1143,10 +1142,8 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
         delete (Yd[0]);
         delete (Xd[1]);
         delete (Yd[1]);
-        if (debug) printf("\n ...go delete ..[t=%d]\n=================================", t);
     }
     delete charname;
-    //printf ("\n go DlgOpen");
     CString NomFichier;
     LPTSTR PtrNomFichier;
     char ext[10];

@@ -418,6 +418,102 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 
 }
 
+
+void CalculForme3DBallonement
+				(Forme *forme, int isPercent, double percent,
+				   Matrice *ExtProfCent, Matrice *IntProfCent,
+				   Matrice *ExtProfBout, Matrice *IntProfBout,
+				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
+				   Matrice **XInt, Matrice **YInt, Matrice **ZInt)
+
+{
+    //printf ("\n CalculForme3D");
+    Matrice *ExtProfCentN, *ExtProfBoutN;
+	double LongNerv, EpaiRel, xp,yp, xo,yo,zo, a,v,m;
+	double EpaiRelProfCent, EpaiRelProfBout;
+	double coeffx, coeffyCent, coeffyBout;
+	int i,j;
+    bool isCenterPanel = (1 & forme->NbCaiss);
+
+	/*calcul epaisseur relative profil central et bout*/
+	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
+	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
+
+	*XExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
+	*YExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
+	*ZExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
+
+	*XInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
+	*YInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
+	*ZInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
+
+    if (isPercent) {
+        makePosProfile(ExtProfCent, IntProfCent, percent, &ExtProfCentN);
+        makePosProfile(ExtProfBout, IntProfBout, percent, &ExtProfBoutN);
+    }
+        
+	for (i=0; i<forme->m_nbProfils; i++)
+	{
+		//longueur nervure courante
+		LongNerv = forme->m_pProfils[i]->m_fLength;
+		//epaisseur relative
+		EpaiRel = forme->m_pProfils[i]->m_fWidth;
+		//position xo,yo,zo du nez
+		xo = forme->m_pProfils[i]->m_fNezX;
+		yo = forme->m_pProfils[i]->m_fNezY;
+		zo = forme->m_pProfils[i]->m_fNezZ;
+        //printf ("\n %d long=%f width=%f (%f, %f, %f)", i, forme->m_pProfils[i]->m_fLength, forme->m_pProfils[i]->m_fWidth, xo, yo, zo);
+		a = forme->m_pProfils[i]->m_fInclin;
+        if ((isCenterPanel) && (i == 0)) a = forme->m_pProfils[0]->m_fInclin - 0.33333333f * fabs(forme->m_pProfils[0]->m_fInclin - forme->m_pProfils[1]->m_fInclin);
+                
+		//angle vrillage
+		v = forme->m_pProfils[i]->m_fWash;
+		//coeff morphing
+		m = forme->m_pProfils[i]->m_fMorph;
+               
+		//printf ("\n%3d -> LNerv=%f EpRel=%f a=%f v=%f m=%f",
+		//				i,  LongNerv, EpaiRel, a * 180.0f/pi, v, m);
+
+		coeffx = LongNerv/100.0f;
+		coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
+		coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
+
+		for (j=0; j<IntProfCent->GetLignes(); j++)
+		{
+			xp = IntProfCent->Element(j,0)*coeffx;
+			yp = IntProfCent->Element(j,1)*coeffyCent*m
+				+ IntProfBout->Element(j,1)*coeffyBout*(1.0f-m);
+			(*XInt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
+			(*YInt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
+			(*ZInt)->SetElement(i,j, zo-(xp*(double)cos(v)));
+
+		}
+
+		/*boucle sur les points du profil en extrados*/
+		for (j=0; j<ExtProfCent->GetLignes(); j++)
+		{
+            if (isPercent) {
+                xp = ExtProfCentN->Element(j,0)*coeffx;
+                yp = ExtProfCentN->Element(j,1)*coeffyCent*m
+                        + ExtProfBoutN->Element(j,1)*coeffyBout*(1.0f-m);
+            } else {
+                xp = ExtProfCent->Element(j,0)*coeffx;
+                yp = ExtProfCent->Element(j,1)*coeffyCent*m
+                        + ExtProfBout->Element(j,1)*coeffyBout*(1.0f-m);
+            }
+			(*XExt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
+			(*YExt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
+			(*ZExt)->SetElement(i,j, zo-(xp*(double)cos(v)));
+          /*  if (i == 0) {
+                printf ("\n%d DELTA(%f, %f, %f)",j, (yp-xp*(double)sin(v))*(double)cos(a), (yp-xp*(double)sin(v))*(double)sin(a), -(xp*(double)cos(v)));
+            } */
+		}
+
+	}
+        //printf ("\n ...CalculForme3D");
+
+}
+
 /***********************/
 /* InterpoleProfilBout */
 /***********************/
