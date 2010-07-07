@@ -37,4 +37,14 @@ public:
 	double m_fPosE;		//pos relative ligne D
 };
 
+class ProfilGeom
+{
+	public:
+		ProfilGeom();
+
+	Matrice* ExtProf;
+	Matrice* IntProf;
+};
+
+
 #endif
