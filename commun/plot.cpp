@@ -1610,12 +1610,31 @@ void AjoutForme3D( TAxe *Axe3d,
 	}
 }
 
+void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt){
+	*courbeExt = new Courbe("ProfileExt");
+    (*courbeExt)->points = OFF;
+    (*courbeExt)->symX = OFF;
+
+	int nExt = pg->ExtProf->GetLignes();
+	int nInt = pg->IntProf->GetLignes();
+	(*courbeExt)->pts = new Matrice(nExt,2);
+	for (int i = 0; i < nExt; i++) {
+		(*courbeExt)->pts->SetElement(i, 0, pg->ExtProf->Element(i, 0));
+		(*courbeExt)->pts->SetElement(i, 1, pg->ExtProf->Element(i, 1));
+	}
+	(*courbeInt) = new Courbe("ProfileInt");
+    (*courbeInt)->points = OFF;
+    (*courbeInt)->symX = OFF;
+	(*courbeInt)->pts = new Matrice(nInt,2);
+	for (int i = 0; i < nInt; i++) {
+		(*courbeInt)->pts->SetElement( i, 0, pg->IntProf->Element(i, 0));
+		(*courbeInt)->pts->SetElement( i, 1, pg->IntProf->Element(i, 1));
+	}
+}
 
 
 /**********************/
-
 /* AjoutPtsSuspentage */
-
 /**********************/
 
 void AjoutPtsSuspentage(

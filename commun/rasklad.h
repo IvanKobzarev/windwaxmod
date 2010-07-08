@@ -3,7 +3,7 @@
 #include "afx.h"		//class CString
 #include "afxdlgs.h"	//class CFileDialog
 
-
+#include "profil.h"
 #include "pince.h"
 #include "matrice.h"
 #include "fichier.h"
@@ -88,6 +88,8 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
 double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int face);
 
 void GetMiddleProfile (WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf);
+
+ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv);
 
 void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrice** fl, double *pRA, double *pRF, Matrice** fr, double *len);
 

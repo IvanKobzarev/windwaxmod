@@ -1847,6 +1847,69 @@ double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int 
     return width;
 }
 
+void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matrice** XProf, Matrice** YProf) {
+    Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+    CalculForme3D(F, 0, 0.0f,
+		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+    double LongNerv = 100.0f;
+    double EpaiRel = 0.0f;
+    double m = -1.0f;
+    if (nerv != -1) {
+        EpaiRel = F->m_pProfils[nerv]->m_fWidth;
+        m = F->m_pProfils[nerv]->m_fMorph;
+    } else {
+        EpaiRel = F->m_pProfils[0]->m_fWidth;
+        m = 1.0f;
+    }
+    double EpaiRelProfCent = EpaisseurRelative(gfd->ExtProfCent, gfd->IntProfCent);
+    double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
+    double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
+    double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
+    double xp, yp;
+    int n = 0, j = 0;
+    if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
+    *XProf = new Matrice(n, 1);
+    *YProf = new Matrice(n, 1);
+    if (face == 1) {
+        for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
+            xp = gfd->ExtProfCent->Element(j, 0);
+            yp = gfd->ExtProfCent->Element(j, 1) * coeffyCent * m + gfd->ExtProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    } else {
+        for (j = 0; j < gfd->IntProfCent->GetLignes(); j++) {
+            xp = gfd->IntProfCent->Element(j, 0);
+            yp = gfd->IntProfCent->Element(j, 1) * coeffyCent * m + gfd->IntProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    }
+
+}
+
+ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
+	ProfilGeom* pg = new ProfilGeom();
+
+	Matrice* XExt, *YExt, *XInt, *YInt;
+	GetProfileXY(gfd, F, nerv, 1, &XExt, &YExt);
+	int n = XExt->GetLignes();
+	pg->ExtProf = new Matrice (n,2);
+	for (int i = 0; i < n; i++ ) {
+		pg->ExtProf->SetElement(i, 0, XExt->Element(i, 0));
+		pg->ExtProf->SetElement(i, 1, YExt->Element(i, 0));
+	}
+
+	GetProfileXY(gfd, F, nerv, 2, &XInt, &YInt);
+	n = XInt->GetLignes();
+	pg->IntProf = new Matrice (n,2);
+	for (int i = 0; i < n; i++ ) {
+		pg->IntProf->SetElement(i, 0, XInt->Element(i, 0));
+		pg->IntProf->SetElement(i, 1, YInt->Element(i, 0));
+	}
+	return pg;
+}
+
 void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf) {
     Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
     CalculForme3D(F, 0, 0.0f,
