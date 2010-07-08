@@ -1,6 +1,8 @@
 #ifndef __PROFIL_H__
 #define __PROFIL_H__
 
+#include "matrice.h"
+
 class Profil
 {
 public:
@@ -39,9 +41,7 @@ public:
 
 class ProfilGeom
 {
-	public:
-		ProfilGeom();
-
+public:
 	Matrice* ExtProf;
 	Matrice* IntProf;
 };

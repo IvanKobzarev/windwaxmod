@@ -1,4 +1,6 @@
 #pragma once
+
+
 /* header de plot.c */
 
 /*pour activer ou desactiver une fonction*/
@@ -29,6 +31,7 @@
 
 
 #include <string>
+#include "profil.h"
 using namespace std;
 
 class Matrice;
@@ -206,4 +209,4 @@ void AjoutPtsSuspentage(
 						int symetrie, Matrice **PosPtsSuspente);
 
 
-
+void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);

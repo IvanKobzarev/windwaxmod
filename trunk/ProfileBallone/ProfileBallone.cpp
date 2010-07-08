@@ -41,6 +41,8 @@ char NomFichierRepPoints[255];
 char NomFichierVentHoles[255];
 char NomFichierDiagNerv[255];
 
+int XYGrid = 0;
+
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {2, 3};
@@ -196,6 +198,10 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	IntProfCent = tmpIntProfCent;
 	ExtProfBout = tmpExtProfBout;
 	IntProfBout = tmpIntProfBout;
+	gfd->ExtProfCent = ExtProfCent;
+	gfd->ExtProfBout = ExtProfBout;
+	gfd->IntProfCent = IntProfCent;
+	gfd->IntProfBout = IntProfBout;
 	/* --------                                 ------------ */
 }
 
@@ -219,11 +225,6 @@ void ChargerFichierProject(int /*control*/) {
     glui->sync_live();
 }
 
-ProfilGeom* getProfilGeom(Forme* f, int nerv) {
-	ProfilGeom* pg = new ProfilGeom();
-	
-	return pg;
-}
 
 void Apply(int /*control*/) {
     AxeProfiles->XAuto = ON;
@@ -234,31 +235,32 @@ void Apply(int /*control*/) {
     AxeProfiles->ymin = -2.0;
     AxeProfiles->ymax = 2.0;
 
-	AxeProfiles->XGrid == OFF;
-	AxeProfiles->YGrid == OFF;
-	AxeProfiles->ZGrid == OFF;
+	AxeProfiles->XGrid = XYGrid;
+	AxeProfiles->YGrid = XYGrid;
+	AxeProfiles->ZGrid = OFF;
 
     LibererCourbesAxe(AxeProfiles);
+	
+	ProfilGeom* pg1 = getProfile(gfd, F, NoNerv[0]);
+	Courbe* cext1, *cint1;
+	getCourbeFromProfilGeom(pg1, &cext1, &cint1);
+	AjoutCourbe(AxeProfiles, cext1);
+	AjoutCourbe(AxeProfiles, cint1);
 
-	ProfilGeom pg = getProfilGeom(F, NoNerv[0]);
+	ProfilGeom* pg2 = getProfile(gfd, F, NoNerv[1]);
+	Courbe* cext2, *cint2;
+	getCourbeFromProfilGeom(pg2, &cext2, &cint2);
+	AjoutCourbe(AxeProfiles, cext2);
+	AjoutCourbe(AxeProfiles, cint2);
 
-    CourbProfile = new Courbe("Profile");
-    CourbProfile->points = OFF;
-    CourbProfile->symX = OFF;
-    CourbProfile->pts = new Matrice(4, 2);
-	CourbProfile->pts->SetElement(0,0,0);
-	CourbProfile->pts->SetElement(0,1,0);
+	display();
+}
 
-	CourbProfile->pts->SetElement(1,0,1.0);
-	CourbProfile->pts->SetElement(1,1,0.0);
+void ModifXYGrid(int /*control*/) {
+	printf ("\n ModifXYGrid()");
+	AxeProfiles->XGrid = XYGrid;
+	AxeProfiles->YGrid = XYGrid;
 
-	CourbProfile->pts->SetElement(2,0,1.0);
-	CourbProfile->pts->SetElement(2,1,0.5);
-
-	CourbProfile->pts->SetElement(3,0,0.5);
-	CourbProfile->pts->SetElement(3,1,0.5);
-
-	AjoutCourbe(AxeProfiles, CourbProfile);
 	display();
 }
 
@@ -298,6 +300,9 @@ int main(int argc, char** argv)
 	SpinNoNerv[1] = glui->add_spinner_to_panel(panel1, "No Nerv 2", GLUI_SPINNER_INT, &(NoNerv[1]));
     //SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
 
+
+	glui->add_checkbox("XY grid", &XYGrid, 0,  &ModifXYGrid);
+
     GLUI_Button *btnApply =
             glui->add_button("Apply", 0, &Apply);
     btnApply->set_w(10);
@@ -333,7 +338,7 @@ int main(int argc, char** argv)
     //GLUI_Panel *panel = glui->add_panel("");
 
     GLUI_Master.set_glutIdleFunc(NULL);
-	Apply();
+	Apply(0);
     glui->sync_live();
 
     display();
