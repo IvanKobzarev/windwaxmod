@@ -1852,6 +1852,10 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
     CalculForme3D(F, 0, 0.0f,
 		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
     double LongNerv = 100.0f;
+	LongNerv = F->m_pProfils[nerv]->m_fLength;
+	double coeffx = LongNerv/100.0f;
+	//coeffx = 1.0;
+
     double EpaiRel = 0.0f;
     double m = -1.0f;
     if (nerv != -1) {
@@ -1865,6 +1869,7 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
     double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
     double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
     double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
+	printf ("\n coeffx=%f, coeffyCent=%f, coeffyBout=%f", coeffx, coeffyCent, coeffyBout);
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
@@ -1872,14 +1877,14 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
     *YProf = new Matrice(n, 1);
     if (face == 1) {
         for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
-            xp = gfd->ExtProfCent->Element(j, 0);
+            xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
             yp = gfd->ExtProfCent->Element(j, 1) * coeffyCent * m + gfd->ExtProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
             (*XProf)->SetElement(j, 0, xp);
             (*YProf)->SetElement(j, 0, yp);
         }
     } else {
         for (j = 0; j < gfd->IntProfCent->GetLignes(); j++) {
-            xp = gfd->IntProfCent->Element(j, 0);
+            xp = gfd->IntProfCent->Element(j, 0) * coeffx;
             yp = gfd->IntProfCent->Element(j, 1) * coeffyCent * m + gfd->IntProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
             (*XProf)->SetElement(j, 0, xp);
             (*YProf)->SetElement(j, 0, yp);

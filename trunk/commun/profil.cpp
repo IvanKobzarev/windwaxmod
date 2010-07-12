@@ -51,3 +51,56 @@ Profil::Profil(
 Profil::~Profil()
 {}
 
+void ProfilGeom::print() {
+	printf ("\nProfilGeom->print()");
+	printf ("\n ExtProf");
+	for (int i = 0; i < ExtProf->GetLignes(); i++) {
+		printf ("\n%d (%f, %f)", i, ExtProf->Element(i,0), ExtProf->Element(i,1));
+	}
+	printf ("\n IntProf");
+	for (int i = 0; i < IntProf->GetLignes(); i++) {
+		printf ("\n%d (%f, %f)", i, IntProf->Element(i,0), IntProf->Element(i,1));
+	}
+}
+
+ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, double w0, double wN, double dyw) {
+	ProfilGeom* pg = new ProfilGeom();
+
+	int ne = pg0->ExtProf->GetLignes();
+	int ni = pg0->IntProf->GetLignes();
+	pg -> ExtProf = new Matrice (ne, 2);
+	pg -> IntProf = new Matrice (ni, 2);
+	
+	double l = abs (pg0->ExtProf->Element(ne-1, 0) - pg0->ExtProf->Element(0, 0));
+
+	double l_ = l * (1 + kChord * 0.01);
+	double dl = l * kChord * 0.01;
+
+
+	double x0_ = pg0->ExtProf->Element(0, 0) - dl * kMf; 
+	double wabs0 = EpaisseurRelative(pg0->ExtProf, pg0->IntProf);
+	double y0_ = wabs0 * dyw/w0;
+
+	for (int i = 0; i < ne; i++) {
+		double xi0 = pg0 -> ExtProf->Element(i, 0);
+		double yi0 = pg0 -> ExtProf->Element(i, 1);
+		
+		double xi = x0_ + xi0 * l_/l;
+		double yi = y0_ + yi0 * wN/w0;
+
+		pg-> ExtProf->SetElement(i, 0, xi);
+		pg-> ExtProf->SetElement(i, 1, yi);
+	}
+	for (int i = 0; i < ni; i++) {
+		double xi0 = pg0 -> IntProf->Element(i, 0);
+		double yi0 = pg0 -> IntProf->Element(i, 1);
+
+		double xi = x0_ + xi0 * l_/l;
+		double yi = y0_ + yi0 * wN/w0;
+
+		pg-> IntProf->SetElement(i, 0, xi);
+		pg-> IntProf->SetElement(i, 1, yi);
+	}
+
+	return pg;
+}

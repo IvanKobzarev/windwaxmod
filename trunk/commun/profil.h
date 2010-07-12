@@ -1,7 +1,15 @@
 #ifndef __PROFIL_H__
 #define __PROFIL_H__
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
 #include "matrice.h"
+#include "geom.h"
+
+class ProfilGeom;
 
 class Profil
 {
@@ -44,7 +52,9 @@ class ProfilGeom
 public:
 	Matrice* ExtProf;
 	Matrice* IntProf;
+	double LongProf;
+	void print();
 };
 
-
+ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, double w0, double wN, double dyw);
 #endif
