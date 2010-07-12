@@ -46,7 +46,7 @@ int XYGrid = 0;
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {2, 3};
-float dyw=2, wN=25, kChord=1.05, kMf=1.0;
+float dyw=2.0f, wN=25.0f, kChord=1.05f, kMf=1.0f;
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
 
@@ -226,6 +226,7 @@ void ChargerFichierProject(int /*control*/) {
 }
 
 
+
 void Apply(int /*control*/) {
     AxeProfiles->XAuto = ON;
     AxeProfiles->YAuto = ON;
@@ -242,16 +243,31 @@ void Apply(int /*control*/) {
     LibererCourbesAxe(AxeProfiles);
 	
 	ProfilGeom* pg1 = getProfile(gfd, F, NoNerv[0]);
+	pg1->print();
 	Courbe* cext1, *cint1;
 	getCourbeFromProfilGeom(pg1, &cext1, &cint1);
 	AjoutCourbe(AxeProfiles, cext1);
 	AjoutCourbe(AxeProfiles, cint1);
 
-	ProfilGeom* pg2 = getProfile(gfd, F, NoNerv[1]);
+/*	ProfilGeom* pg2 = getProfile(gfd, F, NoNerv[1]);
 	Courbe* cext2, *cint2;
 	getCourbeFromProfilGeom(pg2, &cext2, &cint2);
 	AjoutCourbe(AxeProfiles, cext2);
-	AjoutCourbe(AxeProfiles, cint2);
+	AjoutCourbe(AxeProfiles, cint2);*/
+
+	ProfilGeom* pg1b = getBalloneProfilGeom(pg1, kChord, kMf, F->m_pProfils[NoNerv[0]]->m_fWidth, wN, dyw);
+	Courbe* cext3, *cint3;
+	getCourbeFromProfilGeom(pg1b, &cext3, &cint3);
+	cext3->CouleurSegments[0]=1.0f;
+	cext3->CouleurSegments[1]=0.0f;
+	cext3->CouleurSegments[2]=0.0f;
+	cint3->CouleurSegments[0]=1.0f;
+	cint3->CouleurSegments[1]=0.0f;
+	cint3->CouleurSegments[2]=0.0f;
+
+	AjoutCourbe(AxeProfiles, cext3);
+	AjoutCourbe(AxeProfiles, cint3);
+
 
 	display();
 }
@@ -329,11 +345,11 @@ int main(int argc, char** argv)
 
     GLUI_Spinner *SpinWn = glui->add_spinner_to_panel(
             panel2, "W new", GLUI_SPINNER_FLOAT, &(wN));
-    SpinWn -> set_float_limits(0.0, 1.0);
+    SpinWn -> set_float_limits(0.0, 100.0);
 
     GLUI_Spinner *SpinDyw = glui->add_spinner_to_panel(
             panel2, "D yw", GLUI_SPINNER_FLOAT, &(dyw));
-    SpinDyw -> set_float_limits(0.0, 1.0);
+    SpinDyw -> set_float_limits(0.0, 100.0);
 
     //GLUI_Panel *panel = glui->add_panel("");
 

@@ -329,8 +329,9 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 
 	/*calcul epaisseur relative profil central et bout*/
 	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
+	printf ("\nEpaiRelProfCent=%f", EpaiRelProfCent);
 	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
-
+	printf ("\nEpaiRelProfBout=%f", EpaiRelProfBout);
 	/*init matrices extrados*/
 	//delete(*XExt); delete(*YExt); delete(*ZExt); 
 	//*XExt = Zeros(5, 5);
