@@ -73,8 +73,8 @@ ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, dou
 	
 	double l = abs (pg0->ExtProf->Element(ne-1, 0) - pg0->ExtProf->Element(0, 0));
 
-	double l_ = l * (1 + kChord * 0.01);
-	double dl = l * kChord * 0.01;
+	double l_ = l * kChord;
+	double dl = l * (kChord-1.0);
 
 
 	double x0_ = pg0->ExtProf->Element(0, 0) - dl * kMf; 
