@@ -46,7 +46,7 @@ int XYGrid = 0;
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {2, 3};
-float dyw=2.0f, wN=25.0f, kChord=1.05f, kMf=1.0f;
+float dyw=0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f;
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
 
@@ -267,7 +267,37 @@ void Apply(int /*control*/) {
 
 	AjoutCourbe(AxeProfiles, cext3);
 	AjoutCourbe(AxeProfiles, cint3);
+	
+	Courbe* cvLineHvostPince;
+	cvLineHvostPince = new Courbe("VerticalLine");
+    cvLineHvostPince->points = OFF;
+    cvLineHvostPince->symX = OFF;
 
+	cvLineHvostPince->pts = new Matrice(2, 2);
+
+	int ne = pg1->ExtProf->GetLignes();
+	int ni = pg1->IntProf->GetLignes();
+	double l = abs (pg1->ExtProf->Element(ne - 1, 0) - pg1->ExtProf->Element(0, 0));
+	double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
+	cvLineHvostPince->pts->SetElement(0, 0, xv );
+	cvLineHvostPince->pts->SetElement(0, 1, -0.1 * l);
+
+	cvLineHvostPince->pts->SetElement(1, 0, xv );
+	cvLineHvostPince->pts->SetElement(1, 1, 0.1 * l );
+	AjoutCourbe(AxeProfiles, cvLineHvostPince);
+
+	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, xv);
+	Courbe* cext4, *cint4;
+	getCourbeFromProfilGeom(pg1bh, &cext4, &cint4);
+	cext4->CouleurSegments[0]=0.0f;
+	cext4->CouleurSegments[1]=1.0f;
+	cext4->CouleurSegments[2]=0.0f;
+	cint4->CouleurSegments[0]=0.0f;
+	cint4->CouleurSegments[1]=1.0f;
+	cint4->CouleurSegments[2]=0.0f;
+
+	AjoutCourbe(AxeProfiles, cext4);
+	AjoutCourbe(AxeProfiles, cint4);
 
 	display();
 }
