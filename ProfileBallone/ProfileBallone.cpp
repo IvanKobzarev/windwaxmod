@@ -46,7 +46,7 @@ int XYGrid = 0;
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {2, 3};
-float dyw=0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f;
+float dyw=0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
 
@@ -286,7 +286,7 @@ void Apply(int /*control*/) {
 	cvLineHvostPince->pts->SetElement(1, 1, 0.1 * l );
 	AjoutCourbe(AxeProfiles, cvLineHvostPince);
 
-	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, pg1, xv);
+	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, pg1, xv, power);
 	Courbe* cext4, *cint4;
 	getCourbeFromProfilGeom(pg1bh, &cext4, &cint4);
 	cext4->CouleurSegments[0]=0.0f;
@@ -380,6 +380,11 @@ int main(int argc, char** argv)
     GLUI_Spinner *SpinDyw = glui->add_spinner_to_panel(
             panel2, "D yw", GLUI_SPINNER_FLOAT, &(dyw));
     SpinDyw -> set_float_limits(0.0, 100.0);
+
+    GLUI_Spinner *SpinPower = glui->add_spinner_to_panel(
+            panel2, "power", GLUI_SPINNER_FLOAT, &(power));
+    SpinPower -> set_float_limits(0.05, 3.0);
+
 
     //GLUI_Panel *panel = glui->add_panel("");
 
