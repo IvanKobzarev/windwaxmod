@@ -156,15 +156,123 @@ ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, dou
 	return pg;
 }
 
-ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, double xv) {
-	ProfilGeom* pg1h = new ProfilGeom();
+ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv) {
+	int ne1 = pg1->ExtProf->GetLignes();
+	int ni1 = pg1->IntProf->GetLignes();
+	int ne0 = pg0->ExtProf->GetLignes();
+	int ni0 = pg0->IntProf->GetLignes();
+	printf ("\n ne1=%d ni1=%d", ne1, ni1);
+	printf ("\n ne0=%d ni0=%d", ne0, ni0);
 
-	int ne = pg1->ExtProf->GetLignes();
-	int ni = pg1->IntProf->GetLignes();
+	int iExtTail1 = -1, iIntTail1 = -1, iExtTail0 = -1, iIntTail0 = -1;
+ 
+	// coping pg1
+
+	for (int i = 0; i < ne1; i++) {
+		double xi1 = pg1 -> ExtProf->Element(i, 0);
+		double yi1 = pg1 -> ExtProf->Element(i, 1);
+		if (xi1 <= xv ) iExtTail1 = i;
+	}
+	for (int i = 0; i < ni1; i++) {
+		double xi1 = pg1 -> IntProf->Element(i, 0);
+		double yi1 = pg1 -> IntProf->Element(i, 1);
+		if (xi1 <= xv ) iIntTail1 = i;
+	}
+
+	for (int i = 0; i < ne0; i++) {
+		double xi = pg0 -> ExtProf->Element(i, 0);
+		double yi = pg0 -> ExtProf->Element(i, 1);
+		if (xi <= xv ) iExtTail0 = i;
+	}
+	for (int i = 0; i < ni0; i++) {
+		double xi = pg0 -> IntProf->Element(i, 0);
+		double yi = pg0 -> IntProf->Element(i, 1);
+		if (xi <= xv ) iIntTail0 = i;
+	}
+
+	printf ("\n iExtTail1=%d, iIntTail1=%d, iExtTail0=%d, iIntTail0=%d",  iExtTail1 , iIntTail1 , iExtTail0 , iIntTail0 );
+
+	// now pg1h equal pg1
+
+	// need to make tail, good tail
+
+	// 1) find index where tail starts [ iExtTail, iIntTail ]
+	// make equal quantity tail points
+	ProfilGeom* pgtmp = new ProfilGeom();
+	pgtmp -> ExtProf = new Matrice (iExtTail1 + ne0 - iExtTail0, 2);
+	pgtmp -> IntProf = new Matrice (iIntTail1 + ni0 - iIntTail0, 2);
+
+	for (int i = 0; i <= iExtTail1; i++ ) {
+		pgtmp->ExtProf->SetElement(i, 0, pg1->ExtProf->Element(i, 0));
+		pgtmp->ExtProf->SetElement(i, 1, pg1->ExtProf->Element(i, 1));
+	}
+
+	for (int i = iExtTail0 + 1; i < ne0; i++ ) {
+		pgtmp->ExtProf->SetElement(iExtTail1 + i - iExtTail0, 0, pg0->ExtProf->Element(i, 0));
+		pgtmp->ExtProf->SetElement(iExtTail1 + i - iExtTail0, 1, pg0->ExtProf->Element(i, 1));
+	}
+
+	for (int i = 0; i <= iIntTail1; i++ ) {
+		pgtmp->IntProf->SetElement(i, 0, pg1->IntProf->Element(i, 0));
+		pgtmp->IntProf->SetElement(i, 1, pg1->IntProf->Element(i, 1));
+	}
+
+	for (int i = iIntTail0 + 1; i < ni0; i++ ) {
+		pgtmp->IntProf->SetElement(iIntTail1 + i - iIntTail0, 0, pg0->IntProf->Element(i, 0));
+		pgtmp->IntProf->SetElement(iIntTail1 + i - iIntTail0, 1, pg0->IntProf->Element(i, 1));
+	}
+
+	// constructing Ext part
+
+	// amp ?
+
+    double xn, yn, x , y, ampExt = -1000.0f;
+	double x0 = pg1->ExtProf->Element(iExtTail1, 0);
+    double y0 = pg1->ExtProf->Element(iExtTail1, 1);
+	CalculVecteurBissec(pg1->ExtProf->Element(iExtTail1-1, 0), pg1->ExtProf->Element(iExtTail1-1, 1),
+					x0, y0,
+					pg1->ExtProf->Element(iExtTail1+1, 0), pg1->ExtProf->Element(iExtTail1+1, 1),
+			 &xn, &yn, 10.0f, +1);
+	for (int j = 0; j < ne0; j++) {
+		double x1 = pg0->ExtProf->Element(j,0);
+        double y1 = pg0->ExtProf->Element(j,1);
+        double x2 = pg0->ExtProf->Element(j + 1,0);
+        double y2 = pg0->ExtProf->Element(j + 1,1);
+        Inter2Vecteurs(x0,y0,xn,yn, x1,y1,x2,y2,&x, &y);
+        if ((x >= x1) && (x <= x2)) {
+            ampExt= dist2d (x,y,x0,y0);
+            break;
+        }
+    }
+
+
+	//amp est'!
+	printf ("\n ampExt=%f", ampExt);
+
 	
-	pg1h -> ExtProf = new Matrice (ne, 2);
-	pg1h -> IntProf = new Matrice (ni, 2);
+/*	for (i=1; i<n-1;i++) {
+        double x0 = X1->Element(i, 0);
+        double y0 = Y1->Element(i, 0);
+        CalculVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
+                        x0, y0,
+                        X1->Element(i+1, 0), Y1->Element(i+1, 0),
+		         &xn, &yn, 10.0f, +1);
+*/        
+    //}
 
+
+
+	// constructing Int part
+
+
+
+
+
+
+
+
+
+/*
 	double dw = pg1 -> ExtProf -> Element (ne-1, 1);
 	printf ("\n dw=%f", dw);
 	bool found = false;
@@ -214,6 +322,6 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, double xv) {
 		}
 
 	}
-
-	return pg1h;
+*/
+	return pgtmp;
 }

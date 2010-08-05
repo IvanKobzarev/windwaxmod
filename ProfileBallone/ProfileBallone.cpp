@@ -243,7 +243,7 @@ void Apply(int /*control*/) {
     LibererCourbesAxe(AxeProfiles);
 	
 	ProfilGeom* pg1 = getProfile(gfd, F, NoNerv[0]);
-	pg1->print();
+	//pg1->print();
 	Courbe* cext1, *cint1;
 	getCourbeFromProfilGeom(pg1, &cext1, &cint1);
 	AjoutCourbe(AxeProfiles, cext1);
@@ -286,7 +286,7 @@ void Apply(int /*control*/) {
 	cvLineHvostPince->pts->SetElement(1, 1, 0.1 * l );
 	AjoutCourbe(AxeProfiles, cvLineHvostPince);
 
-	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, xv);
+	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, pg1, xv);
 	Courbe* cext4, *cint4;
 	getCourbeFromProfilGeom(pg1bh, &cext4, &cint4);
 	cext4->CouleurSegments[0]=0.0f;
