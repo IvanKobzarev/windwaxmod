@@ -58,5 +58,6 @@ public:
 
 ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, double w0, double wN, double dyw);
 
-ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, double xv);
+ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv);
+
 #endif
