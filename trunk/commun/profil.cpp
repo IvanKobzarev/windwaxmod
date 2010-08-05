@@ -156,7 +156,7 @@ ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, dou
 	return pg;
 }
 
-ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv) {
+ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, double power) {
 	int ne1 = pg1->ExtProf->GetLignes();
 	int ni1 = pg1->IntProf->GetLignes();
 	int ne0 = pg0->ExtProf->GetLignes();
@@ -167,7 +167,6 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv) {
 	int iExtTail1 = -1, iIntTail1 = -1, iExtTail0 = -1, iIntTail0 = -1;
  
 	// coping pg1
-
 	for (int i = 0; i < ne1; i++) {
 		double xi1 = pg1 -> ExtProf->Element(i, 0);
 		double yi1 = pg1 -> ExtProf->Element(i, 1);
@@ -232,43 +231,92 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv) {
 	CalculVecteurBissec(pg1->ExtProf->Element(iExtTail1-1, 0), pg1->ExtProf->Element(iExtTail1-1, 1),
 					x0, y0,
 					pg1->ExtProf->Element(iExtTail1+1, 0), pg1->ExtProf->Element(iExtTail1+1, 1),
-			 &xn, &yn, 10.0f, +1);
+					&xn, &yn, 10.0f, +1);
 	for (int j = 0; j < ne0; j++) {
-		double x1 = pg0->ExtProf->Element(j,0);
-        double y1 = pg0->ExtProf->Element(j,1);
+		double x1 = pg0->ExtProf->Element(j, 0);
+        double y1 = pg0->ExtProf->Element(j, 1);
         double x2 = pg0->ExtProf->Element(j + 1,0);
         double y2 = pg0->ExtProf->Element(j + 1,1);
-        Inter2Vecteurs(x0,y0,xn,yn, x1,y1,x2,y2,&x, &y);
+        Inter2Vecteurs(x0, y0, xn, yn, x1, y1, x2, y2, &x, &y);
         if ((x >= x1) && (x <= x2)) {
             ampExt= dist2d (x,y,x0,y0);
             break;
         }
     }
 
-
 	//amp est'!
 	printf ("\n ampExt=%f", ampExt);
 
+	double xbegin = pg0->ExtProf->Element(iExtTail0, 0);
+	double xend = pg0->ExtProf->Element(ne0-1, 0);
+	int ne1tail = iExtTail1 + ne0 - iExtTail0;
+	for (int i = iExtTail1 + 1; i < ne1tail-1; i++ ) {
+		//pg0->ExtProf->Element(iExtTail0, 0) -> ampExt
+		//pg0->ExtProf->Element(i, 0) -> amp? ampExt * pow (xend-xc/xend-xi)
+		int i0 = iExtTail0+i-iExtTail1;
+		//printf ("\n i=%d i0=%d", i, i0);
+		double xc = pg0->ExtProf->Element(i0, 0);
+		//pg0->ExtProf->Element(ne0-1, 0) -> 0
+		double x = 0, y =0; 
+		double amp = ampExt * pow ( (xend-xc)/(xend-xbegin), 1/power);
+		CalculVecteurBissec(pg0->ExtProf->Element(i0-1, 0), pg0->ExtProf->Element(i0-1, 1),
+						pg0->ExtProf->Element(i0, 0), pg0->ExtProf->Element(i0, 1),
+						pg0->ExtProf->Element(i0+1, 0), pg0->ExtProf->Element(i0+1, 1),
+						&x, &y, amp, +1);
+		pgtmp->ExtProf->SetElement(i, 0, x);
+		pgtmp->ExtProf->SetElement(i, 1, y);
+	}
+
+	pgtmp->ExtProf->SetElement(ne1tail-1, 0, pg0->ExtProf->Element(ne0-1, 0));
+	pgtmp->ExtProf->SetElement(ne1tail-1, 1, pg0->ExtProf->Element(ne0-1, 1));
 	
-/*	for (i=1; i<n-1;i++) {
-        double x0 = X1->Element(i, 0);
-        double y0 = Y1->Element(i, 0);
-        CalculVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
-                        x0, y0,
-                        X1->Element(i+1, 0), Y1->Element(i+1, 0),
-		         &xn, &yn, 10.0f, +1);
-*/        
-    //}
-
-
-
 	// constructing Int part
+    double ampInt = -1000.0f;
+	x0 = pg1->IntProf->Element(iIntTail1, 0);
+    y0 = pg1->IntProf->Element(iIntTail1, 1);
+	CalculVecteurBissec(pg1->IntProf->Element(iIntTail1-1, 0), pg1->IntProf->Element(iIntTail1-1, 1),
+					x0, y0,
+					pg1->IntProf->Element(iIntTail1+1, 0), pg1->IntProf->Element(iIntTail1+1, 1),
+					&xn, &yn, 10.0f, +1);
+	for (int j = 0; j < ni0; j++) {
+		double x1 = pg0->IntProf->Element(j, 0);
+        double y1 = pg0->IntProf->Element(j, 1);
+        double x2 = pg0->IntProf->Element(j + 1,0);
+        double y2 = pg0->IntProf->Element(j + 1,1);
+        Inter2Vecteurs(x0, y0, xn, yn, x1, y1, x2, y2, &x, &y);
+        if ((x >= x1) && (x <= x2)) {
+            ampInt= dist2d (x,y,x0,y0);
+            break;
+        }
+    }
+
+	//amp est'!
+	printf ("\n ampInt=%f", ampInt);
 
 
 
+	xbegin = pg0->IntProf->Element(iIntTail0, 0);
+	xend = pg0->IntProf->Element(ni0-1, 0);
+	int ni1tail = iIntTail1 + ni0 - iIntTail0;
+	for (int i = iIntTail1 + 1; i < ni1tail-1; i++ ) {
+		//pg0->ExtProf->Element(iExtTail0, 0) -> ampExt
+		//pg0->ExtProf->Element(i, 0) -> amp? ampExt * pow (xend-xc/xend-xi)
+		int i0 = iIntTail0+i-iIntTail1;
+		//printf ("\n i=%d i0=%d", i, i0);
+		double xc = pg0->IntProf->Element(i0, 0);
+		//pg0->ExtProf->Element(ne0-1, 0) -> 0
+		double x = 0, y =0; 
+		double amp = ampInt * pow ( (xend-xc)/(xend-xbegin), 1/power);
+		CalculVecteurBissec(pg0->IntProf->Element(i0-1, 0), pg0->IntProf->Element(i0-1, 1),
+						pg0->IntProf->Element(i0, 0), pg0->IntProf->Element(i0, 1),
+						pg0->IntProf->Element(i0+1, 0), pg0->IntProf->Element(i0+1, 1),
+						&x, &y, amp, -1);
+		pgtmp->IntProf->SetElement(i, 0, x);
+		pgtmp->IntProf->SetElement(i, 1, y);
+	}
 
-
-
+	pgtmp->IntProf->SetElement(ni1tail-1, 0, pg0->IntProf->Element(ni0-1, 0));
+	pgtmp->IntProf->SetElement(ni1tail-1, 1, pg0->IntProf->Element(ni0-1, 1));
 
 
 
