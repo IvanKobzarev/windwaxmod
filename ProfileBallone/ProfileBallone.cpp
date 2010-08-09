@@ -312,7 +312,15 @@ void ModifXYGrid(int /*control*/) {
 
 int main(int argc, char** argv)
 {
-	printf ("Profile ballone...");
+
+	Ballonement* bal = readBallonementFromFile("bal.txt");
+	bal->kChord->print(0);
+	bal->kMf->print(0);
+	bal->dyw->print(0);
+	bal->wN->print(0);
+
+
+	printf ("\nProfile ballone");
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

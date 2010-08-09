@@ -68,12 +68,14 @@ public:
 
 class Ballonement
 {
+	//kChord, kMf, wN, dyw
 	public:
 		Ballonement();
 		virtual ~Ballonement();
-		double* kNose;
-		double* kBack;
-		double* kTail;
+		Matrice* kChord;
+		Matrice* kMf;
+		Matrice* wN;
+		Matrice* dyw;
 		void loadFromFile(const char* fileName);
 };
 
@@ -92,7 +94,11 @@ struct InfoForme
 
 void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** intrados);
 
+Ballonement* readBallonementFromFile(char* NomFic);
+
 Forme* LectureFichierForme(char* NomFic);
+
+Ballonement* readBallonementFromFile(char* NomFic);
 
 Forme* LectureFichierForme2(char* NomFic);
 

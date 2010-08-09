@@ -58,6 +58,16 @@ Forme::Forme()
 	mCtrlVrillage = NULL;
 }
 
+Ballonement::Ballonement(){
+}
+
+Ballonement::~Ballonement(){
+	delete this->kChord;
+	delete this->dyw;
+	delete this->wN;
+	delete this->kMf;
+}
+
 void Forme::DeleteProfils()
 {
 	if ( m_pProfils != NULL )
@@ -950,6 +960,51 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
 		exit(0);
 	}
     
+}
+
+
+Ballonement* readBallonementFromFile(char* NomFic) {
+	FILE *fid;
+	Matrice *m = NULL;
+	Ballonement* bal = new Ballonement();
+	//kChord, kMf, wN, dyw
+	Matrice *kChord, *kMf, *wN, *dyw;
+	if( (fid = fopen( NomFic, "rt" )) == NULL )
+	{
+		printf( "\nErreur ouverture fichier '%s'", NomFic);
+		char ex[100];
+		sprintf (ex, " could not open `%s`", NomFic);
+		throw (ex);
+	}
+	else
+	{
+		// readBallonement
+		int n=-1, ind=0;
+		fscanf(fid,"%d", &n);
+		double _kChord=0, _kMf=0, _wN=0, _dyw=0;
+		kChord = new Matrice(n, 1);
+		kMf = new Matrice(n, 1);
+		wN = new Matrice(n, 1);
+		dyw = new Matrice(n, 1);
+
+		for (int i = 0; i < n; i ++) {
+			fscanf(fid,"%d %lf %lf %lf %lf", &ind, &_kChord, &_kMf, &_wN, &_dyw );
+			kChord->SetElement(i, 0, _kChord);
+			kMf->SetElement(i, 0, _kMf);
+			wN->SetElement(i, 0, _wN);
+			dyw->SetElement(i, 0, _dyw);
+		}
+		bal->kChord = kChord;
+		bal->kMf = kMf;
+		bal->wN = wN;
+		bal->dyw = dyw;
+	}
+	if(fclose(fid))
+	{
+		printf("\nProbleme  la fermeture du fichier WindPatternsProject");
+		exit(0);
+	}
+	return bal;
 }
 
 Forme* LectureFichierForme(char* NomFic)
