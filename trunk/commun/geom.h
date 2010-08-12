@@ -25,7 +25,7 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
 
 void CalculForme3DBallonement
-				(WindPatternsProject* gfd, Forme *forme, Ballonement* bal, int isPercent, double percent,
+				(WindPatternsProject* gfd, Forme *forme, int isPercent, double percent,
 				   Matrice *ExtProfCent, Matrice *IntProfCent,
 				   Matrice *ExtProfBout, Matrice *IntProfBout,
 				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,

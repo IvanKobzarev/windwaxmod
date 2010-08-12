@@ -179,6 +179,8 @@ char ProjectName[255];
 /*divers tableaux*/
 Matrice *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
 Matrice** ReperPoints;
+Ballonement* ballonement;
+char ballonementPath[255];
 char NomFichierForme[255];
 char NomFichierProject[255];
 char NomFichierRepPoints[255];
@@ -230,7 +232,8 @@ WindPatternsProject* getWindPatternsProject() {
     strcpy(gfd->name,ProjectName);
     strcpy(gfd->NomFichierForme, NomFichierForme);
 
-
+    strcpy(gfd->ballonementPath, ballonementPath);
+	gfd->ballonement=ballonement;
     gfd->ReperPointsPlotterFormat = ReperPointsPlotterFormat;
     gfd->PincePowerA = PincePowerA;
     gfd->PincePowerF = PincePowerF;
@@ -338,6 +341,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	Forme* tmpF=0;
 	Matrice *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
 	Matrice** tmpReperPoints=0;
+	Ballonement* tmpBallonement;
 	int tmpquantDiag=0;
 	int tmpquantVH=0;
 	int *tmpnoNervD=0;
@@ -358,6 +362,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 		tmpnoNervVH = LectureFichierVentHoles(gfd->NomFichierVentHoles, &tmpquantVH, &tmpVentCentralNerv);
 		tmpnoNervD = LectureFichierDiagNervs(gfd->NomFichierDiagNerv, &tmpquantDiag);
 		tmpReperPoints = LectureFichierReperPoints(gfd->NomFichierRepPoints);
+		tmpBallonement = readBallonementFromFile(gfd->ballonementPath);
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
 		char msg[100];
@@ -378,12 +383,14 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	noNervD = tmpnoNervD;
 	quantDiag = tmpquantDiag;
 	ReperPoints = tmpReperPoints;
+	ballonement = tmpBallonement;
 	/* --------                                 ------------ */
-  
+ 
     strcpy(NomFichierRepPoints, gfd->NomFichierRepPoints);
     strcpy(NomFichierDiagNerv, gfd->NomFichierDiagNerv);
     strcpy(NomFichierVentHoles, gfd->NomFichierVentHoles);
 	strcpy(NomFichierForme, gfd->NomFichierForme);
+	strcpy(ballonementPath, gfd->ballonementPath);
     strcpy(ProjectName, gfd -> name);	
 	PincePowerA = gfd->PincePowerA;
     PincePowerF = gfd->PincePowerF;
@@ -844,10 +851,12 @@ void AppliquerMagic2(int /*control*/) {
     delete(xi);
     delete(extProf);
     delete(intProf);
-    
+    //printf ("goCalculPinceRasklad()");
 	Rasklad* rasklad = CalculIndepPinceRasklad(getWindPatternsProject(), F);
-
+    //printf ("...goCalculPinceRasklad()");
+	//printf ("goSaveRasklad2()");
     SaveRasklad2(getWindPatternsProject(), rasklad);
+	//printf ("...goSaveRasklad2()");
 }
 
 void SauverFichier3dDXF( int ) //
@@ -1610,9 +1619,9 @@ void CalculVue3dEtPatron(void)
 	if (showBal) {
 		//printf ("\n if showBal");
 		//printf ("\n readBallonementFile(...");
-		Ballonement *bal = readBallonementFromFile("bal.txt");
+		//Ballonement *bal = readBallonementFromFile("bal.txt");
 		//printf ("\n CalculForme3DBallonement(...");
-		CalculForme3DBallonement(getWindPatternsProject(), F, bal, 0, 0.0f,
+		CalculForme3DBallonement(getWindPatternsProject(), F,  0, 0.0f,
 				ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
 				&XExtBal, &YExtBal, &ZExtBal, &XIntBal, &YIntBal, &ZIntBal);
 		//printf ("\n AjoutForme3D(...");

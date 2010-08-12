@@ -212,13 +212,23 @@ void AddPointsToCourb(Matrice* courb, Matrice* pts, Matrice** newCourb)
 }
 
 Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
+	/*printf ("\nXY1");
+	X1->print(0);
+	Y1->print(0);
+	printf ("\nXY2");
+	X2->print(0);
+	Y2->print(0);*/
+
     int n = X1->GetLignes();
+	for (int i =0; i < n-5; i++) {
+		printf ("\n %d (%f, %f)    (%f, %f)", i, X1->Element(i, 0), Y1->Element(i, 0), X2->Element(i, 0), Y2->Element(i, 0));
+	}
     Matrice *res = new Matrice(n, 1);
     int i = 0;
     res->SetElement(0, 0,dist2d (X1->Element(0,0), Y1->Element(0,0), X2->Element(0,0), Y2->Element(0,0)));
-    res->SetElement(n-1, 0,dist2d (X1->Element(n-1,0), Y1->Element(n-1,0), X2->Element(n-1,0), Y2->Element(n-1,0)));
+	res->SetElement(n-1, 0,dist2d (X1->Element(n-1,0), Y1->Element(n-1,0), X2->Element(X2->GetLignes()-1,0), Y2->Element(Y2->GetLignes()-1,0)));
     double xn, yn, x , y;
-    for (i=1; i<n-1;i++) {
+    for (i=1; i < n-1; i++) {
         double x0 = X1->Element(i, 0);
         double y0 = Y1->Element(i, 0);
         CalculVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
@@ -234,6 +244,7 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
             Inter2Vecteurs(x0,y0,xn,yn, x1,y1,x2,y2,&x, &y);
             if ((x >= x1) && (x <= x2)) {
                 res->SetElement(i, 0, dist2d (x,y,x0,y0));
+				printf ("\n set elem %f", dist2d (x,y,x0,y0));
                 break;
             }
         }
@@ -422,7 +433,7 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 
 
 void CalculForme3DBallonement
-				(WindPatternsProject* gfd, Forme *forme, Ballonement* bal, int isPercent, double percent,
+				(WindPatternsProject* gfd, Forme *forme, int isPercent, double percent,
 				   Matrice *ExtProfCent, Matrice *IntProfCent,
 				   Matrice *ExtProfBout, Matrice *IntProfBout,
 				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
@@ -522,10 +533,10 @@ void CalculForme3DBallonement
 			m = (forme->m_pProfils[i]->m_fMorph + forme->m_pProfils[i]->m_fMorph) * 0.5f;
 			// time to calculate profile ballone
 			ProfilGeom* pgCur = getProfile(gfd, forme, i);
-			ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, bal->kChord->Element(i, 0), bal->kMf->Element(i, 0), EpaiRel, bal->wN->Element(i, 0), bal->dyw->Element(i, 0));
+			ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, gfd->ballonement->kChord->Element(i, 0), gfd->ballonement->kMf->Element(i, 0), EpaiRel, gfd->ballonement->wN->Element(i, 0), gfd->ballonement->dyw->Element(i, 0));
 			double l = abs (pgCur->ExtProf->Element(pgCur->ExtProf->GetLignes() - 1, 0) - pgCur->ExtProf->Element(0, 0));
 			double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
-			ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, bal->powerTail->Element(i, 0));
+			ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, gfd->ballonement->powerTail->Element(i, 0));
 			//  -- time to calculate profile ballone
 			coeffx = LongNerv/100.0f;
 			double EpaiRelCur = EpaisseurRelative(pgCur->ExtProf, pgCur->IntProf);
