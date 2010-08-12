@@ -84,9 +84,10 @@ class WindPatternsProject
         char NomFichierVentHoles[255];
         char NomFichierDiagNerv[255];
         char NomFichierForme[255];
+		char ballonementPath[255];
         char logFileName[255];
 		bool debug;
-
+		Ballonement* ballonement;
         void print();
 
 };

@@ -727,10 +727,17 @@ LAYOUT_VENTILATION 1
 LAYOUT_MARGE_EXT_FIN 4.0
 LAYOUT_ACCURACY 0.7
  */
+
 WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
     FILE *fid;
     WindPatternsProject *wpp = NULL;
-    char* motsClef[54] =
+    if( (fid = fopen( NomFic, "rt" )) == NULL )
+    {
+            printf( "\nErreur ouverture fichier '%s'", NomFic);
+    }
+    else
+    {
+    char* motsClef[55] =
                     {"PROJECT", // 1
 				"MARGE_DEB", "MARGE_FIN", "MARGE1", "MARGE2", //4
 				"PINCES","PINCES_POS_BA","PINCES_AMP_BA","PINCES_POS_BF","PINCES_AMP_BF", //5
@@ -754,18 +761,13 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                 "LAYOUT_MARGE_EXT_FIN","LAYOUT_MARGE_INT_FIN", "LAYOUT_MARGE_NERV_FIN", "LAYOUT_MARGE_DIAG_NERV_FIN",
                 "LAYOUT_ACCURACY",//3
 
-                "XMASHTAB", "TEXTX", "TEXTY", "FORME"}; //3
+                "XMASHTAB", "TEXTX", "TEXTY", "FORME", "BALLONEMENT"}; //3
 
-    if( (fid = fopen( NomFic, "rt" )) == NULL )
-    {
-            printf( "\nErreur ouverture fichier '%s'", NomFic);
-    }
-    else
-    {
+
         wpp = new WindPatternsProject();
         strcpy(wpp->fromFile, NomFic);
         char s[255];
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < 55; i++) {
             //printf ("\n i=%d", i);
             if(!TrouveMotDansFichierTexte(fid, motsClef[i])) {
                 printf("\n\tWarning: mot clef '%s' not in file!", motsClef[i]);
@@ -837,6 +839,7 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                     case 51: fscanf(fid,"%f", &(wpp->textX)); break;
                     case 52: fscanf(fid,"%f", &(wpp->textY)); break;
                     case 53: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->NomFichierForme, s);  break;}
+					case 54: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->ballonementPath, s);  break;}
                     default:;
                 }
                
@@ -862,12 +865,10 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
 		printf( "\nErreur ouverture fichier '%s'", NomFichier);
 		exit(0);
 	}
-    char* motsClef[54] =
+    char* motsClef[55] =
                     {"PROJECT", // 1
-
-		"MARGE_DEB", "MARGE_FIN", "MARGE1", "MARGE2", //4
-
-		"PINCES","PINCES_POS_BA","PINCES_AMP_BA","PINCES_POS_BF","PINCES_AMP_BF", //5
+				"MARGE_DEB", "MARGE_FIN", "MARGE1", "MARGE2", //4
+				"PINCES","PINCES_POS_BA","PINCES_AMP_BA","PINCES_POS_BF","PINCES_AMP_BF", //5
 
                 "PINCE_TYPE_NEZ","PINCE_RADIUS_ALG_K_NEZ","PINCE_EQUAL_AMP_TO_FUI", // 9
                 "PINCE_POWER_NEZ", "PINCE_POWER_NEZ_VALUE",
@@ -877,17 +878,19 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                 "PINCE_POWER_FUI", "PINCE_POWER_FUI_VALUE",
                 "PINCE_ARCTAN_FUI", "PINCE_ARCTAN_FUI_K1", "PINCE_ARCTAN_FUI_K2", "PINCE_ARCTAN_FUI_K3",
 
-		"DIAG_NERVURES","DIAG_NERVURES_FILE", // 6
+				"DIAG_NERVURES","DIAG_NERVURES_FILE", // 6
                 "DIAG_NERVURES_POS_INT_A","DIAG_NERVURES_POS_INT_F", "DIAG_NERVURES_POS_EXT_A","DIAG_NERVURES_POS_EXT_F",
 
-		"VENT_HOLES", "VENT_HOLES_FILE", "VENT_HOLES_DEB", "VENT_HOLES_FIN", // 7
+				"VENT_HOLES", "VENT_HOLES_FILE", "VENT_HOLES_DEB", "VENT_HOLES_FIN", // 7
                 "VENT_HOLES_KLAPANS", "VENT_HOLES_KLAPANS_DOUBLE", "VENT_HOLES_KLAPANS_FIN",
 
                 "REP_POINTS", "REP_POINTS_FROM_FILE", "REP_POINTS_FILE", // 3
                 "LAYOUT_VENTILATION",
                 "LAYOUT_MARGE_EXT_FIN","LAYOUT_MARGE_INT_FIN", "LAYOUT_MARGE_NERV_FIN", "LAYOUT_MARGE_DIAG_NERV_FIN",
                 "LAYOUT_ACCURACY",//3
-                "XMASHTAB", "TEXTX", "TEXTY", "FORME"}; //3
+
+                "XMASHTAB", "TEXTX", "TEXTY", "FORME", "BALLONEMENT"}; //3
+
 
                     fprintf(fid,"\n%s %s", motsClef[0], wpp->name);
                     fprintf(fid,"\n\n%s %f", motsClef[1],wpp->MargeDeb);
@@ -953,6 +956,7 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                     fprintf(fid,"\n%s %f", motsClef[51],wpp->textX);
                     fprintf(fid,"\n%s %f", motsClef[52],wpp->textY);
                     fprintf(fid,"\n%s %s", motsClef[53],wpp->NomFichierForme);
+                    fprintf(fid,"\n%s %s", motsClef[54],wpp->ballonementPath);
 
 	if(fclose(fid))
 	{
