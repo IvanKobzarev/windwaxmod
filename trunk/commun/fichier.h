@@ -76,6 +76,7 @@ class Ballonement
 		Matrice* kMf;
 		Matrice* wN;
 		Matrice* dyw;
+		Matrice* powerTail;
 		void loadFromFile(const char* fileName);
 };
 

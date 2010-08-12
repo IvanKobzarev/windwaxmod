@@ -1551,9 +1551,10 @@ void AjoutForme3D( TAxe *Axe3d,
 		CourbCour->pts = Zeros(NbNerv,3);
 		for (i=0; i<NbNerv; i++)
 		{
-			CourbCour->pts->SetElement(i,0,XExt->Element(i,nbPtsExt-1));
-			CourbCour->pts->SetElement(i,1,YExt->Element(i,nbPtsExt-1));
-			CourbCour->pts->SetElement(i,2,ZExt->Element(i,nbPtsExt-1));
+			int nXExt = XExt->GetColonnes();
+			CourbCour->pts->SetElement(i,0,XExt->Element(i, nXExt - 1));
+			CourbCour->pts->SetElement(i,1,YExt->Element(i, nXExt - 1));
+			CourbCour->pts->SetElement(i,2,ZExt->Element(i, nXExt - 1));
 		}
 
 		AjoutCourbe(Axe3d, CourbCour);

@@ -3,6 +3,8 @@
 
 class Forme;
 class Matrice;
+class Ballonement;
+class WindPatternsProject;
 
 Matrice* MonBezier(Matrice *tab, int NbrPts);
 
@@ -17,6 +19,13 @@ void CalculVecteurBissec(double x1,double y1,double x2,double y2, double x3,doub
 						 double *x,double *y,double l,int cote);
 
 void CalculForme3D(Forme *forme, int isPercent, double percent,
+				   Matrice *ExtProfCent, Matrice *IntProfCent,
+				   Matrice *ExtProfBout, Matrice *IntProfBout,
+				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
+				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
+
+void CalculForme3DBallonement
+				(WindPatternsProject* gfd, Forme *forme, Ballonement* bal, int isPercent, double percent,
 				   Matrice *ExtProfCent, Matrice *IntProfCent,
 				   Matrice *ExtProfBout, Matrice *IntProfBout,
 				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,

@@ -1847,15 +1847,20 @@ double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int 
     return width;
 }
 
-void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matrice** XProf, Matrice** YProf) {
+void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matrice** XProf, Matrice** YProf) 
+{
+	//printf ("\n getProfileXY()");
     Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+	//printf ("\n 1");
     CalculForme3D(F, 0, 0.0f,
 		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+	//printf ("\n 1.1");
     double LongNerv = 100.0f;
-	LongNerv = F->m_pProfils[nerv]->m_fLength;
+	//LongNerv = F->m_pProfils[nerv]->m_fLength;
+	LongNerv = 100.0f;
 	double coeffx = LongNerv/100.0f;
 	//coeffx = 1.0;
-
+	//printf ("\n 2");
     double EpaiRel = 0.0f;
     double m = -1.0f;
     if (nerv != -1) {
@@ -1865,16 +1870,20 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
         EpaiRel = F->m_pProfils[0]->m_fWidth;
         m = 1.0f;
     }
+	//printf ("\n 3");
     double EpaiRelProfCent = EpaisseurRelative(gfd->ExtProfCent, gfd->IntProfCent);
     double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
+	//printf ("\n inGetProfileXY: EpaiRelProfCent=%f", EpaiRelProfCent);
+	//printf ("\n inGetProfileXY: EpaiRelProfBout=%f", EpaiRelProfBout);
     double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
     double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
-	printf ("\n coeffx=%f, coeffyCent=%f, coeffyBout=%f", coeffx, coeffyCent, coeffyBout);
+	//printf ("\n coeffx=%f, coeffyCent=%f, coeffyBout=%f", coeffx, coeffyCent, coeffyBout);
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
     *XProf = new Matrice(n, 1);
     *YProf = new Matrice(n, 1);
+	//printf ("\n 4");
     if (face == 1) {
         for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
             xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
@@ -1890,10 +1899,11 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
             (*YProf)->SetElement(j, 0, yp);
         }
     }
-
+	//printf ("\n ..getProfileXY()");
 }
 
 ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
+	//printf ("\n getProfileGeom()");
 	ProfilGeom* pg = new ProfilGeom();
 
 	Matrice* XExt, *YExt, *XInt, *YInt;
@@ -1912,6 +1922,7 @@ ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
 		pg->IntProf->SetElement(i, 0, XInt->Element(i, 0));
 		pg->IntProf->SetElement(i, 1, YInt->Element(i, 0));
 	}
+	//printf ("\n ...getProfileGeom()");
 	return pg;
 }
 
@@ -1956,6 +1967,53 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
             (*YProf)->SetElement(j, 0, yp);
         }
     }
+
+}
+
+void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf) {
+	double LongNerv, EpaiRel, xp, yp;
+	double EpaiRelProfCent, EpaiRelProfBout;
+	double coeffx, coeffy, coeffyCent, coeffyBout;
+	int i, j;
+	i = nerv1;
+    //bool isCenterPanel = (1 & forme->NbCaiss);
+
+	//EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
+	//EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
+
+	LongNerv = (forme->m_pProfils[i]->m_fLength + forme->m_pProfils[i+1]->m_fLength) * 0.5f;
+	EpaiRel = (forme->m_pProfils[i]->m_fWidth + forme->m_pProfils[i+1]->m_fWidth) * 0.5f;
+
+			ProfilGeom* pgCur = getProfile(gfd, forme, i);
+			ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, bal->kChord->Element(i, 0), bal->kMf->Element(i, 0), EpaiRel, bal->wN->Element(i, 0), bal->dyw->Element(i, 0));
+			double l = abs (pgCur->ExtProf->Element(pgCur->ExtProf->GetLignes() - 1, 0) - pgCur->ExtProf->Element(0, 0));
+			double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
+			ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, bal->powerTail->Element(i, 0));
+
+			coeffx = LongNerv/100.0f;
+			double EpaiRelCur = EpaisseurRelative(pgCur->ExtProf, pgCur->IntProf);
+			coeffy = LongNerv*EpaiRel/(EpaiRelCur*100.0f);
+    int n = 0, j = 0;
+    if (face == 1) n = pg->ExtProf->GetLignes(); else n = pg->IntProf->GetLignes();
+    *XProf = new Matrice(n, 1);
+    *YProf = new Matrice(n, 1);
+
+	if (face == 1) {
+			for (j=0; j < pg->IntProf->GetLignes(); j++)
+			{
+				xp = pg->IntProf->Element(j, 0) * coeffx;
+				yp = pg->IntProf->Element(j, 1) * coeffy;
+				(*XProf)->SetElement(j, 0, xp);
+				(*YProf)->SetElement(j, 0, yp);
+
+			}
+	} else {
+			for (j=0; j < pg->ExtProf->GetLignes(); j++)
+			{
+				xp = pg->ExtProf->Element(j, 0) * coeffx;
+				yp = pg->ExtProf->Element(j, 1) * coeffy;
+			}
+	}
 
 }
 

@@ -58,7 +58,7 @@ int VentCentralNerv = 0;
 float VentHolesDeb = 2.0f;
 float VentHolesFin = 6.0f;
 
-int VisuSymetrique = 1;
+int VisuSymetrique = 0;
 int RaskladSymetrique = 0;
 int RaskladKlapans = 0;
 int VisuPtsSuspentes = 1; /*visualise pts de suspentage*/
@@ -100,7 +100,7 @@ float PinceRadiusAlgKHvost=0.985f, PinceRadiusAlgKNos=0.985f;
 
 int FaceDeb[2], FaceFin[2];
 int isPosNerv[2]={0, 0};
-float PosNerv[2]={20.0f, 80.0f};
+float PosNerv[2]={0.0f, 100.0f};
 float Marge[2] = {1.0f, 1.0f};
 //double PosRep[2];
 int FaceRep[2];
@@ -135,6 +135,7 @@ int ZoomTwist3d = OFF; /*flag twist 3d -> bouton gauche et droit souris*/
 
 /*fenetres OpenGL*/
 int Fenetre3d; /*visu 3D*/
+//int Fenetre3dBal; /*visu 3D*/
 int FenetrePatron; /*visu patron*/
 
 double *pinceLAAmp1;
@@ -165,6 +166,7 @@ int *noNervD2;
 
 /* axes graphiques*/
 TAxe *Axe3d;
+//TAxe *Axe3dBal;
 TAxe *AxeSel;
 TAxe *AxePatron;
 TAxe *AxePatronDXF, *AxePatronTextDXF, *AxeMarginDXF, *AxeCercleDXF, *AxeRepDXF;
@@ -665,12 +667,17 @@ void ModifPinceHvostRadio(int /*control*/) {
 
 void ModifProjection3d(int /*control*/) {
     /*test type de proj.*/
-    if (ProjOrthoPers == 0)
+	if (ProjOrthoPers == 0) {
         Axe3d->proj = PROJ_ORTHOGONALE;
-    else
+        //Axe3dBal->proj = PROJ_ORTHOGONALE;
+	}
+	else {
         Axe3d->proj = PROJ_PERSPECTIVE;
+        //Axe3dBal->proj = PROJ_PERSPECTIVE;
+	}
     /*retrace uniquement la vue 3d*/
     VisuAxe(Axe3d);
+    //VisuAxe(Axe3dBal);
     glutSwapBuffers();
 }
 
@@ -682,6 +689,8 @@ void ModifVisu3d(int /*control*/) {
     CalculVue3dEtPatron();
     VisuAxe(Axe3d);
     glutSwapBuffers();
+    //VisuAxe(Axe3dBal);
+    //glutSwapBuffers();
 
 }
 
@@ -693,6 +702,8 @@ void ModifVisuSymetrique(int /*control*/) {
     CalculVue3dEtPatron();
     VisuAxe(Axe3d);
     glutSwapBuffers();
+    //VisuAxe(Axe3dBal);
+    //glutSwapBuffers();
 
 }
 
@@ -961,6 +972,7 @@ void Quitter(int control) {
     if (MessageBox(NULL, "Voulez-vous vraiment quitter l'application ?", "Confirmation", MB_YESNO) == IDYES) {
         /*liberation espace memoire*/
         LibererAxe(Axe3d);
+        //LibererAxe(Axe3dBal);
         LibererAxe(AxePatron);
         LibererAxe(AxePatronDXF);
         LibererAxe(AxeRepDXF);
@@ -1553,6 +1565,9 @@ void CalculVue3dEtPatron(void)
     //printf ("\n CalculVue3dEtPatron");
     Matrice *XExt, *YExt, *ZExt;
     Matrice *XInt, *YInt, *ZInt;
+    Matrice *XExtBal, *YExtBal, *ZExtBal;
+    Matrice *XIntBal, *YIntBal, *ZIntBal;
+
     Matrice *PtsSuspentes; //pour recuperer la position 3D des pts de suspentage
     
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
@@ -1584,12 +1599,27 @@ void CalculVue3dEtPatron(void)
     Courbe *CourbCercle, *CourbCercleDXF;
     LibererCourbesAxe(Axe3d);
     LibererMeshsAxe(Axe3d);
+    //LibererCourbesAxe(Axe3dBal);
+    //LibererMeshsAxe(Axe3dBal);
 
     CalculForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-    /*ajoute visu 3D de la forme*/
-    AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+    //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+	int showBal = 1;
+	if (showBal) {
+		//printf ("\n if showBal");
+		//printf ("\n readBallonementFile(...");
+		Ballonement *bal = readBallonementFromFile("bal.txt");
+		//printf ("\n CalculForme3DBallonement(...");
+		CalculForme3DBallonement(getWindPatternsProject(), F, bal, 0, 0.0f,
+				ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
+				&XExtBal, &YExtBal, &ZExtBal, &XIntBal, &YIntBal, &ZIntBal);
+		//printf ("\n AjoutForme3D(...");
+		AjoutForme3D(Axe3d, XExtBal, YExtBal, ZExtBal, XIntBal, YIntBal, ZIntBal, VisuFace, VisuSymetrique);
+		//printf ("\n !!!...");
+	}
+
     /*ajoute points de suspentage*/
     if (VisuPtsSuspentes) {
         AjoutPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
@@ -2750,6 +2780,8 @@ void display(void) {
     //CalculVue3dEtPatron();
     VisuAxe(Axe3d);
     glutSwapBuffers();
+	//VisuAxe(Axe3dBal);
+    //glutSwapBuffers();
     VisuAxe(AxePatron);
     glutSwapBuffers();
 }
@@ -2782,12 +2814,18 @@ void motion(int x, int y) {
     if (Rotation3d) {
         Axe3d->azimuth = Axe3d->azimuth + (x - xSouris);
         Axe3d->incidence = Axe3d->incidence + (y - ySouris);
+        //Axe3dBal->azimuth = Axe3dBal->azimuth + (x - xSouris);
+        //Axe3dBal->incidence = Axe3dBal->incidence + (y - ySouris);
+
         xSouris = x;
         ySouris = y;
     }/*axe 3d -> translation*/
     else if (Translation3d) {
         Axe3d->xcam = Axe3d->xcam + (double) (x - xSouris) / 100.0;
         Axe3d->ycam = Axe3d->ycam - (double) (y - ySouris) / 100.0;
+        //Axe3dBal->xcam = Axe3dBal->xcam + (double) (x - xSouris) / 100.0;
+        //Axe3dBal->ycam = Axe3dBal->ycam - (double) (y - ySouris) / 100.0;
+
         xSouris = x;
         ySouris = y;
 
@@ -2795,6 +2833,9 @@ void motion(int x, int y) {
     else if (ZoomTwist3d) {
         Axe3d->twist = Axe3d->twist - (double) (x - xSouris);
         Axe3d->zcam = Axe3d->zcam + (double) (y - ySouris) / 100.0;
+        //Axe3dBal->twist = Axe3dBal->twist - (double) (x - xSouris);
+        //Axe3dBal->zcam = Axe3dBal->zcam + (double) (y - ySouris) / 100.0;
+
         xSouris = x;
         ySouris = y;
     }/*axe patron  -> zoom IN*/
@@ -2908,6 +2949,9 @@ void BoutonSouris(int button, int state, int x, int y) {
     if (Fenetre == Fenetre3d) {
         AxeSel = Axe3d;
     }
+    //if (Fenetre == Fenetre3dBal) {
+//        AxeSel = Axe3dBal;
+    //}
 
     if (Fenetre == FenetrePatron) {
         AxeSel = AxePatron;
@@ -3089,6 +3133,13 @@ int main(int argc, char** argv) {
     Axe3d = CreerAxe(Fenetre3d);
     Axe3d->axe3d = ON;
 
+    //Fenetre3dBal = glutCreateWindow("Visualisation 3D Balone");
+    //InitFenetre();
+    //InitLumiere();
+    //Axe3dBal = CreerAxe(Fenetre3dBal);
+    //Axe3dBal->axe3d = ON;
+
+
     /* creation fenetre/axe/courbes AxePatron*/
     FenetrePatron = glutCreateWindow("Patron");
     InitFenetre(); //InitLumiere();
@@ -3106,6 +3157,9 @@ int main(int argc, char** argv) {
     glutSetWindow(Fenetre3d);
     glutPositionWindow((int) (0.70 * (double) ws), (int) (0.05 * (double) hs));
     glutReshapeWindow((int) (0.30 * (double) ws), (int) (0.40 * (double) hs));
+    //glutSetWindow(Fenetre3dBal);
+    //glutPositionWindow((int) (0.70 * (double) ws), (int) (0.05 * (double) hs));
+    //glutReshapeWindow((int) (0.30 * (double) ws), (int) (0.40 * (double) hs));
 
     /*redefini taille et position des fenetre Patron*/
     glutSetWindow(FenetrePatron);
@@ -3382,12 +3436,8 @@ int main(int argc, char** argv) {
             glui->add_button_to_panel(panel_Vent, "Load", 0, &ChargerFichierVentHoles);
     boutonLoadVentHoles->set_w(10);
     
-
-
-
     /*3eme colonne*/
     glui->add_column(true);
-
 
     GLUI_Rollout *panel_marges = glui->add_rollout("Marges",false);
 

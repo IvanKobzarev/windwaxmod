@@ -45,7 +45,7 @@ int XYGrid = 0;
 
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
-int NoNerv[2] = {2, 3};
+int NoNerv[2] = {0, 1};
 float dyw=0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
