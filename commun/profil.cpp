@@ -57,6 +57,7 @@ void ProfilGeom::print() {
 	for (int i = 0; i < ExtProf->GetLignes(); i++) {
 		printf ("\n%d (%f, %f)", i, ExtProf->Element(i,0), ExtProf->Element(i,1));
 	}
+	printf ("\n ");
 	printf ("\n IntProf");
 	for (int i = 0; i < IntProf->GetLignes(); i++) {
 		printf ("\n%d (%f, %f)", i, IntProf->Element(i,0), IntProf->Element(i,1));
@@ -161,8 +162,8 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 	int ni1 = pg1->IntProf->GetLignes();
 	int ne0 = pg0->ExtProf->GetLignes();
 	int ni0 = pg0->IntProf->GetLignes();
-	printf ("\n ne1=%d ni1=%d", ne1, ni1);
-	printf ("\n ne0=%d ni0=%d", ne0, ni0);
+	//printf ("\n ne1=%d ni1=%d", ne1, ni1);
+	//printf ("\n ne0=%d ni0=%d", ne0, ni0);
 
 	int iExtTail1 = -1, iIntTail1 = -1, iExtTail0 = -1, iIntTail0 = -1;
  
@@ -189,7 +190,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 		if (xi <= xv ) iIntTail0 = i;
 	}
 
-	printf ("\n iExtTail1=%d, iIntTail1=%d, iExtTail0=%d, iIntTail0=%d",  iExtTail1 , iIntTail1 , iExtTail0 , iIntTail0 );
+	//printf ("\n iExtTail1=%d, iIntTail1=%d, iExtTail0=%d, iIntTail0=%d",  iExtTail1 , iIntTail1 , iExtTail0 , iIntTail0 );
 
 	// now pg1h equal pg1
 
@@ -245,7 +246,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
     }
 
 	//amp est'!
-	printf ("\n ampExt=%f", ampExt);
+	//printf ("\n ampExt=%f", ampExt);
 
 	double xbegin = pg0->ExtProf->Element(iExtTail0, 0);
 	double xend = pg0->ExtProf->Element(ne0-1, 0);
@@ -291,7 +292,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
     }
 
 	//amp est'!
-	printf ("\n ampInt=%f", ampInt);
+	//printf ("\n ampInt=%f", ampInt);
 
 
 

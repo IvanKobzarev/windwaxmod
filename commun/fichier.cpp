@@ -968,7 +968,7 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 	Matrice *m = NULL;
 	Ballonement* bal = new Ballonement();
 	//kChord, kMf, wN, dyw
-	Matrice *kChord, *kMf, *wN, *dyw;
+	Matrice *kChord, *kMf, *wN, *dyw, *powerTail;
 	if( (fid = fopen( NomFic, "rt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", NomFic);
@@ -981,23 +981,26 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 		// readBallonement
 		int n=-1, ind=0;
 		fscanf(fid,"%d", &n);
-		double _kChord=0, _kMf=0, _wN=0, _dyw=0;
+		double _kChord=0, _kMf=0, _wN=0, _dyw=0, _powerTail=0;
 		kChord = new Matrice(n, 1);
 		kMf = new Matrice(n, 1);
 		wN = new Matrice(n, 1);
 		dyw = new Matrice(n, 1);
+		powerTail = new Matrice(n, 1);
 
 		for (int i = 0; i < n; i ++) {
-			fscanf(fid,"%d %lf %lf %lf %lf", &ind, &_kChord, &_kMf, &_wN, &_dyw );
+			fscanf(fid,"%d %lf %lf %lf %lf %lf", &ind, &_kChord, &_kMf, &_wN, &_dyw, &_powerTail );
 			kChord->SetElement(i, 0, _kChord);
 			kMf->SetElement(i, 0, _kMf);
 			wN->SetElement(i, 0, _wN);
 			dyw->SetElement(i, 0, _dyw);
+			powerTail->SetElement(i, 0, _powerTail);
 		}
 		bal->kChord = kChord;
 		bal->kMf = kMf;
 		bal->wN = wN;
 		bal->dyw = dyw;
+		bal->powerTail = powerTail;
 	}
 	if(fclose(fid))
 	{
