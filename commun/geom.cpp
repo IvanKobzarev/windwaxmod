@@ -220,9 +220,9 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
 	Y2->print(0);*/
 
     int n = X1->GetLignes();
-	for (int i =0; i < n-5; i++) {
+	/*for (int i =0; i < n-5; i++) {
 		printf ("\n %d (%f, %f)    (%f, %f)", i, X1->Element(i, 0), Y1->Element(i, 0), X2->Element(i, 0), Y2->Element(i, 0));
-	}
+	}*/
     Matrice *res = new Matrice(n, 1);
     int i = 0;
     res->SetElement(0, 0,dist2d (X1->Element(0,0), Y1->Element(0,0), X2->Element(0,0), Y2->Element(0,0)));
@@ -244,7 +244,7 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
             Inter2Vecteurs(x0,y0,xn,yn, x1,y1,x2,y2,&x, &y);
             if ((x >= x1) && (x <= x2)) {
                 res->SetElement(i, 0, dist2d (x,y,x0,y0));
-				printf ("\n set elem %f", dist2d (x,y,x0,y0));
+				//printf ("\n set elem %f", dist2d (x,y,x0,y0));
                 break;
             }
         }
