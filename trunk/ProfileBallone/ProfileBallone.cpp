@@ -313,11 +313,11 @@ void ModifXYGrid(int /*control*/) {
 int main(int argc, char** argv)
 {
 
-	Ballonement* bal = readBallonementFromFile("bal.txt");
-	bal->kChord->print(0);
-	bal->kMf->print(0);
-	bal->dyw->print(0);
-	bal->wN->print(0);
+	//Ballonement* bal = readBallonementFromFile("bal.txt");
+	//bal->kChord->print(0);
+	//bal->kMf->print(0);
+	//bal->dyw->print(0);
+	//bal->wN->print(0);
 
 
 	printf ("\nProfile ballone");

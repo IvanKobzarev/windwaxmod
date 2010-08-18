@@ -892,7 +892,7 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                 "XMASHTAB", "TEXTX", "TEXTY", "FORME", "BALLONEMENT"}; //3
 
 
-                    fprintf(fid,"\n%s %s", motsClef[0], wpp->name);
+					fprintf(fid,"\n%s %s", motsClef[0], NomFichier);
                     fprintf(fid,"\n\n%s %f", motsClef[1],wpp->MargeDeb);
                     fprintf(fid,"\n%s %f", motsClef[2],wpp->MargeFin);
                     fprintf(fid,"\n%s %f", motsClef[3],wpp->Marge[0]);
