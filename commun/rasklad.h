@@ -87,9 +87,9 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
 
 double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int face);
 
-void GetMiddleProfile (WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf);
+void GetMiddleProfile (WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, int realMashtab, Matrice** XProf, Matrice** YProf);
 
-void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf);
+void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face,  int realMashtab, Matrice** XProf, Matrice** YProf);
 
 ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv);
 

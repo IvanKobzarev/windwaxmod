@@ -953,9 +953,9 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             getLayoutLogger()->logprintf(" %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1[t], n2[t], posDeb1[t], fd1[t], posFin1[t],  ff1[t], posDeb2[t], fd2[t], posFin2[t],  ff2[t]);
             Pince* pince = new Pince();
             pince -> debug = false;
-            if (debug) printf("\n tmpPince=getPincePlus...");
+            printf("\n tmpPince=getPincePlus...");
             Pince* tmpPince = getPincePlus(gfd, n1[t], n2[t], myDeb, myFin,  myDeb, myFin,  fd1[t], ff1[t]);
-            if (debug) printf("\n ... tmpPince=getPincePlus...");
+            printf("\n ... tmpPince=getPincePlus...");
             pince -> SetFunction1(tmpPince->function1);
             pince -> SetFunction2(tmpPince->function2);
             pince -> ipa1 = tmpPince -> ipa1;
@@ -970,13 +970,16 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             //printf("\n pince->i01=%d", pince->i01);
             //printf("\n pince->ipa1=%d", pince->ipa1);
             //printf("\n pince->ipf1=%d", pince->ipf1);
-             if (debug) printf("\n CalculPincePlusNew()...");
-            CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
-            if (debug) printf("\n ...CalculPincePlusNew()...");
+			printf("\n pince->function1->GetLignes()=%d", pince->function1->GetLignes());
+			printf("\n pince->function2->GetLignes()=%d", pince->function2->GetLignes());
 
-            if (debug) printf("\n go rezak");
+            printf("\n CalculPincePlusNew()...");
+            CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
+            printf("\n ...CalculPincePlusNew()...");
+
+			printf("\n go rezak");
                 if ((myDeb != posDeb1[t])||(myDeb != posDeb2[t])) {
-                    if (debug) printf("\n rezem");
+                    printf("\n rezem");
                     // rezem Xd, newXd
                     rXdp[0] = GetFunctionSrezDeb(P[0], Xdp[0], posDeb1[t]);
                     rYdp[0] = GetFunctionSrezDeb(P[0], Ydp[0], posDeb1[t]);
@@ -1017,7 +1020,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     delete(P[1]);
                     P[1]=rP[1];
                 }
-            if (debug) printf("\n...go rezak");
+				printf("\n...go rezak");
             //
 
             //delete(P[0]);
@@ -1926,14 +1929,19 @@ ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
 	return pg;
 }
 
-void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf) {
-    Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, int realMashtab, Matrice** XProf, Matrice** YProf) {
+    /*Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
     CalculForme3D(F, 0, 0.0f,
-		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);*/
     int i1 = nerv1;
     int i2 = nerv2;
-    //double LongNerv = 0.5f*(F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength);
-    double LongNerv = 100.0f;
+	if (i1 == -1) i1 = 0;
+	if (i2 == -1) i2 = 0;
+
+	double LongNerv = 100.0f;
+	if (realMashtab == 1) {
+		LongNerv = 0.5f*(F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength);
+	} 
     double EpaiRel = 0.0f;
     double m = -1.0f;
     if (i1 != -1) {
@@ -1947,6 +1955,8 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
     double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
     double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
     double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
+	double coeffx = LongNerv/100.0f;
+	//printf ("\n in getMiddleProfile() LongNerv=%f", LongNerv);
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
@@ -1954,14 +1964,14 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
     *YProf = new Matrice(n, 1);
     if (face == 1) {
         for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
-            xp = gfd->ExtProfCent->Element(j, 0);
+            xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
             yp = gfd->ExtProfCent->Element(j, 1) * coeffyCent * m + gfd->ExtProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
             (*XProf)->SetElement(j, 0, xp);
             (*YProf)->SetElement(j, 0, yp);
         }
     } else {
         for (j = 0; j < gfd->IntProfCent->GetLignes(); j++) {
-            xp = gfd->IntProfCent->Element(j, 0);
+            xp = gfd->IntProfCent->Element(j, 0) * coeffx;
             yp = gfd->IntProfCent->Element(j, 1) * coeffyCent * m + gfd->IntProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
             (*XProf)->SetElement(j, 0, xp);
             (*YProf)->SetElement(j, 0, yp);
@@ -1970,9 +1980,9 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
 
 }
 
-void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, Matrice** XProf, Matrice** YProf) {
-	//printf ("\n getMiddleProfileBal()");
-	double LongNerv, EpaiRel, xp, yp;
+void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face,  int realMashtab, Matrice** XProf, Matrice** YProf) {
+	printf ("\n getMiddleProfileBal()");
+	double EpaiRel, xp, yp;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffy, coeffyCent, coeffyBout;
 	int i1, i2, j;
@@ -1982,8 +1992,10 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 	if (i2 == -1) i2=0;
 	//printf ("nerv1=%d nerv2=%d", nerv1, nerv2);
     //bool isCenterPanel = (1 & forme->NbCaiss);
-	//LongNerv = (F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength) * 0.5f;
-	LongNerv = 100.0f;
+	double LongNerv = 100.0f;
+	if (realMashtab == 1) {
+		LongNerv = (F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength) * 0.5f;
+	} 
 	EpaiRel = (F->m_pProfils[i1]->m_fWidth + F->m_pProfils[i2]->m_fWidth) * 0.5f;
     if (i1 != -1) {
         EpaiRel = 0.5f * (F->m_pProfils[i1]->m_fWidth + F->m_pProfils[i2]->m_fWidth);
@@ -2020,7 +2032,7 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 			(*YProf)->SetElement(j, 0, yp);
 		}
 	}
-	//printf ("\n ...getMiddleProfileBal()");
+	printf ("\n ...getMiddleProfileBal()");
 }
 
 void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrice** fl, double *pRA, double *pRF, Matrice** fr, double *len) {
