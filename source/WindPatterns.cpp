@@ -1069,7 +1069,7 @@ void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
 }
 
 void Test(int control) {
-    printf ("\n TEST()");
+    // printf ("\n TEST()");
 
 	Matrice* Xd0 = new Matrice(4, 0);
 	Matrice* Yd0 = new Matrice(4, 0);

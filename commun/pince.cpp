@@ -449,12 +449,7 @@ void CalculPincePlusAloneAbsFunc(Matrice *Xd, Matrice *Yd,
 
     double x1, y1, x2, y2;
     bool showAmp = 0;
-
     
-    printf ("\n Xd->GetLignes()=%d", Xd->GetLignes());
-    printf (" func->GetLignes()=%d", func->GetLignes());
-    
-
     newXd = new Matrice (Xd->GetLignes(), 1);
     newYd = new Matrice (Yd->GetLignes(), 1);
     for (i = 0; i < Xd->GetLignes(); i++) {
@@ -703,7 +698,6 @@ Pince* getPincePlus(WindPatternsProject* gfd,
 
 Pince* getPince(WindPatternsProject* gfd, int nerv1, int nerv2, int face)
 {
-    //printf ("\ngetPince(%d, %d, %d)", nerv1, nerv2, face);
     Matrice *ResFunction1, *ResFunction2, *RadiusFunction, *FuncFunction1, *FuncFunction2;
     double ampFfA=0.0f, ampFfF=0.0f, ampRfA=0.0f, ampRfF=0.0f;
     int ipa = 0, ipf = 0;
@@ -712,8 +706,6 @@ Pince* getPince(WindPatternsProject* gfd, int nerv1, int nerv2, int face)
     getPinceFunctions(gfd, nerv1, nerv2, face,
                         &ipa, &ipf, &P, &FuncFunction1,&FuncFunction2, &ampFfA, &ampFfF,
                         &RadiusFunction, &ampRfA, &ampRfF);
-    printf ("\n   in getPince(): P->GetLignes()=%d", P->GetLignes());
-	printf ("\n   in getPince(): RadiusFunction->GetLignes()=%d", RadiusFunction->GetLignes());
     int n = FuncFunction1->GetLignes();
     int _ipai=ipa, _ipfi=ipf;
 
@@ -821,7 +813,7 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
                         Matrice** FuncFunction1,Matrice** FuncFunction2, double* ampFfA, double* ampFfF,
                         Matrice** RadiusFunction, double* ampRfA, double* ampRfF)
 {
-    printf ("\n getPinceFunctions()");
+    //printf ("\n getPinceFunctions()");
     int nerv[2] = {nerv1, nerv2};
     int i = 0;
     Matrice *X[2], *Y[2], *Z[2], *P[2], *Xd[2], *Yd[2];
@@ -897,7 +889,7 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
     }
 
     // ==============RadiusFunction=============
-	    printf ("\n RadiusFunction()");
+	//    printf ("\n RadiusFunction()");
     //double kn = gfd->PinceRadiusAlgKNos;
     //double kh = gfd->PinceRadiusAlgKHvost;
 
@@ -914,9 +906,9 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
     //double h0f = CalculHbyw0w1 (w10f/kn, w10f);
 
     Matrice *XProfil0, *YProfil0;
-    printf ("\n before getMiddleProfile()");
     GetMiddleProfile(gfd, gfd->Forme, nerv[0], nerv[1], face, 1,  &XProfil0, &YProfil0);
-    Matrice *XProfil, *YProfil, *newPtmp;
+    Matrice *XProfil, *YProfil, *newPtmp, *PProfil, *tmp;
+	GetMiddleProfile(gfd, gfd->Forme, nerv[0], nerv[1], face, 0,  &PProfil, &tmp);
     int i1 = 0, i2 = 0;
     //makePointPince(XProfil0, YProfil0, XProfil0, PosA, PosF, &XProfil, &YProfil, &newPtmp, &i1, &i2);
     XProfil = CloneMat(XProfil0);
@@ -939,30 +931,29 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
 	//printf ("\n$$1");
 	GetMiddleProfileBal(gfd, gfd->Forme, nerv[0], nerv[1], face, 1,  &XProfil2n, &YProfil2n);
 	//printf ("\n$$2");
-    (*Pout)=XProfil2n;
+    (*Pout)=PProfil;
     Matrice *XProfil2h, *YProfil2h;
     //  XProfil2h = CloneMat(XProfil);
     //  YProfil2h = MultReelMat( CloneMat(YProfil), kyhvost );
-	//  printf ("\n$$$1");
 	GetMiddleProfileBal(gfd, gfd->Forme, nerv[0], nerv[1], face, 1, &XProfil2h, &YProfil2h);
-	//  printf ("\n$$$2");
 
 	//	printf ("\n CalculNormalRasst");
     Matrice* Hn = CalculNormalRasst(XProfil, YProfil, XProfil2n, YProfil2n);
-	//	printf ("\n Hn:");
-	//  Hn->print(0);
-	//  printf ("\n ...CalculNormalRasst");
+	 if (nerv1 == -1) printf ("\n Hn.len= %d", Hn->GetLignes());
+	 if (nerv1 == -1) Hn->print(0);
+	// printf ("\n ...CalculNormalRasst");
     Matrice* Hh = CalculNormalRasst(XProfil, YProfil, XProfil2h, YProfil2h);
-	//	printf ("\n Hh:");
-	//  Hh->print(0);
+	// printf ("\n Hh:");
+	// printf ("\n Hh.len= %d", Hh->GetLignes());
+	// Hh->print(0);
 
 	/*if (nerv1 == -1) {
 	XProfil->print(0);
 		printf ("\n...");
 		XProfil2n->print(0);
 	}*/
-	printf ("\n XProfil->GL=%d XProfil2n->GL=%d", XProfil->GetLignes(), XProfil2n->GetLignes());
-	printf ("\n newXd[0]->GetLignes()=%d", newXd[0]->GetLignes());
+	//printf ("\n XProfil->GL=%d XProfil2n->GL=%d", XProfil->GetLignes(), XProfil2n->GetLignes());
+	//printf ("\n newXd[0]->GetLignes()=%d", newXd[0]->GetLignes());
 
     double w = dist2d(newXd[0]->Element(i1,0),newYd[0]->Element(i1,0),  newXd[1]->Element(i1,0), newYd[1]->Element(i1,0));
     double dkn = 1.0f/(CalculW0byHW1(Hn->Element(i1, 0), w)-w);
@@ -986,17 +977,16 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
        // printf ("\n RF=%f", (*RadiusFunction) -> Element(i, 0));
     }
 	// new School!
-	printf ("\n Hn->Element(%d, 0)=%f w10a=%f", ipai[0], Hn->Element(ipai[0], 0), w10a);
-	printf ("\n Hn->Element(%d, 0)=%f w10f=%f", ipfi[0], Hn->Element(ipfi[0], 0), w10f);
-	printf ("\n ampRfA=%f ampRfF=%f", (CalculW0byHW1(Hn->Element(ipai[0], 0), w10a) - w10a)*0.5f, (CalculW0byHW1(Hn->Element(ipfi[0], 0), w10f) - w10f)*0.5f);
-
-	printf ("\n RF->GetLignes()=%d", (*RadiusFunction)->GetLignes());
+	//printf ("\n Hn->Element(%d, 0)=%f w10a=%f", ipai[0], Hn->Element(ipai[0], 0), w10a);
+	//printf ("\n Hn->Element(%d, 0)=%f w10f=%f", ipfi[0], Hn->Element(ipfi[0], 0), w10f);
+	//printf ("\n ampRfA=%f ampRfF=%f", (CalculW0byHW1(Hn->Element(ipai[0], 0), w10a) - w10a)*0.5f, (CalculW0byHW1(Hn->Element(ipfi[0], 0), w10f) - w10f)*0.5f);
+	//printf ("\n RF->GetLignes()=%d", (*RadiusFunction)->GetLignes());
 
 	(*ampRfA) = (CalculW0byHW1(Hn->Element(ipai[0], 0), w10a) - w10a)*0.5f;
     (*ampRfF) = (CalculW0byHW1(Hn->Element(ipfi[0], 0), w10f) - w10f)*0.5f;
 
-	 printf ("\n ...RadiusFunction()");
-     printf ("\n ...getPinceFunctions()");
+	 //printf ("\n ...RadiusFunction()");
+     //printf ("\n ...getPinceFunctions()");
 }
 
 void getPinceRadiusFunction(WindPatternsProject* gfd, int nerv1, int nerv2, int face) {
