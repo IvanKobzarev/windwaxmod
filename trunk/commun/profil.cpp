@@ -290,11 +290,8 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
             break;
         }
     }
-
 	//amp est'!
 	//printf ("\n ampInt=%f", ampInt);
-
-
 
 	xbegin = pg0->IntProf->Element(iIntTail0, 0);
 	xend = pg0->IntProf->Element(ni0-1, 0);

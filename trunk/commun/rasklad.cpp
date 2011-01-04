@@ -953,9 +953,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             getLayoutLogger()->logprintf(" %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1[t], n2[t], posDeb1[t], fd1[t], posFin1[t],  ff1[t], posDeb2[t], fd2[t], posFin2[t],  ff2[t]);
             Pince* pince = new Pince();
             pince -> debug = false;
-            printf("\n tmpPince=getPincePlus...");
             Pince* tmpPince = getPincePlus(gfd, n1[t], n2[t], myDeb, myFin,  myDeb, myFin,  fd1[t], ff1[t]);
-            printf("\n ... tmpPince=getPincePlus...");
             pince -> SetFunction1(tmpPince->function1);
             pince -> SetFunction2(tmpPince->function2);
             pince -> ipa1 = tmpPince -> ipa1;
@@ -970,16 +968,9 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             //printf("\n pince->i01=%d", pince->i01);
             //printf("\n pince->ipa1=%d", pince->ipa1);
             //printf("\n pince->ipf1=%d", pince->ipf1);
-			printf("\n pince->function1->GetLignes()=%d", pince->function1->GetLignes());
-			printf("\n pince->function2->GetLignes()=%d", pince->function2->GetLignes());
-
-            printf("\n CalculPincePlusNew()...");
             CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
-            printf("\n ...CalculPincePlusNew()...");
 
-			printf("\n go rezak");
                 if ((myDeb != posDeb1[t])||(myDeb != posDeb2[t])) {
-                    printf("\n rezem");
                     // rezem Xd, newXd
                     rXdp[0] = GetFunctionSrezDeb(P[0], Xdp[0], posDeb1[t]);
                     rYdp[0] = GetFunctionSrezDeb(P[0], Ydp[0], posDeb1[t]);
@@ -1020,8 +1011,6 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     delete(P[1]);
                     P[1]=rP[1];
                 }
-				printf("\n...go rezak");
-            //
 
             //delete(P[0]);
             //delete(P[1]);
@@ -1274,7 +1263,7 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
         {
             Ind(DebT[i], xIntProf, &iDeb, &iCol);
             Ind(FinT[i], xExtProf, &iFin, &iCol);
-			printf ("\n iDeb=%d iFin=%d", iDeb, iFin);
+			//printf ("\n iDeb=%d iFin=%d", iDeb, iFin);
             X[i] = new Matrice(iFin + iDeb + 1, 1);
             Y[i] = new Matrice(iFin + iDeb + 1, 1);
             Z[i] = new Matrice(iFin + iDeb + 1, 1);
@@ -1981,7 +1970,6 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
 }
 
 void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face,  int realMashtab, Matrice** XProf, Matrice** YProf) {
-	printf ("\n getMiddleProfileBal()");
 	double EpaiRel, xp, yp;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffy, coeffyCent, coeffyBout;
@@ -1990,7 +1978,6 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 	if (i1 == -1) i1=0;
 	i2 = nerv2;
 	if (i2 == -1) i2=0;
-	//printf ("nerv1=%d nerv2=%d", nerv1, nerv2);
     //bool isCenterPanel = (1 & forme->NbCaiss);
 	double LongNerv = 100.0f;
 	if (realMashtab == 1) {
@@ -2032,7 +2019,6 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 			(*YProf)->SetElement(j, 0, yp);
 		}
 	}
-	printf ("\n ...getMiddleProfileBal()");
 }
 
 void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrice** fl, double *pRA, double *pRF, Matrice** fr, double *len) {
@@ -2352,7 +2338,7 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
 int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* y) {
 
 	if (l < 0) {
-		getLayoutLogger()->logprintf("\n calcRepPointByLength l=%f return -1", l);
+		getLayoutLogger()->logprintf("\n!!! calcRepPointByLength l=%f return -1", l);
 		return -1;
 	}
 	if (l == 0) {
@@ -2441,7 +2427,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     //printf ("...2");
     int isave = 0;
     if (cerezNos) {
-		printf ("\n cerezNos");
+		//printf ("\n cerezNos");
         interpXSuspente0 = Zeros(i0 + 1, 2);
         interpYSuspente0 = Zeros(i0 + 1, 2);
         for (int j = i0; j >= 0; j--) {
