@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindShape", "WindShape.vcpr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindView", "WindView.vcproj", "{4155A393-329B-4B75-A41C-0E3110021F7C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProfileBallone", "..\ProfileBallone\ProfileBallone.vcproj", "{406F6E63-90B1-46C1-BB9B-702D047B79CF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindDesigner", "..\WindDesigner\WindDesigner.vcproj", "{6C1AD8D0-2D64-4B03-91C1-E57070DCDE9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +35,14 @@ Global
 		{4155A393-329B-4B75-A41C-0E3110021F7C}.Debug|Win32.Build.0 = Debug|Win32
 		{4155A393-329B-4B75-A41C-0E3110021F7C}.Release|Win32.ActiveCfg = Release|Win32
 		{4155A393-329B-4B75-A41C-0E3110021F7C}.Release|Win32.Build.0 = Release|Win32
+		{406F6E63-90B1-46C1-BB9B-702D047B79CF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{406F6E63-90B1-46C1-BB9B-702D047B79CF}.Debug|Win32.Build.0 = Debug|Win32
+		{406F6E63-90B1-46C1-BB9B-702D047B79CF}.Release|Win32.ActiveCfg = Release|Win32
+		{406F6E63-90B1-46C1-BB9B-702D047B79CF}.Release|Win32.Build.0 = Release|Win32
+		{6C1AD8D0-2D64-4B03-91C1-E57070DCDE9C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6C1AD8D0-2D64-4B03-91C1-E57070DCDE9C}.Debug|Win32.Build.0 = Debug|Win32
+		{6C1AD8D0-2D64-4B03-91C1-E57070DCDE9C}.Release|Win32.ActiveCfg = Release|Win32
+		{6C1AD8D0-2D64-4B03-91C1-E57070DCDE9C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
