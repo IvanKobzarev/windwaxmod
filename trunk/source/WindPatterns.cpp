@@ -3531,8 +3531,8 @@ int main(int argc, char** argv) {
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
 
-    GLUI_Rollout *RolloutPts=glui->add_rollout("Points",false);
-//    GLUI_Panel *panelNum = glui->add_panel_to_panel(RolloutNum, "Numerotation");
+    GLUI_Rollout *RolloutPts=glui->add_rollout("Points", false);
+	// GLUI_Panel *panelNum = glui->add_panel_to_panel(RolloutNum, "Numerotation");
 
     GLUI_Panel *panel_RepPoints = glui->add_panel_to_panel(RolloutPts, "Rep pts");
     glui->add_checkbox_to_panel(panel_RepPoints, "from file", &ReperPointsFromFile, 0, &ModifRepPts);
