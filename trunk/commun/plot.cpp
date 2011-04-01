@@ -327,49 +327,25 @@ TMesh* CreerMesh(void)
 /*****************/
 
 void VisuAxe(TAxe *axe)
-
 {
-
 	int i,l,c, w, h, nbAff;
-
 	double xmin,xmax,ymin,ymax,zmin,zmax,dx,dy,ratio;
-
 	Courbe* CourbCour;
-
 	TMesh* MeshCour;
-
 	double mx,my,mz; /*coeff -1 ou 1 pour affichage sym�trique*/
-
 	/*double cap, roulis, tangage;*/
-
 	Matrice *rotTwist, *rotIncidence, *rotAzimuth, *rotFinal, *rotInt; /*matrice de rotation*/
-
 	Matrice *uni, *uniRot;	/*vecteur unitaire*/
-
 	double sina, cosa; /*pour pre-calcul sinus/cosinus*/
-
 	double xaxe=0.0, yaxe=0.0, zaxe=0.0;	/*position graduation dans vue 3d*/
-
 	Matrice *x,*y,*z;	/*pour simplifier ecriture*/
-
 	double xv1,yv1,zv1,xv2,yv2,zv2;
-
 //	double light_position[]={0.0, 0.0, 1.0, 0.0};
-
-
-
 	/*selection de la fenetre de cet axe*/
-
 	glutSetWindow(axe->fenetre);
-
-
-
 	/***************/
-
 	/*axe auto en X*/
-
 	/***************/
-
 	if((axe->XAuto == ON)&&((axe->Courb != NULL)||(axe->Mesh != NULL)))
 	{
 		xmin=10000.0f; xmax=-10000.0f;
@@ -429,21 +405,15 @@ void VisuAxe(TAxe *axe)
 		axe->xmin = xmin; axe->xmax = xmax;
 	}
 
-
-
 	/***************/
-
 	/*axe auto en Y*/
-
 	/***************/
 
 	if ((axe->YAuto == ON)&&((axe->Courb != NULL)||(axe->Mesh != NULL)))
 	{
 		ymin=10000.0f; ymax=-10000.0f;
-
 		/*recherche des min/max des courbes*/
 		CourbCour=axe->Courb;
-
 		while (CourbCour != NULL)
 		{	
 			if (CourbCour->pts != NULL && CourbCour->visible)
@@ -464,7 +434,6 @@ void VisuAxe(TAxe *axe)
 
 		/*recherche des min/max des mesh*/
 		MeshCour=axe->Mesh;
-
 		while (MeshCour != NULL)
 		{	
 			if (MeshCour->y != NULL)
