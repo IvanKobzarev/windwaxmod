@@ -31,10 +31,15 @@ GLUI_StaticText *FicProject;
 GLUI_StaticText *FicDesign;
 TAxe *AxeProfiles;
 TAxe *AxeSel;
+TAxe *Axe3d;
+
+int VisuFace = 0; 
+int VisuSymetrique = 0;
+
 Courbe * CourbProfile;
 Forme *F;
 char ProjectName[255];
-int Fenetre2d;
+int Fenetre2d, Fenetre3d;
 /*divers tableaux*/
 Matrice *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
 Matrice** ReperPoints;
@@ -46,31 +51,180 @@ char NomFichierDesign[255];
 char NomFichierRepPoints[255];
 char NomFichierVentHoles[255];
 char NomFichierDiagNerv[255];
-
+int ProjOrthoPers = 0;
 int XYGrid = 0;
 
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
-float dyw=0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
+float dyw = 0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
+int Rotation3d = OFF;
+int Translation3d = OFF;
+int ZoomTwist3d = OFF;
 
 Courbe *CourbZoom;
 
+void Apply(int /*control*/);
+
+void ModifVisu3d(int /*control*/) {
+    VisuAxe(Axe3d);
+    glutSwapBuffers();
+}
+
+void ModifVisuSymetrique(int /*control*/) {
+	Apply(0);
+    VisuAxe(Axe3d);
+    glutSwapBuffers();
+}
+
+
 void display(void) {
+    VisuAxe(Axe3d);
+    glutSwapBuffers();
     //CalculVue3dEtPatron();
     VisuAxe(AxeProfiles);
     glutSwapBuffers();
 }
 
-
-void motion(int x, int y) {
-}
+/*****************/
+/* reshape       */
+/*****************/
 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     display();
+}
+
+/*****************/
+/* motion        */
+/*****************/
+
+void motion(int x, int y) {
+    //pour gestion zoom dans fenetre patron
+    double xs, ys;
+    double xmin, xmax, ymin, ymax;
+    int h, w; /*taille de la fenetre*/
+    double dx, dy; //pour zoom OUT
+
+    /*message pour test*/
+    //printf("\n<%d,%d>",x,y);
+
+    /*axe 3d -> rotation*/
+
+    if (Rotation3d) {
+        Axe3d->azimuth = Axe3d->azimuth + (x - xSouris);
+        Axe3d->incidence = Axe3d->incidence + (y - ySouris);
+        //Axe3dBal->azimuth = Axe3dBal->azimuth + (x - xSouris);
+        //Axe3dBal->incidence = Axe3dBal->incidence + (y - ySouris);
+
+        xSouris = x;
+        ySouris = y;
+    }/*axe 3d -> translation*/
+    else if (Translation3d) {
+        Axe3d->xcam = Axe3d->xcam + (double) (x - xSouris) / 100.0;
+        Axe3d->ycam = Axe3d->ycam - (double) (y - ySouris) / 100.0;
+        //Axe3dBal->xcam = Axe3dBal->xcam + (double) (x - xSouris) / 100.0;
+        //Axe3dBal->ycam = Axe3dBal->ycam - (double) (y - ySouris) / 100.0;
+
+        xSouris = x;
+        ySouris = y;
+
+    }/*axe 3d -> zoom*/
+    else if (ZoomTwist3d) {
+        Axe3d->twist = Axe3d->twist - (double) (x - xSouris);
+        Axe3d->zcam = Axe3d->zcam + (double) (y - ySouris) / 100.0;
+        //Axe3dBal->twist = Axe3dBal->twist - (double) (x - xSouris);
+        //Axe3dBal->zcam = Axe3dBal->zcam + (double) (y - ySouris) / 100.0;
+
+        xSouris = x;
+        ySouris = y;
+    }/*axe patron  -> zoom IN*/
+    else if (zoomIN) {
+        w = glutGet(GLUT_WINDOW_WIDTH);
+        h = glutGet(GLUT_WINDOW_HEIGHT);
+
+        xmin = AxeSel->xmin;
+        xmax = AxeSel->xmax;
+
+        ymin = AxeSel->ymin;
+        ymax = AxeSel->ymax;
+
+        xs = xmin + (double) x * (xmax - xmin) / (double) w;
+        ys = ymin + ((double) h - (double) y)*(ymax - ymin) / h;
+        
+        if (debZoomIN) {
+            debZoomIN = false;
+
+            CourbZoom->pts->SetElement(0, 0, xs);
+            CourbZoom->pts->SetElement(0, 1, ys);
+
+            CourbZoom->pts->SetElement(4, 0, xs);
+            CourbZoom->pts->SetElement(4, 1, ys);
+
+            CourbZoom->pts->SetElement(3, 0, xs);
+            CourbZoom->pts->SetElement(1, 1, ys);
+
+        }
+
+        CourbZoom->pts->SetElement(1, 0, xs);
+        CourbZoom->pts->SetElement(3, 1, ys);
+
+        CourbZoom->pts->SetElement(2, 0, xs);
+        CourbZoom->pts->SetElement(2, 1, ys);
+    }
+
+    /*else if (finZoomIN) {
+        finZoomIN = false;
+
+        //test points non confondus
+
+        if ((CourbZoom->pts->Element(0, 0) != CourbZoom->pts->Element(2, 0))
+                && (CourbZoom->pts->Element(0, 1) != CourbZoom->pts->Element(2, 1))) {
+            //assure xmin<xmax
+            if (CourbZoom->pts->Element(0, 0) < CourbZoom->pts->Element(2, 0)) {
+                AxePatron->xmin = CourbZoom->pts->Element(0, 0);
+                AxePatron->xmax = CourbZoom->pts->Element(2, 0);
+            } else {
+                AxePatron->xmax = CourbZoom->pts->Element(0, 0);
+                AxePatron->xmin = CourbZoom->pts->Element(2, 0);
+            }
+            //assure ymin<ymax
+            if (CourbZoom->pts->Element(0, 1) < CourbZoom->pts->Element(2, 1)) {
+                AxePatron->ymin = CourbZoom->pts->Element(0, 1);
+                AxePatron->ymax = CourbZoom->pts->Element(2, 1);
+            } else {
+                AxePatron->ymax = CourbZoom->pts->Element(0, 1);
+                AxePatron->ymin = CourbZoom->pts->Element(2, 1);
+            }
+        }
+    } else if (zoomOUT) {
+        w = glutGet(GLUT_WINDOW_WIDTH);
+        h = glutGet(GLUT_WINDOW_HEIGHT);
+
+        xmin = AxeSel->xmin;
+        xmax = AxeSel->xmax;
+
+        ymin = AxeSel->ymin;
+        ymax = AxeSel->ymax;
+
+        xs = xmin + (double) x * (xmax - xmin) / (double) w;
+        ys = ymin + ((double) h - (double) y)*(ymax - ymin) / h;
+
+        zoomOUT = false;
+
+        dx = AxePatron->xmax - AxePatron->xmin;
+        dy = AxePatron->ymax - AxePatron->ymin;
+
+        AxePatron->xmin = xs - dx;
+        AxePatron->xmax = xs + dx;
+
+        AxePatron->ymin = ys - dy;
+        AxePatron->ymax = ys + dy;
+    } */
+    glutPostRedisplay();
+
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -83,10 +237,46 @@ void BoutonSouris(int button, int state, int x, int y) {
     AxeSel = NULL;
 
     Fenetre = glutGetWindow();
-
 	if (Fenetre == Fenetre2d) {
         AxeSel = AxeProfiles;
     }
+    if (Fenetre == Fenetre3d) {
+        AxeSel = Axe3d;
+    }
+
+    /*test debut/fin, rotation/translation/zoom pour Axe3d*/
+    if (AxeSel == Axe3d) {
+        if (state == GLUT_DOWN) {
+            switch (button) {
+                case GLUT_LEFT_BUTTON:
+                    if (Translation3d == ON) {
+                        Translation3d = OFF;
+                        ZoomTwist3d = ON;
+                    } else Rotation3d = ON;
+                    break;
+
+                case GLUT_RIGHT_BUTTON:
+
+                    if (Rotation3d == ON) {
+                        Rotation3d = OFF;
+                        ZoomTwist3d = ON;
+                    } else Translation3d = ON;
+                    break;
+
+                case GLUT_MIDDLE_BUTTON:
+                    ZoomTwist3d = ON;
+                    break;
+
+                default: printf("\n type de bouton souris inconnu !!!");
+            }
+        } else /*state = GLUT_UP*/ {
+            finZoomIN = true;
+            Rotation3d = OFF;
+            Translation3d = OFF;
+            ZoomTwist3d = OFF;
+        }
+    }
+
 
     /*test debut/fin, rotation/translation/zoom pour Axe3d*/
     if (AxeSel == AxeProfiles) {
@@ -168,6 +358,25 @@ void InitFenetre(void) {
     glutMotionFunc(&motion);
     glutMouseFunc(&BoutonSouris);
 }
+
+void InitLumiere(void) {
+    float mat_specular[] = {1.0, 1.0, 1.0, 1.0};
+    float mat_shininess[] = {50.0};
+    float light_position[] = {0.0, 0.0, 1.0, 0.0};
+    float light_color[] = {1.0, 1.0, 0.0, 1.0};
+    glShadeModel(GL_SMOOTH);
+    /*glClearColor(0.0, 0.0, 0.0, 0.0);*/
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_color);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
+}
+
 
 void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	Forme* tmpF=0;
@@ -331,6 +540,16 @@ void Apply(int /*control*/) {
 	AjoutCourbe(AxeProfiles, cext4);
 	AjoutCourbe(AxeProfiles, cint4);
 
+	// 3d forme visualisation
+    Matrice *XExt, *YExt, *ZExt;
+    Matrice *XInt, *YInt, *ZInt;
+
+    CalculForme3D(F, 0, 0.0f,
+            ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
+            &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+    AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+
+
 	display();
 }
 
@@ -338,13 +557,29 @@ void ModifXYGrid(int /*control*/) {
 	printf ("\n ModifXYGrid()");
 	AxeProfiles->XGrid = XYGrid;
 	AxeProfiles->YGrid = XYGrid;
-
 	display();
+}
+
+
+void ModifProjection3d(int /*control*/) {
+    /*test type de proj.*/
+	if (ProjOrthoPers == 0) {
+        Axe3d->proj = PROJ_ORTHOGONALE;
+        //Axe3dBal->proj = PROJ_ORTHOGONALE;
+	}
+	else {
+        Axe3d->proj = PROJ_PERSPECTIVE;
+        //Axe3dBal->proj = PROJ_PERSPECTIVE;
+	}
+    /*retrace uniquement la vue 3d*/
+    VisuAxe(Axe3d);
+    //VisuAxe(Axe3dBal);
+    glutSwapBuffers();
 }
 
 int main(int argc, char** argv)
 {
-	printf ("\nWind design");
+	printf ("\nWind designer");
 	// glut initialisation
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -354,16 +589,22 @@ int main(int argc, char** argv)
 	// 2d view for projections
 	Fenetre2d = glutCreateWindow("2d design");
     InitFenetre(); 
-
     AxeProfiles = CreerAxe(Fenetre2d);
-
 	int ws, hs;
     ws = glutGet(GLUT_SCREEN_WIDTH);
     hs = glutGet(GLUT_SCREEN_HEIGHT);
-
     glutSetWindow(Fenetre2d);
     glutPositionWindow((int) (0.0 * (double) ws), (int) (0.50 * (double) hs));
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
+
+	Fenetre3d = glutCreateWindow("3d design");
+    InitFenetre();
+    InitLumiere();
+    Axe3d = CreerAxe(Fenetre3d);
+    Axe3d->axe3d = ON;
+    glutSetWindow(Fenetre3d);
+    glutPositionWindow((int) (0.25 * (double) ws), (int) (0.0 * (double) hs));
+    glutReshapeWindow((int) (0.75 * (double) ws), (int) (0.48 * (double) hs));
 
 	// main form whith GUI
     glui = GLUI_Master.create_glui("Wind designer", 0, 0, 0);
@@ -390,8 +631,6 @@ int main(int argc, char** argv)
     FicDesign->set_text(NomFichierDesign);
 	//FicDesign->set_h(10);
 
-
-
 	GLUI_Panel *panel1 = glui->add_panel("");
 	GLUI_Button *btn2d = glui->add_button_to_panel(panel1, "2d", 0, &Apply2d);
 	btn2d->set_w(5);
@@ -407,14 +646,8 @@ int main(int argc, char** argv)
 
 	glui->add_checkbox("XY grid", &XYGrid, 0,  &ModifXYGrid);
 
-
-
-
     //GLUI_Button *btnApply = glui->add_button("Apply", 0, &Apply);
     //btnApply->set_w(10);
-
-    
-
 
 	/*GLUI_Panel *panel2 = glui->add_panel("");
     GLUI_Spinner *SpinKchord = glui->add_spinner_to_panel(
@@ -437,12 +670,18 @@ int main(int argc, char** argv)
             panel2, "power", GLUI_SPINNER_FLOAT, &(power));
     SpinPower -> set_float_limits(0.05, 3.0);*/
 
-
-    //GLUI_Panel *panel = glui->add_panel("");
+    GLUI_Panel *panelViewOptions = glui->add_panel("");
+    glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &VisuSymetrique, 0, &ModifVisuSymetrique);
+    GLUI_Panel *panel_proj = glui->add_panel_to_panel(panelViewOptions, "Projection");
+    GLUI_RadioGroup *radio_proj =
+            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &ModifProjection3d);
+    glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
+    glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
     GLUI_Master.set_glutIdleFunc(NULL);
+	glui->sync_live();
 	Apply(0);
-    glui->sync_live();
+	AxeSel = Axe3d;
     display();
     glutMainLoop();
 	return 0;
