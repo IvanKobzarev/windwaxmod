@@ -36,6 +36,7 @@ using namespace std;
 
 class Matrice;
 class Forme;
+class FormeProjection;
 class Courbe;
 
 class Courbe
@@ -189,24 +190,17 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 
 
 void AjoutForme3D( TAxe *Axe3d, 
-
 			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
-
 			 Matrice *XInt, Matrice *YInt, Matrice *ZInt,
-
 			 int mesh, int symetrie);
 
-
-
 void AjoutPtsSuspentage(
-
 						TAxe *Axe3d, Forme *forme, Matrice *IntProfCent,
-
 						Matrice *XExt, Matrice *YExt, Matrice *ZExt,
-
 						Matrice *XInt, Matrice *YInt, Matrice *ZInt,
-
 						int symetrie, Matrice **PosPtsSuspente);
 
 
 void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
+
+void ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe);

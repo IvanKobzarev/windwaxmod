@@ -318,11 +318,10 @@ double EpaisseurRelative(Matrice* extrados, Matrice* intrados)
 	return MaxExt-MinInt;
 }
 
-
-
 /*****************/
 /* CalculForme3D */
 /*****************/
+
 void CalculForme3D(Forme *forme, int isPercent, double percent,
 				   Matrice *ExtProfCent, Matrice *IntProfCent,
 				   Matrice *ExtProfBout, Matrice *IntProfBout,
@@ -426,8 +425,55 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 		}
 
 	}
-        //printf ("\n ...CalculForme3D");
+    //printf ("\n ...CalculForme3D");
 
+}
+
+FormeProjection* getFormeProjection(Forme3D* f3d) 
+{
+	printf ("\n getFormeProjection()");
+	FormeProjection* formePrj = new FormeProjection();
+	// we should X, 0, Z
+	Matrice *X = Zeros(f3d->XExt->GetLignes(), 2); 
+	Matrice *Y = Zeros(f3d->YExt->GetLignes(), 2);
+		
+	printf ("\n f3d->XExt->GetLignes()=%d", f3d->XExt->GetLignes());
+	for (int i = 0; i < f3d->XExt->GetLignes(); i++)
+	{
+		X->SetElement(i, 0, f3d->XExt->Element(i, 0));
+		Y->SetElement(i, 0, f3d->ZExt->Element(i, 0));
+		printf ("\n %d, 0: %f, %f",i, f3d->XExt->Element(i, 0), f3d->ZExt->Element(i, 0));
+		X->SetElement(i, 1, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1));
+		Y->SetElement(i, 1, f3d->ZExt->Element(i, f3d->ZExt->GetColonnes()-1));
+		printf ("\n %d, 1: %f, %f", i, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1), f3d->ZExt->Element(i, f3d->XExt->GetColonnes()-1));
+	}
+
+	formePrj->X = X;
+	formePrj->Y = Y;
+	return formePrj;
+}
+
+Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
+				   Matrice *ExtProfCent, Matrice *IntProfCent,
+				   Matrice *ExtProfBout, Matrice *IntProfBout)
+{
+	Forme3D* forme3D = new Forme3D();
+    Matrice *XExt, *YExt, *ZExt;
+    Matrice *XInt, *YInt, *ZInt;
+
+    CalculForme3D(forme, isPercent, percent,
+            ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
+            &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+
+	forme3D->XExt=XExt;
+	forme3D->YExt=YExt;
+	forme3D->ZExt=ZExt;
+
+	forme3D->XInt=XInt;
+	forme3D->YInt=YInt;
+	forme3D->ZInt=ZInt;
+
+	return forme3D;
 }
 
 
@@ -863,10 +909,8 @@ void int_cer_bis(double xo1, double yo1, double r1,
 /*******************/
 
 void CalculDeveloppe(
-					 //coordonnï¿½es 3D des 2 cotes de la surface 
 					 Matrice *Xs1, Matrice *Ys1, Matrice *Zs1,
 					 Matrice *Xs2, Matrice *Ys2, Matrice *Zs2,
-					 //coordonnï¿½es 2D du dï¿½veloppï¿½
 					 Matrice **Xb1, Matrice **Yb1,
 					 Matrice **Xb2, Matrice **Yb2)
 {
