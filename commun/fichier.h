@@ -12,7 +12,6 @@
 #include "rasklad.h"
 #include "patternsproject.h"
 
-
 /* using namespace std; */
 class Matrice;
 class Profil;
@@ -64,6 +63,25 @@ public:
 	void DeleteProfils();
 	void AllocateProfils( int i );
 	void Validate();
+};
+
+class Forme3D
+{
+public:
+	Forme3D();
+	virtual ~Forme3D();
+	
+	Matrice *XExt, *YExt, *ZExt;
+	Matrice *XInt, *YInt, *ZInt;
+};
+
+class FormeProjection
+{
+public:
+	FormeProjection();
+	virtual ~FormeProjection();
+
+	Matrice *X, *Y;
 };
 
 class Ballonement

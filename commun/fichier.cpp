@@ -58,6 +58,27 @@ Forme::Forme()
 	mCtrlVrillage = NULL;
 }
 
+Forme3D::Forme3D(){
+}
+
+Forme3D::~Forme3D(){
+	delete this->XExt;
+	delete this->YExt;
+	delete this->ZExt;
+
+	delete this->XInt;
+	delete this->YInt;
+	delete this->ZInt;
+}
+
+FormeProjection::FormeProjection(){
+}
+
+FormeProjection::~FormeProjection(){
+	delete this->X;
+	delete this->Y;
+}
+
 Ballonement::Ballonement(){
 }
 

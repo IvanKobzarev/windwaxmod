@@ -29,7 +29,7 @@ GLUI *glui;
 GLUI_StaticText *FicProject;
 // static text on dialog form, that shows name of loaded design 
 GLUI_StaticText *FicDesign;
-TAxe *AxeProfiles;
+TAxe *AxeProjections;
 TAxe *AxeSel;
 TAxe *Axe3d;
 
@@ -84,7 +84,7 @@ void display(void) {
     VisuAxe(Axe3d);
     glutSwapBuffers();
     //CalculVue3dEtPatron();
-    VisuAxe(AxeProfiles);
+    VisuAxe(AxeProjections);
     glutSwapBuffers();
 }
 
@@ -238,7 +238,7 @@ void BoutonSouris(int button, int state, int x, int y) {
 
     Fenetre = glutGetWindow();
 	if (Fenetre == Fenetre2d) {
-        AxeSel = AxeProfiles;
+        AxeSel = AxeProjections;
     }
     if (Fenetre == Fenetre3d) {
         AxeSel = Axe3d;
@@ -279,7 +279,7 @@ void BoutonSouris(int button, int state, int x, int y) {
 
 
     /*test debut/fin, rotation/translation/zoom pour Axe3d*/
-    if (AxeSel == AxeProfiles) {
+    if (AxeSel == AxeProjections) {
         if (state == GLUT_DOWN) {
             switch (button) {
                 case GLUT_LEFT_BUTTON: //zoomIN
@@ -292,9 +292,9 @@ void BoutonSouris(int button, int state, int x, int y) {
                         zoomIN = true, debZoomIN = true;
                     }
                     CourbZoom->segments = ON;
-                    AxeProfiles->XAuto = OFF;
-                    AxeProfiles->YAuto = OFF;
-                    AxeProfiles->ZAuto = OFF;
+                    AxeProjections->XAuto = OFF;
+                    AxeProjections->YAuto = OFF;
+                    AxeProjections->ZAuto = OFF;
                     break;
                 case GLUT_RIGHT_BUTTON: //zoomOUT x2
 
@@ -305,9 +305,9 @@ void BoutonSouris(int button, int state, int x, int y) {
 
                     zoomOUT = true;
 
-                    AxeProfiles->XAuto = OFF;
-                    AxeProfiles->YAuto = OFF;
-                    AxeProfiles->ZAuto = OFF;
+                    AxeProjections->XAuto = OFF;
+                    AxeProjections->YAuto = OFF;
+                    AxeProjections->ZAuto = OFF;
 
                     break;
 
@@ -337,9 +337,9 @@ void BoutonSouris(int button, int state, int x, int y) {
                 finZoomIN = false;
                 zoomOUT = false;
 
-                AxeProfiles->XAuto = ON;
-                AxeProfiles->YAuto = ON;
-                AxeProfiles->ZAuto = ON;
+                AxeProjections->XAuto = ON;
+                AxeProjections->YAuto = ON;
+                AxeProjections->ZAuto = ON;
             }
 
             glutPostRedisplay();
@@ -469,94 +469,65 @@ void Apply3d(int /*control*/) {
 
 
 void Apply(int /*control*/) {
-    AxeProfiles->XAuto = ON;
-    AxeProfiles->YAuto = ON;
-    AxeProfiles->ZAuto = ON;
-    AxeProfiles->xmin = -2.0;
-    AxeProfiles->xmax = 2.0;
-    AxeProfiles->ymin = -2.0;
-    AxeProfiles->ymax = 2.0;
-
-	AxeProfiles->XGrid = XYGrid;
-	AxeProfiles->YGrid = XYGrid;
-	AxeProfiles->ZGrid = OFF;
-
-    LibererCourbesAxe(AxeProfiles);
-	
-	ProfilGeom* pg1 = getProfile(gfd, F, NoNerv[0]);
-	//pg1->print();
-	Courbe* cext1, *cint1;
-	getCourbeFromProfilGeom(pg1, &cext1, &cint1);
-	AjoutCourbe(AxeProfiles, cext1);
-	AjoutCourbe(AxeProfiles, cint1);
-
-/*	ProfilGeom* pg2 = getProfile(gfd, F, NoNerv[1]);
-	Courbe* cext2, *cint2;
-	getCourbeFromProfilGeom(pg2, &cext2, &cint2);
-	AjoutCourbe(AxeProfiles, cext2);
-	AjoutCourbe(AxeProfiles, cint2);*/
-
-	ProfilGeom* pg1b = getBalloneProfilGeom(pg1, kChord, kMf, F->m_pProfils[NoNerv[0]]->m_fWidth, wN, dyw);
-	Courbe* cext3, *cint3;
-	getCourbeFromProfilGeom(pg1b, &cext3, &cint3);
-	cext3->CouleurSegments[0]=1.0f;
-	cext3->CouleurSegments[1]=0.0f;
-	cext3->CouleurSegments[2]=0.0f;
-	cint3->CouleurSegments[0]=1.0f;
-	cint3->CouleurSegments[1]=0.0f;
-	cint3->CouleurSegments[2]=0.0f;
-
-	AjoutCourbe(AxeProfiles, cext3);
-	AjoutCourbe(AxeProfiles, cint3);
-	
-	Courbe* cvLineHvostPince;
-	cvLineHvostPince = new Courbe("VerticalLine");
-    cvLineHvostPince->points = OFF;
-    cvLineHvostPince->symX = OFF;
-
-	cvLineHvostPince->pts = new Matrice(2, 2);
-
-	int ne = pg1->ExtProf->GetLignes();
-	int ni = pg1->IntProf->GetLignes();
-	double l = abs (pg1->ExtProf->Element(ne - 1, 0) - pg1->ExtProf->Element(0, 0));
-	double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
-	cvLineHvostPince->pts->SetElement(0, 0, xv );
-	cvLineHvostPince->pts->SetElement(0, 1, -0.1 * l);
-
-	cvLineHvostPince->pts->SetElement(1, 0, xv );
-	cvLineHvostPince->pts->SetElement(1, 1, 0.1 * l );
-	AjoutCourbe(AxeProfiles, cvLineHvostPince);
-
-	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, pg1, xv, power);
-	Courbe* cext4, *cint4;
-	getCourbeFromProfilGeom(pg1bh, &cext4, &cint4);
-	cext4->CouleurSegments[0]=0.0f;
-	cext4->CouleurSegments[1]=1.0f;
-	cext4->CouleurSegments[2]=0.0f;
-	cint4->CouleurSegments[0]=0.0f;
-	cint4->CouleurSegments[1]=1.0f;
-	cint4->CouleurSegments[2]=0.0f;
-
-	AjoutCourbe(AxeProfiles, cext4);
-	AjoutCourbe(AxeProfiles, cint4);
-
 	// 3d forme visualisation
-    Matrice *XExt, *YExt, *ZExt;
-    Matrice *XInt, *YInt, *ZInt;
+    Matrice *XExt, *YExt, *ZExt, *YExt0;
+    Matrice *XInt, *YInt, *ZInt, *YInt0;
 
     CalculForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-    AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+
+	printf ("\n WindDesigner.test()");
+	Forme3D* f3d = getForme3D(F, 0, 0.0f,
+            ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
+
+    //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+
+	YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
+	YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
+
+	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, YInt0, f3d->ZInt, VisuFace, VisuSymetrique);
+	//------------------------ Projections Fenetre calculation -------------------------------------
+    AxeProjections->XAuto = ON;
+    AxeProjections->YAuto = ON;
+    AxeProjections->ZAuto = ON;
+    AxeProjections->xmin = -100.0;
+    AxeProjections->xmax = 100.0;
+    AxeProjections->ymin = -100.0;
+    AxeProjections->ymax = 100.0;
+	AxeProjections->XGrid = XYGrid;
+	AxeProjections->YGrid = XYGrid;
+	AxeProjections->ZGrid = OFF;
+    LibererCourbesAxe(AxeProjections);
+	
+	//AjoutCourbe(AxeProjections, cint4);
+	printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
+	FormeProjection* fp = getFormeProjection(f3d);
+	printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
+	ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);
+
+	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
+	printf ("\n display()");
 
 
+
+	// Zoom
+    CourbZoom = new Courbe("Zoom");
+    CourbZoom->pts = Zeros(5, 2);
+    CourbZoom->points = OFF;
+    CourbZoom->segments = OFF;
+    CourbZoom->symX = OFF;
+    CourbZoom->CouleurSegments[0] = 0.0f;
+    CourbZoom->CouleurSegments[2] = 0.0f;
+    AjoutCourbe(AxeProjections, CourbZoom);
+	//-------------------------
 	display();
 }
 
 void ModifXYGrid(int /*control*/) {
 	printf ("\n ModifXYGrid()");
-	AxeProfiles->XGrid = XYGrid;
-	AxeProfiles->YGrid = XYGrid;
+	AxeProjections->XGrid = XYGrid;
+	AxeProjections->YGrid = XYGrid;
 	display();
 }
 
@@ -577,6 +548,7 @@ void ModifProjection3d(int /*control*/) {
     glutSwapBuffers();
 }
 
+
 int main(int argc, char** argv)
 {
 	printf ("\nWind designer");
@@ -589,7 +561,7 @@ int main(int argc, char** argv)
 	// 2d view for projections
 	Fenetre2d = glutCreateWindow("2d design");
     InitFenetre(); 
-    AxeProfiles = CreerAxe(Fenetre2d);
+    AxeProjections = CreerAxe(Fenetre2d);
 	int ws, hs;
     ws = glutGet(GLUT_SCREEN_WIDTH);
     hs = glutGet(GLUT_SCREEN_HEIGHT);

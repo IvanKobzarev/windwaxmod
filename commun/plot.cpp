@@ -1602,6 +1602,30 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 	}
 }
 
+void ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe) {
+	printf ("\n ajoutFormeProjectionCourbesToAxe()");
+	int n = fp->X->GetLignes();
+	int m = fp->X->GetColonnes();
+	printf ("\n n=%d, m=%d", n, m);
+	for (int i = 0; i < n; i++) {
+		printf ("\n i=%d", i);
+		Courbe* courbe = new Courbe("Courbe");
+		courbe->points = OFF;
+		courbe->symX = OFF;
+		courbe->CouleurSegments[0]=1.0f;
+		courbe->CouleurSegments[1]=0.0f;
+		courbe->CouleurSegments[2]=0.0f;
+		courbe->pts = new Matrice(m, 2);
+		for (int j = 0; j < m; j++) {
+			courbe->pts->SetElement(j, 0, fp->X->Element(i, j));
+			courbe->pts->SetElement(j, 1, fp->Y->Element(i, j));
+			printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
+		}
+		printf ("\n AjoutCourbe()");
+		AjoutCourbe(axe, courbe);
+	}
+}
+
 
 /**********************/
 /* AjoutPtsSuspentage */

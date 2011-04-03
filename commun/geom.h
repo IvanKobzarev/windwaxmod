@@ -2,6 +2,8 @@
 #define __GEOM_H__
 
 class Forme;
+class Forme3D;
+class FormeProjection;
 class Matrice;
 class Ballonement;
 class WindPatternsProject;
@@ -30,6 +32,12 @@ void CalculForme3DBallonement
 				   Matrice *ExtProfBout, Matrice *IntProfBout,
 				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
 				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
+
+Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
+				   Matrice *ExtProfCent, Matrice *IntProfCent,
+				   Matrice *ExtProfBout, Matrice *IntProfBout);
+
+FormeProjection* getFormeProjection(Forme3D* f3d);
 
 double EpaisseurRelative(Matrice* extrados, Matrice* intrados);
 
