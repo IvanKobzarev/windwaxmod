@@ -26,194 +26,91 @@
 #endif
 
 /********************************/
-
 /* constantes pour tracer texte */
-
 /********************************/
-
-
-
 	const char TabXYch[38][18]={
-
 		{'0',	4,	15,	25,	34,	32,	21,	11,	2,	4,	32,	0,	0,	0,	0,	0,	0,	0},
-
 		{'1',	12,	3,	33,	32,	34,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'2',	11,	6,	2,	4,	10,	15,	31,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'3',	6,	2,	4,	10,	15,	19,	18,	19,	25,	30,	34,	32,	26,	0,	0,	0,	0},
-
 		{'4',	3,	21,	25,	24,	14,	34,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'5',	5,	1,	16,	19,	25,	30,	34,	31,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'6',	10,	4,	2,	6,	26,	32,	34,	30,	25,	19,	16,	0,	0,	0,	0,	0,	0},
-
 		{'7',	1,	5,	31,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'8',	2,	4,	10,	15,	19,	17,	21,	26,	32,	34,	30,	25,	19,	17,	11,	6,	2},
-
 		{'9',	20, 17,	11,	6,	2,	4,	10,	30,	34,	32,	26,	0,	0,	0,	0,	0,	0},
-
 		{'A',	31, 16,	7,	3,	9,	20,	16,	20,	35,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'B',	1,	4,	10,	15,	19,	16,	19,	25,	30,	34,	31,	1,	0,	0,	0,	0,	0},
-
 		{'C',	10, 4,	2,	6,	26,	32,	34,	30,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'D',	1,	4,	10,	30,	34,	31,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'E',	5,	1,	16,	19,	16,	31,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'F',	5,	1,	16,	19,	16,	31,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'G',	10, 4,	2,	6,	26,	32,	34,	30,	20,	18,	0,	0,	0,	0,	0,	0,	0},
-
 		{'H',	1,	31,	16,	20,	5,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'I',	2,	4,	3,	33,	32,	34,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'J',	3,	5,	4,	29,	33,	32,	26,	21,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'K',	5,	16,	1,	31,	16,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'L',	1,	31,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'M',	31, 1,	18,	5,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'N',	31, 1,	35,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'O',	11, 2,	4,	15,	25,	34,	32,	21,	11,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'P',	31, 1,	4,	10,	20,	24,	21,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'Q',	35, 23,	29,	33,	32,	26,	6,	2,	4,	10,	25,	29,	0,	0,	0,	0,	0},
-
 		{'R',	31, 1,	4,	10,	20,	24,	21,	24,	35,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'S',	10, 4,	2,	6,	11,	17,	19,	25,	30,	34,	32,	26,	0,	0,	0,	0,	0},
-
 		{'T',	1,	5,	3,	33,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'U',	1,	26,	32,	34,	30,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'V',	1,	33,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'W',	1,	32,	13,	34,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'X',	1,	35,	18,	31,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'Y',	1,	18,	33,	18,	5,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'Z',	1,	5,	31,	35,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'.',	22, 24,	34,	32,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 		{'-',	16, 20,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-
 	};
-
-	
 
 	const double TabXYpoint[40][2]={
-
 		{0.0f, 7.0f},{ 1.0f, 7.0f},{ 2.0f, 7.0f},{ 3.0f, 7.0f},{ 4.0f, 7.0f},
-
 		{0.0f, 6.0f},{ 1.0f, 6.0f},{ 2.0f, 6.0f},{ 3.0f, 6.0f},{ 4.0f, 6.0f},
-
 		{0.0f, 5.0f},{ 1.0f, 5.0f},{ 2.0f, 5.0f},{ 3.0f, 5.0f},{ 4.0f, 5.0f},
-
 		{0.0f, 4.0f},{ 1.0f, 4.0f},{ 2.0f, 4.0f},{ 3.0f, 4.0f},{ 4.0f, 4.0f},
-
 		{0.0f, 3.0f},{ 1.0f, 3.0f},{ 2.0f, 3.0f},{ 3.0f, 3.0f},{ 4.0f, 3.0f},
-
 		{0.0f, 2.0f},{ 1.0f, 2.0f},{ 2.0f, 2.0f},{ 3.0f, 2.0f},{ 4.0f, 2.0f},
-
 		{0.0f, 1.0f},{ 1.0f, 1.0f},{ 2.0f, 1.0f},{ 3.0f, 1.0f},{ 4.0f, 1.0f},
-
 		{0.0f, 0.0f},{ 1.0f, 0.0f},{ 2.0f, 0.0f},{ 3.0f, 0.0f},{ 4.0f, 0.0f}
-
 	};
 
-
-
-
-
-/*********************************/
-
-/* initialise axe par defaut     */
-
-/*********************************/
-
 TAxe* CreerAxe(int fen)
-
 {
-
 	TAxe *axe;
-
 	/*allocation memoire*/
-
 	axe = (TAxe*)malloc(sizeof(TAxe));
-
 	/*init parametres par defaut*/
-
 	axe->axe3d = OFF;
-
 	axe->XAuto = ON; axe->YAuto = ON; axe->ZAuto = ON;
-
 	axe->Norme = ON;
-
 	axe->Courb = NULL;
-
 	axe->Mesh = NULL;
-
 	axe->fenetre = fen;
-
 	axe->XGrid = ON; axe->YGrid = ON; axe->ZGrid = ON;
-
 	axe->xmin = -1.0f; axe->xmax = +1.0f;
-
 	axe->ymin = -1.0f; axe->ymax = +1.0f;
-
 	axe->zmin = -1.0f; axe->zmax = +1.0f;
-
 	/*couleur de fond: gris*/
-
 	axe->CouleurFond[0] = 0.5f;	axe->CouleurFond[1] = 0.5f;	axe->CouleurFond[2] = 0.5f;
-
 	/*couleur grille: blanc*/
-
 	axe->CouleurGrid[0] = 1.0f;	axe->CouleurGrid[1] = 1.0f; axe->CouleurGrid[2] = 1.0f;
-
 	/*couleur repere: rouge*/
-
 	axe->CouleurRep[0] = 1.0f; axe->CouleurRep[1] = 0.0f; axe->CouleurRep[2] = 0.0f;
-
 	/*position camera dans vue 3d*/
-
 	axe->xcam = 0.0; axe->ycam = 0.0;	axe->zcam = 10.0;
-
 	axe->twist = 0.0; axe->incidence = 0.0;	axe->azimuth = 0.0;
-
 	/*eclairage*/
-
 	axe->eclairage = OFF;
-
 	/*type de projection 3d*/
-
 	axe->proj = PROJ_ORTHOGONALE;
-
 	return axe;
-
 }
-
-
-
-/*********************************/
-
-/* initialise courbe par defaut  */
-
-/*********************************/
 
 Courbe::Courbe(const char* myname)
 {
@@ -249,82 +146,37 @@ Courbe::~Courbe()
 	pts = NULL;
 }
 
-
-/*********************************/
-
-/* initialise mesh par defaut    */
-
-/*********************************/
-
 TMesh* CreerMesh(void)
-
 {
-
 	TMesh *mesh;
-
 	/*allocation memoire*/
-
 	mesh = (TMesh*)malloc(sizeof(TMesh));
-
 	/*init parametres par defaut*/
-
 	mesh->MeshSuiv = NULL;
-
 	mesh->x = NULL;
-
 	mesh->y = NULL;
-
 	mesh->z = NULL;
-
 	mesh->points = OFF;
-
 	mesh->segments = ON;
-
 	mesh->faces = OFF;
-
 	mesh->symX = OFF;
-
 	mesh->symY = OFF;
-
 	mesh->symZ = OFF;
-
 	mesh->InvNormales = OFF;
-
 	/*jaune*/
-
 	mesh->CouleurPoints[0] = 1.0f;
-
 	mesh->CouleurPoints[1] = 1.0f;
-
 	mesh->CouleurPoints[2] = 0.0f;
-
 	/*blanc*/
-
 	mesh->CouleurSegments[0] = 1.0f;
-
 	mesh->CouleurSegments[1] = 1.0f;
-
 	mesh->CouleurSegments[2] = 1.0f;
-
 	/*jaune*/
-
 	mesh->CouleurFaces[0] = 1.0f;
-
 	mesh->CouleurFaces[1] = 1.0f;
-
 	mesh->CouleurFaces[2] = 0.0f;
-
 	return mesh;
-
 }
-
-
-
-/*****************/
-
-/* visualise axe */
-
-/*****************/
 
 void VisuAxe(TAxe *axe)
 {
@@ -1427,22 +1279,13 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 			AjoutCourbe(axe, CourbChar);
 
 		}
-
 	}
-
 	delete(X); delete(Y); delete(T); delete(R);
-
 }
 
-
-
 /****************/
-
 /* AjoutForme3D */
-
 /****************/
-
-
 
 void AjoutForme3D( TAxe *Axe3d, 
 			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
@@ -1457,33 +1300,31 @@ void AjoutForme3D( TAxe *Axe3d,
 
 	/*init variables pour simplifier ecriture*/
 	nbPtsInt = XInt->GetColonnes(); nbPtsExt = XExt->GetColonnes();	NbNerv = XInt->GetLignes();
-
-        /*creation courbes profils*/
+    /*creation courbes profils*/
 	if(mesh == 0)
 	{
-            //printf ("\nbefore Axe3d->eclairage = OFF;");
+        //printf ("\nbefore Axe3d->eclairage = OFF;");
 		Axe3d->eclairage = OFF;
-            //printf ("\nafter Axe3d->eclairage = OFF;");
-            //printf ("\nNbNerv=%d", NbNerv);
+        //printf ("\nafter Axe3d->eclairage = OFF;");
+        //printf ("\nNbNerv=%d", NbNerv);
 		for (i=0; i<NbNerv; i++)
 		{
-              //      printf ("\ni=%d", i);
+            //      printf ("\ni=%d", i);
 			/*extrados*/
 			CourbCour = new Courbe("Extrados");
-
 			CourbCour->points = OFF;
 			CourbCour->pts = Zeros(XExt->GetColonnes(),3);
-                        //printf ("\n after Zeros()");
+            //printf ("\n after Zeros()");
 			for(j=0; j<XExt->GetColonnes(); j++)
 			{
-                           // printf ("\nj=%d",j);
+                // printf ("\nj=%d",j);
 				CourbCour->pts->SetElement(j,0,XExt->Element(i,j));
 				CourbCour->pts->SetElement(j,1,YExt->Element(i,j));
 				CourbCour->pts->SetElement(j,2,ZExt->Element(i,j));
 			}
-                  //  printf ("\nbefore 1");
+            //  printf ("\nbefore 1");
 			AjoutCourbe(Axe3d, CourbCour);
-                    //printf ("\nafter 1");
+            //printf ("\nafter 1");
 			if(symetrie==1) CourbCour->symX = ON;
 			/*intrados*/
 			CourbCour=new Courbe("Intrados");
@@ -1602,30 +1443,59 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 	}
 }
 
-void ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe) {
+void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, int dir) {
 	printf ("\n ajoutFormeProjectionCourbesToAxe()");
+	double ymult = 1;
+	if (dir == DIR_NOSE_DOWN) ymult=-1;
 	int n = fp->X->GetLignes();
 	int m = fp->X->GetColonnes();
 	printf ("\n n=%d, m=%d", n, m);
+	
+	Courbe* courbe0 = new Courbe("CourbeUp");
+	courbe0->points = OFF;
+	if (symetric) courbe0->symX = ON;
+	courbe0->pts = new Matrice(n, 2);
+
+	Courbe* courbe1 = new Courbe("CourbeDown");
+	courbe1->points = OFF;
+	courbe1->symX = OFF;
+	if (symetric) courbe1->symX = ON;
+	courbe1->pts = new Matrice(n, 2);
+	
+
+	double ymin = 1000000;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			double y = fp->Y->Element(i, j);
+			if (y*ymult < ymin) ymin = y*ymult;
+		}
+	}
+
 	for (int i = 0; i < n; i++) {
 		printf ("\n i=%d", i);
 		Courbe* courbe = new Courbe("Courbe");
 		courbe->points = OFF;
 		courbe->symX = OFF;
-		courbe->CouleurSegments[0]=1.0f;
-		courbe->CouleurSegments[1]=0.0f;
-		courbe->CouleurSegments[2]=0.0f;
+		if (symetric) courbe->symX = ON;
+		courbe0->pts->SetElement(i, 0, fp->X->Element(i, 0));
+		courbe0->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, 0)- ymin);
 		courbe->pts = new Matrice(m, 2);
 		for (int j = 0; j < m; j++) {
-			courbe->pts->SetElement(j, 0, fp->X->Element(i, j));
-			courbe->pts->SetElement(j, 1, fp->Y->Element(i, j));
+			double x = fp->X->Element(i, j);
+			courbe->pts->SetElement(j, 0, x);
+			double y = fp->Y->Element(i, j);
+			courbe->pts->SetElement(j, 1, dy + (ymult*y - ymin));
 			printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
 		}
+		courbe1->pts->SetElement(i, 0, fp->X->Element(i, m-1) );
+		courbe1->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, m-1)-ymin);
+
 		printf ("\n AjoutCourbe()");
 		AjoutCourbe(axe, courbe);
 	}
+	AjoutCourbe(axe, courbe0);
+	AjoutCourbe(axe, courbe1);
 }
-
 
 /**********************/
 /* AjoutPtsSuspentage */

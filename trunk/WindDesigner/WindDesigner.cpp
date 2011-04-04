@@ -54,6 +54,9 @@ char NomFichierDiagNerv[255];
 int ProjOrthoPers = 0;
 int XYGrid = 0;
 
+int ExtPrjNoseUp = 0;
+int IntPrjNoseUp = 1;
+
 WindPatternsProject* gfd = new WindPatternsProject();
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
@@ -74,11 +77,11 @@ void ModifVisu3d(int /*control*/) {
 }
 
 void ModifVisuSymetrique(int /*control*/) {
+	printf ("\n ModifVisySymetrique()");
 	Apply(0);
     VisuAxe(Axe3d);
     glutSwapBuffers();
 }
-
 
 void display(void) {
     VisuAxe(Axe3d);
@@ -469,7 +472,10 @@ void Apply3d(int /*control*/) {
 
 
 void Apply(int /*control*/) {
-	// 3d forme visualisation
+
+
+	// 3D
+	// forme visualisation
     Matrice *XExt, *YExt, *ZExt, *YExt0;
     Matrice *XInt, *YInt, *ZInt, *YInt0;
 
@@ -482,11 +488,15 @@ void Apply(int /*control*/) {
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
 
     //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+	//YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
+	//YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
 
-	YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
-	YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
+	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
 
-	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, YInt0, f3d->ZInt, VisuFace, VisuSymetrique);
+
+
+
+	// 2D
 	//------------------------ Projections Fenetre calculation -------------------------------------
     AxeProjections->XAuto = ON;
     AxeProjections->YAuto = ON;
@@ -504,12 +514,10 @@ void Apply(int /*control*/) {
 	printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
 	FormeProjection* fp = getFormeProjection(f3d);
 	printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
-	ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);
-
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, VisuSymetrique, 0.0, IntPrjNoseUp);
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, VisuSymetrique, 2.0, ExtPrjNoseUp);
 	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
 	printf ("\n display()");
-
-
 
 	// Zoom
     CourbZoom = new Courbe("Zoom");
@@ -521,6 +529,7 @@ void Apply(int /*control*/) {
     CourbZoom->CouleurSegments[2] = 0.0f;
     AjoutCourbe(AxeProjections, CourbZoom);
 	//-------------------------
+
 	display();
 }
 
@@ -531,6 +540,15 @@ void ModifXYGrid(int /*control*/) {
 	display();
 }
 
+void ModifExtPrjNoseUp(int /*control*/) {
+	Apply(0);
+	display();
+}
+
+void ModifIntPrjNoseUp(int /*control*/) {
+	Apply(0);
+	display();
+}
 
 void ModifProjection3d(int /*control*/) {
     /*test type de proj.*/
@@ -615,8 +633,11 @@ int main(int argc, char** argv)
 
 	//SpinNoNerv[1] = glui->add_spinner_to_panel(panel1, "No Nerv 2", GLUI_SPINNER_INT, &(NoNerv[1]));
     ////SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
+	GLUI_Panel *panel2dOptions = glui->add_panel("2D");
+	glui->add_checkbox_to_panel(panel2dOptions, "XY grid", &XYGrid, 0,  &ModifXYGrid);
 
-	glui->add_checkbox("XY grid", &XYGrid, 0,  &ModifXYGrid);
+	glui->add_checkbox_to_panel(panel2dOptions, "Ext Projection nose up", &ExtPrjNoseUp, 0,  &ModifExtPrjNoseUp);
+	glui->add_checkbox_to_panel(panel2dOptions, "Int Projection nose up", &IntPrjNoseUp, 0,  &ModifIntPrjNoseUp);
 
     //GLUI_Button *btnApply = glui->add_button("Apply", 0, &Apply);
     //btnApply->set_w(10);

@@ -1,32 +1,18 @@
 #pragma once
 
-
-/* header de plot.c */
-
-/*pour activer ou desactiver une fonction*/
+#define DIR_NOSE_UP 1
+#define DIR_NOSE_DOWN 0
 
 #define ON 1
-
 #define OFF 0
 
-/*definition des diff�rents type de courbe*/
-
 #define NON_DEF		0
-
 #define	CTRL_POINT	1
 
-
-
-/*def des type de projection*/
-
 #define PROJ_ORTHOGONALE 0 /*orthogonale*/
-
 #define PROJ_PERSPECTIVE 1 /*perspective*/
 
-
-
 #define DEG2RAD	(3.1415926f/180.0f)
-
 #define RAD2DEG	(180.0f/3.1415926f)
 
 
@@ -203,4 +189,4 @@ void AjoutPtsSuspentage(
 
 void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
 
-void ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe);
+void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetrie, double dy, int dir);
