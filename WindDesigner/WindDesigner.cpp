@@ -20,6 +20,7 @@
 #include "../commun/pince.h"
 #include "../commun/rasklad.h"
 #include "../commun/logger.h"
+#include "../commun/design.h"
 
 #include "GL/glui.h"
 #include "GL/glut.h"
@@ -472,8 +473,6 @@ void Apply3d(int /*control*/) {
 
 
 void Apply(int /*control*/) {
-
-
 	// 3D
 	// forme visualisation
     Matrice *XExt, *YExt, *ZExt, *YExt0;
@@ -529,7 +528,6 @@ void Apply(int /*control*/) {
     CourbZoom->CouleurSegments[2] = 0.0f;
     AjoutCourbe(AxeProjections, CourbZoom);
 	//-------------------------
-
 	display();
 }
 
