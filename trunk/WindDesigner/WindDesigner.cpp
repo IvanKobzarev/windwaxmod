@@ -59,6 +59,7 @@ int ExtPrjNoseUp = 0;
 int IntPrjNoseUp = 1;
 
 WindPatternsProject* gfd = new WindPatternsProject();
+KiteDesign* kiteDesign = 0;
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
 float dyw = 0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
@@ -428,19 +429,19 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 void ChargerFichierDesign(int /*control*/) {
     CString NomFichier;
     char* PtrNomFichier;
-    //WindDesign* oldWpp;
+    KiteDesign* oldKd;
+
     CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         NomFichier = DlgOpen.GetPathName();
         PtrNomFichier = NomFichier.GetBuffer(1);
         strcpy(NomFichierDesign, PtrNomFichier);
-        //oldWpp = gfd;
-        //gfd = LectureWindPatternsProject(NomFichierProject);
-        //LoadFromWindPatternsProject(gfd);
-        //delete(oldWpp);
+        oldKd = kiteDesign;
+        kiteDesign = readKiteDesignFromFile(NomFichierProject);
+		delete(oldKd);
         FicDesign->set_text(NomFichierDesign);
     }
-    //Appliquer(0);
+    Apply(0);
     display();
     glui->sync_live();
 }
@@ -528,6 +529,10 @@ void Apply(int /*control*/) {
     CourbZoom->CouleurSegments[2] = 0.0f;
     AjoutCourbe(AxeProjections, CourbZoom);
 	//-------------------------
+	if (kiteDesign != 0)  {
+		//apply kite design
+		printf("\n here will be applied kite design");
+	}
 	display();
 }
 
@@ -568,6 +573,10 @@ void ModifProjection3d(int /*control*/) {
 int main(int argc, char** argv)
 {
 	printf ("\nWind designer");
+
+	//KiteDesign* kd = readKiteDesignFromFile("f17.kdn");
+	//return 0;
+
 	// glut initialisation
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -675,6 +684,9 @@ int main(int argc, char** argv)
 	AxeSel = Axe3d;
     display();
     glutMainLoop();
+
+	
+
 	return 0;
 }
 

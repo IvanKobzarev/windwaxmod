@@ -10,6 +10,8 @@
 #include <math.h>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
+
 
 //using namespace std;
 #define sqr(f1) ((f1)*(f1))
@@ -22,6 +24,9 @@
 #include "fichier.h"
 #include "profil.h"
 #include "geom.h"
+#include "design.h"
+
+
 
 
 /////////////////////////////////////////////////////////////
@@ -445,6 +450,47 @@ bool TrouveMotDansFichierTexte(FILE* fid, char* Mot)
 /************************/
 /* LectureFichierProfil */
 /************************/
+
+KiteDesign* readKiteDesignFromFile(const char* FilePath) {
+	cout << "readKiteDesignFromFile: " << FilePath << endl;
+	KiteDesign* kd = new KiteDesign();
+	ifstream in(FilePath);
+	int n=0;
+	string word;
+	in >> n;
+	cout <<"n:"<< n << endl;
+	kd->n_elements=n;
+	kd->kiteDesignElements = new KiteDesignElement*[n];
+
+	for (int i = 0; i < n; i++) {
+		in >> word;
+		cout << "word:" << word << endl;
+		if (word.compare("LINE") == 0) {
+			cout << "It's LINE" << endl;
+			Line* line = new Line(in);
+			line->print();
+			kd->kiteDesignElements[i]=line;
+		}
+	}
+/*		fscanf(fid,"%f",&x);
+		if(x==1.0f)
+		{
+			///////////////
+			//FORMAT SELIG 
+			///////////////
+		
+			//1ere lecture pour determiner le nombre de data
+			nbData = 0;
+			while( fscanf(fid,"%f %f", &x, &y) != EOF ) nbData++;
+			//lecture des datas
+			rewind(fid);
+			fgets( line, 255, fid ); //premiere ligne
+			data = new Matrice(nbData, 2);*/
+
+	
+
+	return kd;
+}
 
 void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** intrados)
 {

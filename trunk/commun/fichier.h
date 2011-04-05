@@ -11,12 +11,16 @@
 #include "matrice.h"
 #include "rasklad.h"
 #include "patternsproject.h"
+#include "design.h"
 
 /* using namespace std; */
 class Matrice;
 class Profil;
 class WindPatternsProject;
 class Ballonement;
+class KiteDesign;
+class KiteDesignElement;
+class Line;
 
 class Forme
 {
@@ -161,3 +165,5 @@ void EcritureManyFichierPolyDXF(char *NomFichier, int np, int n, TAxe **axe, TAx
 void EcritureManyFichierPolyDXF2(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
 void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp);
+
+KiteDesign* readKiteDesignFromFile(const char* FilePath);
