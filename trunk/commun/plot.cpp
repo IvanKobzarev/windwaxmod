@@ -1,9 +1,3 @@
-/*******************************************/
-
-/* biblio de fonctions pour gerer les axes */
-
-/*******************************************/
-
 #pragma warning(disable:4514)
 #pragma warning(disable:4505)
 
@@ -11,14 +5,13 @@
 #include <stdio.h>
 #include <conio.h>
 #include <math.h>
-//#include <string.h>
-
 
 #include "matrice.h"
 #include "geom.h"
 #include "plot.h"
 #include "fichier.h"
 #include "profil.h"
+#include "design.h"
 #include "GL/glut.h"
 
 #ifndef DEBUG
@@ -1443,7 +1436,7 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 	}
 }
 
-void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, int dir) {
+void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
 	printf ("\n ajoutFormeProjectionCourbesToAxe()");
 	double ymult = 1;
 	if (dir == DIR_NOSE_DOWN) ymult=-1;
@@ -1493,6 +1486,14 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetr
 		printf ("\n AjoutCourbe()");
 		AjoutCourbe(axe, courbe);
 	}
+	
+	//calculate kite design courbes
+
+	for (int i = 0; i < kd->n_elements; i++) {
+		KiteDesignElement* kde = kd->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe(axe, fp, ymin, symetric, dy, ymult, ymin);
+	}
+
 	AjoutCourbe(axe, courbe0);
 	AjoutCourbe(axe, courbe1);
 }

@@ -1,39 +1,33 @@
 //design.cpp
-
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <conio.h>
 #include <math.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string>
 
+using namespace std;
 
+#include "design.h"
+#include "plot.h"
 #include "fichier.h"
 #include "profil.h"
 #include "geom.h"
-#include "design.h"
 
-int test() {
-	printf ("\n test()");
-	return 0;
-}
 
 KiteDesignElement::KiteDesignElement(){
-
 }
 
 KiteDesignElement::~KiteDesignElement(){
-
 }
 
 Line::Line(){
 	n_points = 0;
 }
 
-Line::Line(ifstream& in){
+Line::Line(std::ifstream& in){
 	n_points = 0;
 	in >> n_points;
 	cout << "Line n_points: "<< n_points << endl;
@@ -45,6 +39,11 @@ Line::Line(ifstream& in){
 		in >> pointsNervs[j] >> pointsPercents[j];
 		cout << "Line p "<< pointsNervs[j] << " "<< pointsPercents[j] <<endl;
 	}
+}
+
+void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, double ymin, int symetric, double dy, double ymult, double yoffset) 
+{
+	cout << "Line::ajoutCourbesToAxe()" << endl;
 }
 
 Line::~Line(){
@@ -59,13 +58,9 @@ void Line::print(){
 	}
 }
 
-
-
 KiteDesign::KiteDesign(){
 	n_elements = 0;
-
 }
 
 KiteDesign::~KiteDesign(){
-
 }
