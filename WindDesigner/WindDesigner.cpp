@@ -514,8 +514,12 @@ void Apply(int /*control*/) {
 	printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
 	FormeProjection* fp = getFormeProjection(f3d);
 	printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, VisuSymetrique, 0.0, IntPrjNoseUp);
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, VisuSymetrique, 2.0, ExtPrjNoseUp);
+	if (kiteDesign != 0)  {
+		//apply kite design
+		printf("\n here will be applied kite design");
+	}
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesign, VisuSymetrique, 0.0, IntPrjNoseUp);
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesign, VisuSymetrique, 2.0, ExtPrjNoseUp);
 	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
 	printf ("\n display()");
 
@@ -529,10 +533,6 @@ void Apply(int /*control*/) {
     CourbZoom->CouleurSegments[2] = 0.0f;
     AjoutCourbe(AxeProjections, CourbZoom);
 	//-------------------------
-	if (kiteDesign != 0)  {
-		//apply kite design
-		printf("\n here will be applied kite design");
-	}
 	display();
 }
 
@@ -623,9 +623,10 @@ int main(int argc, char** argv)
     btnLoadDesign->set_w(10);
     glui->add_column_to_panel(panelDesign, false);
 	// load default design
-	strcpy(NomFichierDesign, "f17design.wdn");
+	strcpy(NomFichierDesign, "f17.wdn");
     FicDesign = glui->add_statictext_to_panel(panelDesign, "???");
     FicDesign->set_text(NomFichierDesign);
+	kiteDesign = readKiteDesignFromFile(NomFichierDesign);
 	//FicDesign->set_h(10);
 
 	GLUI_Panel *panel1 = glui->add_panel("");
@@ -684,9 +685,6 @@ int main(int argc, char** argv)
 	AxeSel = Axe3d;
     display();
     glutMainLoop();
-
-	
-
 	return 0;
 }
 

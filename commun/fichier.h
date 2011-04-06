@@ -11,9 +11,8 @@
 #include "matrice.h"
 #include "rasklad.h"
 #include "patternsproject.h"
-#include "design.h"
 
-/* using namespace std; */
+
 class Matrice;
 class Profil;
 class WindPatternsProject;
@@ -28,7 +27,6 @@ class Forme
 public:
 	Forme();
 	virtual ~Forme();
-	
 
 	//parametres principaux
 	double CoeffProgGeom;
@@ -42,19 +40,13 @@ public:
 	Matrice *mCtrlDiedre, *mCtrlMorphing, *mCtrlVrillage, *mCtrlEpaiRel;
 	Matrice *mCourbDiedre, *mCourbMorphing, *mCourbVrillage, *mCourbEpaiRel;
 
-
 	// used only for Serialize
     Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
-
 	bool courbInput;
-
-	//nom des profils central/extremite
-
-	string m_strNomProfilCent;
-	string m_strNomProfilBout;
+	std::string m_strNomProfilCent;
+	std::string m_strNomProfilBout;
 
 	//tableau de forme
-
 	Profil** m_pProfils;
 	int m_nbProfils;
 

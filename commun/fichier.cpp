@@ -5,28 +5,26 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <conio.h>
+#include <string>
 #include <math.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 
-
-//using namespace std;
-#define sqr(f1) ((f1)*(f1))
-#define CHISLOPI	3.141592675f
-
-#ifndef DEBUG
-#define DEBUG false
-#endif
+using namespace std;
 
 #include "fichier.h"
 #include "profil.h"
 #include "geom.h"
 #include "design.h"
 
+#define sqr(f1) ((f1)*(f1))
+#define CHISLOPI	3.141592675f
 
+#ifndef DEBUG
+#define DEBUG false
+#endif
 
 
 /////////////////////////////////////////////////////////////
@@ -1249,10 +1247,9 @@ Forme* LectureFichierForme(char* NomFic)
 	return f;
 }
 
+
 /***********************/
-
 /* LectureFichierForme2 */
-
 /***********************/
 
 Forme* LectureFichierForme2(char* NomFic)
@@ -1574,9 +1571,7 @@ Forme* LectureFichierForme2(char* NomFic)
 
 
 /************************/
-
 /* EcritureFichierForme */
-
 /************************/
 
 void EcritureFichierForme(char *NomFichier, Forme *f)
@@ -1679,55 +1674,30 @@ void EcritureFichierForme(char *NomFichier, Forme *f)
 }
 
 /************************/
-
 /* EcritureFichierForme2 */
-
 /************************/
 
 void EcritureFichierForme2(char *NomFichier, Forme *f)
-
 {
 	printf ("EcritureFichierForme2\n");
-
 	int i;
-
 	FILE *fid;
-
 	char* texte[11]={"BORD_ATTAQUE_FORME_COURBE","BORD_DE_FUITE_FORME_COURBE","SUSPENTAGE_LIGNE_A_COURBE",
-
 		"SUSPENTAGE_LIGNE_B_COURBE","SUSPENTAGE_LIGNE_C_COURBE","SUSPENTAGE_LIGNE_D_COURBE", "SUSPENTAGE_LIGNE_E_COURBE",
-
 		"DIEDRE_COURBE","MORPHING_COURBE","VRILLAGE_COURBE","EPAISSEUR_RELATIVE_COURBE"};
-
 	char* texte2[11]={"BORD_ATTAQUE_FORME_CTRL","BORD_DE_FUITE_FORME_CTRL","SUSPENTAGE_LIGNE_A_CTRL",
-
 		"SUSPENTAGE_LIGNE_B_CTRL","SUSPENTAGE_LIGNE_C_CTRL","SUSPENTAGE_LIGNE_D_CTRL", "SUSPENTAGE_LIGNE_E_CTRL",
-
 		"DIEDRE_CTRL","MORPHING_CTRL","VRILLAGE_CTRL","EPAISSEUR_RELATIVE_CTRL"};
-
-
 	Matrice* m[10];
-
 	Matrice* m2[10];
 
-
-
 	/**** message ****/
-
 	printf("\nEcriture fichier de Forme: '%s'",NomFichier);
-
-
-
 	/**** ouverture fichier en ecriture ****/
-
 	if( (fid = fopen( NomFichier, "wt" )) == NULL )
-
 	{
-
 		printf( "\nErreur ouverture fichier '%s'", NomFichier);
-
 		exit(0);
-
 	}
 
 	
