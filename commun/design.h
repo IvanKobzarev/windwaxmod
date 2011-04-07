@@ -16,7 +16,7 @@ public:
 	KiteDesignElement();
 	virtual ~KiteDesignElement();
 
-	virtual void ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, double ymin, int symetric, double dy, double ymult, double yoffset) { }
+	virtual void ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin) { }
 };
 
 class Line : public KiteDesignElement {
@@ -28,7 +28,7 @@ public:
 	int* pointsNervs;
 	double* pointsPercents;
 	void print();
-	void ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, double ymin, int symetric, double dy, double ymult, double yoffset);
+	void ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin);
 };
 
 class KiteDesign

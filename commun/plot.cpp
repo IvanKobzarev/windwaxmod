@@ -1451,7 +1451,6 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign
 
 	Courbe* courbe1 = new Courbe("CourbeDown");
 	courbe1->points = OFF;
-	courbe1->symX = OFF;
 	if (symetric) courbe1->symX = ON;
 	courbe1->pts = new Matrice(n, 2);
 	
@@ -1491,7 +1490,7 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign
 
 	for (int i = 0; i < kd->n_elements; i++) {
 		KiteDesignElement* kde = kd->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe(axe, fp, ymin, symetric, dy, ymult, ymin);
+		kde -> ajoutCourbesToAxe(axe, fp, symetric, dy, ymult, ymin);
 	}
 
 	AjoutCourbe(axe, courbe0);
