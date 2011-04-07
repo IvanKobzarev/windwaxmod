@@ -53,7 +53,7 @@ void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, doubl
 		
 		int nerv = pointsNervs[i];
 
-		printf ("\ni=%d nerv=%d", i, nerv);
+		//printf ("\ni=%d nerv=%d", i, nerv);
 		double percent = pointsPercents[i];
 		
 		double x0 = fp->X->Element(i, 0);
@@ -61,16 +61,20 @@ void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, doubl
 		
 		double x1 = fp->X->Element(i, 1);
 		double y1 = fp->Y->Element(i, 1);
-		printf ("\n(%f,%f) (%f,%f)", x0, y0, x1, y1);
+		//printf ("\n(%f,%f) (%f,%f)", x0, y0, x1, y1);
 		double xp = x0 + percent * 0.01 * (x1 - x0);
 		double yp = y0 + percent * 0.01 * (y1 - y0);
-		printf ("\n(%f,%f)", xp, yp);
+		//printf ("\n(%f,%f)", xp, yp);
 		
 		courbe->pts->SetElement(i, 0, xp);
 		courbe->pts->SetElement(i, 1, dy + ymult*yp - ymin);
 	}
 
 	AjoutCourbe(axe, courbe);
+}
+
+void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, KiteDesign* kd, int side, int symetric) { 
+	printf ("\nLine::ajoutCourbesToAxe3d %d", side);
 }
 
 Line::~Line(){

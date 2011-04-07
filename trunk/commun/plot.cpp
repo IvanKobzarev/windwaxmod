@@ -18,6 +18,8 @@
 #define DEBUG false
 #endif
 
+#define EXT_SIDE 1
+#define INT_SIDE 2
 /********************************/
 /* constantes pour tracer texte */
 /********************************/
@@ -1276,9 +1278,23 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 	delete(X); delete(Y); delete(T); delete(R);
 }
 
-/****************/
-/* AjoutForme3D */
-/****************/
+/**************************/
+/* AjoutForme3DKiteDesign */
+/**************************/
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteDesign* kdInt, int mesh, int symetric) 
+{
+	for (int i = 0; i < kdExt->n_elements; i++) {
+		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, kdExt, EXT_SIDE, symetric);
+	}
+
+	for (int i = 0; i < kdInt->n_elements; i++) {
+		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, kdInt, INT_SIDE, symetric);
+	}
+
+
+}
 
 void AjoutForme3D( TAxe *Axe3d, 
 			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
@@ -1333,8 +1349,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			if(symetrie==1) CourbCour->symX = ON;
 		}
 
-		/*ajout d'une ligne reliant bord d'attaque*/
-
+		/* front line 'NOSE' */
 		CourbCour=new Courbe("BA");
 		CourbCour->points = OFF;
 		CourbCour->pts = Zeros(NbNerv,3);
@@ -1346,9 +1361,9 @@ void AjoutForme3D( TAxe *Axe3d,
 		}
 
 		AjoutCourbe(Axe3d, CourbCour);
-		if(symetrie==1) CourbCour->symX = ON;
-		/*ajout d'une ligne reliant bord de fuite*/
 
+		if(symetrie==1) CourbCour->symX = ON;
+		/* back line 'TALE'*/
 		CourbCour=new Courbe("BF");
 		CourbCour->points = OFF;
 		CourbCour->pts = Zeros(NbNerv,3);
@@ -1442,7 +1457,7 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign
 	if (dir == DIR_NOSE_DOWN) ymult=-1;
 	int n = fp->X->GetLignes();
 	int m = fp->X->GetColonnes();
-	printf ("\n n=%d, m=%d", n, m);
+	//printf ("\n n=%d, m=%d", n, m);
 	
 	Courbe* courbe0 = new Courbe("CourbeUp");
 	courbe0->points = OFF;
@@ -1464,7 +1479,7 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign
 	}
 
 	for (int i = 0; i < n; i++) {
-		printf ("\n i=%d", i);
+		//printf ("\n i=%d", i);
 		Courbe* courbe = new Courbe("Courbe");
 		courbe->points = OFF;
 		courbe->symX = OFF;
@@ -1477,12 +1492,12 @@ void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign
 			courbe->pts->SetElement(j, 0, x);
 			double y = fp->Y->Element(i, j);
 			courbe->pts->SetElement(j, 1, dy + (ymult*y - ymin));
-			printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
+			//printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
 		}
 		courbe1->pts->SetElement(i, 0, fp->X->Element(i, m-1) );
 		courbe1->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, m-1)-ymin);
 
-		printf ("\n AjoutCourbe()");
+		//printf ("\n AjoutCourbe()");
 		AjoutCourbe(axe, courbe);
 	}
 	

@@ -469,6 +469,11 @@ Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
 	forme3D->YInt=YInt;
 	forme3D->ZInt=ZInt;
 
+	forme3D->ExtProfCent=ExtProfCent;
+	forme3D->IntProfCent=IntProfCent;
+
+	forme3D->ExtProfBout=ExtProfBout;
+	forme3D->IntProfBout=IntProfBout;
 	return forme3D;
 }
 
