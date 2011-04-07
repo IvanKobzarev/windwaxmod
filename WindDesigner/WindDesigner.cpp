@@ -508,7 +508,6 @@ void Apply(int /*control*/) {
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 
-	printf ("\n WindDesigner.test()");
 	Forme3D* f3d = getForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
 
@@ -518,7 +517,7 @@ void Apply(int /*control*/) {
 
 	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
 
-
+	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, kiteDesignInt, VisuFace, VisuSymetrique);
 
 
 	// 2D

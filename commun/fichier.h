@@ -69,6 +69,8 @@ public:
 	
 	Matrice *XExt, *YExt, *ZExt;
 	Matrice *XInt, *YInt, *ZInt;
+
+	Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
 };
 
 class FormeProjection

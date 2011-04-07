@@ -25,6 +25,7 @@
 
 class Matrice;
 class Forme;
+class Forme3D;
 class FormeProjection;
 class Courbe;
 class KiteDesign;
@@ -127,3 +128,5 @@ void AjoutPtsSuspentage(
 void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
 
 void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
+
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteDesign* kdInt, int mesh, int symetric);
