@@ -29,7 +29,8 @@ GLUI *glui;
 // static text on dialog form, that shows name of loaded project
 GLUI_StaticText *FicProject;
 // static text on dialog form, that shows name of loaded design 
-GLUI_StaticText *FicDesign;
+GLUI_StaticText *FicDesignExt;
+GLUI_StaticText *FicDesignInt;
 TAxe *AxeProjections;
 TAxe *AxeSel;
 TAxe *Axe3d;
@@ -47,7 +48,9 @@ Matrice** ReperPoints;
 char NomFichierForme[255];
 
 char NomFichierProject[255];
-char NomFichierDesign[255];
+
+char NomFichierDesignExt[255];
+char NomFichierDesignInt[255];
 
 char NomFichierRepPoints[255];
 char NomFichierVentHoles[255];
@@ -59,7 +62,8 @@ int ExtPrjNoseUp = 0;
 int IntPrjNoseUp = 1;
 
 WindPatternsProject* gfd = new WindPatternsProject();
-KiteDesign* kiteDesign = 0;
+KiteDesign* kiteDesignExt = 0;
+KiteDesign* kiteDesignInt = 0;
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
 float dyw = 0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
@@ -426,7 +430,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 }
 
 //TODO: design load calling
-void ChargerFichierDesign(int /*control*/) {
+void ChargerFichierDesignExt(int /*control*/) {
     CString NomFichier;
     char* PtrNomFichier;
     KiteDesign* oldKd;
@@ -435,16 +439,37 @@ void ChargerFichierDesign(int /*control*/) {
     if (DlgOpen.DoModal() == IDOK) {
         NomFichier = DlgOpen.GetPathName();
         PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierDesign, PtrNomFichier);
-        oldKd = kiteDesign;
-        kiteDesign = readKiteDesignFromFile(NomFichierProject);
+        strcpy(NomFichierDesignExt, PtrNomFichier);
+        oldKd = kiteDesignExt;
+        kiteDesignExt = readKiteDesignFromFile(NomFichierDesignExt);
 		delete(oldKd);
-        FicDesign->set_text(NomFichierDesign);
+        FicDesignExt->set_text(NomFichierDesignExt);
     }
     Apply(0);
     display();
     glui->sync_live();
 }
+
+void ChargerFichierDesignInt(int /*control*/) {
+    CString NomFichier;
+    char* PtrNomFichier;
+    KiteDesign* oldKd;
+
+    CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
+    if (DlgOpen.DoModal() == IDOK) {
+        NomFichier = DlgOpen.GetPathName();
+        PtrNomFichier = NomFichier.GetBuffer(1);
+        strcpy(NomFichierDesignInt, PtrNomFichier);
+        oldKd = kiteDesignInt;
+        kiteDesignInt = readKiteDesignFromFile(NomFichierDesignInt);
+		delete(oldKd);
+        FicDesignInt->set_text(NomFichierDesignInt);
+    }
+    Apply(0);
+    display();
+    glui->sync_live();
+}
+
 
 void ChargerFichierProject(int /*control*/) {
     CString NomFichier;
@@ -514,12 +539,9 @@ void Apply(int /*control*/) {
 	printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
 	FormeProjection* fp = getFormeProjection(f3d);
 	printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
-	if (kiteDesign != 0)  {
-		//apply kite design
-		printf("\n here will be applied kite design");
-	}
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesign, VisuSymetrique, 0.0, IntPrjNoseUp);
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesign, VisuSymetrique, 2.0, ExtPrjNoseUp);
+
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp);
+	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp);
 	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
 	printf ("\n display()");
 
@@ -574,9 +596,6 @@ int main(int argc, char** argv)
 {
 	printf ("\nWind designer");
 
-	//KiteDesign* kd = readKiteDesignFromFile("f17.kdn");
-	//return 0;
-
 	// glut initialisation
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -619,14 +638,24 @@ int main(int argc, char** argv)
     FicProject->set_text(NomFichierProject);
 
 	GLUI_Panel *panelDesign = glui->add_panel("");
-    GLUI_Button *btnLoadDesign = glui->add_button_to_panel(panelDesign, "Load design", 0, &ChargerFichierDesign);
-    btnLoadDesign->set_w(10);
+    GLUI_Button *btnLoadDesignExt = glui->add_button_to_panel(panelDesign, "Load design Ext", 0, &ChargerFichierDesignExt);
+    btnLoadDesignExt->set_w(10);
+
+	GLUI_Button *btnLoadDesignInt = glui->add_button_to_panel(panelDesign, "Load design Int", 0, &ChargerFichierDesignInt);
+    btnLoadDesignInt->set_w(10);
+
     glui->add_column_to_panel(panelDesign, false);
 	// load default design
-	strcpy(NomFichierDesign, "f17.wdn");
-    FicDesign = glui->add_statictext_to_panel(panelDesign, "???");
-    FicDesign->set_text(NomFichierDesign);
-	kiteDesign = readKiteDesignFromFile(NomFichierDesign);
+	strcpy(NomFichierDesignExt, "f17ext.wdn");
+    FicDesignExt = glui->add_statictext_to_panel(panelDesign, "???");
+    FicDesignExt->set_text(NomFichierDesignExt);
+	kiteDesignExt = readKiteDesignFromFile(NomFichierDesignExt);
+
+	strcpy(NomFichierDesignInt, "f17int.wdn");
+    FicDesignInt = glui->add_statictext_to_panel(panelDesign, "???");
+    FicDesignInt->set_text(NomFichierDesignInt);
+	kiteDesignInt = readKiteDesignFromFile(NomFichierDesignInt);
+
 	//FicDesign->set_h(10);
 
 	GLUI_Panel *panel1 = glui->add_panel("");
@@ -636,40 +665,11 @@ int main(int argc, char** argv)
 	GLUI_Button *btn3d = glui->add_button_to_panel(panel1, "3d", 0, &Apply3d);
 	btn3d->set_w(5);
 
-	//SpinNoNerv[0] = glui->add_spinner_to_panel(panel1, "No Nerv 1", GLUI_SPINNER_INT, &(NoNerv[0]));
-    ////SpinNoNerv[0] -> set_int_limits(-1, F->m_nbProfils - 1);
-
-	//SpinNoNerv[1] = glui->add_spinner_to_panel(panel1, "No Nerv 2", GLUI_SPINNER_INT, &(NoNerv[1]));
-    ////SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
 	GLUI_Panel *panel2dOptions = glui->add_panel("2D");
 	glui->add_checkbox_to_panel(panel2dOptions, "XY grid", &XYGrid, 0,  &ModifXYGrid);
 
 	glui->add_checkbox_to_panel(panel2dOptions, "Ext Projection nose up", &ExtPrjNoseUp, 0,  &ModifExtPrjNoseUp);
 	glui->add_checkbox_to_panel(panel2dOptions, "Int Projection nose up", &IntPrjNoseUp, 0,  &ModifIntPrjNoseUp);
-
-    //GLUI_Button *btnApply = glui->add_button("Apply", 0, &Apply);
-    //btnApply->set_w(10);
-
-	/*GLUI_Panel *panel2 = glui->add_panel("");
-    GLUI_Spinner *SpinKchord = glui->add_spinner_to_panel(
-            panel2, "K chord", GLUI_SPINNER_FLOAT, &(kChord));
-    SpinKchord -> set_float_limits(0.8, 1.5);
-
-    GLUI_Spinner *SpinKmf = glui->add_spinner_to_panel(
-            panel2, "K move forward", GLUI_SPINNER_FLOAT, &(kMf));
-    SpinKmf -> set_float_limits(0.0, 1.0);
-
-    GLUI_Spinner *SpinWn = glui->add_spinner_to_panel(
-            panel2, "W new", GLUI_SPINNER_FLOAT, &(wN));
-    SpinWn -> set_float_limits(0.0, 100.0);
-
-    GLUI_Spinner *SpinDyw = glui->add_spinner_to_panel(
-            panel2, "D yw", GLUI_SPINNER_FLOAT, &(dyw));
-    SpinDyw -> set_float_limits(0.0, 100.0);
-
-    GLUI_Spinner *SpinPower = glui->add_spinner_to_panel(
-            panel2, "power", GLUI_SPINNER_FLOAT, &(power));
-    SpinPower -> set_float_limits(0.05, 3.0);*/
 
     GLUI_Panel *panelViewOptions = glui->add_panel("");
     glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &VisuSymetrique, 0, &ModifVisuSymetrique);

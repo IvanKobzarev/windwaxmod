@@ -41,9 +41,36 @@ Line::Line(std::ifstream& in){
 	}
 }
 
-void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, double ymin, int symetric, double dy, double ymult, double yoffset) 
+void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin) 
 {
 	cout << "Line::ajoutCourbesToAxe()" << endl;
+	Courbe* courbe = new Courbe("CourbeLine");
+	courbe->points = OFF;
+	if (symetric) courbe->symX = ON;
+	courbe->pts = new Matrice(n_points, 2);
+
+	for (int i = 0; i < n_points; i++) {
+		
+		int nerv = pointsNervs[i];
+
+		printf ("\ni=%d nerv=%d", i, nerv);
+		double percent = pointsPercents[i];
+		
+		double x0 = fp->X->Element(i, 0);
+		double y0 = fp->Y->Element(i, 0);
+		
+		double x1 = fp->X->Element(i, 1);
+		double y1 = fp->Y->Element(i, 1);
+		printf ("\n(%f,%f) (%f,%f)", x0, y0, x1, y1);
+		double xp = x0 + percent * 0.01 * (x1 - x0);
+		double yp = y0 + percent * 0.01 * (y1 - y0);
+		printf ("\n(%f,%f)", xp, yp);
+		
+		courbe->pts->SetElement(i, 0, xp);
+		courbe->pts->SetElement(i, 1, dy + ymult*yp - ymin);
+	}
+
+	AjoutCourbe(axe, courbe);
 }
 
 Line::~Line(){
