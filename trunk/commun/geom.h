@@ -33,9 +33,9 @@ void CalculForme3DBallonement
 				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
 				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
 
-Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout);
+Forme3D* getForme3D(Forme *forme, int isPercent, double percent);
+				   //Matrice *ExtProfCent, Matrice *IntProfCent,
+				   //Matrice *ExtProfBout, Matrice *IntProfBout);
 
 FormeProjection* getFormeProjection(Forme3D* f3d);
 
@@ -73,6 +73,8 @@ Matrice* Cercle(double xo, double yo, double rayon, int nbp);
 void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double *width, double *height);
 
 void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr);
+void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos, double *xr, double *yr, double *zr);
+void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr);
 
 void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1);
 

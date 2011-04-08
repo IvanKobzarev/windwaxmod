@@ -18,8 +18,6 @@
 #define DEBUG false
 #endif
 
-#define EXT_SIDE 1
-#define INT_SIDE 2
 /********************************/
 /* constantes pour tracer texte */
 /********************************/
@@ -841,167 +839,104 @@ void VisuAxe(TAxe *axe)
 
 
 /***************/
-
 /* AjoutCourbe */
-
 /***************/
 
 void AjoutCourbe(TAxe *axe, Courbe *courbe)
-
 {
-
 	Courbe* CourbCour;
-
 	/*test s'il y a deja une courbe sur l'axe*/
-
 	if (axe->Courb==NULL)
-
 	{
-
 		axe->Courb=courbe;
-
 	}
-
 	else
-
 	{
-
 		/*recherche derni�re courbe de la liste*/
-
 		CourbCour=axe->Courb;
-
 		int kk=0;
 		while(CourbCour->CourbSuiv!=NULL) {
-
 			CourbCour=CourbCour->CourbSuiv;
 			kk++;
 //			printf(" -> %d ", kk);
 		}
-
 		/*ajout courbe*/
-
 		CourbCour->CourbSuiv=courbe;
-
 	}
-
 }
 
 void showCourbe(Courbe *courbe)
-
 {
 	printf ("\nshowCourbe()");
 	Courbe* CourbCour;
-
 	/*test s'il y a deja une courbe sur l'axe*/
-
 	if (courbe==NULL)
-
 	{
-
 		printf (" courbe==NULL");
-
 	}
-
 	else
-
 	{
-
 		/*recherche derni�re courbe de la liste*/
-
 		CourbCour=courbe;
-
 		int kk=0;
 		while(CourbCour->CourbSuiv!=NULL) {
-
 			CourbCour=CourbCour->CourbSuiv;
 			kk++;
 			printf ("showCourbe(): - %d ", kk);
 		}
 
 		/*ajout courbe*/
-
 		CourbCour->CourbSuiv=courbe;
-
 	}
-
 }
 
 
 void AjoutCCourbe(Courbe *head, Courbe *courbe)
-
 {
-
 	Courbe* CourbCour;
-
 	/*test s'il y a deja une courbe sur l'axe*/
 	printf ("\nAjoutCC");
 	if (head==NULL)
-
 	{
 		printf ("\nAjoutCC courbeBegin == NULL");
 		head = courbe;
 		if (courbe==NULL)
-
 		{
 			printf (" /courbe == NULL");
-
 		}
 		if (head==NULL)
-
 		{
 			printf (" /courbeBegin == NULL");
-
 		} else {
 			printf (" /courbeBegin != NULL");
-
 		} 
-
-
 	}
-
 	else
-
 	{
 		printf ("\nAjoutCC courbeBegin != NULL");
 		/*recherche derni�re courbe de la liste*/
-
 		CourbCour = head;
-
 		int kk=0;
 		while(CourbCour->CourbSuiv!=NULL) {
-
 			CourbCour=CourbCour->CourbSuiv;
 			kk++;
 			printf(" -cc- -> %d ", kk);
 		}
-
 		/*ajout courbe*/
-
 		CourbCour->CourbSuiv=courbe;
-
 	}
-
 }
 
-
 /***************/
-
 /* AjoutMesh   */
-
 /***************/
 
 void AjoutMesh(TAxe *axe, TMesh *mesh)
-
 {
-
 	TMesh* MeshCour;
-
 	/*test s'il y a deja une courbe sur l'axe*/
-
 	if (axe->Mesh==NULL)
-
 	{
-
 		axe->Mesh=mesh;
 
 	}
@@ -1009,270 +944,143 @@ void AjoutMesh(TAxe *axe, TMesh *mesh)
 	else
 
 	{
-
 		/*recherche derni�re courbe de la liste*/
-
 		MeshCour=axe->Mesh;
-
 		while(MeshCour->MeshSuiv!=NULL)
-
 			MeshCour=MeshCour->MeshSuiv;
-
 		/*ajout courbe*/
-
 		MeshCour->MeshSuiv=mesh;
-
 	}
-
 }
 
-
-
 /***************/
-
 /* LibererMesh */
-
 /***************/
-
 void LibererMesh(TMesh *mesh)
-
 {
-
 	if (mesh != NULL)
-
 	{
-
 		delete(mesh->x);
-
 		delete(mesh->y);
-
 		delete(mesh->z);
-
 		free(mesh);
-
 	}
-
 }
-
-
 
 /*********************/
-
 /* LibererCourbesAxe */
-
 /*********************/
 
 void LibererCourbesAxe(TAxe *axe)
-
 {
-
 	Courbe *CourbCour, *CourbSuiv;
-
 	if (axe != NULL)
-
 	{
-
 		CourbCour = axe->Courb;
-
 		while(CourbCour!=NULL)
-
 		{
-
 			CourbSuiv = CourbCour->CourbSuiv;
-
 			delete CourbCour;
-
 			CourbCour=CourbSuiv;
-
 		}
-
 		axe->Courb = NULL;
-
 	}
-
 }
 
-
-
 /*******************/
-
 /* LibererMeshsAxe */
-
 /*******************/
 
 void LibererMeshsAxe(TAxe *axe)
-
 {
-
 	TMesh *MeshCour, *MeshSuiv;
-
 	if(axe != NULL)
-
 	{
-
 		MeshCour = axe->Mesh;
-
 		while(MeshCour!=NULL)
-
 		{
-
 			MeshSuiv = MeshCour->MeshSuiv;
-
 			LibererMesh(MeshCour);
-
 			MeshCour=MeshSuiv;
-
 		}
-
 		axe->Mesh = NULL;
-
 	}
-
 }
 
-
-
 /**************/
-
 /* LibererAxe */
-
 /**************/
 
 void LibererAxe(TAxe *axe)
-
 {
-
 	LibererCourbesAxe(axe);
-
 	LibererMeshsAxe(axe);
-
 	free(axe);
-
 }
 
-
-
 /**************/
-
 /* AjoutTexte */
-
 /**************/
 
 void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, double posx, double posy)
-
 {
-
 	char *TEXTE;
-
 	unsigned int i,j, ichar, izero=0;
-
 	Matrice *X,*Y,*T,*R;
-
 	double xdec, ydec;
-
 	Courbe *CourbChar;
-
 	double TabXYpt[40][2];
-
-
-
 	//mise en majuscule du texte
-
 	TEXTE = _strupr( _strdup( texte ) );
-
 	//mise a la taille
-
 	for(i=0; i<40; i++){for(j=0; j<2; j++){TabXYpt[i][j] = TabXYpoint[i][j] * taille/7.0f;}}
-
 	//rotation
-
 	X=new Matrice(40,2); Y=new Matrice(40,2);
-
 	for(i=0; i<40; i++) 
 	{
 		X->SetElement(i,0,TabXYpt[i][0]); 
 		Y->SetElement(i,0,TabXYpt[i][1]);
 	}
-
 	Cart2Pol(X,Y,&T,&R); delete(X); delete(Y); 
-
 	for(i=0; i<40; i++) 
 	{
 		T->AddElement(i,0, orientation*3.1415926f/180.0f);
 	}
-
 	Pol2Cart(T,R,&X,&Y);
-
 	//Calcul decalage entre chiffre
-
 	xdec = (double)cos(orientation*3.1415926f/180.0f)*taille*6.0f/7.0f;
-
 	ydec = (double)sin(orientation*3.1415926f/180.0f)*taille*6.0f/7.0f;
-
-	
-
 	//boucle sur les chiffres
-
 	for(i=0; i<strlen(TEXTE); i++)
-
 	{
-
 		//recherche indice du caractere courant
-
 		ichar=100;
-
 		for(j=0; j<38; j++)
-
 		{
-
 			if(TEXTE[i]==TabXYch[j][0])
-
 			{
-
 				ichar=j;
-
 				break;
-
 			}
-
 		}
-
 		//si trouve ...
-
 		if(ichar!=100)
-
 		{
-
 			//recherche colonne du premier zero
-
 			for(j=1; j<18; j++)
-
 			{
-
 				izero=j;
-
 				if(TabXYch[ichar][j]==0) break;
-
 			}
-
 			//trac� du caract�re
-
 			CourbChar=new Courbe("Text"); CourbChar->points = OFF;
-
 			CourbChar->pts=Zeros(izero-1, 2);
-
 			for(j=0; j<izero-1; j++)
-
 			{
-
 				CourbChar->pts->SetElement(j,0, X->Element(TabXYch[ichar][j+1]-1,0) + posx + xdec*i);
-
 				CourbChar->pts->SetElement(j,1, Y->Element(TabXYch[ichar][j+1]-1,0) + posy + ydec*i);
-
 			}
-
 			AjoutCourbe(axe, CourbChar);
-
 		}
 	}
 	delete(X); delete(Y); delete(T); delete(R);
@@ -1285,15 +1093,13 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 {
 	for (int i = 0; i < kdExt->n_elements; i++) {
 		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, kdExt, EXT_SIDE, symetric);
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, EXT_SIDE, symetric);
 	}
 
 	for (int i = 0; i < kdInt->n_elements; i++) {
 		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, kdInt, INT_SIDE, symetric);
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, INT_SIDE, symetric);
 	}
-
-
 }
 
 void AjoutForme3D( TAxe *Axe3d, 
@@ -1452,7 +1258,7 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 }
 
 void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
-	printf ("\n ajoutFormeProjectionCourbesToAxe()");
+	//printf ("\n ajoutFormeProjectionCourbesToAxe()");
 	double ymult = 1;
 	if (dir == DIR_NOSE_DOWN) ymult=-1;
 	int n = fp->X->GetLignes();
@@ -1579,8 +1385,6 @@ void AjoutPtsSuspentage(
 	}
 
 	AjoutCourbe(Axe3d, CourbCour);
-
 	*PosSuspentes = CourbCour->pts;
-
 	delete(interpSuspente);
 }

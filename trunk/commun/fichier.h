@@ -42,9 +42,15 @@ public:
 
 	// used only for Serialize
     Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
+	double EpaiRelProfCent;
+	double EpaiRelProfBout;
+
 	bool courbInput;
 	std::string m_strNomProfilCent;
 	std::string m_strNomProfilBout;
+
+	Matrice* getExtProf(int nerv, bool realSize);
+	Matrice* getIntProf(int nerv, bool realSize);
 
 	//tableau de forme
 	Profil** m_pProfils;
@@ -69,8 +75,8 @@ public:
 	
 	Matrice *XExt, *YExt, *ZExt;
 	Matrice *XInt, *YInt, *ZInt;
-
-	Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
+	Forme* forme;
+	//Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
 };
 
 class FormeProjection

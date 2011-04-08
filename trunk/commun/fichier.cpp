@@ -44,6 +44,9 @@ Forme::Forme()
 	CoeffProgGeom = 0.93f;
         CoeffExp = 0.0f;
 	EpaiRelCent = 17.0f;
+	
+	EpaiRelProfCent=0;
+	EpaiRelProfBout=0;
 
 	NbCaiss = 21;
 
@@ -60,6 +63,49 @@ Forme::Forme()
 	mCtrlMorphing = NULL;
 	mCtrlVrillage = NULL;
 }
+
+
+Matrice* Forme::getExtProf(int nerv, bool realSize) {
+	Matrice* res = new Matrice(ExtProfCent->GetLignes(), 2);
+	double m = m_pProfils[nerv]->m_fMorph;
+	double LongNerv = m_pProfils[nerv]->m_fLength;
+	if (realSize == false) LongNerv = 100.0f;
+	double EpaiRel = m_pProfils[nerv]->m_fWidth;
+	double coeffx = LongNerv/100.0f;
+	double coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
+	double coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
+	double xp=0, yp = 0;
+	for (int j=0; j<ExtProfCent->GetLignes(); j++)
+	{
+	    xp = ExtProfCent->Element(j,0)*coeffx;
+        yp = ExtProfCent->Element(j,1)*coeffyCent*m + ExtProfBout->Element(j,1)*coeffyBout*(1.0f-m);
+		res->SetElement(j, 0, xp);
+		res->SetElement(j, 1, yp);
+    }
+	return res;
+}
+
+Matrice* Forme::getIntProf(int nerv, bool realSize) {
+	Matrice* res = new Matrice(IntProfCent->GetLignes(), 2);
+	double m = m_pProfils[nerv]->m_fMorph;
+	double EpaiRel = m_pProfils[nerv]->m_fWidth;
+	double LongNerv = m_pProfils[nerv]->m_fLength;
+	if (realSize == false) LongNerv = 100.0f;
+	double coeffx = LongNerv/100.0f;
+	double coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
+	double coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
+	double xp=0, yp=0;
+	for (int j=0; j<IntProfCent->GetLignes(); j++)
+	{
+		xp = IntProfCent->Element(j,0)*coeffx;
+		yp = IntProfCent->Element(j,1)*coeffyCent*m	+ IntProfBout->Element(j,1)*coeffyBout*(1.0f-m);
+		res->SetElement(j, 0, xp);
+		res->SetElement(j, 1, yp);
+    }
+	return res;
+
+}
+
 
 Forme3D::Forme3D(){
 }
@@ -456,37 +502,20 @@ KiteDesign* readKiteDesignFromFile(const char* FilePath) {
 	int n=0;
 	string word;
 	in >> n;
-	cout <<"n:"<< n << endl;
+	//cout <<"n:"<< n << endl;
 	kd->n_elements=n;
 	kd->kiteDesignElements = new KiteDesignElement*[n];
 
 	for (int i = 0; i < n; i++) {
 		in >> word;
-		cout << "word:" << word << endl;
+		//cout << "word:" << word << endl;
 		if (word.compare("LINE") == 0) {
-			cout << "It's LINE" << endl;
+			//cout << "It's LINE" << endl;
 			Line* line = new Line(in);
-			line->print();
+			//line->print();
 			kd->kiteDesignElements[i]=line;
 		}
 	}
-/*		fscanf(fid,"%f",&x);
-		if(x==1.0f)
-		{
-			///////////////
-			//FORMAT SELIG 
-			///////////////
-		
-			//1ere lecture pour determiner le nombre de data
-			nbData = 0;
-			while( fscanf(fid,"%f %f", &x, &y) != EOF ) nbData++;
-			//lecture des datas
-			rewind(fid);
-			fgets( line, 255, fid ); //premiere ligne
-			data = new Matrice(nbData, 2);*/
-
-	
-
 	return kd;
 }
 
@@ -1231,18 +1260,13 @@ Forme* LectureFichierForme(char* NomFic)
                                 break;
                             }
                                     default:;
-
                             }//switch mot clef
-
                     }//test trouve mot clef
-
 		}
-
 		if(fclose(fid))
 		{
 			printf("\nProbleme  la fermeture du fichier");
 		}
-
 	}
 	return f;
 }
@@ -1596,18 +1620,12 @@ void EcritureFichierForme(char *NomFichier, Forme *f)
 	fprintf(fid,"\nVERSION %1.2f", NO_VERSION);
 
 	/**** Ecriture des parametres ****/
-
 	fprintf(fid,"\n\nNB_ALVEOLES %d", f->NbCaiss);
 	fprintf(fid,"\nCOEFF_PROG_GEOM %1.5f", f->CoeffProgGeom);
 	fprintf(fid,"\nCOEFF_EXP %1.5f", f->CoeffExp);
 	fprintf(fid,"\nEPAI_REL_CENTRE %2.3f", f->EpaiRelCent);
 
-	
-
 	/**** Ecriture des points de controle ****/
-
-	
-
 	/*init pointeur des matrices de coordonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½es des points de controle*/
 	m [0]=f->mCtrlNez; m [1]=f->mCtrlFui;
 	m [2]=f->mCtrlA; m [3]=f->mCtrlB; m [4]=f->mCtrlC; m [5]=f->mCtrlD;
@@ -1656,21 +1674,12 @@ void EcritureFichierForme(char *NomFichier, Forme *f)
 			);
 
 	}
-
-	
-
 	/**** fermeture fichier ****/
-
 	if(fclose(fid))
-
 	{
-
 		printf("\nProbleme ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ la fermeture du fichier");
-
 		exit(0);
-
 	}
-
 }
 
 /************************/
@@ -1699,112 +1708,55 @@ void EcritureFichierForme2(char *NomFichier, Forme *f)
 		printf( "\nErreur ouverture fichier '%s'", NomFichier);
 		exit(0);
 	}
-
-	
-
 	/**** Ecriture No de version ****/
-
-	
-
 	fprintf(fid,"\nVERSION %1.2f", NO_VERSION);
-
-	
-
 	/**** Ecriture des parametres ****/
-
-	
-
 	fprintf(fid,"\n\nNB_ALVEOLES %d", f->NbCaiss);
-
 	fprintf(fid,"\nCOEFF_PROG_GEOM %1.5f", f->CoeffProgGeom);
-
 	fprintf(fid,"\nEPAI_REL_CENTRE %2.3f", f->EpaiRelCent);
-
-	
-
 	/**** Ecriture des points de controle ****/
-
-	
-
 	/*init pointeur des matrices de coordonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½es des points de controle*/
-
 	m [0]=f->mCourbNez; m [1]=f->mCourbFui;
-
 	m [2]=f->mCourbA; m [3]=f->mCourbB; m [4]=f->mCourbC; m [5]=f->mCourbD;	m [6]=f->mCourbE;
-
 	m [7]=f->mCourbDiedre; m [8]=f->mCourbMorphing;
-
 	m [9]=f->mCourbVrillage; m [10]=f->mCourbEpaiRel;
-
 //	m [6]=f->mCtrlDiedre; m [7]=f->mCtrlMorphing;
-
 //	m [8]=f->mCtrlVrillage; m [9]=f->mCtrlEpaiRel;
-
 	m2 [0]=f->mCtrlNez; m2 [1]=f->mCtrlFui;
-
 	m2 [2]=f->mCtrlA; m2 [3]=f->mCtrlB; m2 [4]=f->mCtrlC; m2 [5]=f->mCtrlD;	m2 [6]=f->mCtrlE;
-
 	m2 [7]=f->mCtrlDiedre; m2 [8]=f->mCtrlMorphing;
-
 	m2 [9]=f->mCtrlVrillage; m2 [10]=f->mCtrlEpaiRel;
-	
-
 	/*boucle ecriture des points de controle*/
 	int NbNerv=0;
-
 	if(f->NbCaiss%2==0) 
-
 		NbNerv=f->NbCaiss/2+1;
-
 	else
-
 		NbNerv=(f->NbCaiss+1)/2;
-
 	for (i=0; i<11; i++)
 	{
-
 		fprintf(fid,"\n%s", texte[i]);
 		for (int j = 0; j < NbNerv; j++) {
 			fprintf(fid, " %1.3f %1.3f", m [i]->Element(j,0), m [i]->Element(j,1));
 		}
 	}
-
 	for (i=0; i<11; i++)
 	{
-
 		fprintf(fid,"\n%s", texte2[i]);
 		for (int j = 0; j < 4; j++) {
 			fprintf(fid, " %1.3f %1.3f", m2 [i]->Element(j,0), m2 [i]->Element(j,1));
 		}
 	}
 	
-
 	/**** Ecriture noms des profils ****/
-
-
-
 	fprintf(fid,"\n\nPROFIL_CENTRE %s", f->m_strNomProfilCent.c_str());
-
 	fprintf(fid,"\nPROFIL_BOUT %s", f->m_strNomProfilBout.c_str());
-
-
-
 	/**** Ecriture du tableau de forme ****/
-
-	
-
 	fprintf(fid,"\n\nTABLEAU_FORME %d",f->m_nbProfils);
-
 	/*boucle ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ partir de la 1ere nervure du centre vers l'extrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½mitÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½*/
-
 	for (i=0; i<f->m_nbProfils; i++)
-
 	{
-
 		fprintf(fid,
-
 			"\n%d %1.3f %2.2f %2.3f %2.3f %2.3f %1.2f %1.2f %1.2f %3.1f %3.1f %3.1f %3.1f %3.1f",
-
 			i+1,							//no Nervure
 			f->m_pProfils[i]->m_fLength,
 			f->m_pProfils[i]->m_fWidth,
@@ -1820,30 +1772,17 @@ void EcritureFichierForme2(char *NomFichier, Forme *f)
 			f->m_pProfils[i]->m_fPosD,
 			f->m_pProfils[i]->m_fPosE
 			);
-
 	}
-
-	
-
 	/**** fermeture fichier ****/
-
 	if(fclose(fid))
-
 	{
-
 		printf("\nProbleme ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ la fermeture du fichier");
-
 		exit(0);
-
 	}
-
 }
 
-
 /********************/
-
 /* CalculInfoForme */
-
 /********************/
 
 void CalculInfoForme( Forme* F, TInfoForme* info )
