@@ -427,21 +427,20 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 
 FormeProjection* getFormeProjection(Forme3D* f3d) 
 {
-	printf ("\n getFormeProjection()");
+	//printf ("\n getFormeProjection()");
 	FormeProjection* formePrj = new FormeProjection();
 	// we should X, 0, Z
 	Matrice *X = Zeros(f3d->XExt->GetLignes(), 2); 
 	Matrice *Y = Zeros(f3d->YExt->GetLignes(), 2);
 		
-	printf ("\n f3d->XExt->GetLignes()=%d", f3d->XExt->GetLignes());
 	for (int i = 0; i < f3d->XExt->GetLignes(); i++)
 	{
 		X->SetElement(i, 0, f3d->XExt->Element(i, 0));
 		Y->SetElement(i, 0, f3d->ZExt->Element(i, 0));
-		printf ("\n %d, 0: %f, %f",i, f3d->XExt->Element(i, 0), f3d->ZExt->Element(i, 0));
+		//printf ("\n %d, 0: %f, %f",i, f3d->XExt->Element(i, 0), f3d->ZExt->Element(i, 0));
 		X->SetElement(i, 1, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1));
 		Y->SetElement(i, 1, f3d->ZExt->Element(i, f3d->ZExt->GetColonnes()-1));
-		printf ("\n %d, 1: %f, %f", i, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1), f3d->ZExt->Element(i, f3d->XExt->GetColonnes()-1));
+		//printf ("\n %d, 1: %f, %f", i, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1), f3d->ZExt->Element(i, f3d->XExt->GetColonnes()-1));
 	}
 
 	formePrj->X = X;
@@ -449,16 +448,16 @@ FormeProjection* getFormeProjection(Forme3D* f3d)
 	return formePrj;
 }
 
-Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout)
+Forme3D* getForme3D(Forme *forme, int isPercent, double percent)
+				   //Matrice *ExtProfCent, Matrice *IntProfCent,
+				   //Matrice *ExtProfBout, Matrice *IntProfBout)
 {
 	Forme3D* forme3D = new Forme3D();
     Matrice *XExt, *YExt, *ZExt;
     Matrice *XInt, *YInt, *ZInt;
 
     CalculForme3D(forme, isPercent, percent,
-            ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
+            forme->ExtProfCent, forme->IntProfCent, forme->ExtProfBout, forme->IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 
 	forme3D->XExt=XExt;
@@ -469,11 +468,13 @@ Forme3D* getForme3D(Forme *forme, int isPercent, double percent,
 	forme3D->YInt=YInt;
 	forme3D->ZInt=ZInt;
 
-	forme3D->ExtProfCent=ExtProfCent;
-	forme3D->IntProfCent=IntProfCent;
+	//forme3D->ExtProfCent=ExtProfCent;
+	//forme3D->IntProfCent=IntProfCent;
 
-	forme3D->ExtProfBout=ExtProfBout;
-	forme3D->IntProfBout=IntProfBout;
+	//forme3D->ExtProfBout=ExtProfBout;
+	//forme3D->IntProfBout=IntProfBout;
+
+	forme3D->forme=forme;
 	return forme3D;
 }
 
@@ -651,45 +652,32 @@ void CalculForme3DBallonement
 /* InterpoleProfilBout */
 /***********************/
 void InterpoleProfilBout(Matrice** XYBout, Matrice* XYCent)
-
 {
 	/*interpolation des Y du profil du bout avec les X du profil central*/
-
 	Matrice *Xi=Zeros(XYCent->GetLignes(),1); 
 	Matrice *Yi=Zeros(XYCent->GetLignes(),1);
-
 	Matrice *X=Zeros((*XYBout)->GetLignes(),1); 
 	Matrice *Y=Zeros((*XYBout)->GetLignes(),1);
-
 	for(int i=0; i<(*XYBout)->GetLignes(); i++)
 	{
 		X->SetElement(i,0,(*XYBout)->Element(i,0)); 
 		Y->SetElement(i,0,(*XYBout)->Element(i,1));
 	}
-
 	for(int i=0; i<XYCent->GetLignes(); i++)
 	{
 		Xi->SetElement(i,0,XYCent->Element(i,0));
 	}
-
 	InterpLinMat(X, Y, Xi, Yi); 
-
-
 	/*affectation au profil du bout*/
-
 	if ( *XYBout != NULL )
 		delete((*XYBout));
-
 	(*XYBout)=Zeros(XYCent->GetLignes(),2);
-
 	for(int i=0; i<XYCent->GetLignes(); i++)
 	{
 		(*XYBout)->SetElement(i,0,Xi->Element(i,0)); 
 		(*XYBout)->SetElement(i,1,Yi->Element(i,0));
 	}
-
 	/*liberation matrice intermediaire*/
-
 	if ( X != NULL )
 		delete(X); 
 	if ( Y != NULL )
@@ -1128,24 +1116,16 @@ void CalculDeveloppe(
 /*************************************************/
 
 void Cart2Pol(Matrice *X, Matrice *Y, Matrice **T, Matrice **R)
-
 {
-
 	int i;
-
 	*R=new Matrice(X->GetLignes(),1); 
 	*T=new Matrice(X->GetLignes(),1);
 
 	for(i=0; i<X->GetLignes(); i++)
-
 	{
-
 		(*T)->SetElement(i,0, (double)atan2(Y->Element(i,0), X->Element(i,0)));
-
 		(*R)->SetElement(i,0, (double)sqrt(sqr(Y->Element(i,0))+sqr(X->Element(i,0))));
-
 	}
-
 }
 
 /*************************************************/
@@ -1548,21 +1528,13 @@ Matrice* Cercle(double xo, double yo, double rayon, int nbp)
 	res=new Matrice(nbp+1,2);
 	for(i=0; i<nbp; i++)
 	{
-
 		res->SetElement(i,0, xo + (double)cos(2*pi*i/nbp)*rayon);
-
 		res->SetElement(i,1, yo + (double)sin(2*pi*i/nbp)*rayon);
-
 	}
-
 	res->SetElement(nbp,0, res->Element(0,0)); 
 	res->SetElement(nbp,1, res->Element(0,1));
-
 	return res;
-
 }
-
-
 
 void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double *width, double *height) {
     // calculate width and height of (Xd[0],Yd[0]) (Xd[1],Yd[1])
@@ -1610,6 +1582,62 @@ void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr
     *xr = InterpLinX(interpXSuspente, Pos);
     *yr = InterpLinX(interpYSuspente, Pos);
 }
+
+void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos, double *xr, double *yr, double *zr) {
+	//printf ("\ngetPoint3dByPos ()");
+    Matrice *interpX, *interpY, *interpZ;
+    interpX = Zeros(P->GetLignes(), 2);
+    interpY = Zeros(P->GetLignes(), 2);
+    interpZ = Zeros(P->GetLignes(), 2);
+
+    for (int i = 0; i < P->GetLignes(); i++) {
+        interpX->SetElement(i, 0, P->Element(i, 0));
+		interpX->SetElement(i, 1, X->Element(i, 0));
+
+        interpY->SetElement(i, 0, P->Element(i, 0));
+        interpY->SetElement(i, 1, Y->Element(i, 0));
+
+        interpZ->SetElement(i, 0, P->Element(i, 0));
+        interpZ->SetElement(i, 1, Z->Element(i, 0));
+
+		//printf ("%f -> %f   ", P->Element(i,0), interpZ->Element(i,1));
+    }
+    *xr = InterpLinX(interpX, pos);
+    *yr = InterpLinX(interpY, pos);
+    *zr = InterpLinX(interpZ, pos);
+}
+
+void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr) 
+{
+	Matrice *X, *Y, *Z, *P;
+	if (side == EXT_SIDE) {
+		P = f3d->forme->getExtProf(nerv, false);
+	} else {
+		// INT_SIDE
+		P = f3d->forme->getIntProf(nerv, false);
+	}
+
+
+	X = Zeros(P->GetLignes(), 2);
+	Y = Zeros(P->GetLignes(), 2);
+	Z = Zeros(P->GetLignes(), 2);
+
+	for (int i = 0; i < P->GetLignes(); i++) {
+		if (side == EXT_SIDE) {
+			X->SetElement(i, 0, f3d->XExt->Element(nerv, i));
+			Y->SetElement(i, 0, f3d->YExt->Element(nerv, i));
+			Z->SetElement(i, 0, f3d->ZExt->Element(nerv, i));
+		} else {
+			//INT_SIDE
+			X->SetElement(i, 0, f3d->XInt->Element(nerv, i));
+			Y->SetElement(i, 0, f3d->YInt->Element(nerv, i));
+			Z->SetElement(i, 0, f3d->ZInt->Element(nerv, i));
+		}
+	}
+	double x, y, z;
+	getPoint3dByPos(X, Y, Z, P, pos, xr, yr, zr);
+}
+
 
 
 void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1) {

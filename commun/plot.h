@@ -15,6 +15,9 @@
 #define DEG2RAD	(3.1415926f/180.0f)
 #define RAD2DEG	(180.0f/3.1415926f)
 
+#define EXT_SIDE 1
+#define INT_SIDE 2
+
 
 #include <string>
 

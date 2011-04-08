@@ -28,31 +28,36 @@ Line::Line(){
 }
 
 Line::Line(std::ifstream& in){
+	in >> colorR >> colorG >> colorB;
+	//cout << "Line color: "<< colorR << colorG << colorB  ;
 	n_points = 0;
 	in >> n_points;
-	cout << "Line n_points: "<< n_points << endl;
+	//cout << "Line n_points: "<< n_points << endl;
 	pointsNervs = new int[n_points];
 	pointsPercents = new double[n_points];
 	for (int j = 0; j < n_points; j++) {
 		int pn;
 		double pp;
 		in >> pointsNervs[j] >> pointsPercents[j];
-		cout << "Line p "<< pointsNervs[j] << " "<< pointsPercents[j] <<endl;
+		//cout << "Line p "<< pointsNervs[j] << " "<< pointsPercents[j] <<endl;
 	}
+}
+void Line::initColor(Courbe* courbe) {
+	courbe->CouleurSegments[0] = colorR;
+	courbe->CouleurSegments[1] = colorG;
+	courbe->CouleurSegments[2] = colorB;
 }
 
 void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin) 
 {
-	cout << "Line::ajoutCourbesToAxe()" << endl;
 	Courbe* courbe = new Courbe("CourbeLine");
+	initColor(courbe);
 	courbe->points = OFF;
 	if (symetric) courbe->symX = ON;
 	courbe->pts = new Matrice(n_points, 2);
 
 	for (int i = 0; i < n_points; i++) {
-		
 		int nerv = pointsNervs[i];
-
 		//printf ("\ni=%d nerv=%d", i, nerv);
 		double percent = pointsPercents[i];
 		
@@ -73,8 +78,22 @@ void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, doubl
 	AjoutCourbe(axe, courbe);
 }
 
-void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, KiteDesign* kd, int side, int symetric) { 
-	printf ("\nLine::ajoutCourbesToAxe3d %d", side);
+void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, int side, int symetric) { 
+	Courbe* courbe = new Courbe("CourbeLine");
+	initColor(courbe);
+	courbe->points = OFF;
+	if (symetric) courbe->symX = ON;
+	courbe->pts = new Matrice(n_points, 2);
+	double x=0, y=0, z=0;
+	for (int i = 0; i < n_points; i++) {
+		int nerv = pointsNervs[i];
+		double perc = pointsPercents[i];
+		getPoint3dFormeByPosNerv(f3d, nerv, side, perc, &x, &y, &z);
+		courbe->pts->SetElement(i, 0, x);
+		courbe->pts->SetElement(i, 1, y);
+		courbe->pts->SetElement(i, 2, z);
+	}
+	AjoutCourbe(axe, courbe);
 }
 
 Line::~Line(){
@@ -83,9 +102,9 @@ Line::~Line(){
 
 void Line::print(){
 	printf ("\nline print()");
-	printf ("\n np=%d", n_points);
+	printf ("\n n_points=%d", n_points);
 	for (int i = 0; i < n_points; i++){
-		printf ("\n pn:%d pp:%f", pointsNervs[i], pointsPercents[i]);
+		printf ("\n pointsNerv:%d pointPercent:%f", pointsNervs[i], pointsPercents[i]);
 	}
 }
 

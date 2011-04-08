@@ -83,7 +83,7 @@ void ModifVisu3d(int /*control*/) {
 }
 
 void ModifVisuSymetrique(int /*control*/) {
-	printf ("\n ModifVisySymetrique()");
+	//printf ("\n ModifVisySymetrique()");
 	Apply(0);
     VisuAxe(Axe3d);
     glutSwapBuffers();
@@ -408,6 +408,8 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 
 		LectureFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
 		LectureFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
+
+
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
 		char msg[100];
@@ -422,6 +424,16 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	IntProfCent = tmpIntProfCent;
 	ExtProfBout = tmpExtProfBout;
 	IntProfBout = tmpIntProfBout;
+
+	F->ExtProfCent = ExtProfCent;
+	F->IntProfCent = IntProfCent;
+	F->ExtProfBout = ExtProfBout;
+	F->IntProfBout = IntProfBout;
+
+	F->EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
+	F->EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
+
+
 	gfd->ExtProfCent = ExtProfCent;
 	gfd->ExtProfBout = ExtProfBout;
 	gfd->IntProfCent = IntProfCent;
@@ -508,15 +520,14 @@ void Apply(int /*control*/) {
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 
-	Forme3D* f3d = getForme3D(F, 0, 0.0f,
-            ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
+	Forme3D* f3d = getForme3D(F, 0, 0.0f);
+            //ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
 
     //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
 	//YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
 	//YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
 
 	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
-
 	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, kiteDesignInt, VisuFace, VisuSymetrique);
 
 
@@ -535,14 +546,14 @@ void Apply(int /*control*/) {
     LibererCourbesAxe(AxeProjections);
 	
 	//AjoutCourbe(AxeProjections, cint4);
-	printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
+	//printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
 	FormeProjection* fp = getFormeProjection(f3d);
-	printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
+	//printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
 
 	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp);
 	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp);
 	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
-	printf ("\n display()");
+	//printf ("\n display()");
 
 	// Zoom
     CourbZoom = new Courbe("Zoom");
@@ -558,7 +569,7 @@ void Apply(int /*control*/) {
 }
 
 void ModifXYGrid(int /*control*/) {
-	printf ("\n ModifXYGrid()");
+	//printf ("\n ModifXYGrid()");
 	AxeProjections->XGrid = XYGrid;
 	AxeProjections->YGrid = XYGrid;
 	display();
