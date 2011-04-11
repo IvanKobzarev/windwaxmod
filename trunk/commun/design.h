@@ -70,6 +70,7 @@ public:
 	int n_elements;
 	KiteDesignElement** kiteDesignElements;
 	ColorTable* colorTable;
+	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric);
 };
 /* vector< vector<int> > vI2Matrix(3, vector<int>(2,0));   
 10

@@ -194,10 +194,8 @@ void VisuAxe(TAxe *axe)
 	if((axe->XAuto == ON)&&((axe->Courb != NULL)||(axe->Mesh != NULL)))
 	{
 		xmin=10000.0f; xmax=-10000.0f;
-
 		/*recherche des min/max des courbes*/
 		CourbCour=axe->Courb;
-
 		while (CourbCour != NULL)
 		{	
 			if (CourbCour->pts != NULL && CourbCour->visible)
@@ -625,7 +623,6 @@ void VisuAxe(TAxe *axe)
 	/*******************/
 	if((axe->ZGrid == ON)&&(axe->axe3d == ON))
 	{
-
 		/*dz = axe->zmax - axe->zmin;*/
 		for(i=ceil(axe->zmin); i<ceil(axe->zmax); i++)
 		{
@@ -779,12 +776,14 @@ void VisuAxe(TAxe *axe)
 					if (MeshCour->segments == ON)
 					{
 						glColor3dv(MeshCour->CouleurSegments);
+						//glColor3d(1.0f, 0.0f, 0.0f);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 					}
 					else
 					{
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 						glColor3dv(MeshCour->CouleurFaces);
+						//glColor3d(1.0f, 0.0f, 0.0f);
 					}
 					/*boucle de trac�*/
 					for(l=0; l<MeshCour->x->GetLignes()-1; l++)
@@ -1099,7 +1098,7 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 	}
 
 	ColorTable* ct = kdExt->colorTable;
-
+	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, EXT_SIDE, symetric);
 
 	// KiteDesign Int Side
 
@@ -1213,7 +1212,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			MeshInt->symX = ON;
 		}
 
-                /*boucle sur les points du profil en extrados*/
+        /*boucle sur les points du profil en extrados*/
 		for (i=0; i<nbPtsExt; i++)
 		{
 			/*boucle � partir de la 1ere nervure du centre vers l'Intr�mit�*/
@@ -1225,7 +1224,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			}
 		}
 
-                /*boucle sur les points du profil en intrados*/
+        /*boucle sur les points du profil en intrados*/
 		for (i=0; i<nbPtsInt; i++)
 		{
 			/*boucle � partir de la 1ere nervure du centre vers l'Intr�mit�*/

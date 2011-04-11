@@ -167,3 +167,45 @@ KiteDesign::KiteDesign(){
 
 KiteDesign::~KiteDesign(){
 }
+
+void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric){
+	printf ("\nKiteDesign::ajoutMeshesToAxe3d");
+	Axe3d->eclairage = ON;
+	TMesh *Mesh;
+	Mesh = CreerMesh(); 
+
+	//Mesh->points = ON;
+	//Mesh->segments = ON;  Mesh->faces = OFF;
+	Mesh->segments=OFF; Mesh->faces=ON;
+	if (side == INT_SIDE) Mesh->InvNormales=ON;
+	
+	int nerv = 1;
+	int nPtsExt = f3d->XExt->GetLignes();
+
+	Mesh->x=new Matrice(nPtsExt, 2);
+	Mesh->y=new Matrice(nPtsExt, 2);
+	Mesh->z=new Matrice(nPtsExt, 2);
+	Mesh->CouleurFaces[0] = 1.0f;
+	Mesh->CouleurFaces[1] = 0.0f;
+	Mesh->CouleurFaces[2] = 0.0f;
+	//Mesh->CouleurSegments[0] = 0.0f;
+	//Mesh->CouleurSegments[1] = 0.0f;
+	//Mesh->CouleurSegments[2] = 1.0f;
+	//Mesh->CouleurPoints[0] = 0.0f;
+	//Mesh->CouleurPoints[1] = 0.0f;
+	//Mesh->CouleurPoints[2] = 1.0f;
+	if(symetric==1)
+	{
+		Mesh->symX = ON;
+	}
+	for (int i=0; i<nPtsExt; i++)
+	{
+		for (int j=nerv; j<nerv+2; j++)
+		{
+			Mesh->x->SetElement(i,j-nerv, f3d->XExt->Element(j, i));
+			Mesh->y->SetElement(i,j-nerv, f3d->YExt->Element(j, i));
+			Mesh->z->SetElement(i,j-nerv, f3d->ZExt->Element(j, i));
+		}
+	}
+	AjoutMesh(Axe3d, Mesh);
+}
