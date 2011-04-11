@@ -384,6 +384,7 @@ void InitLumiere(void) {
     glEnable(GL_LIGHT0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 
