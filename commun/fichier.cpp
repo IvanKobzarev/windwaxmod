@@ -516,6 +516,9 @@ KiteDesign* readKiteDesignFromFile(const char* FilePath) {
 			kd->kiteDesignElements[i]=line;
 		}
 	}
+
+	kd->colorTable = new ColorTable(in);
+	kd->colorTable->print();
 	return kd;
 }
 

@@ -1091,10 +1091,17 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 /**************************/
 void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteDesign* kdInt, int mesh, int symetric) 
 {
+	// KiteDesign Ext Side
+
 	for (int i = 0; i < kdExt->n_elements; i++) {
 		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
 		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, EXT_SIDE, symetric);
 	}
+
+	ColorTable* ct = kdExt->colorTable;
+
+
+	// KiteDesign Int Side
 
 	for (int i = 0; i < kdInt->n_elements; i++) {
 		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
