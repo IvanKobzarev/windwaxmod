@@ -16,6 +16,26 @@ using namespace std;
 #include "profil.h"
 #include "geom.h"
 
+Color::Color(){
+	r = 0.0f; 
+	g = 0.0f; 
+	b = 0.0f;
+}
+
+void Color::print() {
+	printf ("\n(%f, %f, %f)", r, g, b);
+}
+
+Color::~Color(){
+}
+
+ColorTable::ColorTable(){
+}
+
+ColorTable::~ColorTable() {
+}
+
+
 
 KiteDesignElement::KiteDesignElement(){
 }
@@ -42,6 +62,27 @@ Line::Line(std::ifstream& in){
 		//cout << "Line p "<< pointsNervs[j] << " "<< pointsPercents[j] <<endl;
 	}
 }
+
+ColorTable::ColorTable(std::ifstream& in){
+	int n_nervs = 0;
+	in >> n_nervs;
+	for (int i = 0; i < n_nervs; i++) {
+		vector <Color*> row;
+		int n_row = 0;
+		int nerv = 0;
+		in >> nerv >> n_row;
+		for (int j = 0; j < n_row; j++) {
+			Color* c = new Color(in);
+			row.push_back(c);
+		}
+		table.push_back(row);
+	}
+}
+
+Color::Color(std::ifstream& in){
+	in >> r >> g >> b;
+}
+
 void Line::initColor(Courbe* courbe) {
 	courbe->CouleurSegments[0] = colorR;
 	courbe->CouleurSegments[1] = colorG;
@@ -97,7 +138,6 @@ void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, int side, int symetric) 
 }
 
 Line::~Line(){
-
 }
 
 void Line::print(){
@@ -105,6 +145,19 @@ void Line::print(){
 	printf ("\n n_points=%d", n_points);
 	for (int i = 0; i < n_points; i++){
 		printf ("\n pointsNerv:%d pointPercent:%f", pointsNervs[i], pointsPercents[i]);
+	}
+}
+
+void ColorTable::print() {
+	printf ("\nColorTable::print");
+	vector<vector<Color*>>::iterator iter_vc;
+	vector<Color*>::iterator iter_c;
+
+	for (int i = 0; i < table.size(); i++) {
+		printf ("\n%d:", i);
+		for (int j = 0; j < table[i].size(); j++) {
+			table[i][j]->print();
+		}
 	}
 }
 
