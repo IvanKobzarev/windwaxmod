@@ -41,6 +41,7 @@ class Color {
 public:
 	Color();
 	Color(std::ifstream& in);
+	Color(double r, double g, double b);
 	virtual ~Color();
 
 	double r, g, b;
@@ -72,18 +73,23 @@ public:
 	ColorTable* colorTable;
 	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric);
 };
+
+class ColorSegment
+{
+public:
+	ColorSegment();
+	virtual ~ColorSegment();
+
+	int nerv;
+	Color* color;
+	double p00, p01, p10, p11;
+};
+
+void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric);
 /* vector< vector<int> > vI2Matrix(3, vector<int>(2,0));   
-10
- 
-11
    vI2Matrix[0][0] = 0;
-12
    vI2Matrix[0][1] = 1;
-13
    vI2Matrix[1][0] = 10;
-14
    vI2Matrix[1][1] = 11;
-15
    vI2Matrix[2][0] = 20;
-16
    vI2Matrix[2][1] = 21; */
