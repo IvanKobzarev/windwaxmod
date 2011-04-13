@@ -71,27 +71,37 @@ public:
 
 class ColorSegmentsTable
 {
-private:
-    std::vector< std::vector <ColorSegment*> > table;
 public:
-    vector<ColorSegment*> getNervColorSegments(int nerv);
+    std::vector< std::vector <ColorSegment*> > table;
+
+	ColorSegmentsTable();
+	ColorSegmentsTable(int n);
 };
 
 
 class PanelLine
 {
 public:
-    double pos0;
+
+	PanelLine();
+	PanelLine(int _nerv1, double _pos1, int _nerv2, double _pos2);
+    virtual ~PanelLine();
+	
+	int nerv1;
+	int nerv2;
     double pos1;
+    double pos2;
 };
 
 class PanelLinesTable
 {
-private:
-    std::vector< std::vector <PanelLine*> > table;
 public:
+    std::vector< std::vector<PanelLine*>> table;
+
     PanelLinesTable();
-    vector<PanelLine*> getNervPanelLines(int nerv);
+	PanelLinesTable(int n_profils);
+	void addPanelLine(int nerv, PanelLine* pl);
+	void sortNervsVectors();
 };
 
 class KiteDesign
@@ -109,7 +119,8 @@ public:
 	ColorTable* colorTable;
 
 	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric);
-    ColorSegmentsTable* getColorSegmentsTable();
+
+    ColorSegmentsTable* getColorSegmentsTable(Forme3D* f3d);
     PanelLinesTable* getPanelLinesTable();
 };
 

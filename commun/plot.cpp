@@ -1096,8 +1096,8 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
 		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, EXT_SIDE, symetric);
 	}
-
 	ColorTable* ct = kdExt->colorTable;
+
 	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, EXT_SIDE, symetric);
 
 	// KiteDesign Int Side
@@ -1106,6 +1106,7 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
 		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, INT_SIDE, symetric);
 	}
+	//kdInt->ajoutMeshesToAxe3d( Axe3d, f3d, EXT_SIDE, symetric);
 }
 
 void AjoutForme3D( TAxe *Axe3d, 
