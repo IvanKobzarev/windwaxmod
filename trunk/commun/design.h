@@ -48,8 +48,6 @@ public:
 	void print();
 };
 
-
-
 class ColorTable {
 public:
 	ColorTable();
@@ -60,33 +58,65 @@ public:
 	void print();
 };
 
+class ColorSegment
+{
+public:
+    ColorSegment();
+    virtual ~ColorSegment();
+
+    int nerv;
+    Color* color;
+    double p00, p01, p10, p11;
+};
+
+class ColorSegmentsTable
+{
+private:
+    std::vector< std::vector <ColorSegment*> > table;
+public:
+    vector<ColorSegment*> getNervColorSegments(int nerv);
+};
+
+
+class PanelLine
+{
+public:
+    double pos0;
+    double pos1;
+};
+
+class PanelLinesTable
+{
+private:
+    std::vector< std::vector <PanelLine*> > table;
+public:
+    PanelLinesTable();
+    vector<PanelLine*> getNervPanelLines(int nerv);
+};
 
 class KiteDesign
 {
 
 public:
+
 	KiteDesign();
+    KiteDesign(std::ifstream& in);
+
 	virtual ~KiteDesign();
 
 	int n_elements;
 	KiteDesignElement** kiteDesignElements;
 	ColorTable* colorTable;
+
 	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric);
+    ColorSegmentsTable* getColorSegmentsTable();
+    PanelLinesTable* getPanelLinesTable();
 };
 
-class ColorSegment
-{
-public:
-	ColorSegment();
-	virtual ~ColorSegment();
-
-	int nerv;
-	Color* color;
-	double p00, p01, p10, p11;
-};
 
 void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric);
-/* vector< vector<int> > vI2Matrix(3, vector<int>(2,0));   
+
+/* vector< vector<int> > vI2Matrix(3, vector<int>(2,0));
    vI2Matrix[0][0] = 0;
    vI2Matrix[0][1] = 1;
    vI2Matrix[1][0] = 10;
