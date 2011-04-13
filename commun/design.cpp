@@ -17,8 +17,8 @@ using namespace std;
 #include "geom.h"
 
 Color::Color(){
-	r = 0.0f; 
-	g = 0.0f; 
+	r = 0.0f;
+	g = 0.0f;
 	b = 0.0f;
 }
 
@@ -95,7 +95,7 @@ void Line::initColor(Courbe* courbe) {
 	courbe->CouleurSegments[2] = colorB;
 }
 
-void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin) 
+void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin)
 {
 	Courbe* courbe = new Courbe("CourbeLine");
 	initColor(courbe);
@@ -107,17 +107,17 @@ void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, doubl
 		int nerv = pointsNervs[i];
 		//printf ("\ni=%d nerv=%d", i, nerv);
 		double percent = pointsPercents[i];
-		
+
 		double x0 = fp->X->Element(i, 0);
 		double y0 = fp->Y->Element(i, 0);
-		
+
 		double x1 = fp->X->Element(i, 1);
 		double y1 = fp->Y->Element(i, 1);
 		//printf ("\n(%f,%f) (%f,%f)", x0, y0, x1, y1);
 		double xp = x0 + percent * 0.01 * (x1 - x0);
 		double yp = y0 + percent * 0.01 * (y1 - y0);
 		//printf ("\n(%f,%f)", xp, yp);
-		
+
 		courbe->pts->SetElement(i, 0, xp);
 		courbe->pts->SetElement(i, 1, dy + ymult*yp - ymin);
 	}
@@ -125,7 +125,7 @@ void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, doubl
 	AjoutCourbe(axe, courbe);
 }
 
-void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, int side, int symetric) { 
+void Line::ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, int side, int symetric) {
 	Courbe* courbe = new Courbe("CourbeLine");
 	initColor(courbe);
 	courbe->points = OFF;
@@ -171,6 +171,10 @@ KiteDesign::KiteDesign(){
 	n_elements = 0;
 }
 
+KiteDesign::KiteDesign(std::ifstream& in){
+  //TODO:
+}
+
 KiteDesign::~KiteDesign(){
 }
 
@@ -205,20 +209,59 @@ int indexAfterPosProf(Matrice* Prof, double pos) {
 	return i;
 }
 
+PanelLinesTable* KiteDesign::getPanelLinesTable() {
+    PanelLinesTable* panelLinesTable = new PanelLinesTable();
+
+    for (int i = 0; i < kiteDesign->n_elements; i++) {
+        KiteDesignElement* kde = kiteDesign->kiteDesignElements[i];
+        Line* line = (Line*) kde;
+        for (int j = 0; j = line-> n_points;j++){
+          int nerv = line->pointsNervs[j];
+          double perc = line->pointsPercents[j];
+
+          PanelLine* pl = new PanelLine(...);
+          panelLinesTable->addPanelLine(nerv, pl);
+
+          panelLinesTable->sortNervsVectors();
+
+
+        }
+    }
+    return panelLinesTable;
+}
+
+ColorSegmentsTable* KiteDesign::getColorSegmentsTable(){
+    //TODO:
+    PanelLinesTable* panelLinesTable = getPanelLinesTable();
+
+    ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable();
+
+    for (int i = 0; i < kiteDesign->forme->nNerv; i++) {
+      ColorSegment colorSegment = new ColorSegment();
+
+      colorSegment-> = panelLinesTable i
+      colorSegment-> = panelLinesTable i-1
+      colorSegment->color = colorTable->...;
+      colorSegmentsTable.add(i, colorSegment);
+    }
+
+    return colorSegmentsTable;
+
+}
 
 void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
 	printf ("\ndesign:ajoutColorSegmentToAxe3d()");
 	Axe3d->eclairage = ON;
 	TMesh *Mesh;
-	Mesh = CreerMesh(); 
+	Mesh = CreerMesh();
 
 	Mesh->segments=OFF; Mesh->faces=ON;
 	if (side == INT_SIDE) Mesh->InvNormales=ON;
-	
+
 	int nerv = colorSegment->nerv;
-	
+
 	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
-	
+
 	getPoint3dFormeByPosNerv(f3d, nerv, side, colorSegment->p00, &x00, &y00, &z00) ;
 	getPoint3dFormeByPosNerv(f3d, nerv+1, side, colorSegment->p01, &x01, &y01, &z01) ;
 
@@ -227,7 +270,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 
 	Matrice* mProf;
 	if (side == INT_SIDE) mProf = f3d->forme->getIntProf(nerv,false); else mProf = f3d->forme->getExtProf(nerv,false);
-	
+
 	int i00 = indexAfterPosProf(mProf,  colorSegment->p00);
 	int i01 = indexAfterPosProf(mProf,  colorSegment->p01);
 
@@ -307,7 +350,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 
 void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric){
 	printf ("\nKiteDesign::ajoutMeshesToAxe3d");
-	ColorSegment* cs = new ColorSegment();
+	/*ColorSegment* cs = new ColorSegment();
 	cs->p00=0.0f;
 	cs->p01=0.0f;
 
@@ -316,19 +359,29 @@ void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int sy
 
 	cs->nerv=2;
 	Color* c = new Color(1.0f, 0.0f, 0.0f);
-	cs->color = c;
+	cs->color = c;*/
 
+
+    ColorSegmentsTable* cst = getColorSegmentsTable();
+
+    for (int i = 0; i < forme->nNerv;i++) {
+      vector<ColorSegment*> vcs = getNervColorSegments(i);
+      for (int j = 0; j < vcs.size(); j++) {
+          cs = vcs[j];
+          ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
+      }
+    }
 
 	ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
 	/*Axe3d->eclairage = ON;
 	TMesh *Mesh;
-	Mesh = CreerMesh(); 
+	Mesh = CreerMesh();
 
 	//Mesh->points = ON;
 	//Mesh->segments = ON;  Mesh->faces = OFF;
 	Mesh->segments=OFF; Mesh->faces=ON;
 	if (side == INT_SIDE) Mesh->InvNormales=ON;
-	
+
 	int nerv = 1;
 	int nPtsExt = f3d->XExt->GetLignes();
 
