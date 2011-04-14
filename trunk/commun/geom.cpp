@@ -1494,27 +1494,15 @@ void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, M
 /*********************************************/
 
 Matrice* Longueur(Matrice* x, Matrice *y)
-
 {
-
 	int i; 
-
 	Matrice *res;
-
-	
-
 	res=new Matrice(x->GetLignes(),1);
-
 	res->SetElement(0,0,0.0f);//premiï¿½re valeur =0.0 
-
 	for(i=1; i<x->GetLignes(); i++)
-
 		res->SetElement(i,0, res->Element(i-1,0)
-
 		+ (double)sqrt(sqr(x->Element(i,0)-x->Element(i-1,0))+sqr(y->Element(i,0)-y->Element(i-1,0))));
-
 	return res;
-
 }
 
 /*************************************/

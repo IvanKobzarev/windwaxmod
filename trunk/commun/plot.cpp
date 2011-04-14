@@ -835,8 +835,6 @@ void VisuAxe(TAxe *axe)
 
 }
 
-
-
 /***************/
 /* AjoutCourbe */
 /***************/
@@ -844,22 +842,18 @@ void VisuAxe(TAxe *axe)
 void AjoutCourbe(TAxe *axe, Courbe *courbe)
 {
 	Courbe* CourbCour;
-	/*test s'il y a deja une courbe sur l'axe*/
 	if (axe->Courb==NULL)
 	{
 		axe->Courb=courbe;
 	}
 	else
 	{
-		/*recherche derni�re courbe de la liste*/
 		CourbCour=axe->Courb;
 		int kk=0;
 		while(CourbCour->CourbSuiv!=NULL) {
 			CourbCour=CourbCour->CourbSuiv;
 			kk++;
-//			printf(" -> %d ", kk);
 		}
-		/*ajout courbe*/
 		CourbCour->CourbSuiv=courbe;
 	}
 }
@@ -933,21 +927,15 @@ void AjoutCCourbe(Courbe *head, Courbe *courbe)
 void AjoutMesh(TAxe *axe, TMesh *mesh)
 {
 	TMesh* MeshCour;
-	/*test s'il y a deja une courbe sur l'axe*/
 	if (axe->Mesh==NULL)
 	{
 		axe->Mesh=mesh;
-
 	}
-
 	else
-
 	{
-		/*recherche derni�re courbe de la liste*/
 		MeshCour=axe->Mesh;
 		while(MeshCour->MeshSuiv!=NULL)
 			MeshCour=MeshCour->MeshSuiv;
-		/*ajout courbe*/
 		MeshCour->MeshSuiv=mesh;
 	}
 }
