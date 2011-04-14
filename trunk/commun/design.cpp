@@ -295,7 +295,8 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
 	int n_profils = f3d->forme->m_nbProfils;
     ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable(n_profils);
 	printf ("\n 2");
-    for (int nerv = 0; nerv < n_profils; nerv++) {
+	printf ("\n nbprofils=%d colorTable->table.size()=%d", n_profils,colorTable->table.size());
+	for (int nerv = 0; (nerv < n_profils) && (nerv < colorTable->table.size()); nerv++) {
 		printf ("\n nerv=%d", nerv);
 		vector<PanelLine*> v = panelLinesTable->table[nerv];
 		double prev_p0 = 0.0f;
@@ -303,12 +304,14 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
 		vector<Color*> vc = colorTable->table[nerv];
 		printf ("\n _1", nerv);
 		printf ("\n v.size()=%d", v.size());
+
 		for (int i = 0; i < v.size(); i++) {
 			if ( i >= vc.size()) {
 				printf ("\n colors for %d : vc.size(): %d", nerv, vc.size());
 				break;
-			}
+			}			
 			ColorSegment* colorSegment = new ColorSegment();
+			colorSegment->nerv=nerv;
 			colorSegment->p00 = prev_p0;
 			colorSegment->p01 = prev_p1;
 
@@ -326,7 +329,7 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
 				ColorSegment* colorSegment = new ColorSegment();
 				colorSegment->p00 = prev_p0;
 				colorSegment->p01 = prev_p1;
-
+				colorSegment->nerv=nerv;
 				colorSegment->p10 = 100.0f;
 				colorSegment->p11 = 100.0f;
 				colorSegment->color = vc[v.size()];
@@ -349,6 +352,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	if (side == INT_SIDE) Mesh->InvNormales=ON;
 
 	int nerv = colorSegment->nerv;
+	printf ("\n design:ajoutColorSegmentToAxe3d() nerv=%d", nerv);
 
 	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
 
@@ -418,7 +422,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 			Mesh->y->SetElement(_i, 1, f3d->YExt->Element(nerv + 1, ir));
 			Mesh->z->SetElement(_i, 1, f3d->ZExt->Element(nerv + 1, ir));
 		}
-		printf ("\n%d %d %d -> (%f, %f, %f) (%f, %f, %f)", _i, il, ir, Mesh->x->Element(_i,0), Mesh->y->Element(_i,0), Mesh->z->Element(_i,0), Mesh->x->Element(_i,1), Mesh->y->Element(_i,1), Mesh->z->Element(_i,1));
+		//printf ("\n%d %d %d -> (%f, %f, %f) (%f, %f, %f)", _i, il, ir, Mesh->x->Element(_i,0), Mesh->y->Element(_i,0), Mesh->z->Element(_i,0), Mesh->x->Element(_i,1), Mesh->y->Element(_i,1), Mesh->z->Element(_i,1));
 		_i++;
 
 		if ((il == i10) && (ir == i11)) break;
@@ -433,7 +437,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	Mesh->x->SetElement(_i, 1, x11);
 	Mesh->y->SetElement(_i, 1, y11);
 	Mesh->z->SetElement(_i, 1, z11);
-	printf ("\n(%f, %f, %f) (%f, %f, %f)",x10, y10,z10,x11, y11,z11);
+	//printf ("\n(%f, %f, %f) (%f, %f, %f)",x10, y10,z10,x11, y11,z11);
 
 	AjoutMesh(Axe3d, Mesh);
 }
@@ -443,7 +447,9 @@ void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int sy
 
     ColorSegmentsTable* cst = getColorSegmentsTable(f3d);
     for (int nerv = 0; nerv < f3d->forme->m_nbProfils; nerv++) {
+		printf ("\nKiteDesign::ajoutMeshesToAxe3d nerv=%d", nerv);
 		vector<ColorSegment*> vcs = cst->table[nerv];
+		printf ("\nKiteDesign::ajoutMeshesToAxe3d vcs.size()=%d", vcs.size());
 		for (int i = 0; i < vcs.size(); i++) {
 			ColorSegment* cs = vcs[i];
 			ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
