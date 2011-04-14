@@ -1081,7 +1081,7 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 	{
 		// readBallonement
 		int n=-1, ind=0;
-		fscanf(fid,"%d", &n);
+		fscanf(fid, "%d", &n);
 		double _kChord=0, _kMf=0, _wN=0, _dyw=0, _powerTail=0;
 		kChord = new Matrice(n, 1);
 		kMf = new Matrice(n, 1);
@@ -1105,7 +1105,7 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 	}
 	if(fclose(fid))
 	{
-		printf("\nProbleme  la fermeture du fichier WindPatternsProject");
+		printf("\nProbleme  reading ballonement");
 		exit(0);
 	}
 	return bal;
