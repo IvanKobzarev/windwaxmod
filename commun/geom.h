@@ -1,12 +1,50 @@
 #ifndef __GEOM_H__
 #define __GEOM_H__
 
+#define ONE 0
+#define NO 1
+#define SEG 2
+
 class Forme;
 class Forme3D;
 class FormeProjection;
 class Matrice;
 class Ballonement;
 class WindPatternsProject;
+
+class Point2d {
+public:
+	Point2d();
+	double x, y;
+	Point2d(double _x, double _y);
+};
+
+class Vector2d {
+public:
+	double x, y;
+	Vector2d(Point2d p1, Point2d p2);
+	double length();
+};
+
+class Segment2d {
+public:
+	Point2d* p;
+	Point2d *p1, *p2;
+	double A, B, C;
+
+	bool contains(Point2d* pt);
+	Segment2d(Point2d* _p1, Point2d* _p2);
+};
+
+class ResultIntersect2d {
+public:
+	ResultIntersect2d();
+	int type;
+	Point2d *p1, *p2;
+
+};
+
+ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2);
 
 Matrice* MonBezier(Matrice *tab, int NbrPts);
 
@@ -74,6 +112,7 @@ void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double 
 
 void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr);
 void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos, double *xr, double *yr, double *zr);
+void getPoint3dFormeByPosDNerv(Forme3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr);
 void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr);
 
 void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1);
