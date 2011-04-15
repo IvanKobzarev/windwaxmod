@@ -34,6 +34,66 @@
 *  XC YC
 *  XD YD]
 ********************************************************/
+Point2d::Point2d(){
+}
+
+Point2d::Point2d(double _x, double _y) {
+	x = _x;
+	y = _y;
+}
+
+Vector2d::Vector2d(Point2d p1, Point2d p2) {
+	x = p1.x - p2.x;
+	y = p1.y - p2.y;
+}
+
+double Vector2d::length() {
+	return sqrt(x*x+y*y);
+}
+
+Segment2d::Segment2d(Point2d* _p1, Point2d* _p2) {
+	p1 = _p1;
+	p2 = _p2;
+	A = (p1->y - p2->y);
+	B = (p2->x - p1->x); 
+	C = (p1->x*p2->y - p2->x*p1->y);
+}
+
+bool Segment2d::contains(Point2d* pt) {
+	double x0 = pt->x; double y0 = pt->y;
+	double x1 = p1->x; double y1 = p1->y;
+	double x2 = p2->x; double y2 = p2->y;
+	return ((x0 - x1) * (y2 - y1) == (y0 - y1) * (x2 - x1));
+}
+
+ResultIntersect2d::ResultIntersect2d() {
+}
+
+ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2) {
+	double d = s1->A * s2->B - s2->A * s1->B;
+	double dx = (-s1->C) * s2->B - (-s2->C) * s1->B;
+	double dy = s1->A * (-s2->C) - s2->A * (-s1->C);
+	ResultIntersect2d* res = new ResultIntersect2d();
+	if (d == 0) {
+		if ((dx == 0) && (dy == 0)) {
+			res->type = SEG;
+		} else {
+			res->type = NO;
+		}
+	} else {
+		double x = dx / d;
+		double y = dy / d;
+		Point2d* p = new Point2d(x, y);
+		if (s1->contains(p) && s2->contains(p)) {
+			res->type = ONE;
+			res->p1 = p;
+		} else {
+			res->type = NO;
+		}
+	}
+	return res;
+}
+
 
 Matrice* MonBezier(Matrice *tab, int NbrPts)
 {
@@ -1593,6 +1653,19 @@ void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos
     *xr = InterpLinX(interpX, pos);
     *yr = InterpLinX(interpY, pos);
     *zr = InterpLinX(interpZ, pos);
+}
+
+
+void getPoint3dFormeByPosDNerv(Forme3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr){
+	int nerv0 = floor(nerv);
+	double nervPos = nerv - nerv0;
+	double x0, y0, z0, x1,y1,z1;
+	getPoint3dFormeByPosNerv(f3d, nerv0, side, pos, &x0, &y0, &z0);
+	getPoint3dFormeByPosNerv(f3d, nerv0+1, side, pos, &x1, &y1, &z1);
+
+	*xr = x0 + nervPos * (x1 - x0);
+	*yr = y0 + nervPos * (y1 - y0); 
+	*zr = z0 + nervPos * (z1 - z0);
 }
 
 void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr) 

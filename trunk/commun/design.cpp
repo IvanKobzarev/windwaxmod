@@ -342,6 +342,12 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
 
 }
 
+void setMeshPoint(TMesh *Mesh, int i, int j, double x, double y, double z) {
+	Mesh->x->SetElement(i, j, x);
+	Mesh->y->SetElement(i, j, y);
+	Mesh->z->SetElement(i, j, z);
+}
+
 void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
 	printf ("\ndesign:ajoutColorSegmentToAxe3d()");
 	Axe3d->eclairage = ON;
@@ -353,7 +359,135 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 
 	int nerv = colorSegment->nerv;
 	printf ("\n design:ajoutColorSegmentToAxe3d() nerv=%d", nerv);
+	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
 
+	getPoint3dFormeByPosNerv(f3d, nerv, side, colorSegment->p00, &x00, &y00, &z00) ;
+	getPoint3dFormeByPosNerv(f3d, nerv+1, side, colorSegment->p01, &x01, &y01, &z01) ;
+
+	getPoint3dFormeByPosNerv(f3d, nerv, side, colorSegment->p10, &x10, &y10, &z10) ;
+	getPoint3dFormeByPosNerv(f3d, nerv+1, side, colorSegment->p11, &x11, &y11, &z11) ;
+
+	Matrice* mProf;
+	if (side == INT_SIDE) mProf = f3d->forme->getIntProf(nerv,false); else mProf = f3d->forme->getExtProf(nerv,false);
+
+	Mesh->CouleurFaces[0] = colorSegment->color->r;
+	Mesh->CouleurFaces[1] = colorSegment->color->g;
+	Mesh->CouleurFaces[2] = colorSegment->color->b;
+
+	if(symetric==1)
+	{
+		Mesh->symX = ON;
+	}
+
+	//---------------------------------------------
+
+	Point2d* pnt00 = new Point2d(nerv, colorSegment->p00);
+	Point2d* pnt01 = new Point2d(nerv+1, colorSegment->p01);
+	Point2d* pnt10 = new Point2d(nerv, colorSegment->p10);
+	Point2d* pnt11 = new Point2d(nerv+1, colorSegment->p11);
+
+	Segment2d* sl0 = new Segment2d(pnt00, pnt01);
+	Segment2d* sl1 = new Segment2d(pnt10, pnt11);
+	Segment2d* se0 = new Segment2d(pnt00, pnt10);
+	Segment2d* se1 = new Segment2d(pnt01, pnt11);
+
+	std::vector<double> pcse;
+	pcse.push_back(colorSegment->p00);
+	pcse.push_back(colorSegment->p01);
+	pcse.push_back(colorSegment->p10);
+	pcse.push_back(colorSegment->p11);
+
+	double minp = pcse[0];
+	int iAfterMin = indexAfterPosProf(mProf,  minp);
+
+	double maxp = pcse[3];
+	int iBeforeMax = indexBeforePosProf(mProf,  maxp);
+
+	std::vector<double> pcs;
+	pcs.push_back(colorSegment->p00);
+	pcs.push_back(colorSegment->p01);
+	pcs.push_back(colorSegment->p10);
+	pcs.push_back(colorSegment->p11);
+	for (int i = iAfterMin; i <= iBeforeMax; i++) {
+		pcs.push_back(mProf->Element(i, 0));
+	}
+	std::sort(pcs.begin(), pcs.end());
+	int k=0;
+	double prev = -1000;
+	for (int i = 0; i < pcs.size(); i++) {
+		if (pcs[i] != prev) {
+			k++;
+			prev = pcs[i];
+		}
+	}
+
+	int nPts = k;
+	printf ("\nnPts=%d", nPts);
+
+	Mesh->x=new Matrice(nPts, 2);
+	Mesh->y=new Matrice(nPts, 2);
+	Mesh->z=new Matrice(nPts, 2);
+
+	prev = -1000;
+	k=0;
+	for (int i = 0; i < pcs.size(); i++) {
+		if (pcs[i] != prev) {
+			double p = pcs[i];
+			Point2d* p1 = new Point2d(nerv, p);
+			Point2d* p2 = new Point2d(nerv+1, p);
+
+			Segment2d* s = new Segment2d(p1, p2);
+			
+			ResultIntersect2d* rsl0 = intersectSegments2d (s, sl0);
+			ResultIntersect2d* rsl1 = intersectSegments2d (s, sl1);
+			ResultIntersect2d* rse0 = intersectSegments2d (s, se0);
+			ResultIntersect2d* rse1 = intersectSegments2d (s, se1);
+
+			if ((rsl0->type == SEG) || (rsl1->type == SEG))  {
+				if (rsl0->type == SEG) {
+					setMeshPoint(Mesh, k, 0, x00, y00, z00);
+					setMeshPoint(Mesh, k, 1, x01, y01, z01);
+				}
+				if (rsl1->type == SEG) {
+					setMeshPoint(Mesh, k, 0, x10, y10, z10);
+					setMeshPoint(Mesh, k, 1, x11, y11, z11);
+				}
+				continue;
+			} else {
+				std::vector<double> res;
+				if (rsl0->type == ONE) res.push_back(rslo->p1->x);
+				if (rsl1->type == ONE) res.push_back(rsl1->p1->x);
+				if (rse0->type == ONE) res.push_back(rseo->p1->x);
+				if (rse1->type == ONE) res.push_back(rse1->p1->x);
+				std::sort(res.begin(), res.end());
+
+				if (res.size() == 2) {
+					double x0=0.0f, y0=0.0f, z0=0.0f, x1=0.0f, y1=0.0f, z1=0.0f;
+					getPoint3dFormeByPosDNerv(f3d, res[0], side, pcs[i], &x0, &y0, &z0) ;
+					getPoint3dFormeByPosDNerv(f3d, res[1], side, pcs[i], &x1, &y1, &z1) ;
+					setMeshPoint(Mesh, k, 0, x0, y0, z0);
+					setMeshPoint(Mesh, k, 1, x1, y1, z1);
+				}
+			}
+			k++;
+			prev = pcs[i];
+		}
+	}
+	//=============================================
+	AjoutMesh(Axe3d, Mesh);
+}
+
+void ajoutColorSegmentToAxe3dOld(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
+	printf ("\ndesign:ajoutColorSegmentToAxe3d()");
+	Axe3d->eclairage = ON;
+	TMesh *Mesh;
+	Mesh = CreerMesh();
+
+	Mesh->segments=OFF; Mesh->faces=ON;
+	if (side == INT_SIDE) Mesh->InvNormales=ON;
+
+	int nerv = colorSegment->nerv;
+	printf ("\n design:ajoutColorSegmentToAxe3d() nerv=%d", nerv);
 	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
 
 	getPoint3dFormeByPosNerv(f3d, nerv, side, colorSegment->p00, &x00, &y00, &z00) ;
@@ -370,6 +504,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 
 	int i10 = indexBeforePosProf(mProf,  colorSegment->p10);
 	int i11 = indexBeforePosProf(mProf,  colorSegment->p11);
+	
 	printf ("\ni00=%d", i00);
 	printf ("\ni01=%d", i01);
 	printf ("\ni10=%d", i10);
@@ -440,7 +575,9 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	//printf ("\n(%f, %f, %f) (%f, %f, %f)",x10, y10,z10,x11, y11,z11);
 
 	AjoutMesh(Axe3d, Mesh);
+
 }
+
 
 void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric){
 	printf ("\nKiteDesign::ajoutMeshesToAxe3d");
