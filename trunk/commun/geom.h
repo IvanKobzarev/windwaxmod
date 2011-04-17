@@ -1,8 +1,8 @@
 #ifndef __GEOM_H__
 #define __GEOM_H__
 
-#define ONE 0
-#define NO 1
+#define NO 0
+#define ONE 1
 #define SEG 2
 
 class Forme;
@@ -34,6 +34,7 @@ public:
 
 	bool contains(Point2d* pt);
 	Segment2d(Point2d* _p1, Point2d* _p2);
+	void print();
 };
 
 class ResultIntersect2d {
