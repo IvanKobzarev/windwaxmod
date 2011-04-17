@@ -64,6 +64,7 @@ class ColorSegment
 public:
     ColorSegment();
     virtual ~ColorSegment();
+	void print();
 
     int nerv;
     Color* color;

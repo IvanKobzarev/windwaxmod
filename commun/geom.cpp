@@ -59,11 +59,28 @@ Segment2d::Segment2d(Point2d* _p1, Point2d* _p2) {
 	C = (p1->x*p2->y - p2->x*p1->y);
 }
 
+void Segment2d::print() {
+	printf ("\n segment2d::print");
+}
+
 bool Segment2d::contains(Point2d* pt) {
 	double x0 = pt->x; double y0 = pt->y;
 	double x1 = p1->x; double y1 = p1->y;
 	double x2 = p2->x; double y2 = p2->y;
-	return ((x0 - x1) * (y2 - y1) == (y0 - y1) * (x2 - x1));
+	double v = fabs((x0 - x1) * (y2 - y1) - (y0 - y1) * (x2 - x1));
+	printf ("\n v=%f", v);
+	bool onLine = (v <= 0.0001f);
+	//printf ("\n onLine=%d", onLine);
+	double vx = (x0-x1)*(x0-x2);
+	printf ("\n vx=%f", vx);
+	bool btwX = (vx<=0.00001f);
+	//printf ("\n btwX=%d", btwX);
+
+	double vy = (y0-y1)*(y0-y2);
+	printf ("\n vy=%f", vy);
+	bool btwY = (vy<=0.00001f);
+	//printf ("\n btwY=%d", btwY);
+	return (onLine && btwX && btwY);
 }
 
 ResultIntersect2d::ResultIntersect2d() {
@@ -74,20 +91,30 @@ ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2) {
 	double dx = (-s1->C) * s2->B - (-s2->C) * s1->B;
 	double dy = s1->A * (-s2->C) - s2->A * (-s1->C);
 	ResultIntersect2d* res = new ResultIntersect2d();
+	printf ("\nintersect d=%f dx=%f dy=%f", d, dx, dy);
 	if (d == 0) {
 		if ((dx == 0) && (dy == 0)) {
+			printf ("\nSEG");
 			res->type = SEG;
 		} else {
+			printf ("\nNO_");
 			res->type = NO;
 		}
 	} else {
 		double x = dx / d;
 		double y = dy / d;
+		//printf ("\nintersect (%f, %f)", x, y);
 		Point2d* p = new Point2d(x, y);
 		if (s1->contains(p) && s2->contains(p)) {
+			printf("ONE");
 			res->type = ONE;
 			res->p1 = p;
 		} else {
+			printf ("\n s1->contains(p)=%d s2->contains(p)=%d",s1->contains(p),s2->contains(p));
+			printf ("\n p (%f, %f)", p->x, p->y );
+			printf ("\n s1 (%f, %f)_(%f, %f)", s1->p1->x, s1->p1->y, s1->p2->x, s1->p2->y );
+			printf ("\n s2 (%f, %f)_(%f, %f)", s2->p1->x, s2->p1->y, s2->p2->x, s2->p2->y );
+			printf(" NO");
 			res->type = NO;
 		}
 	}

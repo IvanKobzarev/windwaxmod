@@ -194,6 +194,12 @@ ColorSegment::ColorSegment(){
 	p11 = 0.0f;
 }
 
+void ColorSegment::print() {
+	printf ("\nColorSegment::print ");
+	printf (" %d [%f, %f]-[%f, %f]", nerv, p00, p01, p10, p11);
+}
+
+
 ColorSegment::~ColorSegment(){
 }
 
@@ -252,7 +258,11 @@ void PanelLinesTable::addPanelLine(int nerv, PanelLine* pl){
 	printf ("\n v.size()=%d", table[nerv].size());
 	vector<PanelLine*>::iterator it; 
 	it=table[nerv].begin();
-	while (it < table[nerv].end() && ((*it)->pos1 < pl->pos1) && ((*it)->pos2 < pl->pos2)) it++;
+	while ((it < table[nerv].end()) && ((*it)->pos1 <= pl->pos1) && ((*it)->pos2 <= pl->pos2))
+	{
+		printf ("\nit++ (%f <= %f) (%f <= %f) ", (*it)->pos1,  pl->pos1, (*it)->pos2, pl->pos2);
+		it++;
+	}
 	table[nerv].insert(it, pl);
 	printf ("\nPanelLinesTable::...addPanelLine(%d) v.size()=%d", nerv, table[nerv].size());
 }
@@ -291,19 +301,20 @@ PanelLinesTable* KiteDesign::getPanelLinesTable() {
 ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
     printf ("\nKiteDesign::getColorSegmentsTable()");
     PanelLinesTable* panelLinesTable = getPanelLinesTable();
-	printf ("\n 1");
 	int n_profils = f3d->forme->m_nbProfils;
     ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable(n_profils);
-	printf ("\n 2");
 	printf ("\n nbprofils=%d colorTable->table.size()=%d", n_profils,colorTable->table.size());
 	for (int nerv = 0; (nerv < n_profils) && (nerv < colorTable->table.size()); nerv++) {
+		printf ("\n===================================================");
 		printf ("\n nerv=%d", nerv);
+
 		vector<PanelLine*> v = panelLinesTable->table[nerv];
 		double prev_p0 = 0.0f;
 		double prev_p1 = 0.0f;
 		vector<Color*> vc = colorTable->table[nerv];
-		printf ("\n _1", nerv);
-		printf ("\n v.size()=%d", v.size());
+		printf ("\n colorTable->table[%d] vc.size()=%d", nerv, vc.size());
+
+		printf ("\n panelLinesTable->table[%d] v.size()=%d", nerv, v.size());
 
 		for (int i = 0; i < v.size(); i++) {
 			if ( i >= vc.size()) {
@@ -317,7 +328,10 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
 
 			colorSegment->p10 = v[i]->pos1;
 			colorSegment->p11 = v[i]->pos2;
+			printf ("\nv[%d]->pos1=%f pos2=%f", i, v[i]->pos1, v[i]->pos2);
 			colorSegment->color = vc[i];
+
+			printf ("\n push cs (%f, %f)-(%f, %f)", colorSegment->p00, colorSegment->p01, colorSegment->p10, colorSegment->p11);
 			colorSegmentsTable->table[nerv].push_back(colorSegment);
 			prev_p0 = v[i]->pos1;
 			prev_p1 = v[i]->pos2;
@@ -358,7 +372,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	if (side == INT_SIDE) Mesh->InvNormales=ON;
 
 	int nerv = colorSegment->nerv;
-	printf ("\n design:ajoutColorSegmentToAxe3d() nerv=%d", nerv);
+	printf ("\ndesign: ajoutColorSegmentToAxe3d() nerv=%d", nerv);
 	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
 
 	getPoint3dFormeByPosNerv(f3d, nerv, side, colorSegment->p00, &x00, &y00, &z00) ;
@@ -378,11 +392,14 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	{
 		Mesh->symX = ON;
 	}
-
 	//---------------------------------------------
+	printf ("\n colorSegment: ");
+	printf ("\n nerv=%d", nerv);
 
+	printf ("\n %f(%d) %f(%d)", colorSegment->p00, nerv, colorSegment->p01, nerv+1);
 	Point2d* pnt00 = new Point2d(nerv, colorSegment->p00);
 	Point2d* pnt01 = new Point2d(nerv+1, colorSegment->p01);
+	printf ("\n %f(%d) %f(%d)", colorSegment->p10, nerv, colorSegment->p11, nerv+1);
 	Point2d* pnt10 = new Point2d(nerv, colorSegment->p10);
 	Point2d* pnt11 = new Point2d(nerv+1, colorSegment->p11);
 
@@ -397,25 +414,39 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	pcse.push_back(colorSegment->p10);
 	pcse.push_back(colorSegment->p11);
 
-	double minp = pcse[0];
-	int iAfterMin = indexAfterPosProf(mProf,  minp);
+	std::sort(pcse.begin(), pcse.end());
 
+	double minp = pcse[0];
+	printf ("\npcse[0]=%f", pcse[0]);
+	int iAfterMin = indexAfterPosProf(mProf,  minp);
+	printf ("\niAfterMin=%d -- %f", iAfterMin, mProf->Element(iAfterMin, 0));
 	double maxp = pcse[3];
+	printf ("\npcse[3]=%f", pcse[3]);
 	int iBeforeMax = indexBeforePosProf(mProf,  maxp);
+	printf ("\niBeforeMax=%d -- %f", iBeforeMax, mProf->Element(iBeforeMax, 0));
 
 	std::vector<double> pcs;
 	pcs.push_back(colorSegment->p00);
 	pcs.push_back(colorSegment->p01);
 	pcs.push_back(colorSegment->p10);
 	pcs.push_back(colorSegment->p11);
-	for (int i = iAfterMin; i <= iBeforeMax; i++) {
+	int i = 0;
+	
+	for (i = iAfterMin; i <= iBeforeMax; i++) {
 		pcs.push_back(mProf->Element(i, 0));
 	}
 	std::sort(pcs.begin(), pcs.end());
+	
+	for (int ii = 0; ii < pcs.size(); ii++) {
+		printf ("\nPPCCSS pcs %d - %f",ii, pcs[ii]);
+	}
+
 	int k=0;
 	double prev = -1000;
-	for (int i = 0; i < pcs.size(); i++) {
+
+	for (i = 0; i < pcs.size(); i++) {
 		if (pcs[i] != prev) {
+		
 			k++;
 			prev = pcs[i];
 		}
@@ -429,45 +460,151 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	Mesh->z=new Matrice(nPts, 2);
 
 	prev = -1000;
-	k=0;
-	for (int i = 0; i < pcs.size(); i++) {
+	k = 0;
+	for (i = 0; i < pcs.size(); i++) {
+		printf ("\n==%d=======================================================", i);
+		printf ("\npcs[%d]=%f", i, pcs[i]);
 		if (pcs[i] != prev) {
+			printf ("\n!=prev go");
 			double p = pcs[i];
 			Point2d* p1 = new Point2d(nerv, p);
 			Point2d* p2 = new Point2d(nerv+1, p);
 
 			Segment2d* s = new Segment2d(p1, p2);
-			
+			printf ("\n LINE_0");
 			ResultIntersect2d* rsl0 = intersectSegments2d (s, sl0);
+			printf ("\n rsl0->type=%d", rsl0->type);
+
+			printf ("\n LINE_1");
 			ResultIntersect2d* rsl1 = intersectSegments2d (s, sl1);
+			printf ("\n rsl1->type=%d", rsl1->type);
+
+			printf ("\n E_0");
 			ResultIntersect2d* rse0 = intersectSegments2d (s, se0);
+			printf ("\n rse0->type=%d", rse0->type);
+
+			printf ("\n E_1");
 			ResultIntersect2d* rse1 = intersectSegments2d (s, se1);
+			printf ("\n rse1->type=%d", rse1->type);
 
 			if ((rsl0->type == SEG) || (rsl1->type == SEG))  {
+				printf ("\nSEG");
 				if (rsl0->type == SEG) {
+					printf ("\nrsl0->type == SEG");
+					printf ("\nset %d (%f, %f, %f) - (%f, %f, %f) ",k, x00, y00, z00, x01, y01, z01);
 					setMeshPoint(Mesh, k, 0, x00, y00, z00);
 					setMeshPoint(Mesh, k, 1, x01, y01, z01);
-				}
+				} else
 				if (rsl1->type == SEG) {
+					printf ("\nrsl1->type == SEG");
+					printf ("\nset %d (%f, %f, %f) - (%f, %f, %f) ",k,  x10, y10, z10, x11, y11, z11);
 					setMeshPoint(Mesh, k, 0, x10, y10, z10);
 					setMeshPoint(Mesh, k, 1, x11, y11, z11);
 				}
-				continue;
 			} else {
 				std::vector<double> res;
-				if (rsl0->type == ONE) res.push_back(rslo->p1->x);
-				if (rsl1->type == ONE) res.push_back(rsl1->p1->x);
-				if (rse0->type == ONE) res.push_back(rseo->p1->x);
-				if (rse1->type == ONE) res.push_back(rse1->p1->x);
-				std::sort(res.begin(), res.end());
+				vector<double>::iterator it;
+				if (rsl0->type == ONE) {
+					double xi = rsl0->p1->x;
+					printf ("\nrsl0->type == ONE : %f", xi);
+					it = std::find(res.begin(),res.end(), xi);
 
-				if (res.size() == 2) {
+					printf ("\n[%d]", res.size());
+					bool inres = false;
+					for (int _ir = 0; _ir < res.size(); _ir++) {
+						printf ("%f ", res[_ir]);
+						if (fabs(res[_ir]-xi)<0.00001f) inres = true;
+					}
+
+					if (!inres) {
+						res.push_back(xi);
+						printf ("\n push!");	
+					} else {
+						printf ("\n also in res");	
+					}
+				}
+				if (rsl1->type == ONE) {
+					double xi = rsl1->p1->x;
+					printf ("\nrsl1->type == ONE : %f", xi);
+					it = std::find(res.begin(),res.end(), xi);
+
+					printf ("\n[%d]", res.size());
+					bool inres = false;
+					for (int _ir = 0; _ir < res.size(); _ir++) {
+						printf ("%f ", res[_ir]);
+						if (fabs(res[_ir]-xi)<0.00001f) inres = true;
+					}
+
+					if (!inres) {
+						res.push_back(xi);
+						printf ("\n push!");	
+					} else {
+						printf ("\n also in res");	
+					}
+
+				}
+				if (rse0->type == ONE) {
+					double xi = rse0->p1->x;
+					it = std::find(res.begin(),res.end(), xi);
+					printf ("\nrse0->type == ONE : %f", xi);
+
+					printf ("\n[%d]", res.size());
+					bool inres = false;
+					for (int _ir = 0; _ir < res.size(); _ir++) {
+						printf ("%f ", res[_ir]);
+						if (fabs(res[_ir]-xi)<0.00001f) inres = true;
+					}
+
+
+					if (!inres) {
+						res.push_back(xi);
+						printf ("\n push!");	
+					} else {
+						printf ("\n also in res");	
+					}
+				}
+				if (rse1->type == ONE) {
+					double xi = rse1->p1->x;
+					it = std::find(res.begin(),res.end(), xi);
+
+					printf ("\n[%d]", res.size());
+					bool inres = false;
+					for (int _ir = 0; _ir < res.size(); _ir++) {
+						printf ("%f ", res[_ir]);
+						if (fabs(res[_ir]-xi)<0.00001f) inres = true;
+					}
+
+
+					printf ("\nrse1->type == ONE : %f", rse1->p1->x);
+					if (!inres) {
+						res.push_back(xi);
+						printf ("\n push!");	
+					} else {
+						printf ("\n also in res");	
+					}
+
+				}
+				std::sort(res.begin(), res.end());
+				int rsize = res.size();
+				printf ("\n*** res.size()=%d ", rsize);
+				for (int _ir = 0; _ir < res.size(); _ir++) {
+					printf ("%f ", res[_ir]);
+				}
+
+				if ((rsize == 2) || (rsize == 1)) {
 					double x0=0.0f, y0=0.0f, z0=0.0f, x1=0.0f, y1=0.0f, z1=0.0f;
 					getPoint3dFormeByPosDNerv(f3d, res[0], side, pcs[i], &x0, &y0, &z0) ;
-					getPoint3dFormeByPosDNerv(f3d, res[1], side, pcs[i], &x1, &y1, &z1) ;
-					setMeshPoint(Mesh, k, 0, x0, y0, z0);
-					setMeshPoint(Mesh, k, 1, x1, y1, z1);
-				}
+					setMeshPoint(Mesh, k, 0, x0, y0, z0);	
+					printf ("\nset %d (%f, %f, %f)", k, x0, y0, z0);
+					if (rsize == 2) {
+						getPoint3dFormeByPosDNerv(f3d, res[1], side, pcs[i], &x1, &y1, &z1) ;
+						setMeshPoint(Mesh, k, 1, x1, y1, z1);
+						printf(" - (%f, %f, %f) ", x1, y1, z1);
+					} else {
+						setMeshPoint(Mesh, k, 1, x0, y0, z0);
+						printf(" - (%f, %f, %f) ", x0, y0, z0);
+					}
+				} 
 			}
 			k++;
 			prev = pcs[i];
@@ -476,7 +613,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	//=============================================
 	AjoutMesh(Axe3d, Mesh);
 }
-
+/*
 void ajoutColorSegmentToAxe3dOld(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
 	printf ("\ndesign:ajoutColorSegmentToAxe3d()");
 	Axe3d->eclairage = ON;
@@ -577,21 +714,34 @@ void ajoutColorSegmentToAxe3dOld(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorS
 	AjoutMesh(Axe3d, Mesh);
 
 }
-
+*/
 
 void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric){
 	printf ("\nKiteDesign::ajoutMeshesToAxe3d");
-
+	/*
+	// test 
+	ColorSegment* cs = new ColorSegment();
+	cs->p00 = 0.0f;
+	cs->p01 = 50.0f;
+	cs->nerv=1;
+	cs->p10 = 10.0f;
+	cs->p11 = 60.0f;
+	cs->color = new Color(1.0f, 0.0f, 0.0f);
+	ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
+	*/
     ColorSegmentsTable* cst = getColorSegmentsTable(f3d);
-    for (int nerv = 0; nerv < f3d->forme->m_nbProfils; nerv++) {
-		printf ("\nKiteDesign::ajoutMeshesToAxe3d nerv=%d", nerv);
+	for (int nerv = 0; nerv < f3d->forme->m_nbProfils; nerv++) {
+	//for (int nerv = 3; nerv < 4; nerv++) {
 		vector<ColorSegment*> vcs = cst->table[nerv];
-		printf ("\nKiteDesign::ajoutMeshesToAxe3d vcs.size()=%d", vcs.size());
+		printf ("\nKiteDesign::ajoutMeshesToAxe3d nerv=%d vcs.size()=%d", nerv, vcs.size());
 		for (int i = 0; i < vcs.size(); i++) {
+		//for (int i = 1; i < 2; i++) {
+			printf ("\nKiteDesign::ajoutMeshesToAxe3d colorSegment i=%d", i);
 			ColorSegment* cs = vcs[i];
+			//printf ("\nColorSegmentKiteDesign::ajoutMeshesToAxe3d colorSegment i=%d", i);
+			cs->print();
 			ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
 		}
     }
-
 	printf ("\n...KiteDesign::ajoutMeshesToAxe3d");
 }
