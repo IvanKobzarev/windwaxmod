@@ -20,8 +20,6 @@
 
 
 #include <string>
-
-
 #include "profil.h"
 
 //using namespace std;
@@ -48,8 +46,8 @@ public:
 	int symY; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON*/
 	int symZ; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON si axe3d*/
 	int alt; /*alterne segment et vide au trac�*/
-	double CouleurSegments[3];
-	double CouleurPoints[3];
+	double CouleurSegments[4];
+	double CouleurPoints[4];
 	Matrice *pts;		/*matrice des points de la courbe*/
 	Courbe *CourbSuiv;	/*pointeur vers la courbe suivante de l'axe courant*/
 	bool visible;
@@ -67,9 +65,9 @@ struct Mesh
 	int symX; /*trace courbe sym�trique /axe X: 0:OFF, 1:ON*/
 	int symY; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON*/
 	int symZ; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON si axe3d*/
-	double CouleurFaces[3];
-	double CouleurSegments[3];
-	double CouleurPoints[3];
+	double CouleurFaces[4];
+	double CouleurSegments[4];
+	double CouleurPoints[4];
 	int InvNormales;	/*inversion normale ON ou OFF*/
 	Matrice *x, *y, *z;
 	TMesh *MeshSuiv;	/*pointeur vers la courbe suivante de l'axe courant*/
@@ -84,9 +82,9 @@ struct Axe
 	int fenetre;	/*numero fenetre contenant l'axe*/
 	int axe3d;		/*0: axe 2d, 1:axe 3d*/
 	double xmin,xmax,ymin,ymax,zmin,zmax;	/*valeur min et max des axes*/
-	double CouleurFond[3];
-	double CouleurGrid[3];
-	double CouleurRep[3];
+	double CouleurFond[4];
+	double CouleurGrid[4];
+	double CouleurRep[4];
 	int XAuto, YAuto, ZAuto;	/*auto-ajustement des axes*/
 	int Norme;					/*axes norm�s*/
 	int XGrid, YGrid, ZGrid;	/*0: pas de graduation, 1: graduation*/

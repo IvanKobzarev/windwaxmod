@@ -20,16 +20,18 @@ Color::Color(){
 	r = 0.0f;
 	g = 0.0f;
 	b = 0.0f;
+	a = 0.5f;
 }
 
 Color::Color(double _r, double _g, double _b) {
 	r = _r;
 	g = _g;
 	b = _b;
+	a = 0.5f;
 }
 
 void Color::print() {
-	printf ("\n(%f, %f, %f)", r, g, b);
+	printf ("\n(%f, %f, %f)(a=%f)", r, g, b,a);
 }
 
 Color::~Color(){
@@ -54,7 +56,8 @@ Line::Line(){
 }
 
 Line::Line(std::ifstream& in){
-	in >> colorR >> colorG >> colorB;
+	//in >> colorR >> colorG >> colorB;
+	c = new Color(in);
 	//cout << "Line color: "<< colorR << colorG << colorB  ;
 	n_points = 0;
 	in >> n_points;
@@ -87,12 +90,14 @@ ColorTable::ColorTable(std::ifstream& in){
 
 Color::Color(std::ifstream& in){
 	in >> r >> g >> b;
+	a = 0.5f;
 }
 
 void Line::initColor(Courbe* courbe) {
-	courbe->CouleurSegments[0] = colorR;
-	courbe->CouleurSegments[1] = colorG;
-	courbe->CouleurSegments[2] = colorB;
+	courbe->CouleurSegments[0] = c->r;
+	courbe->CouleurSegments[1] = c->g;
+	courbe->CouleurSegments[2] = c->b;
+	courbe->CouleurSegments[3] = c->a;
 }
 
 void Line::ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin)
@@ -392,6 +397,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 	Mesh->CouleurFaces[0] = colorSegment->color->r;
 	Mesh->CouleurFaces[1] = colorSegment->color->g;
 	Mesh->CouleurFaces[2] = colorSegment->color->b;
+	Mesh->CouleurFaces[3] = colorSegment->color->a;
 
 	if(symetric==1)
 	{

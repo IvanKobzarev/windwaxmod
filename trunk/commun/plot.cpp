@@ -160,14 +160,17 @@ TMesh* CreerMesh(void)
 	mesh->CouleurPoints[0] = 1.0f;
 	mesh->CouleurPoints[1] = 1.0f;
 	mesh->CouleurPoints[2] = 0.0f;
+	mesh->CouleurPoints[3] = 1.0f;
 	/*blanc*/
 	mesh->CouleurSegments[0] = 1.0f;
 	mesh->CouleurSegments[1] = 1.0f;
 	mesh->CouleurSegments[2] = 1.0f;
+	mesh->CouleurSegments[3] = 1.0f;
 	/*jaune*/
 	mesh->CouleurFaces[0] = 1.0f;
 	mesh->CouleurFaces[1] = 1.0f;
 	mesh->CouleurFaces[2] = 0.0f;
+	mesh->CouleurFaces[3] = 1.0f;
 	return mesh;
 }
 
@@ -394,6 +397,11 @@ void VisuAxe(TAxe *axe)
 			glDisable(GL_LIGHTING);
 		else
 			glEnable(GL_LIGHTING);
+		//-----------------
+		glEnable (GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glShadeModel (GL_FLAT);
+		//-------------------------
 	}
 	else
 	{
@@ -439,7 +447,7 @@ void VisuAxe(TAxe *axe)
 	{
 		/*trac� boite englobante*/
 		glLineStipple (1, 0xFFFF);
-		glColor3dv(axe->CouleurRep);
+		glColor4dv(axe->CouleurRep);
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(axe->xmin,axe->ymin,axe->zmin);
 		glVertex3f(axe->xmax,axe->ymin,axe->zmin);
@@ -547,12 +555,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor3dv(axe->CouleurGrid);
+				glColor4dv(axe->CouleurGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor3dv(axe->CouleurRep);
+				glColor4dv(axe->CouleurRep);
 			}
 			if(axe->axe3d == OFF)
 			{
@@ -588,12 +596,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor3dv(axe->CouleurGrid);
+				glColor4dv(axe->CouleurGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor3dv(axe->CouleurRep);
+				glColor4dv(axe->CouleurRep);
 			}
 			if(axe->axe3d == OFF)
 			{
@@ -629,12 +637,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor3dv(axe->CouleurGrid);
+				glColor4dv(axe->CouleurGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor3dv(axe->CouleurRep);
+				glColor4dv(axe->CouleurRep);
 			}
 			glBegin(GL_LINES);
 			glVertex3f(axe->xmin,yaxe,(double)i);
@@ -676,7 +684,7 @@ void VisuAxe(TAxe *axe)
 				if (CourbCour->points == ON)
 				{
 					glPointSize(5.0);
-					glColor3dv(CourbCour->CouleurPoints);
+					glColor4dv(CourbCour->CouleurPoints);
 					glBegin(GL_POINTS);
 					for(l=0; l<CourbCour->pts->GetLignes(); l++)
 						if(axe->axe3d == OFF)
@@ -690,7 +698,7 @@ void VisuAxe(TAxe *axe)
 				/*affichage des segments*/
 				if (CourbCour->segments == ON)
 				{
-					glColor3dv(CourbCour->CouleurSegments);
+					glColor4dv(CourbCour->CouleurSegments);
 					if(CourbCour->alt == OFF)
 					{
 						glBegin(GL_LINE_STRIP);
@@ -757,7 +765,7 @@ void VisuAxe(TAxe *axe)
 				if (MeshCour->points == ON)
 				{
 					glPointSize(5.0);
-					glColor3dv(MeshCour->CouleurPoints);
+					glColor4dv(MeshCour->CouleurPoints);
 					glBegin(GL_POINTS);
 					for(l=0; l<MeshCour->x->GetLignes(); l++)
 						for(c=0; c<MeshCour->x->GetColonnes(); c++)
@@ -775,14 +783,14 @@ void VisuAxe(TAxe *axe)
 					/*couleur et mode d'affichage*/
 					if (MeshCour->segments == ON)
 					{
-						glColor3dv(MeshCour->CouleurSegments);
+						glColor4dv(MeshCour->CouleurSegments);
 						//glColor3d(1.0f, 0.0f, 0.0f);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 					}
 					else
 					{
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-						glColor3dv(MeshCour->CouleurFaces);
+						glColor4dv(MeshCour->CouleurFaces);
 						//glColor3d(1.0f, 0.0f, 0.0f);
 					}
 					/*boucle de trac�*/

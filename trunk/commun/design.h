@@ -13,6 +13,8 @@
 #include "rasklad.h"
 #include "patternsproject.h"
 
+class Color;
+
 class KiteDesignElement {
 public:
 	KiteDesignElement();
@@ -30,7 +32,8 @@ public:
 	int n_points;
 	int* pointsNervs;
 	double* pointsPercents;
-	double colorR, colorG, colorB;
+	//double colorR, colorG, colorB;
+	Color* c;
 	void print();
 	void ajoutCourbesToAxe(TAxe* axe, FormeProjection* fp, int symetric, double dy, double ymult, double ymin);
 	void ajoutCourbesToAxe3d(TAxe* axe, Forme3D* f3d, int side, int symetric);
@@ -45,7 +48,7 @@ public:
 	Color(double r, double g, double b);
 	virtual ~Color();
 
-	double r, g, b;
+	double r, g, b, a;
 	void print();
 };
 
