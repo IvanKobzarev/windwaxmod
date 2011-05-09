@@ -67,6 +67,9 @@ KiteDesign* kiteDesignInt = 0;
 GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
 float dyw = 0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
+
+float transpExt = 0.8f, transpInt = 0.6f;
+
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
 int Rotation3d = OFF;
@@ -690,6 +693,15 @@ int main(int argc, char** argv)
     glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
+    GLUI_Panel *panelTransparency = glui->add_panel("Transparency");
+	GLUI_Spinner *extTranspSpinner = glui->add_spinner_to_panel(panelTransparency, "Transp. Ext", GLUI_SPINNER_FLOAT, &(transpExt));
+	extTranspSpinner->set_float_limits(0.0f,1.0f);
+
+	GLUI_Spinner *intTranspSpinner = glui->add_spinner_to_panel(panelTransparency, "Transp. Int", GLUI_SPINNER_FLOAT, &(transpInt));
+	
+	intTranspSpinner->set_float_limits(0.0f,1.0f);
+
+	// ----- end of constructing GUI ----- 
     GLUI_Master.set_glutIdleFunc(NULL);
 	glui->sync_live();
 	Apply(0);
