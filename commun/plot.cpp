@@ -1084,7 +1084,7 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 /**************************/
 /* AjoutForme3DKiteDesign */
 /**************************/
-void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteDesign* kdInt, int mesh, int symetric) 
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float opacExt, KiteDesign* kdInt,float opacInt, int mesh, int symetric) 
 {
 	// KiteDesign Ext Side
 	for (int i = 0; i < kdExt->n_elements; i++) {
@@ -1093,7 +1093,7 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 	}
 	ColorTable* ct = kdExt->colorTable;
 
-	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, EXT_SIDE, symetric);
+	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, opacExt, EXT_SIDE, symetric);
 
 	// KiteDesign Int Side
 	for (int i = 0; i < kdInt->n_elements; i++) {
@@ -1101,7 +1101,7 @@ void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteD
 		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, INT_SIDE, symetric);
 	}
 
-	kdInt->ajoutMeshesToAxe3d( Axe3d, f3d, INT_SIDE, symetric);
+	kdInt->ajoutMeshesToAxe3d( Axe3d, f3d, opacInt, INT_SIDE, symetric);
 }
 
 void AjoutForme3D( TAxe *Axe3d, 
@@ -1335,10 +1335,7 @@ void AjoutPtsSuspentage(
 	Matrice *interpSuspente = NULL;
 	int NbNerv, i, j;
 
-
-
 	/*init variables pour simplifier ecriture*/
-
 	NbNerv = XInt->GetLignes();
 
 	//creation courbe des pts de suspentage
@@ -1346,7 +1343,7 @@ void AjoutPtsSuspentage(
 	CourbCour->points = ON;
 	CourbCour->segments =OFF;
 	CourbCour->pts = Zeros(5*NbNerv,3); //par defaut 4 pts de suspentage
-	if(symetrie==1) CourbCour->symX = ON;
+	if(symetrie == 1) CourbCour->symX = ON;
 
 	//boucle nervures
 	for (i=0; i<NbNerv; i++)

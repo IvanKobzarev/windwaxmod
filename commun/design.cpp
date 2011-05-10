@@ -380,6 +380,7 @@ void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegm
 
 	Mesh->segments=OFF; Mesh->faces=ON;
 	if (side == INT_SIDE) Mesh->InvNormales=ON;
+	Mesh->side = side;
 
 	int nerv = colorSegment->nerv;
 	//printf ("\ndesign: ajoutColorSegmentToAxe3d() nerv=%d", nerv);
@@ -727,7 +728,7 @@ void ajoutColorSegmentToAxe3dOld(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorS
 }
 */
 
-void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric){
+void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, float opac, int side, int symetric){
 	printf ("\nKiteDesign::ajoutMeshesToAxe3d");
 	/*
 	// test 
@@ -749,8 +750,9 @@ void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int sy
 		//for (int i = 1; i < 2; i++) {
 		//	printf ("\nKiteDesign::ajoutMeshesToAxe3d colorSegment i=%d", i);
 			ColorSegment* cs = vcs[i];
+			cs->color->a = opac;
 			//printf ("\nColorSegmentKiteDesign::ajoutMeshesToAxe3d colorSegment i=%d", i);
-			cs->print();
+			//cs->print();
 			ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
 		}
     }

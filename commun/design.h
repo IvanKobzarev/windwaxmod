@@ -123,7 +123,7 @@ public:
 	KiteDesignElement** kiteDesignElements;
 	ColorTable* colorTable;
 
-	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, int side, int symetric);
+	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, float opac, int side, int symetric);
 
     ColorSegmentsTable* getColorSegmentsTable(Forme3D* f3d);
     PanelLinesTable* getPanelLinesTable();
