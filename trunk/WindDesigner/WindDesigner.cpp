@@ -68,7 +68,7 @@ GLUI_Spinner *SpinNoNerv[2];
 int NoNerv[2] = {0, 1};
 float dyw = 0.5f, wN=22.0f, kChord=1.05f, kMf=0.25f, power=1.1f;
 
-float transpExt = 0.8f, transpInt = 0.6f;
+float opacExt = 0.8f, opacInt = 0.6f;
 
 int xSouris, ySouris;
 int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZoom = false;
@@ -514,27 +514,58 @@ void Apply3d(int /*control*/) {
 }
 
 
+
+void modifSpinnerExt(int /*control*/) {
+	TMesh* MeshCour;
+	MeshCour=Axe3d->Mesh;
+	while (MeshCour != NULL)
+	{	
+		if (MeshCour->side == EXT_SIDE) {
+			MeshCour->CouleurFaces[3] = opacExt;
+		}
+		MeshCour=MeshCour->MeshSuiv;
+	}
+	display();
+}
+
+void modifSpinnerInt(int /*control*/) {
+	TMesh* MeshCour;
+	MeshCour=Axe3d->Mesh;
+	while (MeshCour != NULL)
+	{	
+		if (MeshCour->side == INT_SIDE) {
+			MeshCour->CouleurFaces[3] = opacInt;
+		}
+		MeshCour=MeshCour->MeshSuiv;
+	}
+	display();
+}
+
 void Apply(int /*control*/) {
 	// 3D
 	// forme visualisation
+	//printf ("\nLibererCourbesAxe(Axe3d);");
+    //LibererCourbesAxe(Axe3d);
+	printf ("\nLibererMeshsAxe(Axe3d);");
+    LibererMeshsAxe(Axe3d);
+
+
     Matrice *XExt, *YExt, *ZExt, *YExt0;
     Matrice *XInt, *YInt, *ZInt, *YInt0;
-
     CalculForme3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-
 	Forme3D* f3d = getForme3D(F, 0, 0.0f);
-            //ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
 
+	//ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
     //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
 	//YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
 	//YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
 
+	printf ("\nOpacity:");
+	printf ("\nopacExt=%f opacInt=%f", opacExt, opacInt);
 	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
-	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, kiteDesignInt, VisuFace, VisuSymetrique);
-
-
+	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt,VisuFace, VisuSymetrique);
 	// 2D
 	//------------------------ Projections Fenetre calculation -------------------------------------
     AxeProjections->XAuto = ON;
@@ -693,17 +724,19 @@ int main(int argc, char** argv)
     glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
-    GLUI_Panel *panelTransparency = glui->add_panel("Transparency");
-	GLUI_Spinner *extTranspSpinner = glui->add_spinner_to_panel(panelTransparency, "Transp. Ext", GLUI_SPINNER_FLOAT, &(transpExt));
+    GLUI_Panel *panelOpacity = glui->add_panel("Opacity");
+	GLUI_Spinner *extTranspSpinner = glui->add_spinner_to_panel(panelOpacity, "Ext", GLUI_SPINNER_FLOAT, &(opacExt), 0, &modifSpinnerExt);
 	extTranspSpinner->set_float_limits(0.0f,1.0f);
 
-	GLUI_Spinner *intTranspSpinner = glui->add_spinner_to_panel(panelTransparency, "Transp. Int", GLUI_SPINNER_FLOAT, &(transpInt));
+	GLUI_Spinner *intTranspSpinner = glui->add_spinner_to_panel(panelOpacity, "Int", GLUI_SPINNER_FLOAT, &(opacInt), 0, &modifSpinnerInt);
 	
 	intTranspSpinner->set_float_limits(0.0f,1.0f);
-
+    glui->add_button("Apply", 0, &Apply);
 	// ----- end of constructing GUI ----- 
+
     GLUI_Master.set_glutIdleFunc(NULL);
 	glui->sync_live();
+
 	Apply(0);
 	AxeSel = Axe3d;
     display();

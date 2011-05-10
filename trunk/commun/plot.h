@@ -69,6 +69,7 @@ struct Mesh
 	double CouleurSegments[4];
 	double CouleurPoints[4];
 	int InvNormales;	/*inversion normale ON ou OFF*/
+	int side;
 	Matrice *x, *y, *z;
 	TMesh *MeshSuiv;	/*pointeur vers la courbe suivante de l'axe courant*/
 };
@@ -130,4 +131,4 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 
 void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
 
-void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, KiteDesign* kdInt, int mesh, int symetric);
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float transpExt, KiteDesign* kdInt, float transpInt, int mesh, int symetric);
