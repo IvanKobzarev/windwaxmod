@@ -127,8 +127,3 @@ void AjoutPtsSuspentage(
 						Matrice *XInt, Matrice *YInt, Matrice *ZInt,
 						int symetrie, Matrice **PosPtsSuspente);
 
-void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
-
-void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
-
-void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float transpExt, KiteDesign* kdInt, float transpInt, int mesh, int symetric);

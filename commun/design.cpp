@@ -308,10 +308,9 @@ PanelLinesTable* KiteDesign::getPanelLinesTable() {
     return panelLinesTable;
 }
 
-ColorSegmentsTable* KiteDesign::getColorSegmentsTable(Forme3D* f3d){
+ColorSegmentsTable* KiteDesign::getColorSegmentsTable(int n_profils ){
     printf ("\nKiteDesign::getColorSegmentsTable()");
     PanelLinesTable* panelLinesTable = getPanelLinesTable();
-	int n_profils = f3d->forme->m_nbProfils;
     ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable(n_profils);
 	//printf ("\n nbprofils=%d colorTable->table.size()=%d", n_profils,colorTable->table.size());
 	for (int nerv = 0; (nerv < n_profils) && (nerv < colorTable->table.size()); nerv++) {
@@ -370,6 +369,70 @@ void setMeshPoint(TMesh *Mesh, int i, int j, double x, double y, double z) {
 	Mesh->x->SetElement(i, j, x);
 	Mesh->y->SetElement(i, j, y);
 	Mesh->z->SetElement(i, j, z);
+}
+
+
+
+void ajoutColorSegmentToAxeProjection(TAxe *AxeProjection, FormeProjection* fp, ColorSegment* colorSegment, int symetric,  double dy, double ymult, double ymin) {
+	TMesh *Mesh;
+	Mesh = CreerMesh();
+	Mesh->segments=OFF; Mesh->faces=ON;
+	Mesh->CouleurFaces[0] = colorSegment->color->r;
+	Mesh->CouleurFaces[1] = colorSegment->color->g;
+	Mesh->CouleurFaces[2] = colorSegment->color->b;
+	Mesh->CouleurFaces[3] = 1.0f;
+	if(symetric==1) Mesh->symX = ON;
+
+	int nerv = colorSegment->nerv;
+	/*
+		nerv               nerv+1
+
+		p10	-------------- p11
+		|					|
+		|					|
+		|					|
+		|					|
+		|					|
+		p00	-------------- p01
+
+	*/
+	double p00 = colorSegment->p00;
+	double p01 = colorSegment->p01;
+
+	double p10 = colorSegment->p10;
+	double p11 = colorSegment->p11;
+
+	double x0nerv1 = fp->X->Element(nerv, 0);
+	double y0nerv1 = fp->Y->Element(nerv, 0);
+
+	double x1nerv1 = fp->X->Element(nerv, 1);
+	double y1nerv1 = fp->Y->Element(nerv, 1);
+
+	double xp00 = x0nerv1 + p00 * 0.01 * (x1nerv1 - x0nerv1);
+	double yp00 = y0nerv1 + p00 * 0.01 * (y1nerv1 - y0nerv1);
+	double xp10 = x0nerv1 + p10 * 0.01 * (x1nerv1 - x0nerv1);
+	double yp10 = y0nerv1 + p10 * 0.01 * (y1nerv1 - y0nerv1);
+
+	double x0nerv2 = fp->X->Element(nerv+1, 0);
+	double y0nerv2 = fp->Y->Element(nerv+1, 0);
+	double x1nerv2 = fp->X->Element(nerv+1, 1);
+	double y1nerv2 = fp->Y->Element(nerv+1, 1);
+
+	double xp01 = x0nerv2 + p01 * 0.01 * (x1nerv2 - x0nerv2);
+	double yp01 = y0nerv2 + p01 * 0.01 * (y1nerv2 - y0nerv2);
+	double xp11 = x0nerv2 + p11 * 0.01 * (x1nerv2 - x0nerv2);
+	double yp11 = y0nerv2 + p11 * 0.01 * (y1nerv2 - y0nerv2);
+
+	Mesh->x=new Matrice(2, 2);
+	Mesh->y=new Matrice(2, 2);
+	Mesh->z=new Matrice(2, 2);
+
+	setMeshPoint(Mesh, 0, 0, xp00, dy + ymult*yp00 - ymin, 0.0f);
+	setMeshPoint(Mesh, 0, 1, xp01, dy + ymult*yp01 - ymin, 0.0f);
+
+	setMeshPoint(Mesh, 1, 0, xp10, dy + ymult*yp10 - ymin, 0.0f);
+	setMeshPoint(Mesh, 1, 1, xp11, dy + ymult*yp11 - ymin, 0.0f);
+	AjoutMesh(AxeProjection, Mesh);
 }
 
 void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
@@ -741,7 +804,7 @@ void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, float opac, int 
 	cs->color = new Color(1.0f, 0.0f, 0.0f);
 	ajoutColorSegmentToAxe3d(Axe3d, f3d, cs, side, symetric);
 	*/
-    ColorSegmentsTable* cst = getColorSegmentsTable(f3d);
+	ColorSegmentsTable* cst = getColorSegmentsTable( f3d->forme->m_nbProfils );
 	for (int nerv = 0; nerv < f3d->forme->m_nbProfils; nerv++) {
 	//for (int nerv = 3; nerv < 4; nerv++) {
 		vector<ColorSegment*> vcs = cst->table[nerv];
@@ -757,4 +820,140 @@ void KiteDesign::ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, float opac, int 
 		}
     }
 	printf ("\n...KiteDesign::ajoutMeshesToAxe3d");
+}
+ 
+void KiteDesign::ajoutMeshesToAxeProjection( TAxe *AxeProjection, FormeProjection* fp, int symetric, double dy, double ymult, double ymin){
+	ColorSegmentsTable* cst = getColorSegmentsTable(fp->X->GetLignes());
+	for (int nerv = 0; nerv < fp->X->GetLignes(); nerv++) {
+		vector<ColorSegment*> vcs = cst->table[nerv];
+		for (int i = 0; i < vcs.size(); i++) {
+			ColorSegment* cs = vcs[i];
+			ajoutColorSegmentToAxeProjection(AxeProjection, fp, cs, symetric, dy, ymult, ymin);
+		}
+    }
+}
+
+/**************************/
+/* AjoutForme3DKiteDesign */
+/**************************/
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float opacExt, KiteDesign* kdInt,float opacInt, int mesh, int symetric) 
+{
+	// KiteDesign Ext Side
+	for (int i = 0; i < kdExt->n_elements; i++) {
+		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, EXT_SIDE, symetric);
+	}
+	ColorTable* ct = kdExt->colorTable;
+
+	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, opacExt, EXT_SIDE, symetric);
+
+	// KiteDesign Int Side
+	for (int i = 0; i < kdInt->n_elements; i++) {
+		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, INT_SIDE, symetric);
+	}
+
+	kdInt->ajoutMeshesToAxe3d( Axe3d, f3d, opacInt, INT_SIDE, symetric);
+}
+
+void AjoutFormeProjectionKiteDesign(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
+	//calculate kite design courbes
+	double ymult = 1;
+	if (dir == DIR_NOSE_DOWN) ymult=-1;
+	int n = fp->X->GetLignes();
+	int m = fp->X->GetColonnes();
+
+	double ymin = 1000000;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			double y = fp->Y->Element(i, j);
+			if (y*ymult < ymin) ymin = y*ymult;
+		}
+	}
+	ColorTable* ct = kd->colorTable;
+	kd -> ajoutMeshesToAxeProjection( axe, fp, symetric, dy, ymult, ymin );
+
+	for (int i = 0; i < kd->n_elements; i++) {
+		KiteDesignElement* kde = kd->kiteDesignElements[i];
+		kde -> ajoutCourbesToAxe( axe, fp, symetric, dy, ymult, ymin );
+	}
+
+}
+
+
+void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt){
+	*courbeExt = new Courbe("ProfileExt");
+    (*courbeExt)->points = OFF;
+    (*courbeExt)->symX = OFF;
+
+	int nExt = pg->ExtProf->GetLignes();
+	int nInt = pg->IntProf->GetLignes();
+	(*courbeExt)->pts = new Matrice(nExt,2);
+	for (int i = 0; i < nExt; i++) {
+		(*courbeExt)->pts->SetElement(i, 0, pg->ExtProf->Element(i, 0));
+		(*courbeExt)->pts->SetElement(i, 1, pg->ExtProf->Element(i, 1));
+	}
+	(*courbeInt) = new Courbe("ProfileInt");
+    (*courbeInt)->points = OFF;
+    (*courbeInt)->symX = OFF;
+	(*courbeInt)->pts = new Matrice(nInt,2);
+	for (int i = 0; i < nInt; i++) {
+		(*courbeInt)->pts->SetElement( i, 0, pg->IntProf->Element(i, 0));
+		(*courbeInt)->pts->SetElement( i, 1, pg->IntProf->Element(i, 1));
+	}
+}
+
+
+void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
+	//printf ("\n ajoutFormeProjectionCourbesToAxe()");
+	double ymult = 1;
+	if (dir == DIR_NOSE_DOWN) ymult=-1;
+	int n = fp->X->GetLignes();
+	int m = fp->X->GetColonnes();
+	//printf ("\n n=%d, m=%d", n, m);
+	
+	Courbe* courbe0 = new Courbe("CourbeUp");
+	courbe0->points = OFF;
+	if (symetric) courbe0->symX = ON;
+	courbe0->pts = new Matrice(n, 2);
+
+	Courbe* courbe1 = new Courbe("CourbeDown");
+	courbe1->points = OFF;
+	if (symetric) courbe1->symX = ON;
+	courbe1->pts = new Matrice(n, 2);
+	
+
+	double ymin = 1000000;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			double y = fp->Y->Element(i, j);
+			if (y*ymult < ymin) ymin = y*ymult;
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		//printf ("\n i=%d", i);
+		Courbe* courbe = new Courbe("Courbe");
+		courbe->points = OFF;
+		courbe->symX = OFF;
+		if (symetric) courbe->symX = ON;
+		courbe0->pts->SetElement(i, 0, fp->X->Element(i, 0));
+		courbe0->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, 0)- ymin);
+		courbe->pts = new Matrice(m, 2);
+		for (int j = 0; j < m; j++) {
+			double x = fp->X->Element(i, j);
+			courbe->pts->SetElement(j, 0, x);
+			double y = fp->Y->Element(i, j);
+			courbe->pts->SetElement(j, 1, dy + (ymult*y - ymin));
+			//printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
+		}
+		courbe1->pts->SetElement(i, 0, fp->X->Element(i, m-1) );
+		courbe1->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, m-1)-ymin);
+
+		//printf ("\n AjoutCourbe()");
+		AjoutCourbe(axe, courbe);
+	}
+	
+	AjoutCourbe(axe, courbe0);
+	AjoutCourbe(axe, courbe1);
 }

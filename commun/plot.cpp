@@ -1081,29 +1081,6 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 	delete(X); delete(Y); delete(T); delete(R);
 }
 
-/**************************/
-/* AjoutForme3DKiteDesign */
-/**************************/
-void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float opacExt, KiteDesign* kdInt,float opacInt, int mesh, int symetric) 
-{
-	// KiteDesign Ext Side
-	for (int i = 0; i < kdExt->n_elements; i++) {
-		KiteDesignElement* kde = kdExt->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, EXT_SIDE, symetric);
-	}
-	ColorTable* ct = kdExt->colorTable;
-
-	kdExt->ajoutMeshesToAxe3d( Axe3d, f3d, opacExt, EXT_SIDE, symetric);
-
-	// KiteDesign Int Side
-	for (int i = 0; i < kdInt->n_elements; i++) {
-		KiteDesignElement* kde = kdInt->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe3d(Axe3d, f3d, INT_SIDE, symetric);
-	}
-
-	kdInt->ajoutMeshesToAxe3d( Axe3d, f3d, opacInt, INT_SIDE, symetric);
-}
-
 void AjoutForme3D( TAxe *Axe3d, 
 			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
 			 Matrice *XInt, Matrice *YInt, Matrice *ZInt,
@@ -1235,89 +1212,6 @@ void AjoutForme3D( TAxe *Axe3d,
 		/*ajout mesh a l'axe3d*/
 		AjoutMesh(Axe3d, MeshExt); AjoutMesh(Axe3d, MeshInt);
 	}
-}
-
-void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt){
-	*courbeExt = new Courbe("ProfileExt");
-    (*courbeExt)->points = OFF;
-    (*courbeExt)->symX = OFF;
-
-	int nExt = pg->ExtProf->GetLignes();
-	int nInt = pg->IntProf->GetLignes();
-	(*courbeExt)->pts = new Matrice(nExt,2);
-	for (int i = 0; i < nExt; i++) {
-		(*courbeExt)->pts->SetElement(i, 0, pg->ExtProf->Element(i, 0));
-		(*courbeExt)->pts->SetElement(i, 1, pg->ExtProf->Element(i, 1));
-	}
-	(*courbeInt) = new Courbe("ProfileInt");
-    (*courbeInt)->points = OFF;
-    (*courbeInt)->symX = OFF;
-	(*courbeInt)->pts = new Matrice(nInt,2);
-	for (int i = 0; i < nInt; i++) {
-		(*courbeInt)->pts->SetElement( i, 0, pg->IntProf->Element(i, 0));
-		(*courbeInt)->pts->SetElement( i, 1, pg->IntProf->Element(i, 1));
-	}
-}
-
-void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
-	//printf ("\n ajoutFormeProjectionCourbesToAxe()");
-	double ymult = 1;
-	if (dir == DIR_NOSE_DOWN) ymult=-1;
-	int n = fp->X->GetLignes();
-	int m = fp->X->GetColonnes();
-	//printf ("\n n=%d, m=%d", n, m);
-	
-	Courbe* courbe0 = new Courbe("CourbeUp");
-	courbe0->points = OFF;
-	if (symetric) courbe0->symX = ON;
-	courbe0->pts = new Matrice(n, 2);
-
-	Courbe* courbe1 = new Courbe("CourbeDown");
-	courbe1->points = OFF;
-	if (symetric) courbe1->symX = ON;
-	courbe1->pts = new Matrice(n, 2);
-	
-
-	double ymin = 1000000;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			double y = fp->Y->Element(i, j);
-			if (y*ymult < ymin) ymin = y*ymult;
-		}
-	}
-
-	for (int i = 0; i < n; i++) {
-		//printf ("\n i=%d", i);
-		Courbe* courbe = new Courbe("Courbe");
-		courbe->points = OFF;
-		courbe->symX = OFF;
-		if (symetric) courbe->symX = ON;
-		courbe0->pts->SetElement(i, 0, fp->X->Element(i, 0));
-		courbe0->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, 0)- ymin);
-		courbe->pts = new Matrice(m, 2);
-		for (int j = 0; j < m; j++) {
-			double x = fp->X->Element(i, j);
-			courbe->pts->SetElement(j, 0, x);
-			double y = fp->Y->Element(i, j);
-			courbe->pts->SetElement(j, 1, dy + (ymult*y - ymin));
-			//printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
-		}
-		courbe1->pts->SetElement(i, 0, fp->X->Element(i, m-1) );
-		courbe1->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, m-1)-ymin);
-
-		//printf ("\n AjoutCourbe()");
-		AjoutCourbe(axe, courbe);
-	}
-	
-	//calculate kite design courbes
-
-	for (int i = 0; i < kd->n_elements; i++) {
-		KiteDesignElement* kde = kd->kiteDesignElements[i];
-		kde -> ajoutCourbesToAxe(axe, fp, symetric, dy, ymult, ymin);
-	}
-
-	AjoutCourbe(axe, courbe0);
-	AjoutCourbe(axe, courbe1);
 }
 
 /**********************/

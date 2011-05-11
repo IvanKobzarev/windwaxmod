@@ -124,14 +124,26 @@ public:
 	ColorTable* colorTable;
 
 	void ajoutMeshesToAxe3d( TAxe *Axe3d, Forme3D* f3d, float opac, int side, int symetric);
-
-    ColorSegmentsTable* getColorSegmentsTable(Forme3D* f3d);
+	void ajoutMeshesToAxeProjection( TAxe *AxeProjection, FormeProjection* fp, int symetric, double dy, double ymult, double ymin);
+	
+    ColorSegmentsTable* getColorSegmentsTable(int n_profils );
     PanelLinesTable* getPanelLinesTable();
 };
 
 
 void ajoutColorSegmentToAxe3d(TAxe *Axe3d, Forme3D* f3d, ColorSegment* colorSegment, int side, int symetric);
 
+void ajoutColorSegmentToAxeProjection(TAxe *AxeProjection, FormeProjection* fp, ColorSegment* colorSegment, int symetric,  double dy, double ymult, double ymin);
+
+void setMeshPoint(TMesh *Mesh, int i, int j, double x, double y, double z);
+
+void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
+
+void ajoutFormeProjectionCourbesToAxe(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
+
+void AjoutForme3DKiteDesign( TAxe *Axe3d, Forme3D* f3d, KiteDesign* kdExt, float transpExt, KiteDesign* kdInt, float transpInt, int mesh, int symetric);
+
+void AjoutFormeProjectionKiteDesign(TAxe* axe, FormeProjection* fp, KiteDesign* kd, int symetric, double dy, int dir);
 /* vector< vector<int> > vI2Matrix(3, vector<int>(2,0));
    vI2Matrix[0][0] = 0;
    vI2Matrix[0][1] = 1;
