@@ -564,8 +564,10 @@ void Apply(int /*control*/) {
 
 	printf ("\nOpacity:");
 	printf ("\nopacExt=%f opacInt=%f", opacExt, opacInt);
+
 	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
-	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt,VisuFace, VisuSymetrique);
+	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt, VisuFace, VisuSymetrique);
+
 	// 2D
 	//------------------------ Projections Fenetre calculation -------------------------------------
     AxeProjections->XAuto = ON;
@@ -585,8 +587,12 @@ void Apply(int /*control*/) {
 	FormeProjection* fp = getFormeProjection(f3d);
 	//printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
 
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp);
-	ajoutFormeProjectionCourbesToAxe(AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp);
+	AjoutFormeProjectionKiteDesign( AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp );
+	AjoutFormeProjectionKiteDesign( AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp );
+
+	ajoutFormeProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp );
+	ajoutFormeProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp );
+
 	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
 	//printf ("\n display()");
 
@@ -599,7 +605,7 @@ void Apply(int /*control*/) {
     CourbZoom->CouleurSegments[0] = 0.0f;
     CourbZoom->CouleurSegments[2] = 0.0f;
     AjoutCourbe(AxeProjections, CourbZoom);
-	//-------------------------
+
 	display();
 }
 
