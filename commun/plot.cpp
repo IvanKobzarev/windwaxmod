@@ -73,7 +73,7 @@
 		{0.0f, 0.0f},{ 1.0f, 0.0f},{ 2.0f, 0.0f},{ 3.0f, 0.0f},{ 4.0f, 0.0f}
 	};
 
-TAxe* CreerAxe(int fen)
+TAxe* createAxe(int fen)
 {
 	TAxe *axe;
 	/*allocation memoire*/
@@ -90,11 +90,11 @@ TAxe* CreerAxe(int fen)
 	axe->ymin = -1.0f; axe->ymax = +1.0f;
 	axe->zmin = -1.0f; axe->zmax = +1.0f;
 	/*couleur de fond: gris*/
-	axe->CouleurFond[0] = 0.5f;	axe->CouleurFond[1] = 0.5f;	axe->CouleurFond[2] = 0.5f;
+	axe->colorFond[0] = 0.5f;	axe->colorFond[1] = 0.5f;	axe->colorFond[2] = 0.5f;
 	/*couleur grille: blanc*/
-	axe->CouleurGrid[0] = 1.0f;	axe->CouleurGrid[1] = 1.0f; axe->CouleurGrid[2] = 1.0f;
+	axe->colorGrid[0] = 1.0f;	axe->colorGrid[1] = 1.0f; axe->colorGrid[2] = 1.0f;
 	/*couleur repere: rouge*/
-	axe->CouleurRep[0] = 1.0f; axe->CouleurRep[1] = 0.0f; axe->CouleurRep[2] = 0.0f;
+	axe->colorRep[0] = 1.0f; axe->colorRep[1] = 0.0f; axe->colorRep[2] = 0.0f;
 	/*position camera dans vue 3d*/
 	axe->xcam = 0.0; axe->ycam = 0.0;	axe->zcam = 10.0;
 	axe->twist = 0.0; axe->incidence = 0.0;	axe->azimuth = 0.0;
@@ -121,14 +121,14 @@ Courbe::Courbe(const char* myname)
 	alt = OFF;
 
 	/*jaune*/
-	CouleurPoints[0] = 1.0f;
-	CouleurPoints[1] = 1.0f;
-	CouleurPoints[2] = 0.0f;
+	colorPoints[0] = 1.0f;
+	colorPoints[1] = 1.0f;
+	colorPoints[2] = 0.0f;
 
 	/*blanc*/
-	CouleurSegments[0] = 1.0f;
-	CouleurSegments[1] = 1.0f;
-	CouleurSegments[2] = 1.0f;
+	colorSegments[0] = 1.0f;
+	colorSegments[1] = 1.0f;
+	colorSegments[2] = 1.0f;
 	visible = true;
 }
 
@@ -139,7 +139,7 @@ Courbe::~Courbe()
 	pts = NULL;
 }
 
-TMesh* CreerMesh(void)
+TMesh* createMesh(void)
 {
 	TMesh *mesh;
 	/*allocation memoire*/
@@ -157,24 +157,24 @@ TMesh* CreerMesh(void)
 	mesh->symZ = OFF;
 	mesh->InvNormales = OFF;
 	/*jaune*/
-	mesh->CouleurPoints[0] = 1.0f;
-	mesh->CouleurPoints[1] = 1.0f;
-	mesh->CouleurPoints[2] = 0.0f;
-	mesh->CouleurPoints[3] = 1.0f;
+	mesh->colorPoints[0] = 1.0f;
+	mesh->colorPoints[1] = 1.0f;
+	mesh->colorPoints[2] = 0.0f;
+	mesh->colorPoints[3] = 1.0f;
 	/*blanc*/
-	mesh->CouleurSegments[0] = 1.0f;
-	mesh->CouleurSegments[1] = 1.0f;
-	mesh->CouleurSegments[2] = 1.0f;
-	mesh->CouleurSegments[3] = 1.0f;
+	mesh->colorSegments[0] = 1.0f;
+	mesh->colorSegments[1] = 1.0f;
+	mesh->colorSegments[2] = 1.0f;
+	mesh->colorSegments[3] = 1.0f;
 	/*jaune*/
-	mesh->CouleurFaces[0] = 1.0f;
-	mesh->CouleurFaces[1] = 1.0f;
-	mesh->CouleurFaces[2] = 0.0f;
-	mesh->CouleurFaces[3] = 1.0f;
+	mesh->colorFaces[0] = 1.0f;
+	mesh->colorFaces[1] = 1.0f;
+	mesh->colorFaces[2] = 0.0f;
+	mesh->colorFaces[3] = 1.0f;
 	return mesh;
 }
 
-void VisuAxe(TAxe *axe)
+void ViewAxe(TAxe *axe)
 {
 	int i,l,c, w, h, nbAff;
 	double xmin,xmax,ymin,ymax,zmin,zmax,dx,dy,ratio;
@@ -182,11 +182,11 @@ void VisuAxe(TAxe *axe)
 	TMesh* MeshCour;
 	double mx,my,mz; /*coeff -1 ou 1 pour affichage sym�trique*/
 	/*double cap, roulis, tangage;*/
-	Matrice *rotTwist, *rotIncidence, *rotAzimuth, *rotFinal, *rotInt; /*matrice de rotation*/
-	Matrice *uni, *uniRot;	/*vecteur unitaire*/
-	double sina, cosa; /*pour pre-calcul sinus/cosinus*/
+	Matrix *rotTwist, *rotIncidence, *rotAzimuth, *rotFinal, *rotInt; /*matrice de rotation*/
+	Matrix *uni, *uniRot;	/*vecteur unitaire*/
+	double sina, cosa; /*pour pre-calc sinus/cosinus*/
 	double xaxe=0.0, yaxe=0.0, zaxe=0.0;	/*position graduation dans vue 3d*/
-	Matrice *x,*y,*z;	/*pour simplifier ecriture*/
+	Matrix *x,*y,*z;	/*pour simplifier ecriture*/
 	double xv1,yv1,zv1,xv2,yv2,zv2;
 //	double light_position[]={0.0, 0.0, 1.0, 0.0};
 	/*selection de la fenetre de cet axe*/
@@ -389,7 +389,7 @@ void VisuAxe(TAxe *axe)
 	/**********************************************/
 	/*couleur d'effacement et parametre eclairage */
 	/**********************************************/
-	glClearColor(axe->CouleurFond[0], axe->CouleurFond[1], axe->CouleurFond[2], 0.0);
+	glClearColor(axe->colorFond[0], axe->colorFond[1], axe->colorFond[2], 0.0);
 	if(axe->axe3d == ON)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -441,13 +441,13 @@ void VisuAxe(TAxe *axe)
 	
 	/*******************************************/
 	/* si axe 3d trac� d'une boite anglobante  */
-	/* et calcul de la position des graduations*/
+	/* et calc de la position des graduations*/
 	/*******************************************/
 	if((axe->axe3d == ON)&&(axe->ZGrid))
 	{
 		/*trac� boite englobante*/
 		glLineStipple (1, 0xFFFF);
-		glColor4dv(axe->CouleurRep);
+		glColor4dv(axe->colorRep);
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(axe->xmin,axe->ymin,axe->zmin);
 		glVertex3f(axe->xmax,axe->ymin,axe->zmin);
@@ -467,7 +467,7 @@ void VisuAxe(TAxe *axe)
 		glVertex3f(axe->xmin,axe->ymin,axe->zmax);
 		glEnd();
 
-		/*calcul matrice des 3 rotations*/
+		/*calc matrice des 3 rotations*/
 		/*pour d�terminer quelle faces se trouvent en arri�re plan*/
 		/*afin d'y tracer les graduations ... */
 		rotTwist=Zeros(3,3); rotIncidence=Zeros(3,3); rotAzimuth=Zeros(3,3);
@@ -502,7 +502,7 @@ void VisuAxe(TAxe *axe)
 		rotAzimuth->SetElement(2,0,-sina); 
 		rotAzimuth->SetElement(2,2,cosa);
 
-		/*calcul matrice resultante*/
+		/*calc matrice resultante*/
 		rotInt=MultMat(rotTwist,rotIncidence);
 		rotFinal=MultMat(rotInt,rotAzimuth);
 		/*visu pour debug*/
@@ -512,7 +512,7 @@ void VisuAxe(TAxe *axe)
 		VoirMat(rotInt);
 		VoirMat(rotFinal);*/
 		delete(rotInt);
-		/*calcul position x des graduations*/
+		/*calc position x des graduations*/
 		uni=Zeros(3,1); 
 		uni->SetElement(0,0,1);	
 		uniRot=MultMat(rotFinal, uni);
@@ -521,7 +521,7 @@ void VisuAxe(TAxe *axe)
 
 		delete(uniRot);
 
-		/*calcul position y des graduations*/
+		/*calc position y des graduations*/
 
 		uni=Zeros(3,1); 
 		uni->SetElement(1,0,1);	
@@ -531,7 +531,7 @@ void VisuAxe(TAxe *axe)
 
 		delete(uniRot);
 
-		/*calcul position z des graduations*/
+		/*calc position z des graduations*/
 
 		uni=Zeros(3,1); 
 		uni->SetElement(2,0,1);	
@@ -555,12 +555,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor4dv(axe->CouleurGrid);
+				glColor4dv(axe->colorGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor4dv(axe->CouleurRep);
+				glColor4dv(axe->colorRep);
 			}
 			if(axe->axe3d == OFF)
 			{
@@ -596,12 +596,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor4dv(axe->CouleurGrid);
+				glColor4dv(axe->colorGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor4dv(axe->CouleurRep);
+				glColor4dv(axe->colorRep);
 			}
 			if(axe->axe3d == OFF)
 			{
@@ -637,12 +637,12 @@ void VisuAxe(TAxe *axe)
 			if(i!=0)
 			{
 				glLineStipple (1, 0x0F0F);
-				glColor4dv(axe->CouleurGrid);
+				glColor4dv(axe->colorGrid);
 			}
 			else
 			{
 				glLineStipple (1, 0xFFFF);
-				glColor4dv(axe->CouleurRep);
+				glColor4dv(axe->colorRep);
 			}
 			glBegin(GL_LINES);
 			glVertex3f(axe->xmin,yaxe,(double)i);
@@ -684,7 +684,7 @@ void VisuAxe(TAxe *axe)
 				if (CourbCour->points == ON)
 				{
 					glPointSize(5.0);
-					glColor4dv(CourbCour->CouleurPoints);
+					glColor4dv(CourbCour->colorPoints);
 					glBegin(GL_POINTS);
 					for(l=0; l<CourbCour->pts->GetLignes(); l++)
 						if(axe->axe3d == OFF)
@@ -698,7 +698,7 @@ void VisuAxe(TAxe *axe)
 				/*affichage des segments*/
 				if (CourbCour->segments == ON)
 				{
-					glColor4dv(CourbCour->CouleurSegments);
+					glColor4dv(CourbCour->colorSegments);
 					if(CourbCour->alt == OFF)
 					{
 						glBegin(GL_LINE_STRIP);
@@ -765,7 +765,7 @@ void VisuAxe(TAxe *axe)
 				if (MeshCour->points == ON)
 				{
 					glPointSize(5.0);
-					glColor4dv(MeshCour->CouleurPoints);
+					glColor4dv(MeshCour->colorPoints);
 					glBegin(GL_POINTS);
 					for(l=0; l<MeshCour->x->GetLignes(); l++)
 						for(c=0; c<MeshCour->x->GetColonnes(); c++)
@@ -783,14 +783,14 @@ void VisuAxe(TAxe *axe)
 					/*couleur et mode d'affichage*/
 					if (MeshCour->segments == ON)
 					{
-						glColor4dv(MeshCour->CouleurSegments);
+						glColor4dv(MeshCour->colorSegments);
 						//glColor3d(1.0f, 0.0f, 0.0f);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 					}
 					else
 					{
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-						glColor4dv(MeshCour->CouleurFaces);
+						glColor4dv(MeshCour->colorFaces);
 						//glColor3d(1.0f, 0.0f, 0.0f);
 					}
 					/*boucle de trac�*/
@@ -806,7 +806,7 @@ void VisuAxe(TAxe *axe)
 							}
 							else
 							{
-								/*calcul normale*/
+								/*calc normale*/
 								if(c < x->GetColonnes() - 1)
 								{
 									xv1 = x->Element(l+1,c+1) - x->Element(l,c+1);
@@ -844,10 +844,10 @@ void VisuAxe(TAxe *axe)
 }
 
 /***************/
-/* AjoutCourbe */
+/* addCourbe */
 /***************/
 
-void AjoutCourbe(TAxe *axe, Courbe *courbe)
+void addCourbe(TAxe *axe, Courbe *courbe)
 {
 	Courbe* CourbCour;
 	if (axe->Courb==NULL)
@@ -886,20 +886,20 @@ void showCourbe(Courbe *courbe)
 			printf ("showCourbe(): - %d ", kk);
 		}
 
-		/*ajout courbe*/
+		/*add courbe*/
 		CourbCour->CourbSuiv=courbe;
 	}
 }
 
 
-void AjoutCCourbe(Courbe *head, Courbe *courbe)
+void addCCourbe(Courbe *head, Courbe *courbe)
 {
 	Courbe* CourbCour;
 	/*test s'il y a deja une courbe sur l'axe*/
-	printf ("\nAjoutCC");
+	printf ("\naddCC");
 	if (head==NULL)
 	{
-		printf ("\nAjoutCC courbeBegin == NULL");
+		printf ("\naddCC courbeBegin == NULL");
 		head = courbe;
 		if (courbe==NULL)
 		{
@@ -914,7 +914,7 @@ void AjoutCCourbe(Courbe *head, Courbe *courbe)
 	}
 	else
 	{
-		printf ("\nAjoutCC courbeBegin != NULL");
+		printf ("\naddCC courbeBegin != NULL");
 		/*recherche derni�re courbe de la liste*/
 		CourbCour = head;
 		int kk=0;
@@ -923,16 +923,16 @@ void AjoutCCourbe(Courbe *head, Courbe *courbe)
 			kk++;
 			printf(" -cc- -> %d ", kk);
 		}
-		/*ajout courbe*/
+		/*add courbe*/
 		CourbCour->CourbSuiv=courbe;
 	}
 }
 
 /***************/
-/* AjoutMesh   */
+/* addMesh   */
 /***************/
 
-void AjoutMesh(TAxe *axe, TMesh *mesh)
+void addMesh(TAxe *axe, TMesh *mesh)
 {
 	TMesh* MeshCour;
 	if (axe->Mesh==NULL)
@@ -949,9 +949,9 @@ void AjoutMesh(TAxe *axe, TMesh *mesh)
 }
 
 /***************/
-/* LibererMesh */
+/* clearMesh */
 /***************/
-void LibererMesh(TMesh *mesh)
+void clearMesh(TMesh *mesh)
 {
 	if (mesh != NULL)
 	{
@@ -963,10 +963,10 @@ void LibererMesh(TMesh *mesh)
 }
 
 /*********************/
-/* LibererCourbesAxe */
+/* clearCourbesAxe */
 /*********************/
 
-void LibererCourbesAxe(TAxe *axe)
+void clearCourbesAxe(TAxe *axe)
 {
 	Courbe *CourbCour, *CourbSuiv;
 	if (axe != NULL)
@@ -983,10 +983,10 @@ void LibererCourbesAxe(TAxe *axe)
 }
 
 /*******************/
-/* LibererMeshsAxe */
+/* clearMeshsAxe */
 /*******************/
 
-void LibererMeshsAxe(TAxe *axe)
+void clearMeshsAxe(TAxe *axe)
 {
 	TMesh *MeshCour, *MeshSuiv;
 	if(axe != NULL)
@@ -995,7 +995,7 @@ void LibererMeshsAxe(TAxe *axe)
 		while(MeshCour!=NULL)
 		{
 			MeshSuiv = MeshCour->MeshSuiv;
-			LibererMesh(MeshCour);
+			clearMesh(MeshCour);
 			MeshCour=MeshSuiv;
 		}
 		axe->Mesh = NULL;
@@ -1003,25 +1003,25 @@ void LibererMeshsAxe(TAxe *axe)
 }
 
 /**************/
-/* LibererAxe */
+/* clearAxe */
 /**************/
 
-void LibererAxe(TAxe *axe)
+void clearAxe(TAxe *axe)
 {
-	LibererCourbesAxe(axe);
-	LibererMeshsAxe(axe);
+	clearCourbesAxe(axe);
+	clearMeshsAxe(axe);
 	free(axe);
 }
 
 /**************/
-/* AjoutTexte */
+/* addTexte */
 /**************/
 
-void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, double posx, double posy)
+void addTexte(TAxe *axe, char *texte, double taille, double orientation, double posx, double posy)
 {
 	char *TEXTE;
 	unsigned int i,j, ichar, izero=0;
-	Matrice *X,*Y,*T,*R;
+	Matrix *X,*Y,*T,*R;
 	double xdec, ydec;
 	Courbe *CourbChar;
 	double TabXYpt[40][2];
@@ -1030,7 +1030,7 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 	//mise a la taille
 	for(i=0; i<40; i++){for(j=0; j<2; j++){TabXYpt[i][j] = TabXYpoint[i][j] * taille/7.0f;}}
 	//rotation
-	X=new Matrice(40,2); Y=new Matrice(40,2);
+	X=new Matrix(40,2); Y=new Matrix(40,2);
 	for(i=0; i<40; i++) 
 	{
 		X->SetElement(i,0,TabXYpt[i][0]); 
@@ -1042,7 +1042,7 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 		T->AddElement(i,0, orientation*3.1415926f/180.0f);
 	}
 	Pol2Cart(T,R,&X,&Y);
-	//Calcul decalage entre chiffre
+	//calc decalage entre chiffre
 	xdec = (double)cos(orientation*3.1415926f/180.0f)*taille*6.0f/7.0f;
 	ydec = (double)sin(orientation*3.1415926f/180.0f)*taille*6.0f/7.0f;
 	//boucle sur les chiffres
@@ -1075,15 +1075,15 @@ void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, doubl
 				CourbChar->pts->SetElement(j,0, X->Element(TabXYch[ichar][j+1]-1,0) + posx + xdec*i);
 				CourbChar->pts->SetElement(j,1, Y->Element(TabXYch[ichar][j+1]-1,0) + posy + ydec*i);
 			}
-			AjoutCourbe(axe, CourbChar);
+			addCourbe(axe, CourbChar);
 		}
 	}
 	delete(X); delete(Y); delete(T); delete(R);
 }
 
-void AjoutForme3D( TAxe *Axe3d, 
-			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
-			 Matrice *XInt, Matrice *YInt, Matrice *ZInt,
+void addForm3D( TAxe *Axe3d, 
+			 Matrix *XExt, Matrix *YExt, Matrix *ZExt,
+			 Matrix *XInt, Matrix *YInt, Matrix *ZInt,
 			 int mesh, int symetrie)
 {
         
@@ -1117,7 +1117,7 @@ void AjoutForme3D( TAxe *Axe3d,
 				CourbCour->pts->SetElement(j,2,ZExt->Element(i,j));
 			}
             //  printf ("\nbefore 1");
-			AjoutCourbe(Axe3d, CourbCour);
+			addCourbe(Axe3d, CourbCour);
             //printf ("\nafter 1");
 			if(symetrie==1) CourbCour->symX = ON;
 			/*intrados*/
@@ -1130,7 +1130,7 @@ void AjoutForme3D( TAxe *Axe3d,
 				CourbCour->pts->SetElement(j,1,YInt->Element(i,j));
 				CourbCour->pts->SetElement(j,2,ZInt->Element(i,j));
 			}
-			AjoutCourbe(Axe3d, CourbCour);
+			addCourbe(Axe3d, CourbCour);
 			if(symetrie==1) CourbCour->symX = ON;
 		}
 
@@ -1145,7 +1145,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			CourbCour->pts->SetElement(i,2,ZExt->Element(i,0));
 		}
 
-		AjoutCourbe(Axe3d, CourbCour);
+		addCourbe(Axe3d, CourbCour);
 
 		if(symetrie==1) CourbCour->symX = ON;
 		/* back line 'TALE'*/
@@ -1160,7 +1160,7 @@ void AjoutForme3D( TAxe *Axe3d,
 			CourbCour->pts->SetElement(i,2,ZExt->Element(i, nXExt - 1));
 		}
 
-		AjoutCourbe(Axe3d, CourbCour);
+		addCourbe(Axe3d, CourbCour);
 		if(symetrie==1) CourbCour->symX = ON;
         }
 
@@ -1169,16 +1169,16 @@ void AjoutForme3D( TAxe *Axe3d,
 	else
 	{
 		Axe3d->eclairage = ON;
-		MeshExt=CreerMesh(); MeshInt=CreerMesh();
+		MeshExt=createMesh(); MeshInt=createMesh();
 		MeshInt->InvNormales=ON;
 		MeshExt->segments=OFF; MeshExt->faces=ON;
 		MeshInt->segments=OFF; MeshInt->faces=ON;
-		MeshExt->x=new Matrice(nbPtsExt, NbNerv);
-		MeshExt->y=new Matrice(nbPtsExt, NbNerv);
-		MeshExt->z=new Matrice(nbPtsExt, NbNerv);
-		MeshInt->x=new Matrice(nbPtsInt, NbNerv);
-		MeshInt->y=new Matrice(nbPtsInt, NbNerv);
-		MeshInt->z=new Matrice(nbPtsInt, NbNerv);
+		MeshExt->x=new Matrix(nbPtsExt, NbNerv);
+		MeshExt->y=new Matrix(nbPtsExt, NbNerv);
+		MeshExt->z=new Matrix(nbPtsExt, NbNerv);
+		MeshInt->x=new Matrix(nbPtsInt, NbNerv);
+		MeshInt->y=new Matrix(nbPtsInt, NbNerv);
+		MeshInt->z=new Matrix(nbPtsInt, NbNerv);
 		if(symetrie==1)
 		{
 			MeshExt->symX = ON;
@@ -1209,24 +1209,24 @@ void AjoutForme3D( TAxe *Axe3d,
 			}
 		}
 
-		/*ajout mesh a l'axe3d*/
-		AjoutMesh(Axe3d, MeshExt); AjoutMesh(Axe3d, MeshInt);
+		/*add mesh a l'axe3d*/
+		addMesh(Axe3d, MeshExt); addMesh(Axe3d, MeshInt);
 	}
 }
 
 /**********************/
-/* AjoutPtsSuspentage */
+/* addPtsSuspentage */
 /**********************/
 
-void AjoutPtsSuspentage(
-						TAxe *Axe3d, Forme *forme, Matrice *IntProfCent,
-						Matrice* /*XExt*/, Matrice* /*YExt*/, Matrice* /*ZExt*/,
-						Matrice *XInt, Matrice *YInt, Matrice *ZInt,
-						int symetrie, Matrice **PosSuspentes)
+void addPtsSuspentage(
+						TAxe *Axe3d, Form *forme, Matrix *IntProfCent,
+						Matrix* /*XExt*/, Matrix* /*YExt*/, Matrix* /*ZExt*/,
+						Matrix *XInt, Matrix *YInt, Matrix *ZInt,
+						int symetrie, Matrix **PosSuspentes)
 
 {
 	Courbe *CourbCour = NULL;
-	Matrice *interpSuspente = NULL;
+	Matrix *interpSuspente = NULL;
 	int NbNerv, i, j;
 
 	/*init variables pour simplifier ecriture*/
@@ -1277,7 +1277,7 @@ void AjoutPtsSuspentage(
 		CourbCour->pts->SetElement(i*5+4,2,InterpLinX(interpSuspente, forme->m_pProfils[i]->m_fPosE));
 	}
 
-	AjoutCourbe(Axe3d, CourbCour);
+	addCourbe(Axe3d, CourbCour);
 	*PosSuspentes = CourbCour->pts;
 	delete(interpSuspente);
 }

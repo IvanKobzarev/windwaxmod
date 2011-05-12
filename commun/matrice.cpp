@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <math.h>
-//#include "Matrice.h"
+//#include "Matrix.h"
 #include "matrice.h"
 #ifndef DEBUG
     #define DEBUG false
@@ -21,21 +21,21 @@
 
 /************************************/
 
-Matrice::Matrice( int lig, int col )
+Matrix::Matrix( int lig, int col )
 	: m_nLig(lig), m_nCol(col)
 {
     double* tmp = new double[500000];
     delete tmp;
-    //printf ("\n Matrice(%d, %d)", m_nLig, m_nCol);
+    //printf ("\n Matrix(%d, %d)", m_nLig, m_nCol);
 	m_fTab = new double*[m_nLig];
 	for( int l=0; l<m_nLig; l++) {
             if (DEBUG) printf (" l=%d",  l);
 		m_fTab[l] = new double[m_nCol];
         }
-    //printf ("\n... Matrice(%d, %d)", lig, col);
+    //printf ("\n... Matrix(%d, %d)", lig, col);
 }
 
-Matrice::~Matrice()
+Matrix::~Matrix()
 { 
 	if ( m_fTab != NULL )
 	{
@@ -47,7 +47,7 @@ Matrice::~Matrice()
 	m_nLig = m_nCol = -1;
 }
 
-double Matrice::Element( int l, int c )
+double Matrix::Element( int l, int c )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return 0.0f;
@@ -55,7 +55,7 @@ double Matrice::Element( int l, int c )
 	return m_fTab[l][c];
 }
 
-double* Matrice::GetLigne( int l )
+double* Matrix::GetLigne( int l )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig )
 		return NULL; ;
@@ -63,7 +63,7 @@ double* Matrice::GetLigne( int l )
 	return m_fTab[l];
 }
 
-void Matrice::SetElement( int l, int c, double value )
+void Matrix::SetElement( int l, int c, double value )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return;
@@ -71,7 +71,7 @@ void Matrice::SetElement( int l, int c, double value )
 	m_fTab[l][c] = value;
 }
 
-void Matrice::AddElement( int l, int c, double value )
+void Matrix::AddElement( int l, int c, double value )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return;
@@ -79,7 +79,7 @@ void Matrice::AddElement( int l, int c, double value )
 	m_fTab[l][c] += value;
 }
 
-void Matrice::RemoveElement( int l, int c, double value )
+void Matrix::RemoveElement( int l, int c, double value )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return;
@@ -87,7 +87,7 @@ void Matrice::RemoveElement( int l, int c, double value )
 	m_fTab[l][c] -= value;
 }
 
-void Matrice::MultiplyElement( int l, int c, double value )
+void Matrix::MultiplyElement( int l, int c, double value )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return;
@@ -95,13 +95,13 @@ void Matrice::MultiplyElement( int l, int c, double value )
 	m_fTab[l][c] *= value;
 }
 
-void Matrice::print( int c )
+void Matrix::print( int c )
 {
     for (int i = 0; i < m_nLig; i++) printf ("\n %d -> %f", i, m_fTab[i][c]);
 }
 
 
-void Matrice::DivideElement( int l, int c, double value )
+void Matrix::DivideElement( int l, int c, double value )
 {
 	if ( m_fTab == NULL || l < 0 || l > m_nLig || c < 0 || c > m_nCol )
 		return;
@@ -115,9 +115,9 @@ void Matrice::DivideElement( int l, int c, double value )
 
 /********************************/
 
-Matrice* AddMat(Matrice *m1,Matrice *m2)
+Matrix* AddMat(Matrix *m1,Matrix *m2)
 {
-	Matrice *res = NULL;
+	Matrix *res = NULL;
 
 	if(m1==NULL)
 		printf("erreur fonction AddMat: matrice m1 = NULL !!!");
@@ -135,7 +135,7 @@ Matrice* AddMat(Matrice *m1,Matrice *m2)
 		}
 		else
 		{
-			res = new Matrice(m1->GetLignes(),m1->GetColonnes());
+			res = new Matrix(m1->GetLignes(),m1->GetColonnes());
 
 			for( int l = 0; l < m1->GetLignes(); l++ )
 			{
@@ -158,16 +158,16 @@ Matrice* AddMat(Matrice *m1,Matrice *m2)
 
 /************************************/
 
-Matrice* AddReelMat(Matrice *m, double value )
+Matrix* AddReelMat(Matrix *m, double value )
 {
-	Matrice *res = NULL;
+	Matrix *res = NULL;
 
 	if (m==NULL)
 		printf("erreur fonction AddReelMat: m = NULL !!!");
 
 	else
 	{
-		res = new Matrice( m->GetLignes(), m->GetColonnes() );
+		res = new Matrix( m->GetLignes(), m->GetColonnes() );
 
 		for( int l = 0; l < m->GetLignes(); l++ )
 		{
@@ -189,9 +189,9 @@ Matrice* AddReelMat(Matrice *m, double value )
 
 /************************************/
 
-Matrice* MultMat(Matrice *m1,Matrice *m2)
+Matrix* MultMat(Matrix *m1,Matrix *m2)
 {
-	Matrice *res = NULL;
+	Matrix *res = NULL;
 
 	if(m1==NULL)
 		printf("erreur fonction MultMat: m1 = NULL !!!");
@@ -206,7 +206,7 @@ Matrice* MultMat(Matrice *m1,Matrice *m2)
 
 		else
 		{
-			res = new Matrice( m1->GetLignes(), m2->GetColonnes() );
+			res = new Matrix( m1->GetLignes(), m2->GetColonnes() );
 
 			for( int l = 0; l < m1->GetLignes(); l++ )
 			{
@@ -237,13 +237,13 @@ Matrice* MultMat(Matrice *m1,Matrice *m2)
 
 /********************************************/
 
-Matrice * MultReelMat(Matrice *m, double value)
+Matrix * MultReelMat(Matrix *m, double value)
 {
-	Matrice *res = NULL;
+	Matrix *res = NULL;
 
 	if (m!=NULL)
 	{
-		res = new Matrice( m->GetLignes(), m->GetColonnes() );
+		res = new Matrix( m->GetLignes(), m->GetColonnes() );
 
 		for( int l = 0; l < m->GetLignes(); l++ )
 		{
@@ -267,12 +267,12 @@ Matrice * MultReelMat(Matrice *m, double value)
 
 /********************************************/
 
-Matrice* LinSpace(double deb, double fin, int n)
+Matrix* LinSpace(double deb, double fin, int n)
 {
 	if ( n <= 1 )
 		return NULL;
 
-	Matrice *res = new Matrice( n, 1 );
+	Matrix *res = new Matrix( n, 1 );
 
 	double pas = (fin-deb)/(n-1); 
 	double accu = deb;
@@ -296,10 +296,10 @@ Matrice* LinSpace(double deb, double fin, int n)
 
 /***********************************************/
 
-Matrice* Zeros(int lig, int col)
+Matrix* Zeros(int lig, int col)
 {
    if (DEBUG) printf ("\n Zeros(%d, %d)", lig, col);
-	Matrice *res = new Matrice( lig, col );
+	Matrix *res = new Matrix( lig, col );
 
 	for( int l = 0; l < lig; l++ )
 	{
@@ -322,9 +322,9 @@ Matrice* Zeros(int lig, int col)
 
 /***********************************************/
 
-Matrice* Ones(int lig, int col)
+Matrix* Ones(int lig, int col)
 {
-	Matrice *res = new Matrice( lig, col );
+	Matrix *res = new Matrix( lig, col );
 
 	for( int l = 0; l < lig; l++ )
 	{
@@ -343,7 +343,7 @@ Matrice* Ones(int lig, int col)
 
 /*********************************************************/
 
-void CopierMat(Matrice *dst, Matrice *src)
+void CopierMat(Matrix *dst, Matrix *src)
 {
 	if(src==NULL)
 		printf("erreur fonction CopierMat: src = NULL !!!");
@@ -373,16 +373,16 @@ void CopierMat(Matrice *dst, Matrice *src)
 /* cree une copie d'une matrice */
 /********************************/
 
-Matrice* CloneMat(Matrice *src)
+Matrix* CloneMat(Matrix *src)
 {
-	Matrice *dst = NULL;
+	Matrix *dst = NULL;
 
 	if(src==NULL)
 		printf("erreur fonction CopierMat: src = NULL !!!");
 
 	else
 	{
-		dst = new Matrice( src->GetLignes(), src->GetColonnes() );
+		dst = new Matrix( src->GetLignes(), src->GetColonnes() );
 		CopierMat( dst, src );
 	}
 
@@ -397,9 +397,9 @@ Matrice* CloneMat(Matrice *src)
 
 /****************************************************/
 
-void CopierMatInd(Matrice *dst, int lDebDst, int lFinDst,int cDebDst, int cFinDst,
+void CopierMatInd(Matrix *dst, int lDebDst, int lFinDst,int cDebDst, int cFinDst,
 
-				  Matrice *src, int lDebSrc, int lFinSrc,int cDebSrc, int cFinSrc)
+				  Matrix *src, int lDebSrc, int lFinSrc,int cDebSrc, int cFinSrc)
 
 {
 	if(src==NULL)
@@ -443,7 +443,7 @@ void CopierMatInd(Matrice *dst, int lDebDst, int lFinDst,int cDebDst, int cFinDs
 /* visualise une matrice            */
 /************************************/
 
-void VoirMat(Matrice *m)
+void VoirMat(Matrix *m)
 {
 	if( m == NULL ) 
 		printf("\n erreur fonction VoirMat: m = NULL !!!");
@@ -472,9 +472,9 @@ void VoirMat(Matrice *m)
 /*****************/
 /* InterpLinMat  */
 /*****************/
-/*void InterpLinMat(Matrice *m, Matrice *mi)*/
+/*void InterpLinMat(Matrix *m, Matrix *mi)*/
 
-void InterpLinMat(Matrice *x, Matrice *y, Matrice *xi, Matrice *yi)
+void InterpLinMat(Matrix *x, Matrix *y, Matrix *xi, Matrix *yi)
 {
 	/*test matrices non nulle*/
 	if(x==NULL) 
@@ -508,7 +508,7 @@ void InterpLinMat(Matrice *x, Matrice *y, Matrice *xi, Matrice *yi)
 /* InterpLinX  */
 /***************/
 
-double InterpLinX(Matrice *m, double xi)
+double InterpLinX(Matrix *m, double xi)
 {
 	double yi = 0.0;
 	/*test matrices non nulle*/
@@ -539,10 +539,10 @@ double InterpLinX(Matrice *m, double xi)
 /* cree une sous-matrice extraite d'une autre matrice */
 /******************************************************/
 
-Matrice* ExtraitMat(Matrice *m, int lDeb, int lFin,int cDeb, int cFin)
+Matrix* ExtraitMat(Matrix *m, int lDeb, int lFin,int cDeb, int cFin)
 
 {
-	Matrice* res = NULL;
+	Matrix* res = NULL;
 
 	if(m==NULL)
 		printf("erreur fonction ExtraitMat: m = NULL !!!");
@@ -558,7 +558,7 @@ Matrice* ExtraitMat(Matrice *m, int lDeb, int lFin,int cDeb, int cFin)
 
 		else
 		{
-			res = new Matrice(dl+1,dc+1);
+			res = new Matrix(dl+1,dc+1);
 
 			for( int l = 0; l < dl+1; l++ )
 			{
@@ -578,7 +578,7 @@ Matrice* ExtraitMat(Matrice *m, int lDeb, int lFin,int cDeb, int cFin)
 /* valeur la plus proche                              */
 /******************************************************/
 
-void Ind(double val, Matrice *m, int *lig, int *col)
+void Ind(double val, Matrix *m, int *lig, int *col)
 {
         //    printf ("\n Ind");
 	double mini = 10000000000000000.0f;
@@ -606,7 +606,7 @@ void Ind(double val, Matrice *m, int *lig, int *col)
 /* indique si une valeur est pr�sente dans un tableau */
 /******************************************************/
 
-bool ValeurPresente(double val, Matrice *m)
+bool ValeurPresente(double val, Matrix *m)
 {
 	for( int l = 0; l < m->GetLignes(); l++ )
 	{
@@ -621,27 +621,27 @@ bool ValeurPresente(double val, Matrice *m)
 }
 
 /*****************************************************************/
-/* ajoute une valeur dans un vecteur colonne par ordre croissant */
+/* adde une valeur dans un vecteur colonne par ordre croissant */
 /*****************************************************************/
 
-void AjouteValeurCroissant(double val, Matrice **m)
+void addeValeurCroissant(double val, Matrix **m)
 
 {
-	Matrice *res = new Matrice( (*m)->GetLignes()+1, (*m)->GetColonnes() );
-	if(val < (*m)->Element(0,0)) //ajout devant ?
+	Matrix *res = new Matrix( (*m)->GetLignes()+1, (*m)->GetColonnes() );
+	if(val < (*m)->Element(0,0)) //add devant ?
 	{
 		res->SetElement(0,0,val);
 		for(int l=0; l<(*m)->GetLignes(); l++) 
 			res->SetElement( l+1, 0, (*m)->Element(l,0) );
 	}
-	else if (val>(*m)->Element((*m)->GetLignes()-1,0)) //ajout derriere ?
+	else if (val>(*m)->Element((*m)->GetLignes()-1,0)) //add derriere ?
 	{
 		for( int l=0; l<(*m)->GetLignes(); l++ ) res->SetElement( l, 0,(*m)->Element(l,0) );
 
 		res->SetElement((*m)->GetLignes()-1,0,val);
 	}
 
-	else //ajout dans le tableau
+	else //add dans le tableau
 	{
 		int l = 0;
 		while(val>(*m)->Element(l,0))
@@ -676,14 +676,14 @@ void AjouteValeurCroissant(double val, Matrice **m)
 
 ******************************************************************/
 
-void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x)
+void ResolutionGauss(Matrix *A, Matrix *B, Matrix **x)
 {
 	//init var n et n1
 	int n = A->GetLignes(); 
 	int n1 = n-1;
 
 	//init matrice a
-	Matrice *a = Zeros(n, n+1);
+	Matrix *a = Zeros(n, n+1);
 
 	for( int i=0; i<n; i++)
 	{
@@ -694,7 +694,7 @@ void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x)
 	}
 
 	/*initialize the array row*/
-	Matrice *row = Zeros(n,1);
+	Matrix *row = Zeros(n,1);
 
 	for(int i=0;i<=n1;i++) 
 		row->SetElement(i,0,(double)i);
@@ -762,7 +762,7 @@ void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x)
 	*x = Zeros(n,1);
 
 	/* Now perform back substitution
-	to calculate the solutions, x->Element(k,0)*/
+	to calcate the solutions, x->Element(k,0)*/
 
 	n1 = n-1;
 	(*x)->SetElement(n1,0,a->Element((int)row->Element(n1,0),n) / a->Element((int)row->Element(n1,0),n1));
@@ -777,7 +777,7 @@ void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x)
 			(a->Element((int)row->Element(n-i,0),n)-sum) / a->Element((int)row->Element(n-i,0),n-i));
 	}
 
-	//liberation matrice de calcul
+	//liberation matrice de calc
 	delete row;
 	delete a;
 }

@@ -24,10 +24,10 @@
 
 //using namespace std;
 
-class Matrice;
-class Forme;
-class Forme3D;
-class FormeProjection;
+class Matrix;
+class Form;
+class Form3D;
+class FormProjection;
 class Courbe;
 class KiteDesign;
 class KiteDesignElement;
@@ -46,9 +46,9 @@ public:
 	int symY; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON*/
 	int symZ; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON si axe3d*/
 	int alt; /*alterne segment et vide au trac�*/
-	double CouleurSegments[4];
-	double CouleurPoints[4];
-	Matrice *pts;		/*matrice des points de la courbe*/
+	double colorSegments[4];
+	double colorPoints[4];
+	Matrix *pts;		/*matrice des points de la courbe*/
 	Courbe *CourbSuiv;	/*pointeur vers la courbe suivante de l'axe courant*/
 	bool visible;
 	std::string name;
@@ -65,12 +65,12 @@ struct Mesh
 	int symX; /*trace courbe sym�trique /axe X: 0:OFF, 1:ON*/
 	int symY; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON*/
 	int symZ; /*trace courbe sym�trique /axe Y: 0:OFF, 1:ON si axe3d*/
-	double CouleurFaces[4];
-	double CouleurSegments[4];
-	double CouleurPoints[4];
+	double colorFaces[4];
+	double colorSegments[4];
+	double colorPoints[4];
 	int InvNormales;	/*inversion normale ON ou OFF*/
 	int side;
-	Matrice *x, *y, *z;
+	Matrix *x, *y, *z;
 	TMesh *MeshSuiv;	/*pointeur vers la courbe suivante de l'axe courant*/
 };
 
@@ -83,9 +83,9 @@ struct Axe
 	int fenetre;	/*numero fenetre contenant l'axe*/
 	int axe3d;		/*0: axe 2d, 1:axe 3d*/
 	double xmin,xmax,ymin,ymax,zmin,zmax;	/*valeur min et max des axes*/
-	double CouleurFond[4];
-	double CouleurGrid[4];
-	double CouleurRep[4];
+	double colorFond[4];
+	double colorGrid[4];
+	double colorRep[4];
 	int XAuto, YAuto, ZAuto;	/*auto-ajustement des axes*/
 	int Norme;					/*axes norm�s*/
 	int XGrid, YGrid, ZGrid;	/*0: pas de graduation, 1: graduation*/
@@ -102,28 +102,28 @@ typedef struct Axe  TAxe;
 /************/
 /*procedures*/
 /************/
-TAxe* CreerAxe(int fen);
-TMesh* CreerMesh(void);
+TAxe* createAxe(int fen);
+TMesh* createMesh(void);
 
-void AjoutCourbe(TAxe *axe, Courbe *courbe);
-void AjoutCCourbe(Courbe *courbeBegin, Courbe *courbe);
+void addCourbe(TAxe *axe, Courbe *courbe);
+void addCCourbe(Courbe *courbeBegin, Courbe *courbe);
 void showCourbe(Courbe *courbe);
-void AjoutMesh(TAxe *axe, TMesh *mesh);
-void VisuAxe(TAxe *axe);
-void LibererAxe(TAxe *axe);
-void LibererMesh(TMesh *mesh);
-void LibererCourbesAxe(TAxe *axe);
-void LibererMeshsAxe(TAxe *axe);
-void AjoutTexte(TAxe *axe, char *texte, double taille, double orientation, double posx, double posy);
+void addMesh(TAxe *axe, TMesh *mesh);
+void ViewAxe(TAxe *axe);
+void clearAxe(TAxe *axe);
+void clearMesh(TMesh *mesh);
+void clearCourbesAxe(TAxe *axe);
+void clearMeshsAxe(TAxe *axe);
+void addTexte(TAxe *axe, char *texte, double taille, double orientation, double posx, double posy);
 
-void AjoutForme3D( TAxe *Axe3d, 
-			 Matrice *XExt, Matrice *YExt, Matrice *ZExt,
-			 Matrice *XInt, Matrice *YInt, Matrice *ZInt,
+void addForm3D( TAxe *Axe3d, 
+			 Matrix *XExt, Matrix *YExt, Matrix *ZExt,
+			 Matrix *XInt, Matrix *YInt, Matrix *ZInt,
 			 int mesh, int symetrie);
 
-void AjoutPtsSuspentage(
-						TAxe *Axe3d, Forme *forme, Matrice *IntProfCent,
-						Matrice *XExt, Matrice *YExt, Matrice *ZExt,
-						Matrice *XInt, Matrice *YInt, Matrice *ZInt,
-						int symetrie, Matrice **PosPtsSuspente);
+void addPtsSuspentage(
+						TAxe *Axe3d, Form *forme, Matrix *IntProfCent,
+						Matrix *XExt, Matrix *YExt, Matrix *ZExt,
+						Matrix *XInt, Matrix *YInt, Matrix *ZInt,
+						int symetrie, Matrix **PosPtsSuspente);
 

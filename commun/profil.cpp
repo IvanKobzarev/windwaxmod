@@ -68,8 +68,8 @@ void ProfilGeom::print() {
 	ProfilGeom* pg = new ProfilGeom();
 	int ne = pg0->ExtProf->GetLignes();
 	int ni = pg0->IntProf->GetLignes();
-	pg -> ExtProf = new Matrice (ne, 2);
-	pg -> IntProf = new Matrice (ni, 2);
+	pg -> ExtProf = new Matrix (ne, 2);
+	pg -> IntProf = new Matrix (ni, 2);
 
 	
 
@@ -120,8 +120,8 @@ ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, dou
 
 	int ne = pg0->ExtProf->GetLignes();
 	int ni = pg0->IntProf->GetLignes();
-	pg -> ExtProf = new Matrice (ne, 2);
-	pg -> IntProf = new Matrice (ni, 2);
+	pg -> ExtProf = new Matrix (ne, 2);
+	pg -> IntProf = new Matrix (ni, 2);
 	
 	double l = abs (pg0->ExtProf->Element(ne-1, 0) - pg0->ExtProf->Element(0, 0));
 
@@ -199,8 +199,8 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 	// 1) find index where tail starts [ iExtTail, iIntTail ]
 	// make equal quantity tail points
 	ProfilGeom* pgtmp = new ProfilGeom();
-	pgtmp -> ExtProf = new Matrice (iExtTail1 + ne0 - iExtTail0, 2);
-	pgtmp -> IntProf = new Matrice (iIntTail1 + ni0 - iIntTail0, 2);
+	pgtmp -> ExtProf = new Matrix (iExtTail1 + ne0 - iExtTail0, 2);
+	pgtmp -> IntProf = new Matrix (iIntTail1 + ni0 - iIntTail0, 2);
 
 	for (int i = 0; i <= iExtTail1; i++ ) {
 		pgtmp->ExtProf->SetElement(i, 0, pg1->ExtProf->Element(i, 0));
@@ -229,7 +229,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
     double xn, yn, x , y, ampExt = -1000.0f;
 	double x0 = pg1->ExtProf->Element(iExtTail1, 0);
     double y0 = pg1->ExtProf->Element(iExtTail1, 1);
-	CalculVecteurBissec(pg1->ExtProf->Element(iExtTail1-1, 0), pg1->ExtProf->Element(iExtTail1-1, 1),
+	calcVecteurBissec(pg1->ExtProf->Element(iExtTail1-1, 0), pg1->ExtProf->Element(iExtTail1-1, 1),
 					x0, y0,
 					pg1->ExtProf->Element(iExtTail1+1, 0), pg1->ExtProf->Element(iExtTail1+1, 1),
 					&xn, &yn, 10.0f, +1);
@@ -260,7 +260,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 		//pg0->ExtProf->Element(ne0-1, 0) -> 0
 		double x = 0, y =0; 
 		double amp = ampExt * pow ( (xend-xc)/(xend-xbegin), 1/power);
-		CalculVecteurBissec(pg0->ExtProf->Element(i0-1, 0), pg0->ExtProf->Element(i0-1, 1),
+		calcVecteurBissec(pg0->ExtProf->Element(i0-1, 0), pg0->ExtProf->Element(i0-1, 1),
 						pg0->ExtProf->Element(i0, 0), pg0->ExtProf->Element(i0, 1),
 						pg0->ExtProf->Element(i0+1, 0), pg0->ExtProf->Element(i0+1, 1),
 						&x, &y, amp, +1);
@@ -275,7 +275,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
     double ampInt = -1000.0f;
 	x0 = pg1->IntProf->Element(iIntTail1, 0);
     y0 = pg1->IntProf->Element(iIntTail1, 1);
-	CalculVecteurBissec(pg1->IntProf->Element(iIntTail1-1, 0), pg1->IntProf->Element(iIntTail1-1, 1),
+	calcVecteurBissec(pg1->IntProf->Element(iIntTail1-1, 0), pg1->IntProf->Element(iIntTail1-1, 1),
 					x0, y0,
 					pg1->IntProf->Element(iIntTail1+1, 0), pg1->IntProf->Element(iIntTail1+1, 1),
 					&xn, &yn, 10.0f, +1);
@@ -305,7 +305,7 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 		//pg0->ExtProf->Element(ne0-1, 0) -> 0
 		double x = 0, y =0; 
 		double amp = ampInt * pow ( (xend-xc)/(xend-xbegin), 1/power);
-		CalculVecteurBissec(pg0->IntProf->Element(i0-1, 0), pg0->IntProf->Element(i0-1, 1),
+		calcVecteurBissec(pg0->IntProf->Element(i0-1, 0), pg0->IntProf->Element(i0-1, 1),
 						pg0->IntProf->Element(i0, 0), pg0->IntProf->Element(i0, 1),
 						pg0->IntProf->Element(i0+1, 0), pg0->IntProf->Element(i0+1, 1),
 						&x, &y, amp, -1);

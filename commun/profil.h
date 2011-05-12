@@ -50,8 +50,8 @@ public:
 class ProfilGeom
 {
 public:
-	Matrice* ExtProf;
-	Matrice* IntProf;
+	Matrix* ExtProf;
+	Matrix* IntProf;
 	double LongProf;
 	void print();
 };

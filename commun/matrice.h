@@ -1,10 +1,10 @@
 #pragma once
 
-class Matrice
+class Matrix
 {
 public:
-	Matrice( int lig, int col);
-	virtual ~Matrice();
+	Matrix( int lig, int col);
+	virtual ~Matrix();
 
 	double Element( int l, int c );
 
@@ -26,42 +26,42 @@ protected:
 
 };
 
-Matrice* AddMat(Matrice *m1,Matrice *m2);
+Matrix* AddMat(Matrix *m1,Matrix *m2);
 
-Matrice* AddReelMat(Matrice *m, double reel);
+Matrix* AddReelMat(Matrix *m, double reel);
 
-Matrice* MultMat(Matrice *m1,Matrice *m2);
+Matrix* MultMat(Matrix *m1,Matrix *m2);
 
-Matrice* MultReelMat(Matrice *m, double reel);
+Matrix* MultReelMat(Matrix *m, double reel);
 
-Matrice* LinSpace(double deb, double fin, int n);
+Matrix* LinSpace(double deb, double fin, int n);
 
-Matrice* Zeros(int lig, int col);
+Matrix* Zeros(int lig, int col);
 
-Matrice* Ones(int lig, int col);
+Matrix* Ones(int lig, int col);
 
-void VoirMat(Matrice *m);
+void VoirMat(Matrix *m);
 
-void CopierMat(Matrice *dst, Matrice *src);
+void CopierMat(Matrix *dst, Matrix *src);
 
-Matrice* CloneMat(Matrice *src);
+Matrix* CloneMat(Matrix *src);
 
-void CopierMatInd(Matrice *dst, int lDebDst, int lFinDst,int cDebDst, int cFinDst,
+void CopierMatInd(Matrix *dst, int lDebDst, int lFinDst,int cDebDst, int cFinDst,
 
-				  Matrice *src, int lDebSrc, int lFinSrc,int cDebSrc, int cFinSrc);
+				  Matrix *src, int lDebSrc, int lFinSrc,int cDebSrc, int cFinSrc);
 
-/*void InterpLinMat(TMatrice *m, TMatrice *mi);*/
+/*void InterpLinMat(TMatrix *m, TMatrix *mi);*/
 
-void InterpLinMat(Matrice *x, Matrice *y, Matrice *xi, Matrice *yi);
+void InterpLinMat(Matrix *x, Matrix *y, Matrix *xi, Matrix *yi);
 
-double InterpLinX(Matrice *m, double xi);
+double InterpLinX(Matrix *m, double xi);
 
-Matrice* ExtraitMat(Matrice *m, int lDeb, int lFin,int cDeb, int cFin);
+Matrix* ExtraitMat(Matrix *m, int lDeb, int lFin,int cDeb, int cFin);
 
-void Ind(double val, Matrice *m, int *lig, int *col);
+void Ind(double val, Matrix *m, int *lig, int *col);
 
-bool ValeurPresente(double val, Matrice *m);
+bool ValeurPresente(double val, Matrix *m);
 
-void AjouteValeurCroissant(double val, Matrice **m);
+void addeValeurCroissant(double val, Matrix **m);
 
-void ResolutionGauss(Matrice *A, Matrice *B, Matrice **x);
+void ResolutionGauss(Matrix *A, Matrix *B, Matrix **x);
