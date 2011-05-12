@@ -35,26 +35,26 @@ TAxe *AxeProjections;
 TAxe *AxeSel;
 TAxe *Axe3d;
 
-int VisuFace = 0; 
-int VisuSymetrique = 0;
+int ViewFace = 0; 
+int ViewSymetrique = 0;
 
 Courbe * CourbProfile;
-Forme *F;
+Form *F;
 char ProjectName[255];
-int Fenetre2d, Fenetre3d;
+int window2d, window3d;
 /*divers tableaux*/
-Matrice *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
-Matrice** ReperPoints;
-char NomFichierForme[255];
+Matrix *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
+Matrix** ReperPoints;
+char fileNameForm[255];
 
-char NomFichierProject[255];
+char fileNameProject[255];
 
-char NomFichierDesignExt[255];
-char NomFichierDesignInt[255];
+char fileNameDesignExt[255];
+char fileNameDesignInt[255];
 
-char NomFichierRepPoints[255];
-char NomFichierVentHoles[255];
-char NomFichierDiagNerv[255];
+char fileNameRepPoints[255];
+char fileNameVentHoles[255];
+char fileNameDiagNerv[255];
 int ProjOrthoPers = 0;
 int XYGrid = 0;
 
@@ -80,23 +80,23 @@ Courbe *CourbZoom;
 
 void Apply(int /*control*/);
 
-void ModifVisu3d(int /*control*/) {
-    VisuAxe(Axe3d);
+void ModifView3d(int /*control*/) {
+    ViewAxe(Axe3d);
     glutSwapBuffers();
 }
 
-void ModifVisuSymetrique(int /*control*/) {
+void ModifViewSymetrique(int /*control*/) {
 	//printf ("\n ModifVisySymetrique()");
 	Apply(0);
-    VisuAxe(Axe3d);
+    ViewAxe(Axe3d);
     glutSwapBuffers();
 }
 
 void display(void) {
-    VisuAxe(Axe3d);
+    ViewAxe(Axe3d);
     glutSwapBuffers();
-    //CalculVue3dEtPatron();
-    VisuAxe(AxeProjections);
+    //calcVue3dEtPatron();
+    ViewAxe(AxeProjections);
     glutSwapBuffers();
 }
 
@@ -243,16 +243,16 @@ void keyboard(unsigned char key, int x, int y) {
 }
 
 void BoutonSouris(int button, int state, int x, int y) {
-    int Fenetre;
+    int window;
     xSouris = x;
     ySouris = y;
     AxeSel = NULL;
 
-    Fenetre = glutGetWindow();
-	if (Fenetre == Fenetre2d) {
+    window = glutGetWindow();
+	if (window == window2d) {
         AxeSel = AxeProjections;
     }
-    if (Fenetre == Fenetre3d) {
+    if (window == window3d) {
         AxeSel = Axe3d;
     }
 
@@ -362,7 +362,7 @@ void BoutonSouris(int button, int state, int x, int y) {
 
 }
 
-void InitFenetre(void) {
+void InitWindow(void) {
     glEnable(GL_LINE_STIPPLE);
     glutDisplayFunc(&display);
     glutReshapeFunc(&reshape);
@@ -371,7 +371,7 @@ void InitFenetre(void) {
     glutMouseFunc(&BoutonSouris);
 }
 
-void InitLumiere(void) {
+void InitLight(void) {
     float mat_specular[] = {1.0, 1.0, 1.0, 1.0};
     float mat_shininess[] = {50.0};
     float light_position[] = {0.0, 0.0, 1.0, 0.0};
@@ -392,9 +392,9 @@ void InitLumiere(void) {
 
 
 void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
-	Forme* tmpF=0;
-	Matrice *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
-	Matrice** tmpReperPoints=0;
+	Form* tmpF=0;
+	Matrix *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
+	Matrix** tmpReperPoints=0;
 	int tmpquantDiag=0;
 	int tmpquantVH=0;
 	int *tmpnoNervD=0;
@@ -402,7 +402,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	int tmpVentCentralNerv=0;
 
 	try {
-		tmpF = LectureFichierForme(gfd->NomFichierForme);
+		tmpF = LectureFichierForm(gfd->fileNameForm);
 		try {
 		tmpF->Validate();
 		} catch (char* msg) {
@@ -417,7 +417,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
 		char msg[100];
-		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->NomFichierForme);
+		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->fileNameForm);
 		AfxMessageBox(msg);
 		return;
 	}
@@ -446,40 +446,40 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 }
 
 //TODO: design load calling
-void ChargerFichierDesignExt(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readFileDesignExt(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     KiteDesign* oldKd;
 
     CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierDesignExt, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameDesignExt, PtrfileName);
         oldKd = kiteDesignExt;
-        kiteDesignExt = readKiteDesignFromFile(NomFichierDesignExt);
+        kiteDesignExt = readKiteDesignFromFile(fileNameDesignExt);
 		delete(oldKd);
-        FicDesignExt->set_text(NomFichierDesignExt);
+        FicDesignExt->set_text(fileNameDesignExt);
     }
     Apply(0);
     display();
     glui->sync_live();
 }
 
-void ChargerFichierDesignInt(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readFileDesignInt(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     KiteDesign* oldKd;
 
     CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierDesignInt, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameDesignInt, PtrfileName);
         oldKd = kiteDesignInt;
-        kiteDesignInt = readKiteDesignFromFile(NomFichierDesignInt);
+        kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
 		delete(oldKd);
-        FicDesignInt->set_text(NomFichierDesignInt);
+        FicDesignInt->set_text(fileNameDesignInt);
     }
     Apply(0);
     display();
@@ -487,32 +487,25 @@ void ChargerFichierDesignInt(int /*control*/) {
 }
 
 
-void ChargerFichierProject(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readProject(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     WindPatternsProject* oldWpp;
     CFileDialog DlgOpen(TRUE, NULL, "*.wpp", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierProject, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameProject, PtrfileName);
         oldWpp = gfd;
-        gfd = LectureWindPatternsProject(NomFichierProject);
+        gfd = LectureWindPatternsProject(fileNameProject);
         LoadFromWindPatternsProject(gfd);
         delete(oldWpp);
-        FicProject->set_text(NomFichierProject);
+        FicProject->set_text(fileNameProject);
     }
     //Appliquer(0);
     display();
     glui->sync_live();
 }
-
-void Apply2d(int /*control*/) {
-}
-
-void Apply3d(int /*control*/) {
-}
-
 
 
 void modifSpinnerExt(int /*control*/) {
@@ -521,7 +514,7 @@ void modifSpinnerExt(int /*control*/) {
 	while (MeshCour != NULL)
 	{	
 		if (MeshCour->side == EXT_SIDE) {
-			MeshCour->CouleurFaces[3] = opacExt;
+			MeshCour->colorFaces[3] = opacExt;
 		}
 		MeshCour=MeshCour->MeshSuiv;
 	}
@@ -534,7 +527,7 @@ void modifSpinnerInt(int /*control*/) {
 	while (MeshCour != NULL)
 	{	
 		if (MeshCour->side == INT_SIDE) {
-			MeshCour->CouleurFaces[3] = opacInt;
+			MeshCour->colorFaces[3] = opacInt;
 		}
 		MeshCour=MeshCour->MeshSuiv;
 	}
@@ -544,32 +537,32 @@ void modifSpinnerInt(int /*control*/) {
 void Apply(int /*control*/) {
 	// 3D
 	// forme visualisation
-	//printf ("\nLibererCourbesAxe(Axe3d);");
-    //LibererCourbesAxe(Axe3d);
-	printf ("\nLibererMeshsAxe(Axe3d);");
-    LibererMeshsAxe(Axe3d);
+	//printf ("\nclearCourbesAxe(Axe3d);");
+    //clearCourbesAxe(Axe3d);
+	printf ("\nclearMeshsAxe(Axe3d);");
+    clearMeshsAxe(Axe3d);
 
-
-    Matrice *XExt, *YExt, *ZExt, *YExt0;
-    Matrice *XInt, *YInt, *ZInt, *YInt0;
-    CalculForme3D(F, 0, 0.0f,
+    Matrix *XExt, *YExt, *ZExt, *YExt0;
+    Matrix *XInt, *YInt, *ZInt, *YInt0;
+    calcForm3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-	Forme3D* f3d = getForme3D(F, 0, 0.0f);
+	Form3D* f3d = getForm3D(F, 0, 0.0f);
 
 	//ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
-    //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+    //addForm3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, ViewFace, ViewSymetrique);
 	//YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
 	//YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
 
 	printf ("\nOpacity:");
 	printf ("\nopacExt=%f opacInt=%f", opacExt, opacInt);
 
-	AjoutForme3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, VisuFace, VisuSymetrique);
-	AjoutForme3DKiteDesign( Axe3d, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt, VisuFace, VisuSymetrique);
+	addForm3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, ViewFace, ViewSymetrique);
+	
+	
 
 	// 2D
-	//------------------------ Projections Fenetre calculation -------------------------------------
+	//------------------------ Projections window calcation -------------------------------------
     AxeProjections->XAuto = ON;
     AxeProjections->YAuto = ON;
     AxeProjections->ZAuto = ON;
@@ -580,20 +573,23 @@ void Apply(int /*control*/) {
 	AxeProjections->XGrid = XYGrid;
 	AxeProjections->YGrid = XYGrid;
 	AxeProjections->ZGrid = OFF;
-    LibererCourbesAxe(AxeProjections);
+
+    clearCourbesAxe(AxeProjections);
 	
-	//AjoutCourbe(AxeProjections, cint4);
-	//printf ("\n FormeProjection* fp = getFormeProjection(f3d);");
-	FormeProjection* fp = getFormeProjection(f3d);
-	//printf ("\n ajoutFormeProjectionCourbesToAxe(fp, AxeProjections);");
+	addForm3d2dKiteDesign( Axe3d, AxeProjections, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt, ViewFace, ViewSymetrique);
 
-	AjoutFormeProjectionKiteDesign( AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp );
-	AjoutFormeProjectionKiteDesign( AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp );
+	//addCourbe(AxeProjections, cint4);
+	//printf ("\n FormProjection* fp = getFormProjection(f3d);");
+	FormProjection* fp = getFormProjection(f3d);
+	//printf ("\n addFormProjectionCourbesToAxe(fp, AxeProjections);");
 
-	ajoutFormeProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, VisuSymetrique, 0.0, IntPrjNoseUp );
-	ajoutFormeProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, VisuSymetrique, 2.0, ExtPrjNoseUp );
+	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
+	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
 
-	//ajoutFormeProjectionCourbesToAxe(FormeProjection* fp, TAxe* axe)
+	//addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
+	//addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
+
+	//addFormProjectionCourbesToAxe(FormProjection* fp, TAxe* axe)
 	//printf ("\n display()");
 
 	// Zoom
@@ -602,9 +598,9 @@ void Apply(int /*control*/) {
     CourbZoom->points = OFF;
     CourbZoom->segments = OFF;
     CourbZoom->symX = OFF;
-    CourbZoom->CouleurSegments[0] = 0.0f;
-    CourbZoom->CouleurSegments[2] = 0.0f;
-    AjoutCourbe(AxeProjections, CourbZoom);
+    CourbZoom->colorSegments[0] = 0.0f;
+    CourbZoom->colorSegments[2] = 0.0f;
+    addCourbe(AxeProjections, CourbZoom);
 
 	display();
 }
@@ -637,8 +633,8 @@ void ModifProjection3d(int /*control*/) {
         //Axe3dBal->proj = PROJ_PERSPECTIVE;
 	}
     /*retrace uniquement la vue 3d*/
-    VisuAxe(Axe3d);
-    //VisuAxe(Axe3dBal);
+    ViewAxe(Axe3d);
+    //ViewAxe(Axe3dBal);
     glutSwapBuffers();
 }
 
@@ -654,22 +650,22 @@ int main(int argc, char** argv)
     glutInitWindowPosition(100, 100);
 
 	// 2d view for projections
-	Fenetre2d = glutCreateWindow("2d design");
-    InitFenetre(); 
-    AxeProjections = CreerAxe(Fenetre2d);
+	window2d = glutCreateWindow("2d design");
+    InitWindow(); 
+    AxeProjections = createAxe(window2d);
 	int ws, hs;
     ws = glutGet(GLUT_SCREEN_WIDTH);
     hs = glutGet(GLUT_SCREEN_HEIGHT);
-    glutSetWindow(Fenetre2d);
+    glutSetWindow(window2d);
     glutPositionWindow((int) (0.0 * (double) ws), (int) (0.50 * (double) hs));
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
 
-	Fenetre3d = glutCreateWindow("3d design");
-    InitFenetre();
-    InitLumiere();
-    Axe3d = CreerAxe(Fenetre3d);
+	window3d = glutCreateWindow("3d design");
+    InitWindow();
+    InitLight();
+    Axe3d = createAxe(window3d);
     Axe3d->axe3d = ON;
-    glutSetWindow(Fenetre3d);
+    glutSetWindow(window3d);
     glutPositionWindow((int) (0.25 * (double) ws), (int) (0.0 * (double) hs));
     glutReshapeWindow((int) (0.75 * (double) ws), (int) (0.48 * (double) hs));
 
@@ -677,45 +673,37 @@ int main(int argc, char** argv)
     glui = GLUI_Master.create_glui("Wind designer", 0, 0, 0);
 	GLUI_Panel *panelProject = glui->add_panel("");
 
-    GLUI_Button *btnLoadForme = glui->add_button_to_panel(panelProject, "Load project", 0, &ChargerFichierProject);
-    btnLoadForme->set_w(10);
+    GLUI_Button *btnLoadForm = glui->add_button_to_panel(panelProject, "Load project", 0, &readProject);
+    btnLoadForm->set_w(10);
 
     glui->add_column_to_panel(panelProject, false);
 	// loading Default project
-	strcpy(NomFichierProject, "f17project.wpp");
-	gfd = LectureWindPatternsProject(NomFichierProject);
+	strcpy(fileNameProject, "f17project.wpp");
+	gfd = LectureWindPatternsProject(fileNameProject);
     LoadFromWindPatternsProject(gfd);
     FicProject = glui->add_statictext_to_panel(panelProject, "???");
-    FicProject->set_text(NomFichierProject);
+    FicProject->set_text(fileNameProject);
 
 	GLUI_Panel *panelDesign = glui->add_panel("");
-    GLUI_Button *btnLoadDesignExt = glui->add_button_to_panel(panelDesign, "Load design Ext", 0, &ChargerFichierDesignExt);
+    GLUI_Button *btnLoadDesignExt = glui->add_button_to_panel(panelDesign, "Load design Ext", 0, &readFileDesignExt);
     btnLoadDesignExt->set_w(10);
 
-	GLUI_Button *btnLoadDesignInt = glui->add_button_to_panel(panelDesign, "Load design Int", 0, &ChargerFichierDesignInt);
+	GLUI_Button *btnLoadDesignInt = glui->add_button_to_panel(panelDesign, "Load design Int", 0, &readFileDesignInt);
     btnLoadDesignInt->set_w(10);
 
     glui->add_column_to_panel(panelDesign, false);
 	// load default design
-	strcpy(NomFichierDesignExt, "f17ext.wdn");
+	strcpy(fileNameDesignExt, "f17ext.wdn");
     FicDesignExt = glui->add_statictext_to_panel(panelDesign, "???");
-    FicDesignExt->set_text(NomFichierDesignExt);
-	kiteDesignExt = readKiteDesignFromFile(NomFichierDesignExt);
+    FicDesignExt->set_text(fileNameDesignExt);
+	kiteDesignExt = readKiteDesignFromFile(fileNameDesignExt);
 
-	strcpy(NomFichierDesignInt, "f17int.wdn");
+	strcpy(fileNameDesignInt, "f17int.wdn");
     FicDesignInt = glui->add_statictext_to_panel(panelDesign, "???");
-    FicDesignInt->set_text(NomFichierDesignInt);
-	kiteDesignInt = readKiteDesignFromFile(NomFichierDesignInt);
+    FicDesignInt->set_text(fileNameDesignInt);
+	kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
 
 	//FicDesign->set_h(10);
-
-	GLUI_Panel *panel1 = glui->add_panel("");
-	GLUI_Button *btn2d = glui->add_button_to_panel(panel1, "2d", 0, &Apply2d);
-	btn2d->set_w(5);
-	glui->add_column_to_panel(panel1, false);
-	GLUI_Button *btn3d = glui->add_button_to_panel(panel1, "3d", 0, &Apply3d);
-	btn3d->set_w(5);
-
 	GLUI_Panel *panel2dOptions = glui->add_panel("2D");
 	glui->add_checkbox_to_panel(panel2dOptions, "XY grid", &XYGrid, 0,  &ModifXYGrid);
 
@@ -723,7 +711,7 @@ int main(int argc, char** argv)
 	glui->add_checkbox_to_panel(panel2dOptions, "Int Projection nose up", &IntPrjNoseUp, 0,  &ModifIntPrjNoseUp);
 
     GLUI_Panel *panelViewOptions = glui->add_panel("");
-    glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &VisuSymetrique, 0, &ModifVisuSymetrique);
+    glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &ViewSymetrique, 0, &ModifViewSymetrique);
     GLUI_Panel *panel_proj = glui->add_panel_to_panel(panelViewOptions, "Projection");
     GLUI_RadioGroup *radio_proj =
             glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &ModifProjection3d);

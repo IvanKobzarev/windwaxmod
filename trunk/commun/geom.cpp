@@ -27,7 +27,7 @@
 
 /********************************************************
 * res=MonBezier(tab,NbrPts,tabi)
-* calcul Bezier de NbrPts selon la technique geometrique
+* calc Bezier de NbrPts selon la technique geometrique
 * tab contient les 4 points ABCD selon le format
 * [XA YA
 *  XB YB
@@ -122,14 +122,14 @@ ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2) {
 }
 
 
-Matrice* MonBezier(Matrice *tab, int NbrPts)
+Matrix* MonBezier(Matrix *tab, int NbrPts)
 {
-	Matrice *res = NULL;
+	Matrix *res = NULL;
 	double XA,YA,XB,YB,XC,YC,XD,YD,XE,YE,XF,YF,XG,YG,XH,YH,XI,YI,XJ,YJ;
 	double t,pas;
 	int i;
 	/*allocation matrice resultat*/
-	res=new Matrice(NbrPts,2);
+	res=new Matrix(NbrPts,2);
 	/*pour simpifier l'ecriture*/
 	XA=tab->Element(0,0); YA=tab->Element(0,1);
 	XB=tab->Element(1,0); YB=tab->Element(1,1);
@@ -161,13 +161,13 @@ Matrice* MonBezier(Matrice *tab, int NbrPts)
 
 
 /*****************************************************/
-/* CalculVecteurNormal                               */
-/* calcul vecteur BC normal au vecteur AB            */
+/* calcVecteurNormal                               */
+/* calc vecteur BC normal au vecteur AB            */
 /* direct (cotï¿½=+1) ou indirect (cotï¿½=-1)            */
 /* de longeur l.                                     */
 /*****************************************************/
 
-void CalculVecteurNormal(double xa,double ya,double xb,double yb,
+void calcVecteurNormal(double xa,double ya,double xb,double yb,
 						 double *xc,double *yc,double l,int cote)
 {
 	double xab, yab, a11, a12, a21, a22, b1, b2; /*var intermï¿½daires*/
@@ -179,19 +179,19 @@ void CalculVecteurNormal(double xa,double ya,double xb,double yb,
 	a21=xab;  a22=yab;
 	b1=l*(double)sqrt(xab*xab+yab*yab)*cote +yb*xab -xb*yab;
 	b2=xb*xab +yb*yab;
-	/*calcul determinants*/
+	/*calc determinants*/
 	delta=a11*a22-a21*a12;
 	if (delta !=0)
 	{
 		delta1=b1*a22-b2*a12;
 		delta2=a11*b2-a21*b1;
-        	/*calcul resultat*/
+        	/*calc resultat*/
 		*xc=delta1/delta;
 		*yc=delta2/delta;
 	}
 	else
 	{
-		printf("\nIMPSBL CalculVecteurNormal (%f, %f)(%f, %f)", xa, ya, xb, yb);
+		printf("\nIMPSBL calcVecteurNormal (%f, %f)(%f, %f)", xa, ya, xb, yb);
 		*xc=0.0; *yc=0.0;
 	}
 
@@ -200,44 +200,44 @@ void CalculVecteurNormal(double xa,double ya,double xb,double yb,
 
 
 /*****************************************************/
-/* CalculContour                                     */
+/* calcContour                                     */
 /* xy vecteurs colonnes ...						     */
 /* res: matrice contenant le contour                 */
 /* d : distance a la courbe en chaque point          */
 /* cote: +1:contour gauche, -1:contour droite        */
 /*****************************************************/
 
-Matrice* CalculContour(Matrice* xy, Matrice *d, int cote)
+Matrix* calcContour(Matrix* xy, Matrix *d, int cote)
 {
 	int i; 
 	/*test parametres ok*/
 	/* a faire ...*/
 	/*creation matrices*/
-	Matrice *res = new Matrice(xy->GetLignes(),2);
-	/*calcul matrices contour xc,yc a partir du 2eme point*/
+	Matrix *res = new Matrix(xy->GetLignes(),2);
+	/*calc matrices contour xc,yc a partir du 2eme point*/
 	double xc, yc;
 	for(i=0; i<xy->GetLignes()-1; i++)
 	{
 		xc = res->Element(i+1,0);
 		yc = res->Element(i+1,1);
-                //printf ("\n CalculContour1()");
-		CalculVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1),	&xc, &yc, d->Element(i,0), cote);
+                //printf ("\n calcContour1()");
+		calcVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1),	&xc, &yc, d->Element(i,0), cote);
 		res->SetElement(i+1,0,xc);
 		res->SetElement(i+1,1,yc);
 	}
 
-	/*calcul premier point xc,yc*/
+	/*calc premier point xc,yc*/
 	xc = res->Element(0,0);
 	yc = res->Element(0,1);
-        //printf ("\n CalculContour2()");
-	CalculVecteurNormal(xy->Element(1,0), xy->Element(1,1), xy->Element(0,0), xy->Element(0,1), &xc, &yc, d->Element(0,0), -cote);
+        //printf ("\n calcContour2()");
+	calcVecteurNormal(xy->Element(1,0), xy->Element(1,1), xy->Element(0,0), xy->Element(0,1), &xc, &yc, d->Element(0,0), -cote);
 	res->SetElement(0,0,xc);
 	res->SetElement(0,1,yc);
 	return res;
 
 }
 
-void AddPointsToCourb(Matrice* courb, Matrice* pts, Matrice** newCourb)
+void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb)
 {
     //printf ("\n add Points to courb()");
     int n = courb->GetLignes();
@@ -249,7 +249,7 @@ void AddPointsToCourb(Matrice* courb, Matrice* pts, Matrice** newCourb)
         for (j = 0; j < np; j++) 
             if (courb->Element(i,0) == pts->Element(j, 0)) q--;
       //  printf ("\nq=%d",q);
-    (*newCourb) = new Matrice(n + q, 2);
+    (*newCourb) = new Matrix(n + q, 2);
     i = 0;
     j = 0;
     s = 0;
@@ -294,7 +294,7 @@ void AddPointsToCourb(Matrice* courb, Matrice* pts, Matrice** newCourb)
     //printf ("\n ...add Points to courb()");
 }
 
-Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
+Matrix* calcNormalRasst(Matrix* X1, Matrix* Y1,Matrix* X2, Matrix* Y2) {
 	/*printf ("\nXY1");
 	X1->print(0);
 	Y1->print(0);
@@ -306,7 +306,7 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
 	/*for (int i =0; i < n-5; i++) {
 		printf ("\n %d (%f, %f)    (%f, %f)", i, X1->Element(i, 0), Y1->Element(i, 0), X2->Element(i, 0), Y2->Element(i, 0));
 	}*/
-    Matrice *res = new Matrice(n, 1);
+    Matrix *res = new Matrix(n, 1);
     int i = 0;
     res->SetElement(0, 0,dist2d (X1->Element(0,0), Y1->Element(0,0), X2->Element(0,0), Y2->Element(0,0)));
 	res->SetElement(n-1, 0,dist2d (X1->Element(n-1,0), Y1->Element(n-1,0), X2->Element(X2->GetLignes()-1,0), Y2->Element(Y2->GetLignes()-1,0)));
@@ -314,7 +314,7 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
     for (i=1; i < n-1; i++) {
         double x0 = X1->Element(i, 0);
         double y0 = Y1->Element(i, 0);
-        CalculVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
+        calcVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
                         x0, y0,
                         X1->Element(i+1, 0), Y1->Element(i+1, 0),
 		         &xn, &yn, 10.0f, +1);
@@ -336,49 +336,49 @@ Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) {
 }
 
 /*****************************************************/
-/* CalculVecteurBissec                               */
+/* calcVecteurBissec                               */
 /*****************************************************/
 
-void CalculVecteurBissec(double x1,double y1,double x2,double y2, double x3,double y3,
+void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double y3,
 						 double *x,double *y,double l,int cote)
 {
 	double x4,y4,x5,y5;
 	double x12,y12,x23,y23;
 	double a11,a12,a21,a22,b1,b2;
 	double delta, delta1, delta2;
-	//pour simplifier calcul
+	//pour simplifier calc
 	x12=x2-x1; y12=y1-y2;
 	x23=x3-x2; y23=y3-y2;
 	//test pts 1,2,3 alignï¿½s
 	if (x12*y23-x23*y12 == 0.0f)
 	{
-//printf ("\nCalculVecteurBissec cote1");
-		CalculVecteurNormal(x1,y1,x2,y2,x,y,l,cote);
+//printf ("\ncalcVecteurBissec cote1");
+		calcVecteurNormal(x1,y1,x2,y2,x,y,l,cote);
 	}
 	else
 	{
-//printf ("\nCalculVecteurBissec cote2");
-		CalculVecteurNormal(x1,y1,x2,y2,&x4,&y4,l,cote);
-//printf ("\nCalculVecteurBissec -cote");
-		CalculVecteurNormal(x3,y3,x2,y2,&x5,&y5,l,-cote);
+//printf ("\ncalcVecteurBissec cote2");
+		calcVecteurNormal(x1,y1,x2,y2,&x4,&y4,l,cote);
+//printf ("\ncalcVecteurBissec -cote");
+		calcVecteurNormal(x3,y3,x2,y2,&x5,&y5,l,-cote);
 		/*preparation matrices A et B pour resolution AX=B*/
 		a11=y12; a12=-x12;
 		a21=y23;  a22=-x23;
 		b1=x4*y12-y4*x12;
 		b2=x5*y23-y5*x23;
-		/*calcul determinants*/
+		/*calc determinants*/
 		delta=a11*a22-a21*a12;
 		if (delta !=0)
 		{
 			delta1=b1*a22-b2*a12;
 			delta2=a11*b2-a21*b1;
-        		/*calcul resultat*/
+        		/*calc resultat*/
 			*x=delta1/delta;
 			*y=delta2/delta;
 		}
 		else
 		{
-			printf("\npb: impossibilitï¿½ de calcul dans la procï¿½dure 'CalculVecteurBissec'");
+			printf("\npb: impossibilitï¿½ de calc dans la procï¿½dure 'calcVecteurBissec'");
 			*x=0.0; *y=0.0;
 		}
 	}
@@ -388,12 +388,12 @@ void CalculVecteurBissec(double x1,double y1,double x2,double y2, double x3,doub
 /* EpaisseurRelative */
 /*********************/
 
-double EpaisseurRelative(Matrice* extrados, Matrice* intrados)
+double EpaisseurRelative(Matrix* extrados, Matrix* intrados)
 
 {
 	int i;
 	double MaxExt=-1000.0, MinInt=+1000.0;
-	/*calcul epaisseur relative -> a refaire car calcul approchï¿½*/
+	/*calc epaisseur relative -> a refaire car calc approchï¿½*/
 	for(i=0; i<extrados->GetLignes(); i++)
 		if(MaxExt < extrados->Element(i,1)) MaxExt=extrados->Element(i,1);
 	for(i=0; i<intrados->GetLignes(); i++)
@@ -402,25 +402,25 @@ double EpaisseurRelative(Matrice* extrados, Matrice* intrados)
 }
 
 /*****************/
-/* CalculForme3D */
+/* calcForm3D */
 /*****************/
 
-void CalculForme3D(Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout,
-				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
-				   Matrice **XInt, Matrice **YInt, Matrice **ZInt)
+void calcForm3D(Form *forme, int isPercent, double percent,
+				   Matrix *ExtProfCent, Matrix *IntProfCent,
+				   Matrix *ExtProfBout, Matrix *IntProfBout,
+				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
+				   Matrix **XInt, Matrix **YInt, Matrix **ZInt)
 
 {
-    //printf ("\n CalculForme3D");
-    Matrice *ExtProfCentN, *ExtProfBoutN;
+    //printf ("\n calcForm3D");
+    Matrix *ExtProfCentN, *ExtProfBoutN;
 	double LongNerv, EpaiRel, xp,yp, xo,yo,zo, a,v,m;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffyCent, coeffyBout;
 	int i,j;
     bool isCenterPanel = (1 & forme->NbCaiss);
 
-	/*calcul epaisseur relative profil central et bout*/
+	/*calc epaisseur relative profil central et bout*/
 	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
 	//printf ("\nEpaiRelProfCent=%f", EpaiRelProfCent);
 	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
@@ -469,7 +469,7 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 		//printf ("\n%3d -> LNerv=%f EpRel=%f a=%f v=%f m=%f",
 		//				i,  LongNerv, EpaiRel, a * 180.0f/pi, v, m);
 
-		//calcul coeffx et coeffy des points du profil en
+		//calc coeffx et coeffy des points du profil en
 		//fonction de l'ï¿½paisseur relative et de la longueur de nervure
 		coeffx = LongNerv/100.0f;
 		coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
@@ -508,17 +508,17 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 		}
 
 	}
-    //printf ("\n ...CalculForme3D");
+    //printf ("\n ...calcForm3D");
 
 }
 
-FormeProjection* getFormeProjection(Forme3D* f3d) 
+FormProjection* getFormProjection(Form3D* f3d) 
 {
-	//printf ("\n getFormeProjection()");
-	FormeProjection* formePrj = new FormeProjection();
+	//printf ("\n getFormProjection()");
+	FormProjection* formePrj = new FormProjection();
 	// we should X, 0, Z
-	Matrice *X = Zeros(f3d->XExt->GetLignes(), 2); 
-	Matrice *Y = Zeros(f3d->YExt->GetLignes(), 2);
+	Matrix *X = Zeros(f3d->XExt->GetLignes(), 2); 
+	Matrix *Y = Zeros(f3d->YExt->GetLignes(), 2);
 		
 	for (int i = 0; i < f3d->XExt->GetLignes(); i++)
 	{
@@ -535,15 +535,15 @@ FormeProjection* getFormeProjection(Forme3D* f3d)
 	return formePrj;
 }
 
-Forme3D* getForme3D(Forme *forme, int isPercent, double percent)
-				   //Matrice *ExtProfCent, Matrice *IntProfCent,
-				   //Matrice *ExtProfBout, Matrice *IntProfBout)
+Form3D* getForm3D(Form *forme, int isPercent, double percent)
+				   //Matrix *ExtProfCent, Matrix *IntProfCent,
+				   //Matrix *ExtProfBout, Matrix *IntProfBout)
 {
-	Forme3D* forme3D = new Forme3D();
-    Matrice *XExt, *YExt, *ZExt;
-    Matrice *XInt, *YInt, *ZInt;
+	Form3D* forme3D = new Form3D();
+    Matrix *XExt, *YExt, *ZExt;
+    Matrix *XInt, *YInt, *ZInt;
 
-    CalculForme3D(forme, isPercent, percent,
+    calcForm3D(forme, isPercent, percent,
             forme->ExtProfCent, forme->IntProfCent, forme->ExtProfBout, forme->IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 
@@ -567,25 +567,25 @@ Forme3D* getForme3D(Forme *forme, int isPercent, double percent)
 
 
 
-void CalculForme3DBallonement
-				(WindPatternsProject* gfd, Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout,
-				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
-				   Matrice **XInt, Matrice **YInt, Matrice **ZInt)
+void calcForm3DBallonement
+				(WindPatternsProject* gfd, Form *forme, int isPercent, double percent,
+				   Matrix *ExtProfCent, Matrix *IntProfCent,
+				   Matrix *ExtProfBout, Matrix *IntProfBout,
+				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
+				   Matrix **XInt, Matrix **YInt, Matrix **ZInt)
 
 {
 	// !!! support of isPercent, percent not implemented yet!!!
 
-    //printf ("\n CalculForme3DBallonement");
-    Matrice *ExtProfCentN, *ExtProfBoutN;
+    //printf ("\n calcForm3DBallonement");
+    Matrix *ExtProfCentN, *ExtProfBoutN;
 	double LongNerv, EpaiRel, xp, yp, xo, yo, zo, a, a0, v, m;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffy, coeffyCent, coeffyBout;
 	int i,j;
     bool isCenterPanel = (1 & forme->NbCaiss);
 
-	/*calcul epaisseur relative profil central et bout*/
+	/*calc epaisseur relative profil central et bout*/
 	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
 	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
 
@@ -601,7 +601,7 @@ void CalculForme3DBallonement
         makePosProfile(ExtProfCent, IntProfCent, percent, &ExtProfCentN);
         makePosProfile(ExtProfBout, IntProfBout, percent, &ExtProfBoutN);
     }
-	//printf ("\n CalculForme3DBallonement go in FOR");        
+	//printf ("\n calcForm3DBallonement go in FOR");        
 	for (i=0; i<forme->m_nbProfils; i++)
 	{
 		// normal nervure profile
@@ -666,13 +666,13 @@ void CalculForme3DBallonement
 			v = (forme->m_pProfils[i]->m_fWash + forme->m_pProfils[i]->m_fWash) * 0.5f;
 			//coeff morphing
 			m = (forme->m_pProfils[i]->m_fMorph + forme->m_pProfils[i]->m_fMorph) * 0.5f;
-			// time to calculate profile ballone
+			// time to calcate profile ballone
 			ProfilGeom* pgCur = getProfile(gfd, forme, i);
 			ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, gfd->ballonement->kChord->Element(i, 0), gfd->ballonement->kMf->Element(i, 0), EpaiRel, gfd->ballonement->wN->Element(i, 0), gfd->ballonement->dyw->Element(i, 0));
 			double l = abs (pgCur->ExtProf->Element(pgCur->ExtProf->GetLignes() - 1, 0) - pgCur->ExtProf->Element(0, 0));
 			double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
 			ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, gfd->ballonement->powerTail->Element(i, 0));
-			//  -- time to calculate profile ballone
+			//  -- time to calcate profile ballone
 			coeffx = LongNerv/100.0f;
 			double EpaiRelCur = EpaisseurRelative(pgCur->ExtProf, pgCur->IntProf);
 			coeffy = LongNerv*EpaiRel/(EpaiRelCur*100.0f);
@@ -738,13 +738,13 @@ void CalculForme3DBallonement
 /***********************/
 /* InterpoleProfilBout */
 /***********************/
-void InterpoleProfilBout(Matrice** XYBout, Matrice* XYCent)
+void InterpoleProfilBout(Matrix** XYBout, Matrix* XYCent)
 {
 	/*interpolation des Y du profil du bout avec les X du profil central*/
-	Matrice *Xi=Zeros(XYCent->GetLignes(),1); 
-	Matrice *Yi=Zeros(XYCent->GetLignes(),1);
-	Matrice *X=Zeros((*XYBout)->GetLignes(),1); 
-	Matrice *Y=Zeros((*XYBout)->GetLignes(),1);
+	Matrix *Xi=Zeros(XYCent->GetLignes(),1); 
+	Matrix *Yi=Zeros(XYCent->GetLignes(),1);
+	Matrix *X=Zeros((*XYBout)->GetLignes(),1); 
+	Matrix *Y=Zeros((*XYBout)->GetLignes(),1);
 	for(int i=0; i<(*XYBout)->GetLignes(); i++)
 	{
 		X->SetElement(i,0,(*XYBout)->Element(i,0)); 
@@ -981,24 +981,24 @@ void int_cer_bis(double xo1, double yo1, double r1,
 
 
 /*******************/
-/* CalculDeveloppe */
+/* calcDeveloppe */
 /*******************/
 
-void CalculDeveloppe(
-					 Matrice *Xs1, Matrice *Ys1, Matrice *Zs1,
-					 Matrice *Xs2, Matrice *Ys2, Matrice *Zs2,
-					 Matrice **Xb1, Matrice **Yb1,
-					 Matrice **Xb2, Matrice **Yb2)
+void calcDeveloppe(
+					 Matrix *Xs1, Matrix *Ys1, Matrix *Zs1,
+					 Matrix *Xs2, Matrix *Ys2, Matrix *Zs2,
+					 Matrix **Xb1, Matrix **Yb1,
+					 Matrix **Xb2, Matrix **Yb2)
 {
 	double diag, dX, dY, X1, Y1, X2, Y2, Scal1, Scal2;
 	int i, N;
 	//pour rotation
-	Matrice *Thb1=NULL, *Thb2=NULL, *Rb1=NULL, *Rb2=NULL;
+	Matrix *Thb1=NULL, *Thb2=NULL, *Rb1=NULL, *Rb2=NULL;
 	double Th;
 	//test nb pts identique
 	if (Xs1->GetLignes() != Xs2->GetLignes())
 	{
-		printf("\n erreur procedure CalculDeveloppe");
+		printf("\n erreur procedure calcDeveloppe");
 		fflush(stdin); getch(); exit(0);
 	}
 	//init tableaux
@@ -1013,7 +1013,7 @@ void CalculDeveloppe(
 	for(i=0; i<Xs1->GetLignes()-1; i++)
 	{
 		/////////////////////////////////////
-		//calcul point suivant sur le bord 2
+		//calc point suivant sur le bord 2
 		/////////////////////////////////////
 		diag=dist3d(
 			Xs2->Element(i+1,0),Ys2->Element(i+1,0),Zs2->Element(i+1,0),
@@ -1045,7 +1045,7 @@ void CalculDeveloppe(
 					&N, &X1, &Y1, &X2, &Y2);
 				//printf ("\nN=%d (%f, %f) (%f, %f)", N, X1, Y1, X2, Y2);
 				//choix du point resultat ?
-				//calcul de produits scalaires ...
+				//calc de produits scalaires ...
 				if (i>0)
 				{
 					Scal1 =
@@ -1065,7 +1065,7 @@ void CalculDeveloppe(
 						(*Yb2)->SetElement(i+1,0,Y2);
 					}
 				}
-				else //(i=0) 1er point calcule du bord 2
+				else //(i=0) 1er point calce du bord 2
 				{
 					if (X1>X2)
 					{
@@ -1087,7 +1087,7 @@ void CalculDeveloppe(
 			} //test points b2->Element(i,0) et b2->Element(i+1,0) confondus ?   
 		} //test b1->Element(i,0) et b2->Element(i,0) confondus ?
 		/////////////////////////////////////
-		//calcul point suivant sur le bord 1
+		//calc point suivant sur le bord 1
 		/////////////////////////////////////
 		dY=dist3d(
 			Xs2->Element(i+1,0),Ys2->Element(i+1,0),Zs2->Element(i+1,0),
@@ -1109,7 +1109,7 @@ void CalculDeveloppe(
 					&N, &X1, &Y1, &X2, &Y2);
                 //printf ("\n_N=%d (%f, %f) (%f, %f)", N, X1, Y1, X2, Y2);
 				//choix du point resultat ?
-				//calcul de produits scalaires ...
+				//calc de produits scalaires ...
 				if (i>1)
         			{
                 			Scal1 =
@@ -1129,7 +1129,7 @@ void CalculDeveloppe(
 						(*Yb1)->SetElement(i+1,0,Y2);
 					}
 				}
-				else //1er point calcule bord 1
+				else //1er point calce bord 1
 				{
 					if (X1>X2)
 					{
@@ -1202,11 +1202,11 @@ void CalculDeveloppe(
 /* passage de coordonnï¿½es cartesiennes ï¿½ polaire */
 /*************************************************/
 
-void Cart2Pol(Matrice *X, Matrice *Y, Matrice **T, Matrice **R)
+void Cart2Pol(Matrix *X, Matrix *Y, Matrix **T, Matrix **R)
 {
 	int i;
-	*R=new Matrice(X->GetLignes(),1); 
-	*T=new Matrice(X->GetLignes(),1);
+	*R=new Matrix(X->GetLignes(),1); 
+	*T=new Matrix(X->GetLignes(),1);
 
 	for(i=0; i<X->GetLignes(); i++)
 	{
@@ -1219,14 +1219,14 @@ void Cart2Pol(Matrice *X, Matrice *Y, Matrice **T, Matrice **R)
 /* passage de coordonnï¿½es polaire ï¿½ cartesiennes */
 /*************************************************/
 
-void Pol2Cart(Matrice *T, Matrice *R, Matrice **X, Matrice **Y)
+void Pol2Cart(Matrix *T, Matrix *R, Matrix **X, Matrix **Y)
 
 {
 
 	int i;
 
-	*X=new Matrice(R->GetLignes(),1); 
-	*Y=new Matrice(R->GetLignes(),1);
+	*X=new Matrix(R->GetLignes(),1); 
+	*Y=new Matrix(R->GetLignes(),1);
 
 	for(i=0; i<R->GetLignes(); i++)
 
@@ -1257,19 +1257,19 @@ void Inter2Vecteurs(double xa, double ya,
 	//preparation matrices A et B pour resolution AX=B
 	a11=yab; a12=-xab; b1=xa*yab-ya*xab;
 	a21=ycd; a22=-xcd; b2=xc*ycd-yc*xcd;
-	//calcul determinants
+	//calc determinants
 	delta=a11*a22-a21*a12;
 	if (delta !=0)
 	{
 		delta1=b1*a22-b2*a12;
 		delta2=a11*b2-a21*b1;
-		/*calcul resultat*/
+		/*calc resultat*/
 		*x=delta1/delta;
 		*y=delta2/delta;
 	}
 	else
 	{
-		printf("\npb: impossibilitï¿½ de calcul dans la procï¿½dure 'Inter2Vecteurs'");
+		printf("\npb: impossibilitï¿½ de calc dans la procï¿½dure 'Inter2Vecteurs'");
 		*x=0.0f; *y=0.0f;
 	}
 }
@@ -1300,16 +1300,16 @@ void Inter2Vecteurs(double xa, double ya,
 // version originale en fortran, traduit en C et Matlab par Thierry Pï¿½bayle, 2001
 // function [X,Y,Cp]=LVFoil(XB,YB,alphaD);
 
-void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, Matrice **Cp )
+void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matrix **Cp )
 {
 	int n, np1, i, ip1, j;
 	double alpha, SINA, COSA;
-	Matrice *S=NULL, *THETA=NULL, *SINT=NULL, *COST=NULL;
-	Matrice *CN1=NULL, *CN2=NULL, *CT1=NULL, *CT2=NULL, *AN=NULL, *AT=NULL, *RHS=NULL, *XX=NULL, *V=NULL;
+	Matrix *S=NULL, *THETA=NULL, *SINT=NULL, *COST=NULL;
+	Matrix *CN1=NULL, *CN2=NULL, *CT1=NULL, *CT2=NULL, *AN=NULL, *AT=NULL, *RHS=NULL, *XX=NULL, *V=NULL;
 	double A,B,C,D,E,F,G,P1,P2,P3,P4,P,Q;
 	double ANmax;
 	//
-	//     Calculation of geometric data:
+	//     calcation of geometric data:
 	//     ------------------------------
 
 	n=XB->GetLignes()-1; // n:Number of panels
@@ -1325,7 +1325,7 @@ void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, M
 
 	
 
-	//calcul position centre et taille des panneaux 
+	//calc position centre et taille des panneaux 
 
 	for(i=0;i<n; i++)
 
@@ -1357,7 +1357,7 @@ void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, M
 
 	//
 
-	//     Calculation of influence coefficients
+	//     calcation of influence coefficients
 
 	//     -------------------------------------
 
@@ -1562,7 +1562,7 @@ void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, M
 
 
 
-	//liberation matrices de calcul
+	//liberation matrices de calc
 
 	delete(S); delete(THETA); delete(SINT); delete(COST);
 
@@ -1577,14 +1577,14 @@ void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, M
 }
 
 /*********************************************/
-/* calcul longueur dï¿½veloppï¿½ d'une courbe XY */
+/* calc longueur dï¿½veloppï¿½ d'une courbe XY */
 /*********************************************/
 
-Matrice* Longueur(Matrice* x, Matrice *y)
+Matrix* Longueur(Matrix* x, Matrix *y)
 {
 	int i; 
-	Matrice *res;
-	res=new Matrice(x->GetLignes(),1);
+	Matrix *res;
+	res=new Matrix(x->GetLignes(),1);
 	res->SetElement(0,0,0.0f);//premiï¿½re valeur =0.0 
 	for(i=1; i<x->GetLignes(); i++)
 		res->SetElement(i,0, res->Element(i-1,0)
@@ -1593,14 +1593,14 @@ Matrice* Longueur(Matrice* x, Matrice *y)
 }
 
 /*************************************/
-/* calcul coordonï¿½es XY d'un cercle  */
+/* calc coordonï¿½es XY d'un cercle  */
 /*************************************/
 
-Matrice* Cercle(double xo, double yo, double rayon, int nbp)
+Matrix* Cercle(double xo, double yo, double rayon, int nbp)
 {
 	int i; 
-	Matrice *res;
-	res=new Matrice(nbp+1,2);
+	Matrix *res;
+	res=new Matrix(nbp+1,2);
 	for(i=0; i<nbp; i++)
 	{
 		res->SetElement(i,0, xo + (double)cos(2*pi*i/nbp)*rayon);
@@ -1611,10 +1611,10 @@ Matrice* Cercle(double xo, double yo, double rayon, int nbp)
 	return res;
 }
 
-void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double *width, double *height) {
-    // calculate width and height of (Xd[0],Yd[0]) (Xd[1],Yd[1])
-    // calcul minX, maxX, minY, maxY
-    //printf("\n CalculMaxWH()");
+void calcMaxWH(Matrix *Xd0, Matrix *Yd0, Matrix *Xd1, Matrix *Yd1, double *width, double *height) {
+    // calcate width and height of (Xd[0],Yd[0]) (Xd[1],Yd[1])
+    // calc minX, maxX, minY, maxY
+    //printf("\n calcMaxWH()");
     double minX = 10000000.0f, minY = 10000000.0f, maxX = -10000000.0f, maxY = -10000000.0f, x = 0.0f, y = 0.0f;
     for (int i = 0; i < Xd0->GetLignes(); i++) {
         x = Xd0->Element(i, 0);
@@ -1643,8 +1643,8 @@ void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double 
 }
 
 
-void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr) {
-    Matrice *interpXSuspente, *interpYSuspente;
+void getPointByPos (Matrix *Xd, Matrix *Yd, Matrix *P, double Pos, double *xr, double *yr) {
+    Matrix *interpXSuspente, *interpYSuspente;
     interpXSuspente = Zeros(P->GetLignes(), 2);
     interpYSuspente = Zeros(P->GetLignes(), 2);
 
@@ -1658,9 +1658,9 @@ void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr
     *yr = InterpLinX(interpYSuspente, Pos);
 }
 
-void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos, double *xr, double *yr, double *zr) {
+void getPoint3dByPos (Matrix *X, Matrix *Y, Matrix *Z, Matrix *P, double pos, double *xr, double *yr, double *zr) {
 	//printf ("\ngetPoint3dByPos ()");
-    Matrice *interpX, *interpY, *interpZ;
+    Matrix *interpX, *interpY, *interpZ;
     interpX = Zeros(P->GetLignes(), 2);
     interpY = Zeros(P->GetLignes(), 2);
     interpZ = Zeros(P->GetLignes(), 2);
@@ -1683,21 +1683,21 @@ void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos
 }
 
 
-void getPoint3dFormeByPosDNerv(Forme3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr){
+void getPoint3dFormByPosDNerv(Form3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr){
 	int nerv0 = floor(nerv);
 	double nervPos = nerv - nerv0;
 	double x0, y0, z0, x1,y1,z1;
-	getPoint3dFormeByPosNerv(f3d, nerv0, side, pos, &x0, &y0, &z0);
-	getPoint3dFormeByPosNerv(f3d, nerv0+1, side, pos, &x1, &y1, &z1);
+	getPoint3dFormByPosNerv(f3d, nerv0, side, pos, &x0, &y0, &z0);
+	getPoint3dFormByPosNerv(f3d, nerv0+1, side, pos, &x1, &y1, &z1);
 
 	*xr = x0 + nervPos * (x1 - x0);
 	*yr = y0 + nervPos * (y1 - y0); 
 	*zr = z0 + nervPos * (z1 - z0);
 }
 
-void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr) 
+void getPoint3dFormByPosNerv(Form3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr) 
 {
-	Matrice *X, *Y, *Z, *P;
+	Matrix *X, *Y, *Z, *P;
 	if (side == EXT_SIDE) {
 		P = f3d->forme->getExtProf(nerv, false);
 	} else {
@@ -1728,10 +1728,10 @@ void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, doub
 
 
 
-void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1) {
-    /*    Matrice *Xd[2], *Yd[2], *newXd[2], *newYd[2];
-        Matrice *X[2], *Y[2], *Z[2], *P[2];
-        CalculPatron(noNerv, false, 2, 2, Deb[0], Fin[0],
+void calcPatronWithCoeff(Matrix *Xd0, Matrix *Yd0, Matrix *Xd1, Matrix *Yd1, double coeff, Matrix **newXd0, Matrix **newYd0, Matrix **newXd1, Matrix **newYd1) {
+    /*    Matrix *Xd[2], *Yd[2], *newXd[2], *newYd[2];
+        Matrix *X[2], *Y[2], *Z[2], *P[2];
+        calcPatron(noNerv, false, 2, 2, Deb[0], Fin[0],
                 noNerv, false, 1, 1, Deb[1], Fin[1],
                 &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                 &X[0], &Y[0], &Z[0], &P[0],
@@ -1744,7 +1744,7 @@ void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd
     //delete (Xd[1]);delete (Yd[1]);delete (X[1]); delete (Y[1]);delete (Z[1]); delete(P[1]);
 }
 
-double calculCourbeLength(Matrice* X, Matrice* Y) {
+double calcCourbeLength(Matrix* X, Matrix* Y) {
 	double res = 0;
 
 	for (int i = 0; i < X->GetLignes()-1; i++) {

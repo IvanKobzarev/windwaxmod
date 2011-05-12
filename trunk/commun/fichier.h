@@ -13,7 +13,7 @@
 #include "patternsproject.h"
 
 
-class Matrice;
+class Matrix;
 class Profil;
 class WindPatternsProject;
 class Ballonement;
@@ -21,12 +21,12 @@ class KiteDesign;
 class KiteDesignElement;
 class Line;
 
-class Forme
+class Form
 {
 
 public:
-	Forme();
-	virtual ~Forme();
+	Form();
+	virtual ~Form();
 
 	//parametres principaux
 	double CoeffProgGeom;
@@ -35,13 +35,13 @@ public:
 	int NbCaiss;
 
 	//points de controle = courbes de 4 pts(x,y)
-	Matrice *mCtrlNez, *mCtrlFui, *mCtrlA, *mCtrlB, *mCtrlC, *mCtrlD, *mCtrlE;
-	Matrice *mCourbNez, *mCourbFui, *mCourbA, *mCourbB, *mCourbC, *mCourbD, *mCourbE;
-	Matrice *mCtrlDiedre, *mCtrlMorphing, *mCtrlVrillage, *mCtrlEpaiRel;
-	Matrice *mCourbDiedre, *mCourbMorphing, *mCourbVrillage, *mCourbEpaiRel;
+	Matrix *mCtrlNez, *mCtrlFui, *mCtrlA, *mCtrlB, *mCtrlC, *mCtrlD, *mCtrlE;
+	Matrix *mCourbNez, *mCourbFui, *mCourbA, *mCourbB, *mCourbC, *mCourbD, *mCourbE;
+	Matrix *mCtrlDiedre, *mCtrlMorphing, *mCtrlVrillage, *mCtrlEpaiRel;
+	Matrix *mCourbDiedre, *mCourbMorphing, *mCourbVrillage, *mCourbEpaiRel;
 
 	// used only for Serialize
-    Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
+    Matrix *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
 	double EpaiRelProfCent;
 	double EpaiRelProfBout;
 
@@ -49,8 +49,8 @@ public:
 	std::string m_strNomProfilCent;
 	std::string m_strNomProfilBout;
 
-	Matrice* getExtProf(int nerv, bool realSize);
-	Matrice* getIntProf(int nerv, bool realSize);
+	Matrix* getExtProf(int nerv, bool realSize);
+	Matrix* getIntProf(int nerv, bool realSize);
 
 	//tableau de forme
 	Profil** m_pProfils;
@@ -59,7 +59,7 @@ public:
 	Ballonement *ballon;
 
 /*	void SerializeToWpa(QDataStream &ar);
-	void SerializeFoil(QDataStream &ar, Matrice* ExtProf, Matrice* IntProf);
+	void SerializeFoil(QDataStream &ar, Matrix* ExtProf, Matrix* IntProf);
 	void SerializeWing (QDataStream &ar);
 	void WritePolars (QDataStream &ar);*/
 	void DeleteProfils();
@@ -67,25 +67,25 @@ public:
 	void Validate();
 };
 
-class Forme3D
+class Form3D
 {
 public:
-	Forme3D();
-	virtual ~Forme3D();
+	Form3D();
+	virtual ~Form3D();
 	
-	Matrice *XExt, *YExt, *ZExt;
-	Matrice *XInt, *YInt, *ZInt;
-	Forme* forme;
-	//Matrice *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
+	Matrix *XExt, *YExt, *ZExt;
+	Matrix *XInt, *YInt, *ZInt;
+	Form* forme;
+	//Matrix *ExtProfCent, *IntProfCent, *ExtProfBout, *IntProfBout;
 };
 
-class FormeProjection
+class FormProjection
 {
 public:
-	FormeProjection();
-	virtual ~FormeProjection();
+	FormProjection();
+	virtual ~FormProjection();
 
-	Matrice *X, *Y;
+	Matrix *X, *Y;
 };
 
 class Ballonement
@@ -94,17 +94,17 @@ class Ballonement
 	public:
 		Ballonement();
 		virtual ~Ballonement();
-		Matrice* kChord;
-		Matrice* kMf;
-		Matrice* wN;
-		Matrice* dyw;
-		Matrice* powerTail;
+		Matrix* kChord;
+		Matrix* kMf;
+		Matrix* wN;
+		Matrix* dyw;
+		Matrix* powerTail;
 		void loadFromFile(const char* fileName);
 };
 
-typedef struct InfoForme TInfoForme;
+typedef struct InfoForm TInfoForm;
 
-struct InfoForme
+struct InfoForm
 {
 	double surface, envergure;
 	double surfaceProj, envergureProj;
@@ -115,44 +115,44 @@ struct InfoForme
 
 };
 
-void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** intrados);
+void LectureFichierProfil(const char* NomProf, Matrix** extrados, Matrix** intrados);
 
 Ballonement* readBallonementFromFile(char* NomFic);
 
-Forme* LectureFichierForme(char* NomFic);
+Form* LectureFichierForm(char* NomFic);
 
 Ballonement* readBallonementFromFile(char* NomFic);
 
-Forme* LectureFichierForme2(char* NomFic);
+Form* LectureFichierForm2(char* NomFic);
 
-void EcritureFichierForme(char *NomFichier, Forme *f);
+void EcritureFichierForm(char *fileName, Form *f);
 
-void EcritureFichierForme2(char *NomFichier, Forme *f);
+void EcritureFichierForm2(char *fileName, Form *f);
 
 bool TrouveMotDansFichierTexte(FILE* fid, char* Mot);
 
-void EcritureFichierDXF(char *NomFichier, TAxe *axe);
+void EcritureFichierDXF(char *fileName, TAxe *axe);
 
-bool EcritureFichierWpa(char *NomFichier, Forme *forme);
+bool EcritureFichierWpa(char *fileName, Form *forme);
 
-void EcritureFichierPolyDXF(char *NomFichier, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT);
+void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT);
 
 void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
 
-void EcritureFichierFGen(char *NomFichier, Forme *foil);
+void EcritureFichierFGen(char *fileName, Form *foil);
 
-void CalculInfoForme( Forme* F, TInfoForme* info );
+void calcInfoForm( Form* F, TInfoForm* info );
 
-void AfficheInfoForme( TInfoForme info );
+void AfficheInfoForm( TInfoForm info );
 
-void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
-					Matrice *Yd1, Matrice *P1,
+void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
+					Matrix *Yd1, Matrix *P1,
 					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
-					Matrice *Xd2, Matrice *Yd2, Matrice *P2,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
 					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
 			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
                     double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
-					bool isPince=false, Matrice *Xd01=0, Matrice *Yd01=0,double coeff1=0, Matrice *Xd02=0, Matrice *Yd02=0,double coeff2=0);
+					bool isPince=false, Matrix *Xd01=0, Matrix *Yd01=0,double coeff1=0, Matrix *Xd02=0, Matrix *Yd02=0,double coeff2=0);
 
 WindPatternsProject* LectureWindPatternsProject(char* NomFic);
 
@@ -160,10 +160,10 @@ int* LectureFichierVentHoles(char* NomFic, int* quant, int* central);
 
 int* LectureFichierDiagNervs(char* NomFic, int* quant);
 
-void EcritureManyFichierPolyDXF(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
+void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
 
-void EcritureManyFichierPolyDXF2(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
+void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
-void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp);
+void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp);
 
 KiteDesign* readKiteDesignFromFile(const char* FilePath);

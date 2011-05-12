@@ -41,7 +41,7 @@
 /**********************/
 
 /*live-variable GLUI*/
-int VisuFace = 0; /*choix visu nervures(0) ou surfaces(1)*/
+int ViewFace = 0; /*choix visu nervures(0) ou surfaces(1)*/
 int ProjOrthoPers = 0; /*choix projection orthogonale ou perspective*/
 int PinceType = 0;
 
@@ -58,10 +58,10 @@ int VentCentralNerv = 0;
 float VentHolesDeb = 2.0f;
 float VentHolesFin = 6.0f;
 
-int VisuSymetrique = 0;
+int ViewSymetrique = 0;
 int RaskladSymetrique = 0;
 int RaskladKlapans = 0;
-int VisuPtsSuspentes = 1; /*visualise pts de suspentage*/
+int ViewPtsSuspentes = 1; /*visualise pts de suspentage*/
 int ReperesCoutures = 1;
 int ReperesSuspentes[2] = {1, 1};
 int ReperesProfile[2] = {1, 1};
@@ -87,7 +87,7 @@ int GoPince = 0;
 
 float XMashtab = 0.5f;
 float coeffMult = 1.0f;
-//pour calcul patrons
+//pour calc patrons
 int NoNerv[2] = {2, 3};
 float Deb[2] = {0.0f, 20.0f}, Fin[2] = {100.0f, 100.0f};
 
@@ -134,19 +134,19 @@ int Translation3d = OFF; /*flag translation 3d -> bouton droit souris*/
 int ZoomTwist3d = OFF; /*flag twist 3d -> bouton gauche et droit souris*/
 
 /*fenetres OpenGL*/
-int Fenetre3d; /*visu 3D*/
-//int Fenetre3dBal; /*visu 3D*/
-int FenetrePatron; /*visu patron*/
+int window3d; /*visu 3D*/
+//int window3dBal; /*visu 3D*/
+int windowPatron; /*visu patron*/
 
 double *pinceLAAmp1;
 double *pinceLFAmp1;
 double *pinceRAAmp1;
 double *pinceRFAmp1;
 
-Matrice** funcL1;
-Matrice** funcL2;
-Matrice** funcR1;
-Matrice** funcR2;
+Matrix** funcL1;
+Matrix** funcL2;
+Matrix** funcR1;
+Matrix** funcR2;
 
 double *lenp1;
 
@@ -173,22 +173,22 @@ TAxe *AxePatronDXF, *AxePatronTextDXF, *AxeMarginDXF, *AxeCercleDXF, *AxeRepDXF;
 //Courbe *CourbeIntDXF;
 
 /*forme*/
-Forme *F;
+Form *F;
 char ProjectName[255];
 
 /*divers tableaux*/
-Matrice *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
-Matrice** ReperPoints;
+Matrix *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
+Matrix** ReperPoints;
 Ballonement* ballonement;
 char ballonementPath[255];
-char NomFichierForme[255];
-char NomFichierProject[255];
-char NomFichierRepPoints[255];
-char NomFichierVentHoles[255];
-char NomFichierDiagNerv[255];
+char fileNameForm[255];
+char fileNameProject[255];
+char fileNameRepPoints[255];
+char fileNameVentHoles[255];
+char fileNameDiagNerv[255];
 
 GLUI *glui;
-GLUI_StaticText *FicForme, *FicRepPoints, *FicVentHoles, *FicDiagNerv, *BlankST, *BlankST2, *FicProject;
+GLUI_StaticText *FicForm, *FicRepPoints, *FicVentHoles, *FicDiagNerv, *BlankST, *BlankST2, *FicProject;
 GLUI_EditText *NumText, *DiagNervText, *VentHolesNervsText;
 GLUI_Spinner *SpinNoNerv[2];
 
@@ -196,41 +196,41 @@ GLUI_Spinner *SpinNoNerv[2];
 /*liste des procedures definies dans ce fichier*/
 /***********************************************/
 
-void EcritureManyFichierPolyDXF(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
-void EcritureManyFichierPolyDXF2(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
+void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
+void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
 void display(void);
 void reshape(int w, int h);
 void motion(int x, int y);
 void BoutonSouris(int button, int state, int x, int y);
-void PositionneFenetres(void);
+void Positionnewindows(void);
 void keyboard(unsigned char key, int x, int y);
-void InitFenetre(void);
-void InitLumiere(void);
-void CalculVue3dEtPatron(void);
-void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew);
+void InitWindow(void);
+void InitLight(void);
+void calcVue3dEtPatron(void);
+void calcMagicPinceR(int noNerv1, double perc, int face, double* percNew);
 void ModifProjection3d(int control);
-void ModifVisu3d(int control);
-void ModifVisuSymetrique(int control);
+void ModifView3d(int control);
+void ModifViewSymetrique(int control);
 void Appliquer(int control);
 void AppliquerMagic(int control);
 
 void Quitter(int control);
 void Info(int control);
-void ChargerFichierForme(int control);
+void readForm(int control);
 
-Matrice** LectureFichierReperPoints(char* NomFic);
+Matrix** LectureFichierReperPoints(char* NomFic);
 
 void InitValeursDialogue(void);
-void Ajouter(int control);
-void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr);
-void CalculMagicPincesRasklad();
+void adder(int control);
+void getPointByPos (Matrix *Xd, Matrix *Yd, Matrix *P, double Pos, double *xr, double *yr);
+void calcMagicPincesRasklad();
 
 WindPatternsProject* gfd = new WindPatternsProject();
 
 WindPatternsProject* getWindPatternsProject() {
     strcpy(gfd->name,ProjectName);
-    strcpy(gfd->NomFichierForme, NomFichierForme);
+    strcpy(gfd->fileNameForm, fileNameForm);
 
     strcpy(gfd->ballonementPath, ballonementPath);
 	gfd->ballonement=ballonement;
@@ -262,13 +262,13 @@ WindPatternsProject* getWindPatternsProject() {
 
     gfd->PinceRadiusAlgKNos=PinceRadiusAlgKNos;
     gfd->PinceRadiusAlgKHvost=PinceRadiusAlgKHvost;
-    gfd->Forme=F;
+    gfd->Form=F;
     gfd->RaskladSymetrique=RaskladSymetrique;
     gfd->PosDiagNerv1A=PosDiagNerv1A;
     gfd->PosDiagNerv1F=PosDiagNerv1F;
     gfd->PosDiagNerv2A=PosDiagNerv2A;
     gfd->PosDiagNerv2F=PosDiagNerv2F;
-    gfd->FenetrePatron=FenetrePatron;
+    gfd->windowPatron=windowPatron;
     gfd->MargeDeb = MargeDeb;
     gfd->MargeFin = MargeFin;
     gfd->Marge[0] = Marge[0];
@@ -326,21 +326,21 @@ WindPatternsProject* getWindPatternsProject() {
     gfd->ExtProfBout=ExtProfBout;
     gfd->IntProfCent=IntProfCent;
     gfd->IntProfBout=IntProfBout;
-    strcpy(gfd->NomFichierDiagNerv, NomFichierDiagNerv);
-    strcpy(gfd->NomFichierVentHoles, NomFichierVentHoles);
-    strcpy(gfd->NomFichierRepPoints, NomFichierRepPoints);
+    strcpy(gfd->fileNameDiagNerv, fileNameDiagNerv);
+    strcpy(gfd->fileNameVentHoles, fileNameVentHoles);
+    strcpy(gfd->fileNameRepPoints, fileNameRepPoints);
 
-    FicForme->set_text(NomFichierForme);
-    FicVentHoles->set_text(NomFichierVentHoles);
-    FicRepPoints->set_text(NomFichierRepPoints);
-    FicDiagNerv->set_text(NomFichierDiagNerv);
+    FicForm->set_text(fileNameForm);
+    FicVentHoles->set_text(fileNameVentHoles);
+    FicRepPoints->set_text(fileNameRepPoints);
+    FicDiagNerv->set_text(fileNameDiagNerv);
     return gfd;
 }
 
 void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
-	Forme* tmpF=0;
-	Matrice *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
-	Matrice** tmpReperPoints=0;
+	Form* tmpF=0;
+	Matrix *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
+	Matrix** tmpReperPoints=0;
 	Ballonement* tmpBallonement;
 	int tmpquantDiag=0;
 	int tmpquantVH=0;
@@ -349,7 +349,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	int tmpVentCentralNerv=0;
 
 	try {
-		tmpF = LectureFichierForme(gfd->NomFichierForme);
+		tmpF = LectureFichierForm(gfd->fileNameForm);
 		try {
 		tmpF->Validate();
 		} catch (char* msg) {
@@ -359,14 +359,14 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 
 		LectureFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
 		LectureFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
-		tmpnoNervVH = LectureFichierVentHoles(gfd->NomFichierVentHoles, &tmpquantVH, &tmpVentCentralNerv);
-		tmpnoNervD = LectureFichierDiagNervs(gfd->NomFichierDiagNerv, &tmpquantDiag);
-		tmpReperPoints = LectureFichierReperPoints(gfd->NomFichierRepPoints);
+		tmpnoNervVH = LectureFichierVentHoles(gfd->fileNameVentHoles, &tmpquantVH, &tmpVentCentralNerv);
+		tmpnoNervD = LectureFichierDiagNervs(gfd->fileNameDiagNerv, &tmpquantDiag);
+		tmpReperPoints = LectureFichierReperPoints(gfd->fileNameRepPoints);
 		tmpBallonement = readBallonementFromFile(gfd->ballonementPath);
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
 		char msg[100];
-		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->NomFichierForme);
+		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->fileNameForm);
 		AfxMessageBox(msg);
 		return;
 	}
@@ -386,10 +386,10 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	ballonement = tmpBallonement;
 	/* --------                                 ------------ */
  
-    strcpy(NomFichierRepPoints, gfd->NomFichierRepPoints);
-    strcpy(NomFichierDiagNerv, gfd->NomFichierDiagNerv);
-    strcpy(NomFichierVentHoles, gfd->NomFichierVentHoles);
-	strcpy(NomFichierForme, gfd->NomFichierForme);
+    strcpy(fileNameRepPoints, gfd->fileNameRepPoints);
+    strcpy(fileNameDiagNerv, gfd->fileNameDiagNerv);
+    strcpy(fileNameVentHoles, gfd->fileNameVentHoles);
+	strcpy(fileNameForm, gfd->fileNameForm);
 	strcpy(ballonementPath, gfd->ballonementPath);
     strcpy(ProjectName, gfd -> name);	
 	PincePowerA = gfd->PincePowerA;
@@ -483,105 +483,105 @@ void InitValeursDialogue(void) {
 
 
 
-void ChargerFichierRepPoints(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
-    Matrice** oldRP;
+void readRepPoints(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
+    Matrix** oldRP;
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierRepPoints, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameRepPoints, PtrfileName);
         oldRP = ReperPoints;
-        ReperPoints = LectureFichierReperPoints(NomFichierRepPoints);
+        ReperPoints = LectureFichierReperPoints(fileNameRepPoints);
         delete(oldRP);
-        FicRepPoints->set_text(NomFichierRepPoints);
+        FicRepPoints->set_text(fileNameRepPoints);
     }
     if (ReperPointsFromFile==1) Appliquer(0);
 }
 
 
-void ChargerFichierDiagNervs(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readDiagNervs(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     int* oldNoNervD;
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierDiagNerv, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameDiagNerv, PtrfileName);
         oldNoNervD = noNervD;
         
-        noNervD = LectureFichierDiagNervs(NomFichierDiagNerv, &quantDiag);
+        noNervD = LectureFichierDiagNervs(fileNameDiagNerv, &quantDiag);
         delete(oldNoNervD);
-        FicDiagNerv->set_text(NomFichierDiagNerv);
+        FicDiagNerv->set_text(fileNameDiagNerv);
     }
 }
 
 
-void ChargerFichierVentHoles(int /*control*/) {
+void readVentHoles(int /*control*/) {
     //printf ("\nCharger Fichier Vent Holes()");
-    CString NomFichier;
-    char* PtrNomFichier;
+    CString fileName;
+    char* PtrfileName;
     int* oldVH;
     //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
 
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierVentHoles, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameVentHoles, PtrfileName);
         oldVH = noNervVH;
         VentCentralNerv = 0;
-        noNervVH = LectureFichierVentHoles(NomFichierVentHoles, &quantVH, &VentCentralNerv);
+        noNervVH = LectureFichierVentHoles(fileNameVentHoles, &quantVH, &VentCentralNerv);
         delete(oldVH);
-        FicVentHoles->set_text(NomFichierVentHoles);
+        FicVentHoles->set_text(fileNameVentHoles);
     }
 }
 
 
-void ChargerFichierProject(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readProject(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     WindPatternsProject* oldWpp;
     //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.wpp", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierProject, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameProject, PtrfileName);
         oldWpp = gfd;
-        gfd = LectureWindPatternsProject(NomFichierProject);
+        gfd = LectureWindPatternsProject(fileNameProject);
         LoadFromWindPatternsProject(gfd);
         delete(oldWpp);
-        FicProject->set_text(NomFichierProject);
+        FicProject->set_text(fileNameProject);
     }
     Appliquer(0);
     display();
     glui->sync_live();
 }
 
-void ChargerFichierForme(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
-    Forme* oldF;
+void readForm(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
+    Form* oldF;
     //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierForme, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameForm, PtrfileName);
         //lecture fichier de forme
-        //LibererForme(F);
+        //clearForm(F);
         oldF = F;
-        F = LectureFichierForme(NomFichierForme);
+        F = LectureFichierForm(fileNameForm);
        //libere memoire ancienne forme
         delete(oldF);
         //maj interface GLUI
-        FicForme->set_text(NomFichierForme);
+        FicForm->set_text(fileNameForm);
 
         //chargement profils
         LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
@@ -604,31 +604,31 @@ void ChargerFichierForme(int /*control*/) {
         InitValeursDialogue();
     }
     //mise a jour affichage
-    //CalculVue3dEtPatron();
+    //calcVue3dEtPatron();
     Appliquer(0);
     display();
 
 }
 
-void ChargerFichierForme2(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
-    Forme* oldF;
+void readForm2(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
+    Form* oldF;
     //ouverture boite de dialogue
     CFileDialog DlgOpen(TRUE, NULL, "*.txt", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierForme, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameForm, PtrfileName);
         //lecture fichier de forme
-        //LibererForme(F);
+        //clearForm(F);
         oldF = F;
-        F = LectureFichierForme2(NomFichierForme);
+        F = LectureFichierForm2(fileNameForm);
         //libere memoire ancienne forme
         delete(oldF);
         //maj interface GLUI
-        FicForme->set_text(NomFichierForme);
+        FicForm->set_text(fileNameForm);
         //chargement profils
         LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
         LectureFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
@@ -649,17 +649,17 @@ void ChargerFichierForme2(int /*control*/) {
         InitValeursDialogue();
     }
     //mise a jour affichage
-    CalculVue3dEtPatron();
+    calcVue3dEtPatron();
     display();
 }
 
 void ModifPinceNosRadio(int /*control*/) {
-    CalculVue3dEtPatron();
+    calcVue3dEtPatron();
     display();
 }
 
 void ModifRepPts(int /*control*/) {
-    CalculVue3dEtPatron();
+    calcVue3dEtPatron();
     display();
 }
 
@@ -668,7 +668,7 @@ void ModifVentilation(int /*control*/) {
 }
 
 void ModifPinceHvostRadio(int /*control*/) {
-    CalculVue3dEtPatron();
+    calcVue3dEtPatron();
     display();
 }
 
@@ -683,39 +683,39 @@ void ModifProjection3d(int /*control*/) {
         //Axe3dBal->proj = PROJ_PERSPECTIVE;
 	}
     /*retrace uniquement la vue 3d*/
-    VisuAxe(Axe3d);
-    //VisuAxe(Axe3dBal);
+    ViewAxe(Axe3d);
+    //ViewAxe(Axe3dBal);
     glutSwapBuffers();
 }
 
 /***************/
-/* ModifVisu3d */
+/* ModifView3d */
 /***************/
-void ModifVisu3d(int /*control*/) {
-    /*recalcul et retrace la vue 3d*/
-    CalculVue3dEtPatron();
-    VisuAxe(Axe3d);
+void ModifView3d(int /*control*/) {
+    /*recalc et retrace la vue 3d*/
+    calcVue3dEtPatron();
+    ViewAxe(Axe3d);
     glutSwapBuffers();
-    //VisuAxe(Axe3dBal);
+    //ViewAxe(Axe3dBal);
     //glutSwapBuffers();
 
 }
 
 /***********************/
-/* ModifVisuSymetrique */
+/* ModifViewSymetrique */
 /***********************/
-void ModifVisuSymetrique(int /*control*/) {
-    /*recalcul et retrace la vue 3d*/
-    CalculVue3dEtPatron();
-    VisuAxe(Axe3d);
+void ModifViewSymetrique(int /*control*/) {
+    /*recalc et retrace la vue 3d*/
+    calcVue3dEtPatron();
+    ViewAxe(Axe3d);
     glutSwapBuffers();
-    //VisuAxe(Axe3dBal);
+    //ViewAxe(Axe3dBal);
     //glutSwapBuffers();
 
 }
 
 void ModifGoPince(int /*control*/) {
-    CalculVue3dEtPatron();
+    calcVue3dEtPatron();
     display();
 }
 
@@ -727,42 +727,42 @@ void ModifVentilationLayout(int /*control*/) {
 
 }
 
-void Ajouter(int /*control*/) {
+void adder(int /*control*/) {
 
 }
 
 void Appliquer(int /*control*/) {
     int i; //,j;
-    Matrice *xe, *xi;
-    Matrice *extProf, *intProf;
-    xe = new Matrice(ExtProfCent->GetLignes(), 1);
-    xi = new Matrice(IntProfCent->GetLignes(), 1);
+    Matrix *xe, *xi;
+    Matrix *extProf, *intProf;
+    xe = new Matrix(ExtProfCent->GetLignes(), 1);
+    xi = new Matrix(IntProfCent->GetLignes(), 1);
     for (i = 0; i < ExtProfCent->GetLignes(); i++)        xe->SetElement(i, 0, ExtProfCent->Element(i, 0));
     for (i = 0; i < IntProfCent->GetLignes(); i++)        xi->SetElement(i, 0, IntProfCent->Element(i, 0));
     for (i = 0; i < 2; i++) {
-        if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe)))            AjouteValeurCroissant(Deb[i], &xe);
-        if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi)))            AjouteValeurCroissant(Deb[i], &xi);
-        if ((FaceFin[i] == 1) && (!ValeurPresente(Fin[i], xe)))            AjouteValeurCroissant(Fin[i], &xe);
-        if ((FaceFin[i] == 2) && (!ValeurPresente(Fin[i], xi)))            AjouteValeurCroissant(Fin[i], &xi);
+        if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe)))            addeValeurCroissant(Deb[i], &xe);
+        if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi)))            addeValeurCroissant(Deb[i], &xi);
+        if ((FaceFin[i] == 1) && (!ValeurPresente(Fin[i], xe)))            addeValeurCroissant(Fin[i], &xe);
+        if ((FaceFin[i] == 2) && (!ValeurPresente(Fin[i], xi)))            addeValeurCroissant(Fin[i], &xi);
     }
 
-    if ((!ValeurPresente(PosDiagNerv2A, xi))) AjouteValeurCroissant(PosDiagNerv2A, &xi);
-    if ((!ValeurPresente(PosDiagNerv2F, xi))) AjouteValeurCroissant(PosDiagNerv2F, &xi);
-    if ((!ValeurPresente(PosDiagNerv1A, xe))) AjouteValeurCroissant(PosDiagNerv1A, &xe);
-    if ((!ValeurPresente(PosDiagNerv1F, xe))) AjouteValeurCroissant(PosDiagNerv1F, &xe);
+    if ((!ValeurPresente(PosDiagNerv2A, xi))) addeValeurCroissant(PosDiagNerv2A, &xi);
+    if ((!ValeurPresente(PosDiagNerv2F, xi))) addeValeurCroissant(PosDiagNerv2F, &xi);
+    if ((!ValeurPresente(PosDiagNerv1A, xe))) addeValeurCroissant(PosDiagNerv1A, &xe);
+    if ((!ValeurPresente(PosDiagNerv1F, xe))) addeValeurCroissant(PosDiagNerv1F, &xe);
 
-    if ((!ValeurPresente(PosPinceBA[0], xi))) AjouteValeurCroissant(PosPinceBA[0], &xi);
-    if ((!ValeurPresente(100.0f-PosPinceBF[0], xi))) AjouteValeurCroissant(100.0f-PosPinceBF[0], &xi);
-    if ((!ValeurPresente(PosPinceBA[0], xe))) AjouteValeurCroissant(PosPinceBA[0], &xe);
-    if ((!ValeurPresente(100.0f-PosPinceBF[0], xe))) AjouteValeurCroissant(100.0f-PosPinceBF[0], &xe);
+    if ((!ValeurPresente(PosPinceBA[0], xi))) addeValeurCroissant(PosPinceBA[0], &xi);
+    if ((!ValeurPresente(100.0f-PosPinceBF[0], xi))) addeValeurCroissant(100.0f-PosPinceBF[0], &xi);
+    if ((!ValeurPresente(PosPinceBA[0], xe))) addeValeurCroissant(PosPinceBA[0], &xe);
+    if ((!ValeurPresente(100.0f-PosPinceBF[0], xe))) addeValeurCroissant(100.0f-PosPinceBF[0], &xe);
 
     if (VentHoles) {
-        if ((!ValeurPresente(VentHolesDeb, xi))) AjouteValeurCroissant(VentHolesDeb, &xi);
-        if ((!ValeurPresente(VentHolesFin, xi))) AjouteValeurCroissant(VentHolesFin, &xi);
+        if ((!ValeurPresente(VentHolesDeb, xi))) addeValeurCroissant(VentHolesDeb, &xi);
+        if ((!ValeurPresente(VentHolesFin, xi))) addeValeurCroissant(VentHolesFin, &xi);
     }
     if (isKlapan) {
-        if ((!ValeurPresente(PosKlapanInt, xi))) AjouteValeurCroissant(PosKlapanInt, &xi);
-        if ((!ValeurPresente(PosKlapanFin, xe))) AjouteValeurCroissant(PosKlapanFin, &xe);
+        if ((!ValeurPresente(PosKlapanInt, xi))) addeValeurCroissant(PosKlapanInt, &xi);
+        if ((!ValeurPresente(PosKlapanFin, xe))) addeValeurCroissant(PosKlapanFin, &xe);
     }
 
     extProf = Zeros(xe->GetLignes(), 2);
@@ -797,8 +797,8 @@ void Appliquer(int /*control*/) {
     AxePatron->YAuto = ON;
     AxePatron->ZAuto = ON;
     //ParseVentHolesNervs();
-    //recalcul forme 3D et patron avec "nouveau" profil
-    CalculVue3dEtPatron();
+    //recalc forme 3D et patron avec "nouveau" profil
+    calcVue3dEtPatron();
     display();
 
 }
@@ -806,34 +806,34 @@ void Appliquer(int /*control*/) {
 
 void AppliquerMagic2(int /*control*/) {
     int i; //,j;
-    Matrice *xe, *xi;
-    Matrice *extProf, *intProf;
-    xe = new Matrice(ExtProfCent->GetLignes(), 1);
-    xi = new Matrice(IntProfCent->GetLignes(), 1);
+    Matrix *xe, *xi;
+    Matrix *extProf, *intProf;
+    xe = new Matrix(ExtProfCent->GetLignes(), 1);
+    xi = new Matrix(IntProfCent->GetLignes(), 1);
     for (i = 0; i < ExtProfCent->GetLignes(); i++)
         xe->SetElement(i, 0, ExtProfCent->Element(i, 0));
     for (i = 0; i < IntProfCent->GetLignes(); i++)
         xi->SetElement(i, 0, IntProfCent->Element(i, 0));
     for (i = 0; i < 2; i++) {
-        if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe))) AjouteValeurCroissant(Deb[i], &xe);
-        if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi))) AjouteValeurCroissant(Deb[i], &xi);
-        if ((FaceFin[i] == 1) && (!ValeurPresente(Fin[i], xe))) AjouteValeurCroissant(Fin[i], &xe);
-        if ((FaceFin[i] == 2) && (!ValeurPresente(Fin[i], xi))) AjouteValeurCroissant(Fin[i], &xi);
+        if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe))) addeValeurCroissant(Deb[i], &xe);
+        if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi))) addeValeurCroissant(Deb[i], &xi);
+        if ((FaceFin[i] == 1) && (!ValeurPresente(Fin[i], xe))) addeValeurCroissant(Fin[i], &xe);
+        if ((FaceFin[i] == 2) && (!ValeurPresente(Fin[i], xi))) addeValeurCroissant(Fin[i], &xi);
     }
 
-    if ((!ValeurPresente(PosDiagNerv2A, xi))) AjouteValeurCroissant(PosDiagNerv2A, &xi);
-    if ((!ValeurPresente(PosDiagNerv2F, xi))) AjouteValeurCroissant(PosDiagNerv2F, &xi);
-    if ((!ValeurPresente(PosDiagNerv1A, xe))) AjouteValeurCroissant(PosDiagNerv1A, &xe);
-    if ((!ValeurPresente(PosDiagNerv1F, xe))) AjouteValeurCroissant(PosDiagNerv1F, &xe);
+    if ((!ValeurPresente(PosDiagNerv2A, xi))) addeValeurCroissant(PosDiagNerv2A, &xi);
+    if ((!ValeurPresente(PosDiagNerv2F, xi))) addeValeurCroissant(PosDiagNerv2F, &xi);
+    if ((!ValeurPresente(PosDiagNerv1A, xe))) addeValeurCroissant(PosDiagNerv1A, &xe);
+    if ((!ValeurPresente(PosDiagNerv1F, xe))) addeValeurCroissant(PosDiagNerv1F, &xe);
 
-    if ((!ValeurPresente(PosPinceBA[0], xi))) AjouteValeurCroissant(PosPinceBA[0], &xi);
-    if ((!ValeurPresente(100.0f - PosPinceBF[0], xi))) AjouteValeurCroissant(100.0f - PosPinceBF[0], &xi);
-    if ((!ValeurPresente(PosPinceBA[0], xe))) AjouteValeurCroissant(PosPinceBA[0], &xe);
-    if ((!ValeurPresente(100.0f - PosPinceBF[0], xe))) AjouteValeurCroissant(100.0f - PosPinceBF[0], &xe);
+    if ((!ValeurPresente(PosPinceBA[0], xi))) addeValeurCroissant(PosPinceBA[0], &xi);
+    if ((!ValeurPresente(100.0f - PosPinceBF[0], xi))) addeValeurCroissant(100.0f - PosPinceBF[0], &xi);
+    if ((!ValeurPresente(PosPinceBA[0], xe))) addeValeurCroissant(PosPinceBA[0], &xe);
+    if ((!ValeurPresente(100.0f - PosPinceBF[0], xe))) addeValeurCroissant(100.0f - PosPinceBF[0], &xe);
 
     if (VentHoles) {
-        if ((!ValeurPresente(VentHolesDeb, xi))) AjouteValeurCroissant(VentHolesDeb, &xi);
-        if ((!ValeurPresente(VentHolesFin, xi))) AjouteValeurCroissant(VentHolesFin, &xi);
+        if ((!ValeurPresente(VentHolesDeb, xi))) addeValeurCroissant(VentHolesDeb, &xi);
+        if ((!ValeurPresente(VentHolesFin, xi))) addeValeurCroissant(VentHolesFin, &xi);
     }
 
 
@@ -851,9 +851,9 @@ void AppliquerMagic2(int /*control*/) {
     delete(xi);
     delete(extProf);
     delete(intProf);
-    //printf ("goCalculPinceRasklad()");
-	Rasklad* rasklad = CalculIndepPinceRasklad(getWindPatternsProject(), F);
-    //printf ("...goCalculPinceRasklad()");
+    //printf ("gocalcPinceRasklad()");
+	Rasklad* rasklad = calcIndepPinceRasklad(getWindPatternsProject(), F);
+    //printf ("...gocalcPinceRasklad()");
 	//printf ("goSaveRasklad2()");
     SaveRasklad2(getWindPatternsProject(), rasklad);
 	//printf ("...goSaveRasklad2()");
@@ -861,39 +861,39 @@ void AppliquerMagic2(int /*control*/) {
 
 void SauverFichier3dDXF( int ) //
 {
-	CString NomFichier;
-	LPTSTR PtrNomFichier;
+	CString fileName;
+	LPTSTR PtrfileName;
 	//ouverture boite de dialogue
 	CFileDialog DlgOpen(FALSE, NULL, "*.dxf", OFN_OVERWRITEPROMPT, NULL, NULL);
 	if (DlgOpen.DoModal() == IDOK)
 	{
 		//recupere nom de fichier
-		NomFichier=DlgOpen.GetPathName();
-		PtrNomFichier = NomFichier.GetBuffer(1);
+		fileName=DlgOpen.GetPathName();
+		PtrfileName = fileName.GetBuffer(1);
        	//ecriture fichier DXF
-		EcritureFichierDXF(PtrNomFichier, Axe3d);
+		EcritureFichierDXF(PtrfileName, Axe3d);
 	}
 }
 
 void ExportWpa( int ) //
 {
-/*	CString NomFichier;
-	LPTSTR PtrNomFichier;
+/*	CString fileName;
+	LPTSTR PtrfileName;
 	//ouverture boite de dialogue
 	CFileDialog DlgOpen(FALSE, NULL, "*.wpa", OFN_OVERWRITEPROMPT, NULL, NULL);
 	if (DlgOpen.DoModal() == IDOK)
 	{
 		//recupere nom de fichier
-		NomFichier=DlgOpen.GetPathName();
-		PtrNomFichier = NomFichier.GetBuffer(1);
+		fileName=DlgOpen.GetPathName();
+		PtrfileName = fileName.GetBuffer(1);
 		
 		F->ExtProfCent = ExtProfCent;
 		F->ExtProfBout = ExtProfBout;
 		F->IntProfCent = IntProfCent;
 		F->IntProfBout = IntProfBout;
 
-		if (EcritureFichierWpa(PtrNomFichier, F))
-			printf ("\nForme exported in WPA sucessfully");
+		if (EcritureFichierWpa(PtrfileName, F))
+			printf ("\nForm exported in WPA sucessfully");
 	}*/
 }
 
@@ -904,8 +904,8 @@ void ExportWpa( int ) //
 
 void Sauver(int dxf) {
     //boite de dialogue fichier
-    CString NomFichier;
-    LPTSTR PtrNomFichier;
+    CString fileName;
+    LPTSTR PtrfileName;
     //parcours liste des courbes
     Courbe *Cour;
     FILE *fid;
@@ -917,15 +917,15 @@ void Sauver(int dxf) {
     CFileDialog DlgOpen(FALSE, NULL, ext, OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
         //ecriture fichier patron
         if (dxf > 0) //format DXF
         {
             if (dxf == 1)
-                EcritureFichierDXF(PtrNomFichier, AxePatron);
+                EcritureFichierDXF(PtrfileName, AxePatron);
             else {
-                EcritureFichierPolyDXF(PtrNomFichier, AxePatronDXF, AxeMarginDXF, (ReperesSuspentes[0] || ReperesSuspentes[1]),
+                EcritureFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, (ReperesSuspentes[0] || ReperesSuspentes[1]),
                         AxeRepDXF, Ventilation, AxeCercleDXF, Numerotation, AxePatronTextDXF);
                 
                 /*EcritureFichierPolyDXFDelta(fid, AxePatronDXF, AxeMarginDXF,
@@ -934,7 +934,7 @@ void Sauver(int dxf) {
             }
         } else //format TXT
         {
-            fid = fopen(PtrNomFichier, "wt");
+            fid = fopen(PtrfileName, "wt");
             Cour = AxePatron->Courb;
             while (Cour != NULL) {
                 fprintf(fid, "\n%d", Cour->pts->GetLignes());
@@ -953,8 +953,8 @@ void Sauver(int dxf) {
 
 void SauverProject(int /*control*/) {
     //boite de dialogue fichier
-    CString NomFichier;
-    LPTSTR PtrNomFichier;
+    CString fileName;
+    LPTSTR PtrfileName;
     //parcours liste des courbes
     Courbe *Cour;
     FILE *fid;
@@ -965,9 +965,9 @@ void SauverProject(int /*control*/) {
     CFileDialog DlgOpen(FALSE, NULL, ext, OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
         //recupere nom de fichier
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        EcritureWindPatternsProject(PtrNomFichier, getWindPatternsProject());
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        EcritureWindPatternsProject(PtrfileName, getWindPatternsProject());
     }
 
 }
@@ -980,14 +980,14 @@ void SauverProject(int /*control*/) {
 void Quitter(int control) {
     if (MessageBox(NULL, "Voulez-vous vraiment quitter l'application ?", "Confirmation", MB_YESNO) == IDYES) {
         /*liberation espace memoire*/
-        LibererAxe(Axe3d);
-        //LibererAxe(Axe3dBal);
-        LibererAxe(AxePatron);
-        LibererAxe(AxePatronDXF);
-        LibererAxe(AxeRepDXF);
-        LibererAxe(AxePatronTextDXF);
-        LibererAxe(AxeMarginDXF);
-        LibererAxe(AxeCercleDXF);
+        clearAxe(Axe3d);
+        //clearAxe(Axe3dBal);
+        clearAxe(AxePatron);
+        clearAxe(AxePatronDXF);
+        clearAxe(AxeRepDXF);
+        clearAxe(AxePatronTextDXF);
+        clearAxe(AxeMarginDXF);
+        clearAxe(AxeCercleDXF);
         delete(F);
         delete(IntProfCent);
         delete(ExtProfCent);
@@ -1005,7 +1005,7 @@ void Info(int /*control*/) {
 
 }
 
-void CalculMagicPincesRasklad() {
+void calcMagicPincesRasklad() {
     int n = F->m_nbProfils;
     pincePercentage1 = new double[n];
     pincePercentage2 = new double[n];
@@ -1015,21 +1015,21 @@ void CalculMagicPincesRasklad() {
         pincePercentage2[_i] = 0.0f;
     }
     if (n & 1) pincePercentage1[0] = 1.0f;
-    else CalculMagicPinceR(0, 1.0f, 1, &pincePercentage1[0]);
+    else calcMagicPinceR(0, 1.0f, 1, &pincePercentage1[0]);
     for (int _i = 1; _i < n - 1; _i++) {
-        CalculMagicPinceR(_i, 2.0f - pincePercentage1[_i - 1], 1, &pincePercentage1[_i]);
+        calcMagicPinceR(_i, 2.0f - pincePercentage1[_i - 1], 1, &pincePercentage1[_i]);
     }
      printf("\n");
     if (n & 1) pincePercentage2[0] = 1.0f;
-    else CalculMagicPinceR(0, 1.0f, 2, &pincePercentage2[0]);
+    else calcMagicPinceR(0, 1.0f, 2, &pincePercentage2[0]);
     for (int _i = 1; _i < n - 1; _i++) {
-        CalculMagicPinceR(_i, 2.0f - pincePercentage2[_i - 1], 2, &pincePercentage2[_i]);
+        calcMagicPinceR(_i, 2.0f - pincePercentage2[_i - 1], 2, &pincePercentage2[_i]);
     }
 }
 
-void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
-    Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
-    CalculForme3D(F, 0, 0.0f,
+void GetFormProfile (int nerv, int face, Matrix** XProf, Matrix** YProf) {
+    Matrix *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+    calcForm3D(F, 0, 0.0f,
         ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
         &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
     int i = nerv;
@@ -1044,8 +1044,8 @@ void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = ExtProfCent->GetLignes(); else n = IntProfCent->GetLignes();
-    *XProf = new Matrice(n, 1);
-    *YProf = new Matrice(n, 1);
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
 
     if (face == 1) {
         for (j = 0; j < ExtProfCent -> GetLignes(); j++)
@@ -1071,8 +1071,8 @@ void GetFormProfile (int nerv, int face, Matrice** XProf, Matrice** YProf) {
 void Test(int control) {
     // printf ("\n TEST()");
 
-	Matrice* Xd0 = new Matrice(4, 0);
-	Matrice* Yd0 = new Matrice(4, 0);
+	Matrix* Xd0 = new Matrix(4, 0);
+	Matrix* Yd0 = new Matrix(4, 0);
 
 	Xd0->SetElement (0, 0, 0.0);
 	Yd0->SetElement (0, 0, 0.0);
@@ -1086,11 +1086,11 @@ void Test(int control) {
 	Xd0->SetElement (3, 0, 5.0);
 	Yd0->SetElement (3, 0, 0.0);
 
-	printf ("\n 0.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 0.0, 0.0));
-	printf ("\n 2.0, 2.0: %f", calculPolyLength(Xd0, Yd0, 2.0, 2.0));
-	printf ("\n 2.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 2.0, 0.0));
-	printf ("\n 4.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 4.0, 0.0));
-	printf ("\n 5.0, 0.0: %f", calculPolyLength(Xd0, Yd0, 5.0, 0.0));
+	printf ("\n 0.0, 0.0: %f", calcPolyLength(Xd0, Yd0, 0.0, 0.0));
+	printf ("\n 2.0, 2.0: %f", calcPolyLength(Xd0, Yd0, 2.0, 2.0));
+	printf ("\n 2.0, 0.0: %f", calcPolyLength(Xd0, Yd0, 2.0, 0.0));
+	printf ("\n 4.0, 0.0: %f", calcPolyLength(Xd0, Yd0, 4.0, 0.0));
+	printf ("\n 5.0, 0.0: %f", calcPolyLength(Xd0, Yd0, 5.0, 0.0));
 
 	// int res = calcRepPointByLength(Xd, Yd, l*coeff, &newx, &newy);
 	int res=0;
@@ -1124,27 +1124,27 @@ void Test(int control) {
     PinceFunction2 = new Pince*[n];*/
 
 
-    //Matrice *FF1,*FF2, *RF;
+    //Matrix *FF1,*FF2, *RF;
 //    double ampFfA, ampFfF, ampRfA, ampRfF;
     /*getPinceFunctions(2, 3, 1,
                         &FF1,&FF2, &ampFfA, &ampFfF,
                         &RF, &ampRfA, &ampRfF);*/
-/*    Matrice* m = new Matrice (5, 2);
+/*    Matrix* m = new Matrix (5, 2);
     for (int i = 0; i < 5; i++) {
         m -> SetElement(i, 0, i);
         m -> SetElement(i, 1, 4*i);
     }
-    Matrice* p = new Matrice (2, 1);
+    Matrix* p = new Matrix (2, 1);
     p->SetElement(0, 0, 1.5f);
     p->SetElement(1, 0, 3.5f);
 
-    Matrice* mn;
+    Matrix* mn;
     AddPointsToCourb(m, p, &mn);
     for (i = 0; i<mn->GetLignes();i++) {
         printf ("\n %d -> (%f, %f)", i, mn->Element(i,0),  mn->Element(i,1));
     }*/
 
-    /*Matrice* addRepPts = getAddRepPts();
+    /*Matrix* addRepPts = getAddRepPts();
     for  (int _i = 0; _i < addRepPts->GetLignes();_i++){
         printf ("\n arp %d -> %f", _i, addRepPts->Element(_i, 0));
     }*/
@@ -1154,21 +1154,21 @@ void Test(int control) {
 
 void SaveRasklad() {
     int startNoNerv = 0, noNerv = 0, face = 1;
-    Matrice * Xd[2], *Yd[2];//, *Xdp[2], *Ydp[2];
-    Matrice * X[2], *Y[2], *Z[2], *P[2];//, *newP[2];
+    Matrix * Xd[2], *Yd[2];//, *Xdp[2], *Ydp[2];
+    Matrix * X[2], *Y[2], *Z[2], *P[2];//, *newP[2];
     int n = F->m_nbProfils;
     /*
      * int n = F->m_nbProfils;
-     * if (n&1)  pincePercentage1[0]=1.0f; else CalculMagicPinceR(0, 1.0f, 1, &pincePercentage1[0]);
+     * if (n&1)  pincePercentage1[0]=1.0f; else calcMagicPinceR(0, 1.0f, 1, &pincePercentage1[0]);
         for (_i = 1; _i < n - 1; _i++) {
-            CalculMagicPinceR(_i, 2.0f - pincePercentage1[_i - 1], 1, &pincePercentage1[_i]);
+            calcMagicPinceR(_i, 2.0f - pincePercentage1[_i - 1], 1, &pincePercentage1[_i]);
         }
         printf("\n");
-        if (n&1)  pincePercentage2[0]=1.0f; else CalculMagicPinceR(0, 1.0f, 2, &pincePercentage2[0]);
+        if (n&1)  pincePercentage2[0]=1.0f; else calcMagicPinceR(0, 1.0f, 2, &pincePercentage2[0]);
         for (_i = 1; _i < n - 1; _i++) {
-            CalculMagicPinceR(_i, 2.0f - pincePercentage2[_i - 1], 2, &pincePercentage2[_i]);
+            calcMagicPinceR(_i, 2.0f - pincePercentage2[_i - 1], 2, &pincePercentage2[_i]);
         }
-        CalculPince(Xd[0], Yd[0], Xd[1], Yd[1],
+        calcPince(Xd[0], Yd[0], Xd[1], Yd[1],
                 X[0], Y[0], Z[0], P[0],
                 X[1], Y[1], Z[1], P[1],
                 PosPinceBA[0], AmpPinceBA[0] * 1.0f, PosPinceBF[0], AmpPinceBF[0] * 1.0f, 1.5f,
@@ -1290,21 +1290,21 @@ void SaveRasklad() {
         //		if (s1[t]) printf ("true"); else printf ("false");
         //  printf ("\n n%d %d", n2[t], f2[t]);
         //		if (s2[t]) printf ("true"); else printf ("false");
-        CalculPatron(getWindPatternsProject(),n1[t], s1[t], f1[t], f1[t], 0.0f, 100.0f,
+        calcPatron(getWindPatternsProject(),n1[t], s1[t], f1[t], f1[t], 0.0f, 100.0f,
                 n2[t], s2[t], f2[t], f2[t], 0.0f, 100.0f,
                 &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                 &X[0], &Y[0], &Z[0], &P[0],
                 &X[1], &Y[1], &Z[1], &P[1]);
-        //	printf ("\n after calculPatron");
+        //	printf ("\n after calcPatron");
         if (isPince[t]) {
             Pince* pince=new Pince();
 
-/*            CalculPince(getWindPatternsProject(),Xd[0], Yd[0], Xd[1], Yd[1],
+/*            calcPince(getWindPatternsProject(),Xd[0], Yd[0], Xd[1], Yd[1],
                     X[0], Y[0], Z[0], P[0],
                     X[1], Y[1], Z[1], P[1],
                     PosPinceBA[0], AmpPinceBA[0] * p[t], PosPinceBF[0], AmpPinceBF[0] * (1.0f - p[t]), modePinces,
                     &Xdp[0], &Ydp[0], &newP[0], &Xdp[1], &Ydp[1], &newP[1]);*/
-            //        printf ("\n after calculPince");
+            //        printf ("\n after calcPince");
             delete(P[0]);
             delete(P[1]);
 //            P[0] = newP[0];
@@ -1321,7 +1321,7 @@ void SaveRasklad() {
                 Xd[1], Yd[1], P[1], n2[t], f2[t], text,
                 &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t]);
 */
-//        CalculMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
+//        calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
 
 
         /*delete (X[0]);
@@ -1338,47 +1338,47 @@ void SaveRasklad() {
         delete (Yd[1]);*/
     }
 
-    CString NomFichier;
-    LPTSTR PtrNomFichier;
+    CString fileName;
+    LPTSTR PtrfileName;
     char ext[10];
     strcpy(ext, "*.dxf");
     CFileDialog DlgOpen(FALSE, NULL, ext, OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        EcritureManyFichierPolyDXF(PtrNomFichier, n, q, AxePD, AxeMD, 1, AxeRepD, 0, AxeCD, 1, AxePTD, W, H);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        EcritureManyFichierPolyDXF(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, 0, AxeCD, 1, AxePTD, W, H);
     }
     //TAxe *AxeP[n], *AxePD[n], *AxePTD[n], *AxeMD[n], *AxeCD[n], *AxeRepD[n];
     for (i = 0; i < q; i++) {
-        //printf("\n Liberere i=%d", i);
-        LibererCourbesAxe(AxeP[i]);
-        LibererCourbesAxe(AxePD[i]);
-        LibererCourbesAxe(AxePTD[i]);
-        LibererCourbesAxe(AxeMD[i]);
-        LibererCourbesAxe(AxeCD[i]);
-        LibererCourbesAxe(AxeRepD[i]);
+        //printf("\n cleare i=%d", i);
+        clearCourbesAxe(AxeP[i]);
+        clearCourbesAxe(AxePD[i]);
+        clearCourbesAxe(AxePTD[i]);
+        clearCourbesAxe(AxeMD[i]);
+        clearCourbesAxe(AxeCD[i]);
+        clearCourbesAxe(AxeRepD[i]);
     }
-    //printf("\n end of liberer...");
+    //printf("\n end of clear...");
 }
 
 
-void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
-    Matrice * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
-    Matrice * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
-    Matrice * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
-    Matrice * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
+void calcMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
+    Matrix * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
+    Matrix * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
+    Matrix * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
     bool showPoints = false;
-    //if ( DEBUG ) printf("\nCalculMagicPinceR(%d, %f, %d)", noNerv1, perc, face);
+    //if ( DEBUG ) printf("\ncalcMagicPinceR(%d, %f, %d)", noNerv1, perc, face);
     int i = 0;
-    CalculPatron(getWindPatternsProject(), noNerv1 - 1, false, face, face, Deb[0], Fin[0],
+    calcPatron(getWindPatternsProject(), noNerv1 - 1, false, face, face, Deb[0], Fin[0],
             noNerv1, false, face, face, Deb[1], Fin[1],
             &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
             &X1[0], &Y1[0], &Z1[0], &P1[0],
             &X1[1], &Y1[1], &Z1[1], &P1[1]);
-    Matrice *lenm1 = Longueur(Xd1[1], Yd1[1]);
+    Matrix *lenm1 = Longueur(Xd1[1], Yd1[1]);
     double len1 = lenm1->Element(lenm1->GetLignes() - 1, 0);
     double width, w1, w2;
-    CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
     int jt = 0;
     if (showPoints) {
         for (jt = 0; jt < Xd1[0]->GetLignes(); jt = jt + 6) {
@@ -1388,13 +1388,13 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
             printf("\n1 %d(%7.4f, %7.4f)", jt, Xd1[1]->Element(jt, 0), Yd1[1]->Element(jt, 0));
         }
     }
-    CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &width);
-    CalculPatron(getWindPatternsProject(),noNerv1, false, face, face, Deb[0], Fin[0],
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &width);
+    calcPatron(getWindPatternsProject(),noNerv1, false, face, face, Deb[0], Fin[0],
             noNerv1 + 1, false, face, face, Deb[1], Fin[1],
             &Xd2[0], &Yd2[0], &Xd2[1], &Yd2[1],
             &X2[0], &Y2[0], &Z2[0], &P2[0],
             &X2[1], &Y2[1], &Z2[1], &P2[1]);
-    Matrice *lenm2 = Longueur(Xd2[0], Yd2[0]);
+    Matrix *lenm2 = Longueur(Xd2[0], Yd2[0]);
     double len2 = lenm2->Element(lenm2->GetLignes() - 1, 0);
     double minDelta = 1000000.0f, minapAI1 = 0.0f, minapFI1 = 0.0f, minp2 = 1000000.0f;
     double ppA = PosPinceBA[1];
@@ -1402,10 +1402,10 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
     double ppF = PosPinceBF[1];
     double apF = AmpPinceBF[1];
     double startPerc = 0.0, endPerc = 2.0, hPerc = 0.001, l1p1, l2p0, delta;
-    Matrice *long1p1, *long2p0;
+    Matrix *long1p1, *long2p0;
     double mode1 = 1.5;
     double mode2 = 1.5;
-    CalculWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
+    calcWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
     if (showPoints) {
         for (jt = 0; jt < Xd2[0]->GetLignes(); jt = jt + 6) {
             printf("\n0 %d(%7.4f, %7.4f)", jt, Xd2[0]->Element(jt, 0), Yd2[0]->Element(jt, 0));
@@ -1415,13 +1415,13 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
         }
     }
 
-    CalculPinceAlone(getWindPatternsProject(),Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
+    calcPinceAlone(getWindPatternsProject(),Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
             ppA, apA*perc, ppF, apF*perc, mode1, &Xd1p[1], &Yd1p[1], &newP1[1]);
     long1p1 = Longueur(Xd1p[1], Yd1p[1]);
     l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
 
     for (double apAI1 = startPerc; apAI1 <= endPerc; apAI1 += hPerc) {
-        CalculPinceAlone(getWindPatternsProject(),Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
+        calcPinceAlone(getWindPatternsProject(),Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
                 ppA, apA*apAI1, ppF, apF*apAI1, mode2, &Xd2p[0], &Yd2p[0], &newP2[0]);
         long2p0 = Longueur(Xd2p[0], Yd2p[0]);
         l2p0 = long2p0->Element(long2p0->GetLignes() - 1, 0);
@@ -1475,15 +1475,15 @@ void CalculMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
 }
 
 /***********************/
-/* CalculPinces        */
+/* calcPinces        */
 /***********************/
 
-void CalculPinces(Matrice *Xd1, Matrice *Yd1,
+void calcPinces(Matrix *Xd1, Matrix *Yd1,
         double PosPinceBA1, double AmpPinceBA1, double PosPinceBF1, double AmpPinceBF1,
-        Matrice *Xd2, Matrice *Yd2,
+        Matrix *Xd2, Matrix *Yd2,
         double PosPinceBA2, double AmpPinceBA2, double PosPinceBF2, double AmpPinceBF2, double modePincesT,
-        Matrice **Xdp1, Matrice **Ydp1,
-        Matrice **Xdp2, Matrice **Ydp2) {
+        Matrix **Xdp1, Matrix **Ydp1,
+        Matrix **Xdp2, Matrix **Ydp2) {
     double PosPinceBAT[2] = {PosPinceBA1, PosPinceBA2};
     double PosPinceBFT[2] = {PosPinceBF1, PosPinceBF2};
     double AmpPinceBAT[2] = {AmpPinceBA1, AmpPinceBA2};
@@ -1491,10 +1491,10 @@ void CalculPinces(Matrice *Xd1, Matrice *Yd1,
 
     int n, i;
     double longPince, ampPince, amp, larg, longCoteMax;
-    Matrice * longCote[2], *newXd[2], *newYd[2];
+    Matrix * longCote[2], *newXd[2], *newYd[2];
     int iPince, iBidon, i0, i1;
 
-    Matrice * Xd[2], *Yd[2];
+    Matrix * Xd[2], *Yd[2];
     Xd[0] = Xd1;
     Yd[0] = Yd1;
     Xd[1] = Xd2;
@@ -1503,10 +1503,10 @@ void CalculPinces(Matrice *Xd1, Matrice *Yd1,
     longCote[0] = Longueur(Xd[0], Yd[0]);
     longCote[1] = Longueur(Xd[1], Yd[1]);
 
-    newXd[0] = new Matrice(Xd[0]->GetLignes(), 1);
-    newYd[0] = new Matrice(Xd[0]->GetLignes(), 1);
-    newXd[1] = new Matrice(Xd[1]->GetLignes(), 1);
-    newYd[1] = new Matrice(Xd[1]->GetLignes(), 1);
+    newXd[0] = new Matrix(Xd[0]->GetLignes(), 1);
+    newYd[0] = new Matrix(Xd[0]->GetLignes(), 1);
+    newXd[1] = new Matrix(Xd[1]->GetLignes(), 1);
+    newYd[1] = new Matrix(Xd[1]->GetLignes(), 1);
 
     for (i = 0; i < Xd[0]->GetLignes(); i++) {
         newXd[0]->SetElement(i, 0, Xd[0]->Element(i, 0));
@@ -1566,18 +1566,18 @@ void CalculPinces(Matrice *Xd1, Matrice *Yd1,
 }
 
 /***********************/
-/* CalculVue3dEtPatron */
+/* calcVue3dEtPatron */
 /***********************/
 
-void CalculVue3dEtPatron(void)
+void calcVue3dEtPatron(void)
 {
-    //printf ("\n CalculVue3dEtPatron");
-    Matrice *XExt, *YExt, *ZExt;
-    Matrice *XInt, *YInt, *ZInt;
-    Matrice *XExtBal, *YExtBal, *ZExtBal;
-    Matrice *XIntBal, *YIntBal, *ZIntBal;
+    //printf ("\n calcVue3dEtPatron");
+    Matrix *XExt, *YExt, *ZExt;
+    Matrix *XInt, *YInt, *ZInt;
+    Matrix *XExtBal, *YExtBal, *ZExtBal;
+    Matrix *XIntBal, *YIntBal, *ZIntBal;
 
-    Matrice *PtsSuspentes; //pour recuperer la position 3D des pts de suspentage
+    Matrix *PtsSuspentes; //pour recuperer la position 3D des pts de suspentage
     
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
     int ajCo1[2] = {0, 0};
@@ -1586,63 +1586,63 @@ void CalculVue3dEtPatron(void)
     int i, j;
     bool symetrique[2] = {false, false};
     int nerv[2];
-    Matrice * X[2], *Y[2], *Z[2];
-    Matrice * P[2], *rP[2]; // % de la corde du profil
-    Matrice * Xd[2], *Yd[2], *_Xd[2],  *_Yd[2], *rXd[2], *rYd[2];
+    Matrix * X[2], *Y[2], *Z[2];
+    Matrix * P[2], *rP[2]; // % de la corde du profil
+    Matrix * Xd[2], *Yd[2], *_Xd[2],  *_Yd[2], *rXd[2], *rYd[2];
     int iDeb, iFin, iCol;
-    Matrice *xExtProf, *xIntProf;
-    Matrice *iAv, *iAp, *Res;
+    Matrix *xExtProf, *xIntProf;
+    Matrix *iAv, *iAp, *Res;
     Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
     Courbe *CourbAv, *CourbAvBack, *CourbAr, *CourbArDXF, *CourbMargeAv, *CourbMargeAvBack, *CourbMargeAr, *CourbCoin, *CourbMargeArDXF, *CourbCoin1[2], *CourbCoin1Back[2], *CourbCoin2[2], *CourbCoin2Back[2], *CourbRep, *CourbRepDXF;
     Courbe *CourbPin[2];
-    Matrice *distance;
+    Matrix *distance;
     int n; //, iRep;
     double xText, yText;
     char texte[100], texteExtInt[3] = "EI";
-    //pour calcul position suspentes
-    //Matrice *interpXSuspente, *interpYSuspente, *newP[2];
+    //pour calc position suspentes
+    //Matrix *interpXSuspente, *interpYSuspente, *newP[2];
     //double posSuspente, 
     double xSuspente[2][205], ySuspente[2][205];
     TMesh *MeshPatron;
-    Matrice *newXd[2],  *newYd[2], *rnewXd[2],  *rnewYd[2];//, *Xdp, *Ydp;
+    Matrix *newXd[2],  *newYd[2], *rnewXd[2],  *rnewYd[2];//, *Xdp, *Ydp;
     Courbe *CourbCercle, *CourbCercleDXF;
-    LibererCourbesAxe(Axe3d);
-    LibererMeshsAxe(Axe3d);
-    //LibererCourbesAxe(Axe3dBal);
-    //LibererMeshsAxe(Axe3dBal);
+    clearCourbesAxe(Axe3d);
+    clearMeshsAxe(Axe3d);
+    //clearCourbesAxe(Axe3dBal);
+    //clearMeshsAxe(Axe3dBal);
 
-    CalculForme3D(F, 0, 0.0f,
+    calcForm3D(F, 0, 0.0f,
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-    //AjoutForme3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, VisuFace, VisuSymetrique);
+    //addForm3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, ViewFace, ViewSymetrique);
 	int showBal = 1;
 	if (showBal) {
 		//printf ("\n if showBal");
 		//printf ("\n readBallonementFile(...");
 		//Ballonement *bal = readBallonementFromFile("bal.txt");
-		//printf ("\n CalculForme3DBallonement(...");
-		CalculForme3DBallonement(getWindPatternsProject(), F,  0, 0.0f,
+		//printf ("\n calcForm3DBallonement(...");
+		calcForm3DBallonement(getWindPatternsProject(), F,  0, 0.0f,
 				ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
 				&XExtBal, &YExtBal, &ZExtBal, &XIntBal, &YIntBal, &ZIntBal);
-		//printf ("\n AjoutForme3D(...");
-		AjoutForme3D(Axe3d, XExtBal, YExtBal, ZExtBal, XIntBal, YIntBal, ZIntBal, VisuFace, VisuSymetrique);
+		//printf ("\n addForm3D(...");
+		addForm3D(Axe3d, XExtBal, YExtBal, ZExtBal, XIntBal, YIntBal, ZIntBal, ViewFace, ViewSymetrique);
 		//printf ("\n !!!...");
 	}
 
-    /*ajoute points de suspentage*/
-    if (VisuPtsSuspentes) {
-        AjoutPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
-                VisuSymetrique, &PtsSuspentes);
+    /*adde points de suspentage*/
+    if (ViewPtsSuspentes) {
+        addPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
+                ViewSymetrique, &PtsSuspentes);
     }
-    LibererCourbesAxe(AxePatron);
-    LibererCourbesAxe(AxeRepDXF);
-    LibererCourbesAxe(AxePatronDXF);
-    LibererCourbesAxe(AxePatronTextDXF);
-    LibererCourbesAxe(AxeMarginDXF);
-    LibererCourbesAxe(AxeCercleDXF);
+    clearCourbesAxe(AxePatron);
+    clearCourbesAxe(AxeRepDXF);
+    clearCourbesAxe(AxePatronDXF);
+    clearCourbesAxe(AxePatronTextDXF);
+    clearCourbesAxe(AxeMarginDXF);
+    clearCourbesAxe(AxeCercleDXF);
 
-    xExtProf = new Matrice(ExtProfCent->GetLignes(), 1);
-    xIntProf = new Matrice(IntProfCent->GetLignes(), 1);
+    xExtProf = new Matrix(ExtProfCent->GetLignes(), 1);
+    xIntProf = new Matrix(IntProfCent->GetLignes(), 1);
 
     for (i = 0; i < ExtProfCent->GetLignes(); i++) {
         xExtProf->SetElement(i, 0, ExtProfCent->Element(i, 0));
@@ -1672,14 +1672,14 @@ void CalculVue3dEtPatron(void)
         }
     }
     if (isKlapan) {
-        CalculPatronKlapan(getWindPatternsProject(), nerv[0], symetrique[0], nerv[1], symetrique[1], PosKlapanInt, PosKlapanFin,
+        calcPatronKlapan(getWindPatternsProject(), nerv[0], symetrique[0], nerv[1], symetrique[1], PosKlapanInt, PosKlapanFin,
                     &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                     &X[0], &Y[0], &Z[0], &P[0],
                     &X[1], &Y[1], &Z[1], &P[1]);
         
     } else
         if (GoPince)
-            CalculPatron(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], myDeb, myFin,
+            calcPatron(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], myDeb, myFin,
                         nerv[1], symetrique[1], FaceDeb[1], FaceFin[1], myDeb, myFin,
                         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                         &X[0], &Y[0], &Z[0], &P[0],
@@ -1691,7 +1691,7 @@ void CalculVue3dEtPatron(void)
                 if (!isPosNerv[1])
                     if (FaceDeb[1]==1) PosNerv[1]=100.0f; else PosNerv[1]=0.0f;
 
-                CalculPatronPosNerv(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
+                calcPatronPosNerv(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
                             nerv[1], symetrique[1], FaceDeb[1], FaceFin[1], Deb[1], Fin[1],
                             &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                             &X[0], &Y[0], &Z[0], &P[0],
@@ -1699,7 +1699,7 @@ void CalculVue3dEtPatron(void)
             }
             else
             {
-            CalculPatron(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
+            calcPatron(getWindPatternsProject(), nerv[0], symetrique[0], FaceDeb[0], FaceFin[0], Deb[0], Fin[0],
                         nerv[1], symetrique[1], FaceDeb[1], FaceFin[1], Deb[1], Fin[1],
                         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                         &X[0], &Y[0], &Z[0], &P[0],
@@ -1720,10 +1720,10 @@ void CalculVue3dEtPatron(void)
                 Ind(Deb[i], xExtProf, &iDeb, &iCol);
                 Ind(Fin[i], xExtProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZExt->Element(nerv[i], iDeb + j));
@@ -1734,10 +1734,10 @@ void CalculVue3dEtPatron(void)
         {
             Ind(Deb[i], xExtProf, &iDeb, &iCol);
             Ind(Fin[i], xIntProf, &iFin, &iCol);
-            X[i] = new Matrice(iFin + iDeb - 1, 1);
-            Y[i] = new Matrice(iFin + iDeb - 1, 1);
-            Z[i] = new Matrice(iFin + iDeb - 1, 1);
-            P[i] = new Matrice(iFin + iDeb - 1, 1);
+            X[i] = new Matrix(iFin + iDeb - 1, 1);
+            Y[i] = new Matrix(iFin + iDeb - 1, 1);
+            Z[i] = new Matrix(iFin + iDeb - 1, 1);
+            P[i] = new Matrix(iFin + iDeb - 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb - j));
@@ -1750,10 +1750,10 @@ void CalculVue3dEtPatron(void)
         {
             Ind(Deb[i], xIntProf, &iDeb, &iCol);
             Ind(Fin[i], xExtProf, &iFin, &iCol);
-            X[i] = new Matrice(iFin + iDeb + 1, 1);
-            Y[i] = new Matrice(iFin + iDeb + 1, 1);
-            Z[i] = new Matrice(iFin + iDeb + 1, 1);
-            P[i] = new Matrice(iFin + iDeb + 1, 1);
+            X[i] = new Matrix(iFin + iDeb + 1, 1);
+            Y[i] = new Matrix(iFin + iDeb + 1, 1);
+            Z[i] = new Matrix(iFin + iDeb + 1, 1);
+            P[i] = new Matrix(iFin + iDeb + 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb - j));
@@ -1773,10 +1773,10 @@ void CalculVue3dEtPatron(void)
                 Ind(Deb[i], xIntProf, &iDeb, &iCol);
                 Ind(Fin[i], xIntProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZInt->Element(nerv[i], iDeb + j));
@@ -1789,19 +1789,19 @@ void CalculVue3dEtPatron(void)
     if (X[0]->GetLignes() > X[1]->GetLignes()) {
         iAv = LinSpace(0.0f, (double) X[1]->GetLignes() - 1, X[1]->GetLignes());
         iAp = LinSpace(0.0f, (double) X[1]->GetLignes() - 1, X[0]->GetLignes());
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, X[1], iAp, Res);
         delete(X[1]);
         X[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, Y[1], iAp, Res);
         delete(Y[1]);
         Y[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, Z[1], iAp, Res);
         delete(Z[1]);
         Z[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, P[1], iAp, Res);
         delete(P[1]);
         P[1] = Res;
@@ -1810,19 +1810,19 @@ void CalculVue3dEtPatron(void)
     } else if (X[1]->GetLignes() > X[0]->GetLignes()) {
         iAv = LinSpace(0.0f, (double) X[0]->GetLignes() - 1, X[0]->GetLignes());
         iAp = LinSpace(0.0f, (double) X[0]->GetLignes() - 1, X[1]->GetLignes());
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, X[0], iAp, Res);
         delete(X[0]);
         X[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, Y[0], iAp, Res);
         delete(Y[0]);
         Y[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, Z[0], iAp, Res);
         delete(Z[0]);
         Z[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, P[0], iAp, Res);
         delete(P[0]);
         P[0] = Res;
@@ -1837,8 +1837,8 @@ void CalculVue3dEtPatron(void)
         }
     }
     
-    if (DEBUG) printf ("\n goCalculDevelope()");
-    CalculDeveloppe(
+    if (DEBUG) printf ("\n gocalcDevelope()");
+    calcDeveloppe(
             X[0], Y[0], Z[0], X[1], Y[1], Z[1],
             &Xd[0], &Yd[0], &Xd[1], &Yd[1]); */
     
@@ -1858,10 +1858,10 @@ void CalculVue3dEtPatron(void)
         //Yd[1]->print(0);
   
 
-  //init tableau pour calcul des pinces !!!
-    /*Matrice* long1 = Longueur(Xd[0], Yd[0]);
+  //init tableau pour calc des pinces !!!
+    /*Matrix* long1 = Longueur(Xd[0], Yd[0]);
     double l1 = long1->Element(long1->GetLignes() - 1, 0);
-    Matrice* long2 = Longueur(Xd[1], Yd[1]);
+    Matrix* long2 = Longueur(Xd[1], Yd[1]);
     double l2 = long2->Element(long2->GetLignes() - 1, 0);
     printf("\n(%4.2f)L1=%9.7f L2=%9.7f", AmpPinceBA[0], l1, l2);
     delete(long1);
@@ -1896,9 +1896,9 @@ void CalculVue3dEtPatron(void)
                 pince -> SetDiffAmps(pince->AmpA, pince->AmpF, pince->AmpA, pince->AmpF);
                 if (pince -> glue) pince -> SetDiffAmps0(pince->AmpA0, pince->AmpA0);
                 
-                //printf ("\nbefore CalculPincePlusNew");
-                CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1],  pince, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
-                //printf ("\nafter CalculPincePlusNew");
+                //printf ("\nbefore calcPincePlusNew");
+                calcPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1],  pince, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
+                //printf ("\nafter calcPincePlusNew");
 
                 if ((myDeb != Deb[0])||(myDeb != Deb[1])) {
                     // rezem Xd, newXd
@@ -1968,7 +1968,7 @@ void CalculVue3dEtPatron(void)
 
 
     if (coeffMult != 1.0f) {
-        CalculPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeffMult, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
+        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeffMult, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
         delete (Xd[0]);
         delete (Yd[0]);
         delete(Xd[1]);
@@ -2004,9 +2004,9 @@ void CalculVue3dEtPatron(void)
         CourbPatron[i]->symX = OFF;
         CourbPatronDXF[i]->symX = OFF;
         CourbPatronBack[i]->symX = OFF;
-        CourbPatron[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
-        CourbPatronDXF[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
-        CourbPatronBack[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
+        CourbPatron[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        CourbPatronDXF[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        CourbPatronBack[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
         for (j = 0; j < Xd[i]->GetLignes(); j++) {
             CourbPatron[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
             CourbPatronDXF[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
@@ -2023,19 +2023,19 @@ void CalculVue3dEtPatron(void)
                     1000*CourbPatronBack[i]->pts->Element(t, 1));
         }*/
 
-        AjoutCourbe(AxePatron, CourbPatron[i]);
+        addCourbe(AxePatron, CourbPatron[i]);
 
         if (wasPince){
             //CourbPin
             CourbPin[i] = new Courbe("Pin");
             CourbPin[i]->points = OFF;
             CourbPin[i]->symX = OFF;
-            CourbPin[i]->pts = new Matrice(_Xd[i]->GetLignes(), 2);
+            CourbPin[i]->pts = new Matrix(_Xd[i]->GetLignes(), 2);
             for (j = 0; j < _Xd[i]->GetLignes(); j++) {
                 CourbPin[i]->pts->SetElement(j, 0, _Xd[i]->Element(j, 0));
                 CourbPin[i]->pts->SetElement(j, 1, _Yd[i]->Element(j, 0));
             }
-            AjoutCourbe(AxePatron, CourbPin[i]);
+            addCourbe(AxePatron, CourbPin[i]);
         }
 
         distance = Ones(CourbPatron[i]->pts->GetLignes(), 1);
@@ -2043,8 +2043,8 @@ void CalculVue3dEtPatron(void)
         CourbMarge[i] = new Courbe("Marge");
         CourbMargeDXF[i] = new Courbe("Marge");
         CourbMargeBack[i] = new Courbe("MargeBack");
-        if (i == 0)  CourbMarge[i]->pts = CalculContour(CourbPatron[i]->pts, distance, -1);
-            else CourbMarge[i]->pts = CalculContour(CourbPatron[i]->pts, distance, +1);
+        if (i == 0)  CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
+            else CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
 
         CourbMargeDXF[i]->pts = CloneMat(CourbMarge[i]->pts);
         CourbMargeBack[i]->pts = CloneMat(CourbMarge[i]->pts);
@@ -2071,11 +2071,11 @@ void CalculVue3dEtPatron(void)
         }*/
 
 
-        AjoutCourbe(AxePatron, CourbMarge[i]);
+        addCourbe(AxePatron, CourbMarge[i]);
         delete(distance);
     }
 
-    AjoutCourbe(AxePatronDXF, CourbPatronDXF[0]);
+    addCourbe(AxePatronDXF, CourbPatronDXF[0]);
     if ((Xd[0]->Element(0, 0) != Xd[1]->Element(0, 0)) //test points Av cote 1&2 confondus
             || (Yd[0]->Element(0, 0) != Yd[1]->Element(0, 0))) {
         
@@ -2083,8 +2083,8 @@ void CalculVue3dEtPatron(void)
         //printf ("\n left points not equal");
         CourbAv = new Courbe("Avant");
         CourbAvBack = new Courbe("AvantBack");
-        CourbAv->pts = new Matrice(2, 2);
-        CourbAvBack->pts = new Matrice(2, 2);
+        CourbAv->pts = new Matrix(2, 2);
+        CourbAvBack->pts = new Matrix(2, 2);
 
         CourbAv->pts->SetElement(0, 0, Xd[0]->Element(0, 0));
         CourbAv->pts->SetElement(0, 1, Yd[0]->Element(0, 0));
@@ -2101,7 +2101,7 @@ void CalculVue3dEtPatron(void)
         CourbAv->symX = OFF;
         CourbAvBack->points = OFF;
         CourbAv->symX = OFF;
-        AjoutCourbe(AxePatron, CourbAv);
+        addCourbe(AxePatron, CourbAv);
         ajCoAv = 1;
         //marge avant
         distance = Ones(2, 1);
@@ -2109,8 +2109,8 @@ void CalculVue3dEtPatron(void)
             distance->MultiplyElement(j, 0, MargeDeb / 100.0f);
         CourbMargeAv = new Courbe("MargeAV");
         CourbMargeAvBack = new Courbe("MargeAvBack");
-        CourbMargeAv->pts = CalculContour(CourbAv->pts, distance, +1);
-        CourbMargeAvBack->pts = CalculContour(CourbAv->pts, distance, +1);
+        CourbMargeAv->pts = calcContour(CourbAv->pts, distance, +1);
+        CourbMargeAvBack->pts = calcContour(CourbAv->pts, distance, +1);
         for (j = 0; j < CourbMargeAv->pts->GetLignes(); j++) {
             CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 0, CourbMargeAv->pts->Element(j, 0));
             CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 1, CourbMargeAv->pts->Element(j, 1));
@@ -2121,7 +2121,7 @@ void CalculVue3dEtPatron(void)
         CourbMargeAvBack->points = OFF;
         CourbMargeAvBack->symX = OFF;
 
-        AjoutCourbe(AxePatron, CourbMargeAv);
+        addCourbe(AxePatron, CourbMargeAv);
         ajCoMaAv = 1;
 
         delete(distance);
@@ -2178,7 +2178,7 @@ void CalculVue3dEtPatron(void)
 					CourbCoin1Back[i]->pts -> SetElement(2 - _i, 0, CourbCoin1[i]->pts->Element(_i, 0));
 					CourbCoin1Back[i]->pts -> SetElement(2 - _i, 1, CourbCoin1[i]->pts->Element(_i, 1));
 				}
-				AjoutCourbe(AxePatron, CourbCoin);
+				addCourbe(AxePatron, CourbCoin);
 				ajCo1[i] = 1;
 
 			}
@@ -2209,7 +2209,7 @@ void CalculVue3dEtPatron(void)
         CourbAv->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(0, 1));
         CourbAvBack->pts->SetElement(0, 1, CourbMarge[1]->pts->Element(0, 1));
 
-        AjoutCourbe(AxePatron, CourbAv);
+        addCourbe(AxePatron, CourbAv);
         //
         ajCoAv = 0;
         //
@@ -2221,8 +2221,8 @@ void CalculVue3dEtPatron(void)
         CourbAr = new Courbe("AR");
         CourbArDXF = new Courbe("AR");
 
-        CourbAr->pts = new Matrice(2, 2);
-        CourbArDXF->pts = new Matrice(2, 2);
+        CourbAr->pts = new Matrix(2, 2);
+        CourbArDXF->pts = new Matrix(2, 2);
 
         CourbAr->pts->SetElement(0, 0, Xd[0]->Element(n0, 0));
         CourbArDXF->pts->SetElement(0, 0, Xd[0]->Element(n0, 0));
@@ -2241,7 +2241,7 @@ void CalculVue3dEtPatron(void)
         CourbArDXF->points = OFF;
         CourbAr->symX = OFF;
 
-        AjoutCourbe(AxePatron, CourbAr);
+        addCourbe(AxePatron, CourbAr);
         ajCoAr = 1;
 
         distance = Ones(2, 1);
@@ -2250,15 +2250,15 @@ void CalculVue3dEtPatron(void)
 
         CourbMargeAr = new Courbe("MargeAR");
         CourbMargeArDXF = new Courbe("MargeAR");
-        CourbMargeAr->pts = CalculContour(CourbAr->pts, distance, -1);
-        CourbMargeArDXF->pts = CalculContour(CourbAr->pts, distance, -1);
+        CourbMargeAr->pts = calcContour(CourbAr->pts, distance, -1);
+        CourbMargeArDXF->pts = calcContour(CourbAr->pts, distance, -1);
 
         CourbMargeAr->points = OFF;
         CourbMargeAr->symX = OFF;
         CourbMargeArDXF->points = OFF;
         CourbMargeArDXF->symX = OFF;
 
-        AjoutCourbe(AxePatron, CourbMargeAr);
+        addCourbe(AxePatron, CourbMargeAr);
         ajCoMaAr = 1;
 
         delete(distance);
@@ -2322,7 +2322,7 @@ void CalculVue3dEtPatron(void)
 					CourbCoin2Back[i]->pts -> SetElement(2 - _i, 1, CourbCoin2[i]->pts->Element(_i, 1));
 				}
 
-				AjoutCourbe(AxePatron, CourbCoin);
+				addCourbe(AxePatron, CourbCoin);
 				ajCo2[i] = 1;
 
 			}
@@ -2351,51 +2351,51 @@ void CalculVue3dEtPatron(void)
         CourbAr->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(n1, 1));
         CourbArDXF->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(n1, 1));
 
-        AjoutCourbe(AxePatron, CourbAr);
+        addCourbe(AxePatron, CourbAr);
         ajCoAr = 0;
     }*/
 
     if (ajCoAr) {
         //printf ("\n ajCoAR!!!");
-        AjoutCourbe(AxePatronDXF, CourbArDXF);
+        addCourbe(AxePatronDXF, CourbArDXF);
     } else {
         //printf ("\n NOT ajCoAR!!!");
     }
 
-    AjoutCourbe(AxePatronDXF, CourbPatronBack[1]);
+    addCourbe(AxePatronDXF, CourbPatronBack[1]);
     if (ajCoAv) {
         //printf ("\n ajCoAvBack!!!");
         /*printf ("\n(%f, %f) -> (%f, %f)", 1000*CourbAvBack->pts->Element(0,0), 1000*CourbAvBack->pts->Element(0,1),
                                             1000*CourbAvBack->pts->Element(1,0), 1000*CourbAvBack->pts->Element(1,1) );*/
-        AjoutCourbe(AxePatronDXF, CourbAvBack);
+        addCourbe(AxePatronDXF, CourbAvBack);
     } else {
         //printf ("\n NOT ajCoAvBack!!!");
     }
     //printf ("\n");
-    AjoutCourbe(AxeMarginDXF, CourbMargeDXF[0]);
-    if (ajCo2[0]) AjoutCourbe(AxeMarginDXF, CourbCoin2[0]);
+    addCourbe(AxeMarginDXF, CourbMargeDXF[0]);
+    if (ajCo2[0]) addCourbe(AxeMarginDXF, CourbCoin2[0]);
 
 
     if (ajCoMaAr) {
-        AjoutCourbe(AxeMarginDXF, CourbMargeArDXF);
+        addCourbe(AxeMarginDXF, CourbMargeArDXF);
         //printf ("\n MargeajCoMaAr!!!");
     } else {
         //printf ("\n NOT MargeajCoMaAr!!!");
     }
-    if (ajCo2[1]) AjoutCourbe(AxeMarginDXF, CourbCoin2Back[1]);
+    if (ajCo2[1]) addCourbe(AxeMarginDXF, CourbCoin2Back[1]);
 
-    AjoutCourbe(AxeMarginDXF, CourbMargeBack[1]);
-    if (ajCo1[1]) AjoutCourbe(AxeMarginDXF, CourbCoin1[1]);
+    addCourbe(AxeMarginDXF, CourbMargeBack[1]);
+    if (ajCo1[1]) addCourbe(AxeMarginDXF, CourbCoin1[1]);
     if (ajCoMaAv) {
         //printf ("\n MargeajCoMaAvBack!!!");
-        AjoutCourbe(AxeMarginDXF, CourbMargeAvBack);
+        addCourbe(AxeMarginDXF, CourbMargeAvBack);
     } else {
         //printf ("\n NOT MargeajCoMaAvBack!!!");
     }
-    if (ajCo1[0]) AjoutCourbe(AxeMarginDXF, CourbCoin1Back[0]);
+    if (ajCo1[0]) addCourbe(AxeMarginDXF, CourbCoin1Back[0]);
 
 /*    i=0;
-    Matrice* m = getReperPoints(getWindPatternsProject(), Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i]);
+    Matrix* m = getReperPoints(getWindPatternsProject(), Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i]);
     for (i = 0; i < m->GetLignes(); i++) printf ("\n%d -> %f %f %f %f", i, m->Element(i,0), m->Element(i,1), m->Element(i,2), m->Element(i,3));
     delete (m);*/
 
@@ -2408,7 +2408,7 @@ void CalculVue3dEtPatron(void)
             xSuspente[i][j] = -100000.0f;
             ySuspente[i][j] = -100000.0f;
         }
-            Matrice* m = getReperPoints(getWindPatternsProject(), Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (NoNerv[0]==NoNerv[1]));
+            Matrix* m = getReperPoints(getWindPatternsProject(), Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (NoNerv[0]==NoNerv[1]));
             for (j = 0; j < m->GetLignes(); j++)
             {
                     int mark = m->Element(j,2);
@@ -2458,8 +2458,8 @@ void CalculVue3dEtPatron(void)
                             for (_i = 0; _i < 2; _i++)
                                 for (_j = 0; _j < 2; _j++)
                                     CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                            AjoutCourbe(AxePatron, CourbRep);
+                            addCourbe(AxeRepDXF, CourbRepDXF);
+                            addCourbe(AxePatron, CourbRep);
                             CourbRep = new Courbe("Reperes suspentes 2");
                             CourbRep->points = OFF;
                             CourbRepDXF = new Courbe("Reperes suspentes 2");
@@ -2473,8 +2473,8 @@ void CalculVue3dEtPatron(void)
                             for (_i = 0; _i < 2; _i++)
                                 for (_j = 0; _j < 2; _j++)
                                     CourbRepDXF->pts->SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                            AjoutCourbe(AxePatron, CourbRep);
+                            addCourbe(AxeRepDXF, CourbRepDXF);
+                            addCourbe(AxePatron, CourbRep);
                         } 
                         if (mark==REP_LINE || ((ReperesProfile[i]) && (mark == REP_MIDDLE_LINE))) {
                                 //perpendiular
@@ -2493,9 +2493,9 @@ void CalculVue3dEtPatron(void)
                                 if ((Xd[i]->Element(ix, 0) > _x0) && (ix != 0)) ix--;
                                 if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0)) ix--;
                                 if (ix != 0)
-                                    CalculVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
+                                    calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
                                 else
-                                    CalculVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                                    calcVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
                                 double _x1 = _x0;
                                 double _y1 = _y0;
                                 double _x2 = xc;
@@ -2519,8 +2519,8 @@ void CalculVue3dEtPatron(void)
                                 for (_i = 0; _i < 2; _i++)
                                     for (_j = 0; _j < 2; _j++)
                                         CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                                AjoutCourbe(AxePatron, CourbRep);
+                                addCourbe(AxeRepDXF, CourbRepDXF);
+                                addCourbe(AxePatron, CourbRep);
                             }
                             if ((ReperesSuspentes[i] == 1) && ((mark==REP_TRIANGLE) || (mark==REP_V)))  {
                                     int direction = -1;
@@ -2538,9 +2538,9 @@ void CalculVue3dEtPatron(void)
                                     if ((Xd[i]->Element(ix,0) > _x0) && (ix != 0 )) ix--;
                                     if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0) ) ix--;
                                     if  (ix != 0)
-                                        CalculVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
+                                        calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
                                     else
-                                        CalculVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                                        calcVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
                                     if (ix == 0) ix = 1;
                                     double nx = (Xd[i]->Element(ix, 0)-_x0);
                                     double ny = (Yd[i]->Element(ix, 0)-_y0);
@@ -2568,8 +2568,8 @@ void CalculVue3dEtPatron(void)
                                     for (_i = 0; _i < 2; _i++)
                                         for (_j = 0; _j < 2; _j++)
                                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                    AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                                    AjoutCourbe(AxePatron, CourbRep);
+                                    addCourbe(AxeRepDXF, CourbRepDXF);
+                                    addCourbe(AxePatron, CourbRep);
                                     if (mark != REP_V) {
                                         CourbRep = new Courbe("RepP");
                                         CourbRep->points = OFF;
@@ -2584,8 +2584,8 @@ void CalculVue3dEtPatron(void)
                                         for (_i = 0; _i < 2; _i++)
                                             for (_j = 0; _j < 2; _j++)
                                                 CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                        AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                                        AjoutCourbe(AxePatron, CourbRep);
+                                        addCourbe(AxeRepDXF, CourbRepDXF);
+                                        addCourbe(AxePatron, CourbRep);
                                     }
 
                                     CourbRep = new Courbe("RepP");
@@ -2601,8 +2601,8 @@ void CalculVue3dEtPatron(void)
                                     for (_i = 0; _i < 2; _i++)
                                         for (_j = 0; _j < 2; _j++)
                                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                    AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                                    AjoutCourbe(AxePatron, CourbRep);
+                                    addCourbe(AxeRepDXF, CourbRepDXF);
+                                    addCourbe(AxePatron, CourbRep);
                             }
                         
                     }
@@ -2638,8 +2638,8 @@ void CalculVue3dEtPatron(void)
                         for (_i = 0; _i < 2; _i++)
                             for (_j = 0; _j < 2; _j++)
                                 CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                        AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                        AjoutCourbe(AxePatron, CourbRep);
+                        addCourbe(AxeRepDXF, CourbRepDXF);
+                        addCourbe(AxePatron, CourbRep);
 
                     }
                     // xk1, yk1 -> xkfin, ykfin
@@ -2656,8 +2656,8 @@ void CalculVue3dEtPatron(void)
                     for (_i = 0; _i < 2; _i++)
                         for (_j = 0; _j < 2; _j++)
                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                    AjoutCourbe(AxePatron, CourbRep);
+                    addCourbe(AxeRepDXF, CourbRepDXF);
+                    addCourbe(AxePatron, CourbRep);
 
                     // xk2, yk2 -> xkfin, ykfin
                     CourbRep = new Courbe("RepP");
@@ -2673,8 +2673,8 @@ void CalculVue3dEtPatron(void)
                     for (_i = 0; _i < 2; _i++)
                         for (_j = 0; _j < 2; _j++)
                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    AjoutCourbe(AxeRepDXF, CourbRepDXF);
-                    AjoutCourbe(AxePatron, CourbRep);
+                    addCourbe(AxeRepDXF, CourbRepDXF);
+                    addCourbe(AxePatron, CourbRep);
 
                 } else {
                     //printf (" \n NOOOOT MATCH!");
@@ -2704,12 +2704,12 @@ void CalculVue3dEtPatron(void)
                         (ySuspente[0][i] + ySuspente[1][i] + ySuspente[0][i - 1] + ySuspente[1][i - 1]) / 4.0,
                         (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
                         36);
-                AjoutCourbe(AxePatron, CourbCercle);
-                AjoutCourbe(AxeCercleDXF, CourbCercleDXF);
+                addCourbe(AxePatron, CourbCercle);
+                addCourbe(AxeCercleDXF, CourbCercleDXF);
             }
         }
     }
-       // ajout texte !!!
+       // add texte !!!
 
     if (Numerotation == 1) {
         xText = (Xd[0]->Element(0, 0) + Xd[0]->Element(Xd[0]->GetLignes() - 1, 0)
@@ -2728,29 +2728,29 @@ void CalculVue3dEtPatron(void)
         //	NoNerv[0],texteExtInt[FaceDeb[0]-1],Deb[0],texteExtInt[FaceFin[0]-1],Fin[0],
         //	NoNerv[1],texteExtInt[FaceDeb[1]-1],Deb[1],texteExtInt[FaceFin[1]-1],Fin[1]);
         sprintf(texte, "%s", NumText->get_text());
-        AjoutTexte(AxePatron, texte, 0.02f, 0.0f, xText, yText);
+        addTexte(AxePatron, texte, 0.02f, 0.0f, xText, yText);
         sprintf(texte, "%s", NumText->get_text());
-        AjoutTexte(AxePatronTextDXF, texte, 0.02f, 0.0f, xText, yText);
+        addTexte(AxePatronTextDXF, texte, 0.02f, 0.0f, xText, yText);
     }
 
-    //ajout d'une courbe bidon pour le zoom
+    //add d'une courbe bidon pour le zoom
     CourbZoom = new Courbe("Zoom");
     CourbZoom->pts = Zeros(5, 2);
     CourbZoom->points = OFF;
     CourbZoom->segments = OFF;
     CourbZoom->symX = OFF;
-    CourbZoom->CouleurSegments[0] = 0.0f;
-    CourbZoom->CouleurSegments[2] = 0.0f;
-    AjoutCourbe(AxePatron, CourbZoom);
+    CourbZoom->colorSegments[0] = 0.0f;
+    CourbZoom->colorSegments[2] = 0.0f;
+    addCourbe(AxePatron, CourbZoom);
 
     //creation Mesh pour visualisation 3d du patron
-    MeshPatron = CreerMesh();
+    MeshPatron = createMesh();
     MeshPatron->InvNormales = OFF;
     MeshPatron->segments = OFF;
     MeshPatron->faces = ON;
-    MeshPatron->x = new Matrice(X[0]->GetLignes(), 2);
-    MeshPatron->y = new Matrice(X[0]->GetLignes(), 2);
-    MeshPatron->z = new Matrice(X[0]->GetLignes(), 2);
+    MeshPatron->x = new Matrix(X[0]->GetLignes(), 2);
+    MeshPatron->y = new Matrix(X[0]->GetLignes(), 2);
+    MeshPatron->z = new Matrix(X[0]->GetLignes(), 2);
     for (i = 0; i < X[0]->GetLignes(); i++) {
         MeshPatron->x->SetElement(i, 0, X[0]->Element(i, 0));
         MeshPatron->x->SetElement(i, 1, X[1]->Element(i, 0));
@@ -2759,7 +2759,7 @@ void CalculVue3dEtPatron(void)
         MeshPatron->z->SetElement(i, 0, Z[0]->Element(i, 0));
         MeshPatron->z->SetElement(i, 1, Z[1]->Element(i, 0));
     }
-    AjoutMesh(Axe3d, MeshPatron);
+    addMesh(Axe3d, MeshPatron);
     //definition eclairage
     Axe3d->eclairage = ON;
 
@@ -2786,12 +2786,12 @@ void CalculVue3dEtPatron(void)
 /****************/
 
 void display(void) {
-    //CalculVue3dEtPatron();
-    VisuAxe(Axe3d);
+    //calcVue3dEtPatron();
+    ViewAxe(Axe3d);
     glutSwapBuffers();
-	//VisuAxe(Axe3dBal);
+	//ViewAxe(Axe3dBal);
     //glutSwapBuffers();
-    VisuAxe(AxePatron);
+    ViewAxe(AxePatron);
     glutSwapBuffers();
 }
 
@@ -2944,7 +2944,7 @@ void motion(int x, int y) {
 /****************/
 
 void BoutonSouris(int button, int state, int x, int y) {
-    int Fenetre;
+    int window;
     //double xmil, ymil; //pour zoom OUT
     /*memorise position de la souris dans la fenetre*/
     xSouris = x;
@@ -2954,15 +2954,15 @@ void BoutonSouris(int button, int state, int x, int y) {
     Translation3d = OFF;
     ZoomTwist3d = OFF;*/
 
-    Fenetre = glutGetWindow();
-    if (Fenetre == Fenetre3d) {
+    window = glutGetWindow();
+    if (window == window3d) {
         AxeSel = Axe3d;
     }
-    //if (Fenetre == Fenetre3dBal) {
+    //if (window == window3dBal) {
 //        AxeSel = Axe3dBal;
     //}
 
-    if (Fenetre == FenetrePatron) {
+    if (window == windowPatron) {
         AxeSel = AxePatron;
     }
 
@@ -3084,11 +3084,11 @@ void keyboard(unsigned char key, int x, int y) {
 }
 
 /*****************/
-/* InitFenetre   */
+/* InitWindow   */
 
 /*****************/
 
-void InitFenetre(void) {
+void InitWindow(void) {
     glEnable(GL_LINE_STIPPLE);
     glutDisplayFunc(&display);
     glutReshapeFunc(&reshape);
@@ -3100,7 +3100,7 @@ void InitFenetre(void) {
 
 
 
-void InitLumiere(void) {
+void InitLight(void) {
     float mat_specular[] = {1.0, 1.0, 1.0, 1.0};
     float mat_shininess[] = {50.0};
     float light_position[] = {0.0, 0.0, 1.0, 0.0};
@@ -3136,47 +3136,47 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(100, 100);
 
     /* creation fenetre/axe/courbes Axe3d*/
-    Fenetre3d = glutCreateWindow("Visualisation 3D");
-    InitFenetre();
-    InitLumiere();
-    Axe3d = CreerAxe(Fenetre3d);
+    window3d = glutCreateWindow("Viewalisation 3D");
+    InitWindow();
+    InitLight();
+    Axe3d = createAxe(window3d);
     Axe3d->axe3d = ON;
 
-    //Fenetre3dBal = glutCreateWindow("Visualisation 3D Balone");
-    //InitFenetre();
-    //InitLumiere();
-    //Axe3dBal = CreerAxe(Fenetre3dBal);
+    //window3dBal = glutCreateWindow("Viewalisation 3D Balone");
+    //InitWindow();
+    //InitLight();
+    //Axe3dBal = createAxe(window3dBal);
     //Axe3dBal->axe3d = ON;
 
 
     /* creation fenetre/axe/courbes AxePatron*/
-    FenetrePatron = glutCreateWindow("Patron");
-    InitFenetre(); //InitLumiere();
-    AxePatron = CreerAxe(FenetrePatron);
-    AxePatronDXF = CreerAxe(FenetrePatron);
-    AxeRepDXF = CreerAxe(FenetrePatron);
-    AxePatronTextDXF = CreerAxe(FenetrePatron);
-    AxeMarginDXF = CreerAxe(FenetrePatron);
-    AxeCercleDXF = CreerAxe(FenetrePatron);
+    windowPatron = glutCreateWindow("Patron");
+    InitWindow(); //InitLight();
+    AxePatron = createAxe(windowPatron);
+    AxePatronDXF = createAxe(windowPatron);
+    AxeRepDXF = createAxe(windowPatron);
+    AxePatronTextDXF = createAxe(windowPatron);
+    AxeMarginDXF = createAxe(windowPatron);
+    AxeCercleDXF = createAxe(windowPatron);
 
     /*recupere taille de l'ecran en pixel*/
     ws = glutGet(GLUT_SCREEN_WIDTH);
     hs = glutGet(GLUT_SCREEN_HEIGHT);
     /*redefini taille et position des fenetre 3D*/
-    glutSetWindow(Fenetre3d);
+    glutSetWindow(window3d);
     glutPositionWindow((int) (0.70 * (double) ws), (int) (0.05 * (double) hs));
     glutReshapeWindow((int) (0.30 * (double) ws), (int) (0.40 * (double) hs));
-    //glutSetWindow(Fenetre3dBal);
+    //glutSetWindow(window3dBal);
     //glutPositionWindow((int) (0.70 * (double) ws), (int) (0.05 * (double) hs));
     //glutReshapeWindow((int) (0.30 * (double) ws), (int) (0.40 * (double) hs));
 
     /*redefini taille et position des fenetre Patron*/
-    glutSetWindow(FenetrePatron);
+    glutSetWindow(windowPatron);
     glutPositionWindow((int) (0.0 * (double) ws), (int) (0.50 * (double) hs));
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
 
-    strcpy(NomFichierProject, "f17project.wpp");
-    gfd = LectureWindPatternsProject(NomFichierProject);
+    strcpy(fileNameProject, "f17project.wpp");
+    gfd = LectureWindPatternsProject(fileNameProject);
 
     LoadFromWindPatternsProject(gfd);
 
@@ -3226,7 +3226,7 @@ int main(int argc, char** argv) {
             SpinPosRep1 -> set_float_limits( 0.0, 100.0 );
             GLUI_Listbox *ListRep1 = glui->add_listbox_to_panel(panel_Rep1,"Face",&FaceRep[0]);
             ListRep1->add_item( 1, "Ext" ); ListRep1->add_item( 2, "Int" );
-            glui->add_button_to_panel(panel_Rep1, "Ajouter", 0, Ajouter );
+            glui->add_button_to_panel(panel_Rep1, "adder", 0, adder );
      */
 
     /*Marge de couture en cm*/
@@ -3309,10 +3309,10 @@ int main(int argc, char** argv) {
     posDiagNerv2F -> set_float_limits(0.0, 100.0);
 
     FicDiagNerv = glui->add_statictext_to_panel(panel_DiagNerv, "???");
-    FicDiagNerv->set_text(NomFichierDiagNerv);
+    FicDiagNerv->set_text(fileNameDiagNerv);
 
     GLUI_Button *boutonLoadDiagNervs =
-            glui->add_button_to_panel(panel_DiagNerv, "Load", 0, &ChargerFichierDiagNervs);
+            glui->add_button_to_panel(panel_DiagNerv, "Load", 0, &readDiagNervs);
     boutonLoadDiagNervs->set_w(10);
 
     GLUI_Rollout *panel_Klapan = glui->add_rollout("Klapan",false);
@@ -3361,7 +3361,7 @@ int main(int argc, char** argv) {
             SpinPosRep2 -> set_float_limits( 0.0, 100.0 );
             GLUI_Listbox *ListRep2 = glui->add_listbox_to_panel(panel_Rep2,"Face",&FaceRep[1]);
             ListRep2->add_item( 1, "Ext" ); ListRep2->add_item( 2, "Int" );
-            glui->add_button_to_panel(panel_Rep2, "Ajouter", 1, Ajouter );
+            glui->add_button_to_panel(panel_Rep2, "adder", 1, adder );
      */
 
     /*Marge de couture en cm*/
@@ -3435,14 +3435,14 @@ int main(int argc, char** argv) {
 
     //printf ("\n before new VentHoles");
     FicVentHoles = glui->add_statictext_to_panel(panel_Vent, "???");
-    FicVentHoles->set_text(NomFichierVentHoles);
+    FicVentHoles->set_text(fileNameVentHoles);
     //glui->add_column_to_panel(panel_Vent, false);
     
     //BlankST = glui->add_statictext_to_panel(panel_RepPoints, "");
     //BlankST->set_text("");
     
     GLUI_Button *boutonLoadVentHoles =
-            glui->add_button_to_panel(panel_Vent, "Load", 0, &ChargerFichierVentHoles);
+            glui->add_button_to_panel(panel_Vent, "Load", 0, &readVentHoles);
     boutonLoadVentHoles->set_w(10);
     
     /*3eme colonne*/
@@ -3500,24 +3500,24 @@ int main(int argc, char** argv) {
     SpinModePinces2 -> set_float_limits(0.01, 10.0);*/
 
     /*nom fichier forme*/
-    GLUI_Panel *panel_forme = glui->add_panel("Forme", GLUI_PANEL_EMBOSSED);
-    FicForme = glui->add_statictext_to_panel(panel_forme, "???");
-    FicForme->set_text(NomFichierForme);
+    GLUI_Panel *panel_forme = glui->add_panel("Form", GLUI_PANEL_EMBOSSED);
+    FicForm = glui->add_statictext_to_panel(panel_forme, "???");
+    FicForm->set_text(fileNameForm);
     glui->add_column_to_panel(panel_forme, false);
     GLUI_Button *bouton =
-            glui->add_button_to_panel(panel_forme, "Load", 0, &ChargerFichierForme);
+            glui->add_button_to_panel(panel_forme, "Load", 0, &readForm);
     bouton->set_w(10);
     glui->add_column_to_panel(panel_forme, false);
     GLUI_Button *bouton2 =
-            glui->add_button_to_panel(panel_forme, "Load2", 0, &ChargerFichierForme2);
+            glui->add_button_to_panel(panel_forme, "Load2", 0, &readForm2);
     bouton2->set_w(10);
     /*choix projection orthogonale ou perspective*/
     GLUI_Panel *panel_project = glui->add_panel("Project", GLUI_PANEL_EMBOSSED);
     FicProject = glui->add_statictext_to_panel(panel_project, "???");
-    FicProject->set_text(NomFichierProject);
+    FicProject->set_text(fileNameProject);
     glui->add_column_to_panel(panel_project, false);
     GLUI_Button *boutonLoadProject =
-            glui->add_button_to_panel(panel_project, "Load", 0, &ChargerFichierProject);
+            glui->add_button_to_panel(panel_project, "Load", 0, &readProject);
     boutonLoadProject -> set_w(10);
     glui->add_column_to_panel(panel_project, false);
     GLUI_Button *boutonSauverProject = 
@@ -3536,27 +3536,27 @@ int main(int argc, char** argv) {
 
     GLUI_Panel *panel_RepPoints = glui->add_panel_to_panel(RolloutPts, "Rep pts");
     glui->add_checkbox_to_panel(panel_RepPoints, "from file", &ReperPointsFromFile, 0, &ModifRepPts);
-    glui->add_checkbox_to_panel(RolloutPts, "pts suspentes", &VisuPtsSuspentes, 0, &ModifVisuSymetrique);
+    glui->add_checkbox_to_panel(RolloutPts, "pts suspentes", &ViewPtsSuspentes, 0, &ModifViewSymetrique);
     glui->add_checkbox_to_panel(RolloutPts, "plotter format", &ReperPointsPlotterFormat, 0, &ModifRepPts);
     GLUI_Spinner *SpinXMashtab = glui->add_spinner_to_panel(RolloutPts, "X mashtab", GLUI_SPINNER_FLOAT, &(XMashtab));
     SpinXMashtab -> set_float_limits(0.01, 100);
 
 
     FicRepPoints = glui->add_statictext_to_panel(panel_RepPoints, "???");
-    FicRepPoints->set_text(NomFichierRepPoints);
+    FicRepPoints->set_text(fileNameRepPoints);
     glui->add_column_to_panel(panel_RepPoints, false);
     BlankST = glui->add_statictext_to_panel(panel_RepPoints, "");
     BlankST->set_text("");
     GLUI_Button *boutonLoadRepPoints =
-            glui->add_button_to_panel(panel_RepPoints, "Load", 0, &ChargerFichierRepPoints);
+            glui->add_button_to_panel(panel_RepPoints, "Load", 0, &readRepPoints);
     boutonLoadRepPoints->set_w(10);
 
 
-    glui->add_checkbox("symetrique", &VisuSymetrique, 0, &ModifVisuSymetrique);
+    glui->add_checkbox("symetrique", &ViewSymetrique, 0, &ModifViewSymetrique);
 
     /*choix visu des points de suspentage*/
 
-    glui->add_checkbox("make pinces", &GoPince, 0, &ModifVisuSymetrique);
+    glui->add_checkbox("make pinces", &GoPince, 0, &ModifViewSymetrique);
     /* bouton appliquer */
 
     GLUI_Spinner *SpinCoeff = glui->add_spinner("Coeff", GLUI_SPINNER_FLOAT, &(coeffMult));
@@ -3587,14 +3587,14 @@ int main(int argc, char** argv) {
     glui->add_button("Quitter", 0, &Quitter);
     if (TEST_BUTTON) glui->add_button("Test", 0, &Test);
     /* Link windows to GLUI, and register idle callback */
-    glui->set_main_gfx_window(FenetrePatron);
+    glui->set_main_gfx_window(windowPatron);
     /* We register the idle callback with GLUI, not with GLUT */
     GLUI_Master.set_glutIdleFunc(NULL);
     /*init valeurs boite de dialogue*/
     InitValeursDialogue();
     glui->sync_live();
-    /*premiers calculs et trace des axes*/
-    //CalculVue3dEtPatron();
+    /*premiers calcs et trace des axes*/
+    //calcVue3dEtPatron();
     Appliquer(0);
     AxeSel = Axe3d;
     display();

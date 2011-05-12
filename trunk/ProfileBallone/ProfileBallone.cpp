@@ -29,17 +29,17 @@ GLUI_StaticText *FicProject;
 TAxe *AxeProfiles;
 TAxe *AxeSel;
 Courbe * CourbProfile;
-Forme *F;
+Form *F;
 char ProjectName[255];
-int FenetreProfiles;
+int windowProfiles;
 /*divers tableaux*/
-Matrice *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
-Matrice** ReperPoints;
-char NomFichierForme[255];
-char NomFichierProject[255];
-char NomFichierRepPoints[255];
-char NomFichierVentHoles[255];
-char NomFichierDiagNerv[255];
+Matrix *IntProfCent, *ExtProfCent, *IntProfBout, *ExtProfBout;
+Matrix** ReperPoints;
+char fileNameForm[255];
+char fileNameProject[255];
+char fileNameRepPoints[255];
+char fileNameVentHoles[255];
+char fileNameDiagNerv[255];
 
 int XYGrid = 0;
 
@@ -53,8 +53,8 @@ int zoomIN = false, debZoomIN = false, finZoomIN = false, zoomOUT = false, quitZ
 Courbe *CourbZoom;
 
 void display(void) {
-    //CalculVue3dEtPatron();
-    VisuAxe(AxeProfiles);
+    //calcVue3dEtPatron();
+    ViewAxe(AxeProfiles);
     glutSwapBuffers();
 }
 
@@ -71,14 +71,14 @@ void keyboard(unsigned char key, int x, int y) {
 }
 
 void BoutonSouris(int button, int state, int x, int y) {
-    int Fenetre;
+    int window;
     xSouris = x;
     ySouris = y;
     AxeSel = NULL;
 
-    Fenetre = glutGetWindow();
+    window = glutGetWindow();
 
-	if (Fenetre == FenetreProfiles) {
+	if (window == windowProfiles) {
         AxeSel = AxeProfiles;
     }
 
@@ -154,7 +154,7 @@ void BoutonSouris(int button, int state, int x, int y) {
 
 }
 
-void InitFenetre(void) {
+void InitWindow(void) {
     glEnable(GL_LINE_STIPPLE);
     glutDisplayFunc(&display);
     glutReshapeFunc(&reshape);
@@ -164,9 +164,9 @@ void InitFenetre(void) {
 }
 
 void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
-	Forme* tmpF=0;
-	Matrice *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
-	Matrice** tmpReperPoints=0;
+	Form* tmpF=0;
+	Matrix *tmpIntProfCent=0, *tmpExtProfCent=0, *tmpIntProfBout=0, *tmpExtProfBout=0;
+	Matrix** tmpReperPoints=0;
 	int tmpquantDiag=0;
 	int tmpquantVH=0;
 	int *tmpnoNervD=0;
@@ -174,7 +174,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	int tmpVentCentralNerv=0;
 
 	try {
-		tmpF = LectureFichierForme(gfd->NomFichierForme);
+		tmpF = LectureFichierForm(gfd->fileNameForm);
 		try {
 		tmpF->Validate();
 		} catch (char* msg) {
@@ -187,7 +187,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
 		char msg[100];
-		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->NomFichierForme);
+		sprintf (msg, "Problem loading project: %s, check project file %s, forme file %s", sexception, gfd-> name, gfd->fileNameForm);
 		AfxMessageBox(msg);
 		return;
 	}
@@ -205,20 +205,20 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	/* --------                                 ------------ */
 }
 
-void ChargerFichierProject(int /*control*/) {
-    CString NomFichier;
-    char* PtrNomFichier;
+void readProject(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
     WindPatternsProject* oldWpp;
     CFileDialog DlgOpen(TRUE, NULL, "*.wpp", OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        strcpy(NomFichierProject, PtrNomFichier);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameProject, PtrfileName);
         oldWpp = gfd;
-        gfd = LectureWindPatternsProject(NomFichierProject);
+        gfd = LectureWindPatternsProject(fileNameProject);
         LoadFromWindPatternsProject(gfd);
         delete(oldWpp);
-        FicProject->set_text(NomFichierProject);
+        FicProject->set_text(fileNameProject);
     }
     //Appliquer(0);
     display();
@@ -240,40 +240,40 @@ void Apply(int /*control*/) {
 	AxeProfiles->YGrid = XYGrid;
 	AxeProfiles->ZGrid = OFF;
 
-    LibererCourbesAxe(AxeProfiles);
+    clearCourbesAxe(AxeProfiles);
 	
 	ProfilGeom* pg1 = getProfile(gfd, F, NoNerv[0]);
 	//pg1->print();
 	Courbe* cext1, *cint1;
 	getCourbeFromProfilGeom(pg1, &cext1, &cint1);
-	AjoutCourbe(AxeProfiles, cext1);
-	AjoutCourbe(AxeProfiles, cint1);
+	addCourbe(AxeProfiles, cext1);
+	addCourbe(AxeProfiles, cint1);
 
 /*	ProfilGeom* pg2 = getProfile(gfd, F, NoNerv[1]);
 	Courbe* cext2, *cint2;
 	getCourbeFromProfilGeom(pg2, &cext2, &cint2);
-	AjoutCourbe(AxeProfiles, cext2);
-	AjoutCourbe(AxeProfiles, cint2);*/
+	addCourbe(AxeProfiles, cext2);
+	addCourbe(AxeProfiles, cint2);*/
 
 	ProfilGeom* pg1b = getBalloneProfilGeom(pg1, kChord, kMf, F->m_pProfils[NoNerv[0]]->m_fWidth, wN, dyw);
 	Courbe* cext3, *cint3;
 	getCourbeFromProfilGeom(pg1b, &cext3, &cint3);
-	cext3->CouleurSegments[0]=1.0f;
-	cext3->CouleurSegments[1]=0.0f;
-	cext3->CouleurSegments[2]=0.0f;
-	cint3->CouleurSegments[0]=1.0f;
-	cint3->CouleurSegments[1]=0.0f;
-	cint3->CouleurSegments[2]=0.0f;
+	cext3->colorSegments[0]=1.0f;
+	cext3->colorSegments[1]=0.0f;
+	cext3->colorSegments[2]=0.0f;
+	cint3->colorSegments[0]=1.0f;
+	cint3->colorSegments[1]=0.0f;
+	cint3->colorSegments[2]=0.0f;
 
-	AjoutCourbe(AxeProfiles, cext3);
-	AjoutCourbe(AxeProfiles, cint3);
+	addCourbe(AxeProfiles, cext3);
+	addCourbe(AxeProfiles, cint3);
 	
 	Courbe* cvLineHvostPince;
 	cvLineHvostPince = new Courbe("VerticalLine");
     cvLineHvostPince->points = OFF;
     cvLineHvostPince->symX = OFF;
 
-	cvLineHvostPince->pts = new Matrice(2, 2);
+	cvLineHvostPince->pts = new Matrix(2, 2);
 
 	int ne = pg1->ExtProf->GetLignes();
 	int ni = pg1->IntProf->GetLignes();
@@ -284,20 +284,20 @@ void Apply(int /*control*/) {
 
 	cvLineHvostPince->pts->SetElement(1, 0, xv );
 	cvLineHvostPince->pts->SetElement(1, 1, 0.1 * l );
-	AjoutCourbe(AxeProfiles, cvLineHvostPince);
+	addCourbe(AxeProfiles, cvLineHvostPince);
 
 	ProfilGeom* pg1bh = getProfilGeomTailDown(pg1b, pg1, xv, power);
 	Courbe* cext4, *cint4;
 	getCourbeFromProfilGeom(pg1bh, &cext4, &cint4);
-	cext4->CouleurSegments[0]=0.0f;
-	cext4->CouleurSegments[1]=1.0f;
-	cext4->CouleurSegments[2]=0.0f;
-	cint4->CouleurSegments[0]=0.0f;
-	cint4->CouleurSegments[1]=1.0f;
-	cint4->CouleurSegments[2]=0.0f;
+	cext4->colorSegments[0]=0.0f;
+	cext4->colorSegments[1]=1.0f;
+	cext4->colorSegments[2]=0.0f;
+	cint4->colorSegments[0]=0.0f;
+	cint4->colorSegments[1]=1.0f;
+	cint4->colorSegments[2]=0.0f;
 
-	AjoutCourbe(AxeProfiles, cext4);
-	AjoutCourbe(AxeProfiles, cint4);
+	addCourbe(AxeProfiles, cext4);
+	addCourbe(AxeProfiles, cint4);
 
 	display();
 }
@@ -327,24 +327,24 @@ int main(int argc, char** argv)
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
 
-	FenetreProfiles = glutCreateWindow("Profile view");
-    InitFenetre(); 
+	windowProfiles = glutCreateWindow("Profile view");
+    InitWindow(); 
 
-    AxeProfiles = CreerAxe(FenetreProfiles);
+    AxeProfiles = createAxe(windowProfiles);
 
 	int ws, hs;
     ws = glutGet(GLUT_SCREEN_WIDTH);
     hs = glutGet(GLUT_SCREEN_HEIGHT);
 
-    glutSetWindow(FenetreProfiles);
+    glutSetWindow(windowProfiles);
     glutPositionWindow((int) (0.0 * (double) ws), (int) (0.50 * (double) hs));
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
 
     glui = GLUI_Master.create_glui("Profile ballone", 0, 0, 0);
 
-    GLUI_Button *btnLoadForme =
-            glui->add_button("Load project", 0, &ChargerFichierProject);
-    btnLoadForme->set_w(10);
+    GLUI_Button *btnLoadForm =
+            glui->add_button("Load project", 0, &readProject);
+    btnLoadForm->set_w(10);
 
 	GLUI_Panel *panel1 = glui->add_panel("");
 
@@ -363,13 +363,13 @@ int main(int argc, char** argv)
 
     glui->add_column(true);
 
-	strcpy(NomFichierProject, "f17project.wpp");
+	strcpy(fileNameProject, "f17project.wpp");
 
-	gfd = LectureWindPatternsProject(NomFichierProject);
+	gfd = LectureWindPatternsProject(fileNameProject);
     LoadFromWindPatternsProject(gfd);
 
     FicProject = glui->add_statictext("???");
-    FicProject->set_text(NomFichierProject);
+    FicProject->set_text(fileNameProject);
 
 	GLUI_Panel *panel2 = glui->add_panel("");
 	

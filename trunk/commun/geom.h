@@ -5,10 +5,10 @@
 #define ONE 1
 #define SEG 2
 
-class Forme;
-class Forme3D;
-class FormeProjection;
-class Matrice;
+class Form;
+class Form3D;
+class FormProjection;
+class Matrix;
 class Ballonement;
 class WindPatternsProject;
 
@@ -47,54 +47,54 @@ public:
 
 ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2);
 
-Matrice* MonBezier(Matrice *tab, int NbrPts);
+Matrix* MonBezier(Matrix *tab, int NbrPts);
 
-Matrice* CalculNormalRasst(Matrice* X1, Matrice* Y1,Matrice* X2, Matrice* Y2) ;
-void AddPointsToCourb(Matrice* courb, Matrice* pts, Matrice** newCourb);
-void CalculVecteurNormal(double xa,double ya,double xb,double yb,
+Matrix* calcNormalRasst(Matrix* X1, Matrix* Y1,Matrix* X2, Matrix* Y2) ;
+void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb);
+void calcVecteurNormal(double xa,double ya,double xb,double yb,
 						 double *xc,double *yc,double l,int cote);
 
-Matrice* CalculContour(Matrice* xy, Matrice *d, int cote);
+Matrix* calcContour(Matrix* xy, Matrix *d, int cote);
 
-void CalculVecteurBissec(double x1,double y1,double x2,double y2, double x3,double y3,
+void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double y3,
 						 double *x,double *y,double l,int cote);
 
-void CalculForme3D(Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout,
-				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
-				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
+void calcForm3D(Form *forme, int isPercent, double percent,
+				   Matrix *ExtProfCent, Matrix *IntProfCent,
+				   Matrix *ExtProfBout, Matrix *IntProfBout,
+				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
+				   Matrix **XInt, Matrix **YInt, Matrix **ZInt);
 
-void CalculForme3DBallonement
-				(WindPatternsProject* gfd, Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout,
-				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
-				   Matrice **XInt, Matrice **YInt, Matrice **ZInt);
+void calcForm3DBallonement
+				(WindPatternsProject* gfd, Form *forme, int isPercent, double percent,
+				   Matrix *ExtProfCent, Matrix *IntProfCent,
+				   Matrix *ExtProfBout, Matrix *IntProfBout,
+				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
+				   Matrix **XInt, Matrix **YInt, Matrix **ZInt);
 
-Forme3D* getForme3D(Forme *forme, int isPercent, double percent);
-				   //Matrice *ExtProfCent, Matrice *IntProfCent,
-				   //Matrice *ExtProfBout, Matrice *IntProfBout);
+Form3D* getForm3D(Form *forme, int isPercent, double percent);
+				   //Matrix *ExtProfCent, Matrix *IntProfCent,
+				   //Matrix *ExtProfBout, Matrix *IntProfBout);
 
-FormeProjection* getFormeProjection(Forme3D* f3d);
+FormProjection* getFormProjection(Form3D* f3d);
 
-double EpaisseurRelative(Matrice* extrados, Matrice* intrados);
+double EpaisseurRelative(Matrix* extrados, Matrix* intrados);
 
 double dist2d(double x1, double y1, double x2, double y2);
 
-void InterpoleProfilBout(Matrice** XYBout, Matrice* XYCent);
+void InterpoleProfilBout(Matrix** XYBout, Matrix* XYCent);
 
-void CalculDeveloppe(
+void calcDeveloppe(
 					 //coordonn�es 3D des 2 cotes de la surface 
-					 Matrice *Xs1, Matrice *Ys1, Matrice *Zs1,
-					 Matrice *Xs2, Matrice *Ys2, Matrice *Zs2,
+					 Matrix *Xs1, Matrix *Ys1, Matrix *Zs1,
+					 Matrix *Xs2, Matrix *Ys2, Matrix *Zs2,
 					 //coordonn�es 2D du d�velopp�
-					 Matrice **Xb1, Matrice **Yb1,
-					 Matrice **Xb2, Matrice **Yb2);
+					 Matrix **Xb1, Matrix **Yb1,
+					 Matrix **Xb2, Matrix **Yb2);
 
-void Cart2Pol(Matrice *X, Matrice *Y, Matrice **T, Matrice **R);
+void Cart2Pol(Matrix *X, Matrix *Y, Matrix **T, Matrix **R);
 
-void Pol2Cart(Matrice *T, Matrice *R, Matrice **X, Matrice **Y);
+void Pol2Cart(Matrix *T, Matrix *R, Matrix **X, Matrix **Y);
 
 void Inter2Vecteurs(
 					double xa, double ya,
@@ -103,24 +103,24 @@ void Inter2Vecteurs(
 					double xd, double yd,
 					double *x, double *y);
 
-void LVFoil(Matrice *XB, Matrice *YB, double alphaD, Matrice **X, Matrice **Y, Matrice **Cp );
+void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matrix **Cp );
 
-Matrice* Longueur(Matrice* x, Matrice *y);
+Matrix* Longueur(Matrix* x, Matrix *y);
 
-Matrice* Cercle(double xo, double yo, double rayon, int nbp);
+Matrix* Cercle(double xo, double yo, double rayon, int nbp);
 
-void CalculMaxWH(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double *width, double *height);
+void calcMaxWH(Matrix *Xd0, Matrix *Yd0, Matrix *Xd1, Matrix *Yd1, double *width, double *height);
 
-void getPointByPos (Matrice *Xd, Matrice *Yd, Matrice *P, double Pos, double *xr, double *yr);
-void getPoint3dByPos (Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, double pos, double *xr, double *yr, double *zr);
-void getPoint3dFormeByPosDNerv(Forme3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr);
-void getPoint3dFormeByPosNerv(Forme3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr);
+void getPointByPos (Matrix *Xd, Matrix *Yd, Matrix *P, double Pos, double *xr, double *yr);
+void getPoint3dByPos (Matrix *X, Matrix *Y, Matrix *Z, Matrix *P, double pos, double *xr, double *yr, double *zr);
+void getPoint3dFormByPosDNerv(Form3D* f3d, double nerv, int side, double pos, double *xr, double *yr, double *zr);
+void getPoint3dFormByPosNerv(Form3D* f3d, int nerv, int side, double pos, double *xr, double *yr, double *zr);
 
-void CalculPatronWithCoeff(Matrice *Xd0, Matrice *Yd0, Matrice *Xd1, Matrice *Yd1, double coeff, Matrice **newXd0, Matrice **newYd0, Matrice **newXd1, Matrice **newYd1);
+void calcPatronWithCoeff(Matrix *Xd0, Matrix *Yd0, Matrix *Xd1, Matrix *Yd1, double coeff, Matrix **newXd0, Matrix **newYd0, Matrix **newXd1, Matrix **newYd1);
 
 double dist3d(double x1, double y1, double z1, double x2, double y2, double z2);
 
-double calculCourbeLength(Matrice* X, Matrice* Y);
+double calcCourbeLength(Matrix* X, Matrix* Y);
 
 int pointAtSegment(double x, double y, double x1, double y1, double x2, double y2 );
 #endif

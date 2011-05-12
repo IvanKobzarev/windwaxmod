@@ -26,6 +26,6 @@ WindPatternsProject::~WindPatternsProject()
 void WindPatternsProject::print()
 {
     printf ("\nWindPatternsProject::print() Name=[%s]", name);
-    printf ("\n[%s] [%s] [%s]", NomFichierDiagNerv, NomFichierRepPoints, NomFichierVentHoles);
+    printf ("\n[%s] [%s] [%s]", fileNameDiagNerv, fileNameRepPoints, fileNameVentHoles);
     printf ("\n XMastab=%f", XMashtab);
 }

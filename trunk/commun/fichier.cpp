@@ -37,7 +37,7 @@ using namespace std;
 //			TRUE si trouve, FALSE sinon
 //////////////////////////////////////////////////////////////
 
-Forme::Forme() 
+Form::Form() 
 	: m_pProfils( NULL ), m_nbProfils(0)
 {
 	//valeurs par default
@@ -65,8 +65,8 @@ Forme::Forme()
 }
 
 
-Matrice* Forme::getExtProf(int nerv, bool realSize) {
-	Matrice* res = new Matrice(ExtProfCent->GetLignes(), 2);
+Matrix* Form::getExtProf(int nerv, bool realSize) {
+	Matrix* res = new Matrix(ExtProfCent->GetLignes(), 2);
 	double m = m_pProfils[nerv]->m_fMorph;
 	double LongNerv = m_pProfils[nerv]->m_fLength;
 	if (realSize == false) LongNerv = 100.0f;
@@ -85,8 +85,8 @@ Matrice* Forme::getExtProf(int nerv, bool realSize) {
 	return res;
 }
 
-Matrice* Forme::getIntProf(int nerv, bool realSize) {
-	Matrice* res = new Matrice(IntProfCent->GetLignes(), 2);
+Matrix* Form::getIntProf(int nerv, bool realSize) {
+	Matrix* res = new Matrix(IntProfCent->GetLignes(), 2);
 	double m = m_pProfils[nerv]->m_fMorph;
 	double EpaiRel = m_pProfils[nerv]->m_fWidth;
 	double LongNerv = m_pProfils[nerv]->m_fLength;
@@ -107,10 +107,10 @@ Matrice* Forme::getIntProf(int nerv, bool realSize) {
 }
 
 
-Forme3D::Forme3D(){
+Form3D::Form3D(){
 }
 
-Forme3D::~Forme3D(){
+Form3D::~Form3D(){
 	delete this->XExt;
 	delete this->YExt;
 	delete this->ZExt;
@@ -120,10 +120,10 @@ Forme3D::~Forme3D(){
 	delete this->ZInt;
 }
 
-FormeProjection::FormeProjection(){
+FormProjection::FormProjection(){
 }
 
-FormeProjection::~FormeProjection(){
+FormProjection::~FormProjection(){
 	delete this->X;
 	delete this->Y;
 }
@@ -138,7 +138,7 @@ Ballonement::~Ballonement(){
 	delete this->kMf;
 }
 
-void Forme::DeleteProfils()
+void Form::DeleteProfils()
 {
 	if ( m_pProfils != NULL )
 	{
@@ -154,7 +154,7 @@ void Forme::DeleteProfils()
 	m_nbProfils = 0;
 }
 
-void Forme::Validate()
+void Form::Validate()
 {
 	for (int i = 0; i<m_nbProfils; i++) {
 		if ((m_pProfils[i]->m_fMorph > 1.0) || (m_pProfils[i]->m_fMorph < 0.0)) {
@@ -167,7 +167,7 @@ void Forme::Validate()
 }
 
 
-void Forme::AllocateProfils( int nb )
+void Form::AllocateProfils( int nb )
 {
 	DeleteProfils();
 	m_nbProfils = nb;
@@ -178,7 +178,7 @@ void Forme::AllocateProfils( int nb )
 	}
 }
 
-Forme::~Forme() 
+Form::~Form() 
 { 
 	DeleteProfils();
 
@@ -245,8 +245,8 @@ void Ballonement::loadFromFile(const char* fileName) {
 }
 
 
-/* void Forme::SerializeWing (QDataStream &ar) {
-	printf ("\nin Forme::SerializeWing()");
+/* void Form::SerializeWing (QDataStream &ar) {
+	printf ("\nin Form::SerializeWing()");
 
 	CWing* wing = new CWing ();
 
@@ -341,7 +341,7 @@ void Ballonement::loadFromFile(const char* fileName) {
 
 		wing->m_bVLMAutoMesh = 1;
 		wing->m_bSymetric = 1;
-		printf ("\n in Forme::SerializeWing() ComputeGeometry()");
+		printf ("\n in Form::SerializeWing() ComputeGeometry()");
 		//wing->ComputeGeometry();
 		
 		wing -> SerializeWing(ar, true, 5);
@@ -350,7 +350,7 @@ void Ballonement::loadFromFile(const char* fileName) {
 */
 
 
-/* void Forme::SerializeToWpa(QDataStream &ar) 
+/* void Form::SerializeToWpa(QDataStream &ar) 
 {
 	printf ("\nSerializeToWpa()");
 	int m_LengthUnit;
@@ -373,9 +373,9 @@ void Ballonement::loadFromFile(const char* fileName) {
 	int m_RefAreaType=1; //1=classic or 2=projected on x-yplane
 
 	bool m_bVLM1=true; //true if Classic, false if Quendez
-	bool m_bThinSurfaces=true;//true if Plane Panel calculation on middle surface, false if on top & bottom
-	bool m_bWakeRollUp=true;//true if wake roll up is to be taken into account in calculation
-	bool m_bTiltedGeom=true;//true if calculation is performed on the tilted geometry, at alpha=0.0
+	bool m_bThinSurfaces=true;//true if Plane Panel calcation on middle surface, false if on top & bottom
+	bool m_bWakeRollUp=true;//true if wake roll up is to be taken into account in calcation
+	bool m_bTiltedGeom=true;//true if calcation is performed on the tilted geometry, at alpha=0.0
 	bool m_bViscous=true;
     bool m_bGround=true;
 
@@ -522,16 +522,16 @@ KiteDesign* readKiteDesignFromFile(const char* FilePath) {
 	return kd;
 }
 
-void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** intrados)
+void LectureFichierProfil(const char* NomProf, Matrix** extrados, Matrix** intrados)
 {
 	FILE *fid;
 	char line[255];
 	int NbInt, NbExt, i;
 	float x,y,coeff;
-	//rajoute pour format Selig ...
+	//radde pour format Selig ...
 
 	int nbData, iNez;
-	Matrice *data = NULL;
+	Matrix *data = NULL;
 
 	/* ouverture fichier profil */
 	printf("\nLecture fichier profil: '%s'", NomProf);
@@ -567,7 +567,7 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 			//lecture des datas
 			rewind(fid);
 			fgets( line, 255, fid ); //premiere ligne
-			data = new Matrice(nbData, 2);
+			data = new Matrix(nbData, 2);
 			for(i=0; i<nbData; i++)
 			{
 				float f1, f2;
@@ -588,7 +588,7 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 			}
 			//recopie data dans le tableau d'extrados
 			delete(*extrados); NbExt = iNez+1;
-			*extrados=new Matrice(NbExt,2);
+			*extrados=new Matrix(NbExt,2);
 
 			for(i=0; i<NbExt; i++)
 			{
@@ -597,7 +597,7 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 			}
 			//recopie data dans le tableau d'intrados
 			delete(*intrados); NbInt = nbData-iNez;
-			*intrados=new Matrice(NbInt,2);
+			*intrados=new Matrix(NbInt,2);
 			for(i=0; i<NbInt; i++)
 			{
 				(*intrados)->SetElement(i,0,data->Element(i+NbExt-1,0));
@@ -620,7 +620,7 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 			NbExt=(int)floor(x);	NbInt=(int)floor(y);		
 			// lecture pts Extrados
 			delete(*extrados);
-			*extrados=new Matrice(NbExt,2);
+			*extrados=new Matrix(NbExt,2);
 			for(i=0; i<NbExt; i++)
         		{
 				float f1, f2;
@@ -631,7 +631,7 @@ void LectureFichierProfil(const char* NomProf, Matrice** extrados, Matrice** int
 			}
 			// lecture pts Intrados
 			delete(*intrados);
-			*intrados=new Matrice(NbInt,2);
+			*intrados=new Matrix(NbInt,2);
 			for(i=0; i<NbInt; i++)
         		{
 				float f1, f2;
@@ -714,9 +714,9 @@ int* LectureFichierVentHoles(char* NomFic, int* quant, int* central) {
 /* LectureFichierReperPoints */
 /***********************/
 
-Matrice** LectureFichierReperPoints(char* NomFic) {
+Matrix** LectureFichierReperPoints(char* NomFic) {
     FILE *fid;
-    Matrice** m= new Matrice*[3];
+    Matrix** m= new Matrix*[3];
     int n;
     float p;
     if( (fid = fopen( NomFic, "rt" )) == NULL )
@@ -729,7 +729,7 @@ Matrice** LectureFichierReperPoints(char* NomFic) {
         for (int i=1;i<3;i++) {
             fscanf(fid,"%d", &n);
             //printf ("\n n=%d", n);
-            m[i] = new Matrice(n, 1);
+            m[i] = new Matrix(n, 1);
             for (int j = 0; j < n; j++) {
                 fscanf (fid, "%f", &p);
                 //printf ("\n p=%f", p);
@@ -904,14 +904,14 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                     case 27: fscanf(fid,"%f", &(wpp->PinceArctanK3ValueF)); break;
 
                     case 28: fscanf(fid,"%d", &(wpp->DiagNervs)); break;
-                    case 29: {  fgets (s, 255, fid);  trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->NomFichierDiagNerv, s);  break;}
+                    case 29: {  fgets (s, 255, fid);  trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->fileNameDiagNerv, s);  break;}
                     case 30: fscanf(fid,"%f", &(wpp->PosDiagNerv2A)); break;
                     case 31: fscanf(fid,"%f", &(wpp->PosDiagNerv2F)); break;
                     case 32: fscanf(fid,"%f", &(wpp->PosDiagNerv1A)); break;
                     case 33: fscanf(fid,"%f", &(wpp->PosDiagNerv1F)); break;
 
                     case 34: fscanf(fid,"%d", &(wpp->VentHoles)); break;
-                    case 35: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->NomFichierVentHoles, s); break;}
+                    case 35: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->fileNameVentHoles, s); break;}
                     case 36: fscanf(fid,"%f", &(wpp->VentHolesDeb)); break;
                     case 37: fscanf(fid,"%f", &(wpp->VentHolesFin)); break;
 
@@ -921,7 +921,7 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
 
                     case 41: fscanf(fid,"%d", &(wpp->RepPoints)); break;
                     case 42: fscanf(fid,"%d", &(wpp->ReperPointsFromFile)); break;
-                    case 43: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->NomFichierRepPoints, s);  break;}
+                    case 43: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->fileNameRepPoints, s);  break;}
 
                     case 44: fscanf(fid,"%d", &(wpp->VentilationLayout)); break;
 
@@ -935,7 +935,7 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                     case 50: fscanf(fid,"%f", &(wpp->XMashtab)); break;
                     case 51: fscanf(fid,"%f", &(wpp->textX)); break;
                     case 52: fscanf(fid,"%f", &(wpp->textY)); break;
-                    case 53: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->NomFichierForme, s);  break;}
+                    case 53: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->fileNameForm, s);  break;}
 					case 54: {  fgets (s, 255, fid); trim(s); trim(s, '\r'); trim(s, '\n'); strcpy(wpp->ballonementPath, s);  break;}
                     default:;
                 }
@@ -952,14 +952,14 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
     return wpp;
 }
 
-void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
+void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
 	FILE *fid;
 	/**** message ****/
-	printf("\nEcriture fichier WindPatternsProject: '%s'",NomFichier);
+	printf("\nEcriture fichier WindPatternsProject: '%s'",fileName);
 	/**** ouverture fichier en ecriture ****/
-	if( (fid = fopen( NomFichier, "wt" )) == NULL )
+	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
     char* motsClef[55] =
@@ -989,7 +989,7 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                 "XMASHTAB", "TEXTX", "TEXTY", "FORME", "BALLONEMENT"}; //3
 
 
-					fprintf(fid,"\n%s %s", motsClef[0], NomFichier);
+					fprintf(fid,"\n%s %s", motsClef[0], fileName);
                     fprintf(fid,"\n\n%s %f", motsClef[1],wpp->MargeDeb);
                     fprintf(fid,"\n%s %f", motsClef[2],wpp->MargeFin);
                     fprintf(fid,"\n%s %f", motsClef[3],wpp->Marge[0]);
@@ -1022,14 +1022,14 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                     fprintf(fid,"\n%s %f", motsClef[27],wpp->PinceArctanK3ValueF);
 
                     fprintf(fid,"\n\n%s %d", motsClef[28],wpp->DiagNervs);
-                    fprintf(fid,"\n%s %s", motsClef[29],wpp->NomFichierDiagNerv);
+                    fprintf(fid,"\n%s %s", motsClef[29],wpp->fileNameDiagNerv);
                     fprintf(fid,"\n%s %f", motsClef[30],wpp->PosDiagNerv2A);
                     fprintf(fid,"\n%s %f", motsClef[31],wpp->PosDiagNerv2F);
                     fprintf(fid,"\n%s %f", motsClef[32],wpp->PosDiagNerv1A);
                     fprintf(fid,"\n%s %f", motsClef[33],wpp->PosDiagNerv1F);
 
                     fprintf(fid,"\n\n%s %d", motsClef[34],wpp->VentHoles);
-                    fprintf(fid,"\n%s %s", motsClef[35],wpp->NomFichierVentHoles);
+                    fprintf(fid,"\n%s %s", motsClef[35],wpp->fileNameVentHoles);
                     fprintf(fid,"\n%s %f", motsClef[36],wpp->VentHolesDeb);
                     fprintf(fid,"\n%s %f", motsClef[37],wpp->VentHolesFin);
 
@@ -1039,7 +1039,7 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
 
                     fprintf(fid,"\n\n%s %d", motsClef[41],wpp->RepPoints);
                     fprintf(fid,"\n%s %d", motsClef[42],wpp->ReperPointsFromFile);
-                    fprintf(fid,"\n%s %s", motsClef[43],wpp->NomFichierRepPoints);
+                    fprintf(fid,"\n%s %s", motsClef[43],wpp->fileNameRepPoints);
 
                     fprintf(fid,"\n\n%s %d", motsClef[44],wpp->VentilationLayout);
 
@@ -1052,7 +1052,7 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
                     fprintf(fid,"\n%s %f", motsClef[50],wpp->XMashtab);
                     fprintf(fid,"\n%s %f", motsClef[51],wpp->textX);
                     fprintf(fid,"\n%s %f", motsClef[52],wpp->textY);
-                    fprintf(fid,"\n%s %s", motsClef[53],wpp->NomFichierForme);
+                    fprintf(fid,"\n%s %s", motsClef[53],wpp->fileNameForm);
                     fprintf(fid,"\n%s %s", motsClef[54],wpp->ballonementPath);
 
 	if(fclose(fid))
@@ -1066,10 +1066,10 @@ void EcritureWindPatternsProject(char *NomFichier, WindPatternsProject *wpp) {
 
 Ballonement* readBallonementFromFile(char* NomFic) {
 	FILE *fid;
-	Matrice *m = NULL;
+	Matrix *m = NULL;
 	Ballonement* bal = new Ballonement();
 	//kChord, kMf, wN, dyw
-	Matrice *kChord, *kMf, *wN, *dyw, *powerTail;
+	Matrix *kChord, *kMf, *wN, *dyw, *powerTail;
 	if( (fid = fopen( NomFic, "rt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", NomFic);
@@ -1083,11 +1083,11 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 		int n=-1, ind=0;
 		fscanf(fid, "%d", &n);
 		double _kChord=0, _kMf=0, _wN=0, _dyw=0, _powerTail=0;
-		kChord = new Matrice(n, 1);
-		kMf = new Matrice(n, 1);
-		wN = new Matrice(n, 1);
-		dyw = new Matrice(n, 1);
-		powerTail = new Matrice(n, 1);
+		kChord = new Matrix(n, 1);
+		kMf = new Matrix(n, 1);
+		wN = new Matrix(n, 1);
+		dyw = new Matrix(n, 1);
+		powerTail = new Matrix(n, 1);
 
 		for (int i = 0; i < n; i ++) {
 			fscanf(fid,"%d %lf %lf %lf %lf %lf", &ind, &_kChord, &_kMf, &_wN, &_dyw, &_powerTail );
@@ -1111,14 +1111,14 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 	return bal;
 }
 
-Forme* LectureFichierForme(char* NomFic)
+Form* LectureFichierForm(char* NomFic)
 {
-//    if (DEBUG) printf ("\n LectureFichierForme");
+//    if (DEBUG) printf ("\n LectureFichierForm");
 	int i,j,n;
 	FILE *fid;
-	Matrice *m=NULL;
+	Matrix *m=NULL;
 	double noVer=0.0f;
-	Forme *f=NULL;
+	Form *f=NULL;
 	//liste des mots clefs du fichier
 	char* motsClef[19] = {"VERSION",
 		"NB_ALVEOLES", "COEFF_PROG_GEOM", "COEFF_EXP", "EPAI_REL_CENTRE",
@@ -1127,7 +1127,7 @@ Forme* LectureFichierForme(char* NomFic)
 		"DIEDRE","MORPHING","VRILLAGE","EPAISSEUR_RELATIVE",
 		"PROFIL_CENTRE", "PROFIL_BOUT", "TABLEAU_FORME" };
 	/**** message ****/
-	printf("\nLecture fichier de Forme: '%s'",NomFic);
+	printf("\nLecture fichier de Form: '%s'",NomFic);
 	/**** ouverture fichier en lecture ****/
 	if( (fid = fopen( NomFic, "rt" )) == NULL )
 	{
@@ -1139,7 +1139,7 @@ Forme* LectureFichierForme(char* NomFic)
 	else
 	{
 		/**** allocation memoire ****/
-		f = new Forme();
+		f = new Form();
 		/**** Lecture des points de controle ****/
 		/*Boucle de lecture*/
 		for (int i = 0; i < 19; i++)
@@ -1187,7 +1187,7 @@ Forme* LectureFichierForme(char* NomFic)
                             case 13:
                             case 14:
                             case 15: {
-                                    m = new Matrice(4,2);
+                                    m = new Matrix(4,2);
                                     double f1, f2, f3, f4, f5, f6, f7, f8;
                                     fscanf(fid,"%lf %lf %lf %lf %lf %lf %lf %lf", &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8 );
 //                                    if (DEBUG) printf (" %lf %lf %lf %lf %lf %lf %lf %lf", f1, f2, f3, f4, f5, f6, f7, f8);
@@ -1276,22 +1276,22 @@ Forme* LectureFichierForme(char* NomFic)
 
 
 /***********************/
-/* LectureFichierForme2 */
+/* LectureFichierForm2 */
 /***********************/
 
-Forme* LectureFichierForme2(char* NomFic)
+Form* LectureFichierForm2(char* NomFic)
 
 {
-//    if (DEBUG) printf ("\n LectureFichierForme2()");
+//    if (DEBUG) printf ("\n LectureFichierForm2()");
 	int i,j,n;
 
 	FILE *fid;
 
-	Matrice *m=NULL;
+	Matrix *m=NULL;
 
 	float noVer;
 
-	Forme *f=NULL;
+	Form *f=NULL;
 
 	//liste des mots clefs du fichier
 
@@ -1333,7 +1333,7 @@ Forme* LectureFichierForme2(char* NomFic)
 
 	/**** message ****/
 
-	printf("\nLecture fichier de Forme: '%s'",NomFic);
+	printf("\nLecture fichier de Form: '%s'",NomFic);
 
 	
 
@@ -1353,7 +1353,7 @@ Forme* LectureFichierForme2(char* NomFic)
 
 		/**** allocation memoire ****/
 
-		f = new Forme();
+		f = new Form();
 
 		f -> courbInput = true;
 
@@ -1457,7 +1457,7 @@ Forme* LectureFichierForme2(char* NomFic)
 
 					if (i < 15) NN = NbNerv; else NN=4;
 
-					m = new Matrice(NN,2);
+					m = new Matrix(NN,2);
 
 					float f1, f2;
 
@@ -1598,10 +1598,10 @@ Forme* LectureFichierForme2(char* NomFic)
 
 
 /************************/
-/* EcritureFichierForme */
+/* EcritureFichierForm */
 /************************/
 
-void EcritureFichierForme(char *NomFichier, Forme *f)
+void EcritureFichierForm(char *fileName, Form *f)
 
 {
 	int i;
@@ -1609,13 +1609,13 @@ void EcritureFichierForme(char *NomFichier, Forme *f)
 	char* texte[11]={"BORD_ATTAQUE_FORME","BORD_DE_FUITE_FORME","SUSPENTAGE_LIGNE_A",
 		"SUSPENTAGE_LIGNE_B","SUSPENTAGE_LIGNE_C","SUSPENTAGE_LIGNE_D", "SUSPENTAGE_LIGNE_E",
 		"DIEDRE","MORPHING","VRILLAGE","EPAISSEUR_RELATIVE"};
-	Matrice* m[11];
+	Matrix* m[11];
 	/**** message ****/
-	printf("\nEcriture fichier de Forme: '%s'",NomFichier);
+	printf("\nEcriture fichier de Form: '%s'",fileName);
 	/**** ouverture fichier en ecriture ****/
-	if( (fid = fopen( NomFichier, "wt" )) == NULL )
+	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
 
@@ -1686,12 +1686,12 @@ void EcritureFichierForme(char *NomFichier, Forme *f)
 }
 
 /************************/
-/* EcritureFichierForme2 */
+/* EcritureFichierForm2 */
 /************************/
 
-void EcritureFichierForme2(char *NomFichier, Forme *f)
+void EcritureFichierForm2(char *fileName, Form *f)
 {
-	printf ("EcritureFichierForme2\n");
+	printf ("EcritureFichierForm2\n");
 	int i;
 	FILE *fid;
 	char* texte[11]={"BORD_ATTAQUE_FORME_COURBE","BORD_DE_FUITE_FORME_COURBE","SUSPENTAGE_LIGNE_A_COURBE",
@@ -1700,15 +1700,15 @@ void EcritureFichierForme2(char *NomFichier, Forme *f)
 	char* texte2[11]={"BORD_ATTAQUE_FORME_CTRL","BORD_DE_FUITE_FORME_CTRL","SUSPENTAGE_LIGNE_A_CTRL",
 		"SUSPENTAGE_LIGNE_B_CTRL","SUSPENTAGE_LIGNE_C_CTRL","SUSPENTAGE_LIGNE_D_CTRL", "SUSPENTAGE_LIGNE_E_CTRL",
 		"DIEDRE_CTRL","MORPHING_CTRL","VRILLAGE_CTRL","EPAISSEUR_RELATIVE_CTRL"};
-	Matrice* m[10];
-	Matrice* m2[10];
+	Matrix* m[10];
+	Matrix* m2[10];
 
 	/**** message ****/
-	printf("\nEcriture fichier de Forme: '%s'",NomFichier);
+	printf("\nEcriture fichier de Form: '%s'",fileName);
 	/**** ouverture fichier en ecriture ****/
-	if( (fid = fopen( NomFichier, "wt" )) == NULL )
+	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
 	/**** Ecriture No de version ****/
@@ -1785,19 +1785,19 @@ void EcritureFichierForme2(char *NomFichier, Forme *f)
 }
 
 /********************/
-/* CalculInfoForme */
+/* calcInfoForm */
 /********************/
 
-void CalculInfoForme( Forme* F, TInfoForme* info )
+void calcInfoForm( Form* F, TInfoForm* info )
 
 {
 	double xNerv, xNervPrec, lNerv, lNervPrec, larg;
 	int i, nNerv;
-	Matrice *tabXNerv = NULL;
+	Matrix *tabXNerv = NULL;
 
-	/*calcul position nervures a plat*/
+	/*calc position nervures a plat*/
 	nNerv = F->m_nbProfils;
-	tabXNerv = new Matrice(nNerv,1);
+	tabXNerv = new Matrix(nNerv,1);
 
 	tabXNerv->SetElement(0,0, F->m_pProfils[0]->m_fNezX);
 
@@ -1899,10 +1899,10 @@ void CalculInfoForme( Forme* F, TInfoForme* info )
 
 
 /********************/
-/* AfficheInfoForme */
+/* AfficheInfoForm */
 /********************/
 
-void AfficheInfoForme( TInfoForme info )
+void AfficheInfoForm( TInfoForm info )
 {
 	printf("\n\nINFO:");
 	printf("\n\tSurface: plat=%2.2fm2, proj=%2.2fm2, r=%2.1f%%",
@@ -1962,9 +1962,9 @@ void EcritPolyVertexDXF(FILE *fid, char *nom, int en3d,
 /**********************/
 /* EcritureFichierFGen */
 /**********************/
-void EcritureFichierFGen(char *NomFichier, Forme *foil)
+void EcritureFichierFGen(char *fileName, Form *foil)
 {
-	ofstream out(NomFichier,ios::out);
+	ofstream out(fileName,ios::out);
 	if ( out.good() )
 	{
 		out << dec << fixed << setfill('0');
@@ -2026,7 +2026,7 @@ void EcritureFichierFGen(char *NomFichier, Forme *foil)
 
 
 
-/*void Forme::SerializeFoil (QDataStream &ar, Matrice* ExtProf, Matrice* IntProf) { 
+/*void Form::SerializeFoil (QDataStream &ar, Matrix* ExtProf, Matrix* IntProf) { 
 	CFoil* foil = new CFoil();
 	foil->InitFromWindWax(ExtProf, IntProf);
 	foil->m_FoilName="DummyFoil";
@@ -2034,14 +2034,14 @@ void EcritureFichierFGen(char *NomFichier, Forme *foil)
 }*/
 
 /*
-void CalculForme3D(Forme *forme, int isPercent, double percent,
-				   Matrice *ExtProfCent, Matrice *IntProfCent,
-				   Matrice *ExtProfBout, Matrice *IntProfBout,
-				   Matrice **XExt, Matrice **YExt, Matrice **ZExt,
-				   Matrice **XInt, Matrice **YInt, Matrice **ZInt)
+void calcForm3D(Form *forme, int isPercent, double percent,
+				   Matrix *ExtProfCent, Matrix *IntProfCent,
+				   Matrix *ExtProfBout, Matrix *IntProfBout,
+				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
+				   Matrix **XInt, Matrix **YInt, Matrix **ZInt)
 
 {
-    Matrice *ExtProfCentN, *ExtProfBoutN;
+    Matrix *ExtProfCentN, *ExtProfBoutN;
 	double LongNerv, EpaiRel, xp,yp, xo,yo,zo, a,v,m;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffyCent, coeffyBout;
@@ -2102,7 +2102,7 @@ void CalculForme3D(Forme *forme, int isPercent, double percent,
 */
 
 /*
-void Forme::WritePolars (QDataStream &ar) {
+void Form::WritePolars (QDataStream &ar) {
 		printf ("\n WritePolars..");
 	    ar << 100003;
         int m_oaFoilSize=m_nbProfils;
@@ -2123,11 +2123,11 @@ void Forme::WritePolars (QDataStream &ar) {
 		EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
 		EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
 		char foilName[50];
-		printf ("\n Forme->m_nbProfils=%d [0 -> %d]", m_nbProfils, (m_nbProfils-1));
+		printf ("\n Form->m_nbProfils=%d [0 -> %d]", m_nbProfils, (m_nbProfils-1));
 		double w0 = m_pProfils[0]->m_fWidth;
 		for (i=0; i<m_nbProfils; i++)
 		{
-			Matrice *ExtProf, *IntProf;
+			Matrix *ExtProf, *IntProf;
 			ExtProf = Zeros(ExtProfCent->GetLignes(), 2);
 			IntProf = Zeros(IntProfCent->GetLignes(), 2);
 
@@ -2190,12 +2190,12 @@ void Forme::WritePolars (QDataStream &ar) {
 */
 
 /*
-bool EcritureFichierWpa(char *NomFichier, Forme *forme)
+bool EcritureFichierWpa(char *fileName, Form *forme)
 {
 	//CWaitCursor wait;
 	CFileException fe;
-    string nomFichierStr = NomFichier;
-	QFile fp(NomFichier);
+    string nomFichierStr = fileName;
+	QFile fp(fileName);
 
 	if (!fp.open(QIODevice::WriteOnly))
 	{
@@ -2218,7 +2218,7 @@ bool EcritureFichierWpa(char *NomFichier, Forme *forme)
 /* EcritureFichierDXF */
 /**********************/
 
-void EcritureFichierDXF(char *NomFichier, TAxe *axe)
+void EcritureFichierDXF(char *fileName, TAxe *axe)
 
 {
 	int i, j, cpt;
@@ -2227,11 +2227,11 @@ void EcritureFichierDXF(char *NomFichier, TAxe *axe)
 	TMesh *mesh;
 	char text[50];
 	/**** message ****/
-	printf("\nEcriture fichier de DXF: '%s'",NomFichier);
+	printf("\nEcriture fichier de DXF: '%s'",fileName);
 	/**** ouverture fichier en ecriture ****/
-	if( (fid = fopen( NomFichier, "wt" )) == NULL )
+	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
         }
 	/**** ecriture DXF *****/
@@ -2307,14 +2307,14 @@ void EcritureFichierDXF(char *NomFichier, TAxe *axe)
 	}
 }
 
-//EcritureManyFichierPolyDXF(PtrNomFichier, AxePatronDXF, AxeMarginDXF, 1, AxeRepDXF, 0, AxeCercleDXF, Numerotation, AxePatronTextDXF, W, H);
+//EcritureManyFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, 1, AxeRepDXF, 0, AxeCercleDXF, Numerotation, AxePatronTextDXF, W, H);
 
-void EcritureManyFichierPolyDXF(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
+void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
 {
     	FILE *fid;
-	printf("\nEcritureMANY POLY fichier de DXF: '%s'",NomFichier);
-	if( (fid = fopen( NomFichier, "wt" )) == NULL ) {
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	if( (fid = fopen( fileName, "wt" )) == NULL ) {
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
         fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
@@ -2387,12 +2387,12 @@ void EcritureManyFichierPolyDXF(char *NomFichier, int np, int n, TAxe **axe, TAx
        //printf ("\n end of EcrFichManyF...");
 
 }
-void EcritureManyFichierPolyDXF2(char *NomFichier, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
+void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
 {
     	FILE *fid;
-	printf("\nEcritureMANY POLY fichier de DXF: '%s'",NomFichier);
-	if( (fid = fopen( NomFichier, "wt" )) == NULL ) {
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	if( (fid = fopen( fileName, "wt" )) == NULL ) {
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
         fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
@@ -2460,7 +2460,7 @@ void EcritureManyFichierPolyDXF2(char *NomFichier, int np, int n, TAxe **axe, TA
 /* EcritureFichierPolyDXF */
 /**********************/
 
-void EcritureFichierPolyDXF(char *NomFichier, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT )
+void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT )
 {
 
 	int i, j, cpt;
@@ -2470,11 +2470,11 @@ void EcritureFichierPolyDXF(char *NomFichier, TAxe *axe, TAxe *axe2, int rep, TA
         TMesh *mesh;
 	char text[50];
 	/**** message ****/
-	printf("\nEcriture POLY fichier de DXF: '%s'",NomFichier);
+	printf("\nEcriture POLY fichier de DXF: '%s'",fileName);
 	/**** ouverture fichier en ecriture ****/
-	if( (fid = fopen( NomFichier, "wt" )) == NULL )
+	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
-		printf( "\nErreur ouverture fichier '%s'", NomFichier);
+		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
 	/**** ecriture DXF *****/
@@ -2805,24 +2805,24 @@ void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe
 }
 
 
-void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
-					Matrice *Yd1, Matrice *P1,
+void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
+					Matrix *Yd1, Matrix *P1,
 					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
-					Matrice *Xd2, Matrice *Yd2, Matrice *P2,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
 					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
 			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
                     double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
-					bool isPince, Matrice *Xd01, Matrice *Yd01,double coeff1, Matrice *Xd02, Matrice *Yd02,double coeff2)
+					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
 {
     if (debug) printf ("\n GenerateCourbe()");
     double Marge[2]={marge1, marge2};
 
-    *AxePatronP = CreerAxe(gfd->FenetrePatron);
-    *AxePatronDXFP = CreerAxe(gfd->FenetrePatron);
-    *AxeRepDXFP = CreerAxe(gfd->FenetrePatron);
-    *AxePatronTextDXFP = CreerAxe(gfd->FenetrePatron);
-    *AxeMarginDXFP = CreerAxe(gfd->FenetrePatron);
-    *AxeCercleDXFP = CreerAxe(gfd->FenetrePatron);
+    *AxePatronP = createAxe(gfd->windowPatron);
+    *AxePatronDXFP = createAxe(gfd->windowPatron);
+    *AxeRepDXFP = createAxe(gfd->windowPatron);
+    *AxePatronTextDXFP = createAxe(gfd->windowPatron);
+    *AxeMarginDXFP = createAxe(gfd->windowPatron);
+    *AxeCercleDXFP = createAxe(gfd->windowPatron);
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
     int ajCo1[2] = {0, 0};
     int ajCo2[2] = {0, 0};
@@ -2833,18 +2833,18 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
     int FaceFin[2]= {faceFin1, faceFin2};
     double Deb[2] = {deb1, deb2};
     double Fin[2] = {fin1, fin2};
-    Matrice *distance;
+    Matrix *distance;
     int n;
     double xText, yText;
     char texte[100], texteExtInt[3] = "EI";
-    Matrice *interpXSuspente, *interpYSuspente;
+    Matrix *interpXSuspente, *interpYSuspente;
     double posSuspente, xSuspente[2][205], ySuspente[2][205];
 
-    Matrice * Xd[2] = {Xd1, Xd2};
-	Matrice * Xd0[2] = {Xd01, Xd02};
-    Matrice * Yd[2] = {Yd1, Yd2};
-	Matrice * Yd0[2] = {Yd01, Yd02};
-    Matrice * P[2] = {P1, P2};
+    Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+    Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+    Matrix * P[2] = {P1, P2};
 	double coeff[2]= {coeff1, coeff2};
     int i = 0, j = 0;
     Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
@@ -2861,9 +2861,9 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbPatron[i]->symX = OFF;
         CourbPatronDXF[i]->symX = OFF;
         CourbPatronBack[i]->symX = OFF;
-        CourbPatron[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
-        CourbPatronDXF[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
-        CourbPatronBack[i]->pts = new Matrice(Xd[i]->GetLignes(), 2);
+        CourbPatron[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        CourbPatronDXF[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        CourbPatronBack[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
         for (j = 0; j < Xd[i]->GetLignes(); j++) {
             CourbPatron[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
             CourbPatronDXF[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
@@ -2873,7 +2873,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
             CourbPatronDXF[i]->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
             CourbPatronBack[i]->pts->SetElement(Xd[i]->GetLignes() - j - 1, 1, Yd[i]->Element(j, 0));
         }
-        AjoutCourbe(*AxePatronP, CourbPatron[i]);
+        addCourbe(*AxePatronP, CourbPatron[i]);
         distance = Ones(CourbPatron[i]->pts->GetLignes(), 1);
         for (j = 0; j < distance->GetLignes(); j++) distance->MultiplyElement(j, 0, Marge[i] / 100.0f);
         if (debug) printf ("\n CC Marge/Marge/MargeBack");
@@ -2881,13 +2881,13 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbMargeDXF[i] = new Courbe("Marge");
         CourbMargeBack[i] = new Courbe("MargeBack");
         if (i == 0) {
-            CourbMarge[i]->pts = CalculContour(CourbPatron[i]->pts, distance, -1);
-            CourbMargeDXF[i]->pts = CalculContour(CourbPatron[i]->pts, distance, -1);
-            CourbMargeBack[i]->pts = CalculContour(CourbPatron[i]->pts, distance, -1);
+            CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
+            CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
+            CourbMargeBack[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
         } else {
-            CourbMarge[i]->pts = CalculContour(CourbPatron[i]->pts, distance, +1);
-            CourbMargeDXF[i]->pts = CalculContour(CourbPatron[i]->pts, distance, +1);
-            CourbMargeBack[i]->pts = CalculContour(CourbPatron[i]->pts, distance, +1);
+            CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
+            CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
+            CourbMargeBack[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
         }
         CourbMarge[i]->points = OFF;
         CourbMarge[i]->symX = OFF;
@@ -2900,17 +2900,17 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
             CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 0, CourbMarge[i]->pts->Element(j, 0));
             CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 1, CourbMarge[i]->pts->Element(j, 1));
         }
-        AjoutCourbe(*AxePatronP, CourbMarge[i]);
+        addCourbe(*AxePatronP, CourbMarge[i]);
         delete(distance);
     }
-    AjoutCourbe(*AxePatronDXFP, CourbPatronDXF[0]);
+    addCourbe(*AxePatronDXFP, CourbPatronDXF[0]);
     if ((Xd[0]->Element(0, 0) != Xd[1]->Element(0, 0)) //test points Av cote 1&2 confondus
             || (Yd[0]->Element(0, 0) != Yd[1]->Element(0, 0))) {
         if (debug) printf ("\n GenerateCourbe Avant");
         CourbAv = new Courbe("Avant");
         CourbAvBack = new Courbe("AvantBack");
-        CourbAv->pts = new Matrice(2, 2);
-        CourbAvBack->pts = new Matrice(2, 2);
+        CourbAv->pts = new Matrix(2, 2);
+        CourbAvBack->pts = new Matrix(2, 2);
 
         CourbAv->pts->SetElement(0, 0, Xd[0]->Element(0, 0));
         CourbAvBack->pts->SetElement(1, 0, Xd[0]->Element(0, 0));
@@ -2929,7 +2929,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbAvBack->points = OFF;
         CourbAv->symX = OFF;
 
-        AjoutCourbe(*AxePatronP, CourbAv);
+        addCourbe(*AxePatronP, CourbAv);
         ajCoAv = 1;
 
         //marge avant
@@ -2940,8 +2940,8 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbMargeAv = new Courbe("MargeAV");
         CourbMargeAvBack = new Courbe("MargeAvBack");
         if (debug) printf ("\n CC MargeAv/MargeAvBack");
-        CourbMargeAv->pts = CalculContour(CourbAv->pts, distance, +1);
-        CourbMargeAvBack->pts = CalculContour(CourbAv->pts, distance, +1);
+        CourbMargeAv->pts = calcContour(CourbAv->pts, distance, +1);
+        CourbMargeAvBack->pts = calcContour(CourbAv->pts, distance, +1);
         for (j = 0; j < CourbMargeAv->pts->GetLignes(); j++) {
             CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 0, CourbMargeAv->pts->Element(j, 0));
             CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 1, CourbMargeAv->pts->Element(j, 1));
@@ -2952,7 +2952,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbMargeAvBack->points = OFF;
         CourbMargeAvBack->symX = OFF;
 
-        AjoutCourbe(*AxePatronP, CourbMargeAv);
+        addCourbe(*AxePatronP, CourbMargeAv);
         ajCoMaAv = 1;
 
         delete(distance);
@@ -3011,7 +3011,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
 					CourbCoin1Back[i]->pts -> SetElement(2 - _i, 0, CourbCoin1[i]->pts->Element(_i, 0));
 					CourbCoin1Back[i]->pts -> SetElement(2 - _i, 1, CourbCoin1[i]->pts->Element(_i, 1));
 				}
-				AjoutCourbe(*AxePatronP, CourbCoin);
+				addCourbe(*AxePatronP, CourbCoin);
 				ajCo1[i] = 1;
 			}
 		}
@@ -3037,7 +3037,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbAv->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(0, 1));
         CourbAvBack->pts->SetElement(0, 1, CourbMarge[1]->pts->Element(0, 1));
 
-        AjoutCourbe(*AxePatronP, CourbAv);
+        addCourbe(*AxePatronP, CourbAv);
         // 1
         ajCoAv = 0;
     }*/
@@ -3049,8 +3049,8 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbAr = new Courbe("AR");
         CourbArDXF = new Courbe("AR");
 
-        CourbAr->pts = new Matrice(2, 2);
-        CourbArDXF->pts = new Matrice(2, 2);
+        CourbAr->pts = new Matrix(2, 2);
+        CourbArDXF->pts = new Matrix(2, 2);
 
         CourbAr->pts->SetElement(0, 0, Xd[0]->Element(n0, 0));
         CourbArDXF->pts->SetElement(0, 0, Xd[0]->Element(n0, 0));
@@ -3069,7 +3069,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbArDXF->points = OFF;
         CourbAr->symX = OFF;
 
-        AjoutCourbe(*AxePatronP, CourbAr);
+        addCourbe(*AxePatronP, CourbAr);
         ajCoAr = 1;
 
         distance = Ones(2, 1);
@@ -3080,15 +3080,15 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbMargeAr = new Courbe("MargeAR");
         CourbMargeArDXF = new Courbe("MargeAR");
         if (debug) printf ("\n CC MargeAr/MargeArDXF");
-        CourbMargeAr->pts = CalculContour(CourbAr->pts, distance, -1);
-        CourbMargeArDXF->pts = CalculContour(CourbAr->pts, distance, -1);
+        CourbMargeAr->pts = calcContour(CourbAr->pts, distance, -1);
+        CourbMargeArDXF->pts = calcContour(CourbAr->pts, distance, -1);
 
         CourbMargeAr->points = OFF;
         CourbMargeAr->symX = OFF;
         CourbMargeArDXF->points = OFF;
         CourbMargeArDXF->symX = OFF;
 
-        AjoutCourbe(*AxePatronP, CourbMargeAr);
+        addCourbe(*AxePatronP, CourbMargeAr);
         ajCoMaAr = 1;
 
         delete(distance);
@@ -3163,7 +3163,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
 					CourbCoin2Back[i]->pts -> SetElement(2 - _i, 1, CourbCoin2[i]->pts->Element(_i, 1));
 				}
 
-				AjoutCourbe(*AxePatronP, CourbCoin);
+				addCourbe(*AxePatronP, CourbCoin);
 				ajCo2[i] = 1;
 			}
 		}
@@ -3189,27 +3189,27 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
         CourbAr->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(n1, 1));
         CourbArDXF->pts->SetElement(1, 1, CourbMarge[1]->pts->Element(n1, 1));
 
-        AjoutCourbe(*AxePatronP, CourbAr);
+        addCourbe(*AxePatronP, CourbAr);
         // 1
         ajCoAr = 0;
     }*/
-    if (ajCoAr) AjoutCourbe(*AxePatronDXFP, CourbArDXF);
+    if (ajCoAr) addCourbe(*AxePatronDXFP, CourbArDXF);
 
-    AjoutCourbe(*AxePatronDXFP, CourbPatronBack[1]);
-    if (ajCoAv) AjoutCourbe(*AxePatronDXFP, CourbAvBack);
-
-
-    AjoutCourbe(*AxeMarginDXFP, CourbMargeDXF[0]);
-    if (ajCo2[0]) AjoutCourbe(*AxeMarginDXFP, CourbCoin2[0]);
-
-    if (ajCoMaAr) AjoutCourbe(*AxeMarginDXFP, CourbMargeArDXF);
-    if (ajCo2[1]) AjoutCourbe(*AxeMarginDXFP, CourbCoin2Back[1]);
+    addCourbe(*AxePatronDXFP, CourbPatronBack[1]);
+    if (ajCoAv) addCourbe(*AxePatronDXFP, CourbAvBack);
 
 
-    AjoutCourbe(*AxeMarginDXFP, CourbMargeBack[1]);
-    if (ajCo1[1]) AjoutCourbe(*AxeMarginDXFP, CourbCoin1[1]);
-    if (ajCoMaAv) AjoutCourbe(*AxeMarginDXFP, CourbMargeAvBack);
-    if (ajCo1[0]) AjoutCourbe(*AxeMarginDXFP, CourbCoin1Back[0]);
+    addCourbe(*AxeMarginDXFP, CourbMargeDXF[0]);
+    if (ajCo2[0]) addCourbe(*AxeMarginDXFP, CourbCoin2[0]);
+
+    if (ajCoMaAr) addCourbe(*AxeMarginDXFP, CourbMargeArDXF);
+    if (ajCo2[1]) addCourbe(*AxeMarginDXFP, CourbCoin2Back[1]);
+
+
+    addCourbe(*AxeMarginDXFP, CourbMargeBack[1]);
+    if (ajCo1[1]) addCourbe(*AxeMarginDXFP, CourbCoin1[1]);
+    if (ajCoMaAv) addCourbe(*AxeMarginDXFP, CourbMargeAvBack);
+    if (ajCo1[0]) addCourbe(*AxeMarginDXFP, CourbCoin1Back[0]);
 
     if (debug) printf ("\n GC go in Reper()");
     int ventisave=0;
@@ -3223,7 +3223,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                 ySuspente[i][j] = -100000.0f;
             }
 
-			Matrice* m = 0;
+			Matrix* m = 0;
 
 			if (gfd->CorrectRepPoints && isPince && (coeff[i] != -1)) {
 				printf ("\n coeff=%f", coeff[i]);
@@ -3232,14 +3232,14 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
 			} else {
 				m = getReperPoints(gfd, Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
 				if (coeff[i] == -1) 
-					printf ("\nlength XY=%6.2f", 1000*calculCourbeLength(Xd[i], Yd[i]));
+					printf ("\nlength XY=%6.2f", 1000*calcCourbeLength(Xd[i], Yd[i]));
 			} 
 				
 
             if (debug) for (int _i=0; _i<m->GetLignes(); _i++) {
                 printf ("\n grp %d (%f, %f, %f)", _i, m->Element(_i,0), m->Element(_i,1), m->Element(_i,2));
             }
-            //ajout croix au graphe
+            //add croix au graphe
             for (j = 0;j<m->GetLignes();j++) {
                 if (debug)    printf ("\nj3=%d", j);
                     int mark = m->Element(j,2);
@@ -3290,7 +3290,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                             for (_i = 0; _i < 2; _i++)
                                 for (_j = 0; _j < 2; _j++)
                                     CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                            addCourbe(*AxeRepDXFP, CourbRepDXF);
                             CourbRep = new Courbe("Repers points");
                             CourbRep->points = OFF;
                             CourbRepDXF = new Courbe("Repers points");
@@ -3304,7 +3304,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                             for (_i = 0; _i < 2; _i++)
                                 for (_j = 0; _j < 2; _j++)
                                     CourbRepDXF->pts->SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                            addCourbe(*AxeRepDXFP, CourbRepDXF);
                         } 
                         if ((mark==REP_LINE) || ((gfd->ReperesProfile[i]) && (mark == REP_MIDDLE_LINE))) {
                                 char courbName[255];
@@ -3328,9 +3328,9 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                 if ((Xd[i]->Element(ix, 0) > _x0) && (ix != 0)) ix--;
                                 if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0)) ix--;
                                 if (ix != 0)
-                                    CalculVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
+                                    calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
                                 else
-                                    CalculVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                                    calcVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
                                 double _x1 = _x0;
                                 double _y1 = _y0;
                                 double _x2 = xc;
@@ -3353,7 +3353,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                 for (_i = 0; _i < 2; _i++)
                                     for (_j = 0; _j < 2; _j++)
                                         CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                                addCourbe(*AxeRepDXFP, CourbRepDXF);
                             }
                             if ((gfd -> ReperesSuspentes[i]) && ((mark == REP_TRIANGLE) || (mark==REP_V)) ) {
                                 int direction = -1;
@@ -3370,9 +3370,9 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                 if ((Xd[i]->Element(ix,0) > _x0) && (ix != 0 )) ix--;
                                 if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0) ) ix--;
                                 if  (ix != 0)
-                                    CalculVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
+                                    calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
                                 else
-                                    CalculVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                                    calcVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
                                 if (ix == 0) ix=1;
 
                                 double nx = (Xd[i]->Element(ix, 0)-_x0);
@@ -3401,7 +3401,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                     for (_j = 0; _j < 2; _j++)
                                         CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
 
-                                AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                                addCourbe(*AxeRepDXFP, CourbRepDXF);
 
                                 if (mark != REP_V) {
                                     CourbRep = new Courbe("Repers suspente");
@@ -3417,7 +3417,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                     for (_i = 0; _i < 2; _i++)
                                         for (_j = 0; _j < 2; _j++)
                                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                    AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                                    addCourbe(*AxeRepDXFP, CourbRepDXF);
                                 }
                                 CourbRep = new Courbe("Repers suspente");
                                 CourbRep->points = OFF;
@@ -3432,7 +3432,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                                 for (_i = 0; _i < 2; _i++)
                                     for (_j = 0; _j < 2; _j++)
                                         CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                                addCourbe(*AxeRepDXFP, CourbRepDXF);
                             }
             }
 
@@ -3464,7 +3464,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                         for (_i = 0; _i < 2; _i++)
                             for (_j = 0; _j < 2; _j++)
                                 CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                        AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                        addCourbe(*AxeRepDXFP, CourbRepDXF);
                     }
                     // xk1, yk1 -> xkfin, ykfin
                     CourbRep = new Courbe("Klapan line");
@@ -3480,7 +3480,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                     for (_i = 0; _i < 2; _i++)
                         for (_j = 0; _j < 2; _j++)
                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                    addCourbe(*AxeRepDXFP, CourbRepDXF);
                     // xk2, yk2 -> xkfin, ykfin
                     CourbRep = new Courbe("Klapan line");
                     CourbRep->points = OFF;
@@ -3495,7 +3495,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                     for (_i = 0; _i < 2; _i++)
                         for (_j = 0; _j < 2; _j++)
                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    AjoutCourbe(*AxeRepDXFP, CourbRepDXF);
+                    addCourbe(*AxeRepDXFP, CourbRepDXF);
                 } else {
                     printf (" \n NOOOOT MATCH!");
                 }
@@ -3531,8 +3531,8 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
                         (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
                         36);
 
-                AjoutCourbe(*AxePatronP, CourbCercle);
-                AjoutCourbe(*AxeCercleDXFP, CourbCercleDXF);
+                addCourbe(*AxePatronP, CourbCercle);
+                addCourbe(*AxeCercleDXFP, CourbCercleDXF);
             }
 
         }
@@ -3570,9 +3570,9 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrice *Xd1,
     //	NoNerv[0],texteExtInt[FaceDeb[0]-1],Deb[0],texteExtInt[FaceFin[0]-1],Fin[0],
     //	NoNerv[1],texteExtInt[FaceDeb[1]-1],Deb[1],texteExtInt[FaceFin[1]-1],Fin[1]);
     sprintf(texte, "%s", text);
-    AjoutTexte(*AxePatronP, texte, 0.02f, 0.0f, xText, yText);
+    addTexte(*AxePatronP, texte, 0.02f, 0.0f, xText, yText);
     sprintf(texte, "%s", text);
-    AjoutTexte(*AxePatronTextDXFP, texte, 0.02f, 0.0f, xText, yText);
+    addTexte(*AxePatronTextDXFP, texte, 0.02f, 0.0f, xText, yText);
     if (debug) printf ("\n...GenerateCourbe()");
     //}
     //    printf ("\n ...GenerateCourbe()");

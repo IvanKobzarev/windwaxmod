@@ -19,10 +19,10 @@ class Pince
         }
         virtual ~Pince();
 
-        void SetFunction1 ( Matrice *func );
-        void SetFunction2 ( Matrice *func );
-        void SetP1 ( Matrice *p );
-        void SetP2 ( Matrice *p );
+        void SetFunction1 ( Matrix *func );
+        void SetFunction2 ( Matrix *func );
+        void SetP1 ( Matrix *p );
+        void SetP2 ( Matrix *p );
         void SetPos (double pa, double pf);
 
         void SetAmps (double aa, int _ia,  double af, int _if);
@@ -37,26 +37,26 @@ class Pince
         bool diffAmps;
         bool debug;
         bool glue;
-        Matrice *function1, *function2;
-        //Matrice *amp1, *amp2;
-        Matrice *P1, *P2;
+        Matrix *function1, *function2;
+        //Matrix *amp1, *amp2;
+        Matrix *P1, *P2;
         void makeSrez(double deb1, double fin1, double deb2, double fin2) ;
         void print();
 };
 
-Matrice* GetFunctionSrez(Matrice*X, Matrice *Y, double pa, double pf, int *ia);
+Matrix* GetFunctionSrez(Matrix*X, Matrix *Y, double pa, double pf, int *ia);
 
-Matrice* GetFunctionSrezDeb(Matrice*X, Matrice *Y, double pa);
+Matrix* GetFunctionSrezDeb(Matrix*X, Matrix *Y, double pa);
 
 double pinceFunctionA(WindPatternsProject* gfd, double x);
 
 double pinceFunctionF(WindPatternsProject* gfd, double x);
 
-void CalculWidth(Matrice *Xd, Matrice *Yd, Matrice *Xd0, Matrice *Yd0, double *width);
+void calcWidth(Matrix *Xd, Matrix *Yd, Matrix *Xd0, Matrix *Yd0, double *width);
 
-double CalculW0byHW1(double h, double w1);
+double calcW0byHW1(double h, double w1);
 
-double CalculHbyw0w1(double w0, double w1);
+double calcHbyw0w1(double w0, double w1);
 
 double functionPincePower(double x, double power);
 
@@ -64,52 +64,52 @@ double functionPinceArctanSym(double x, double k1, double k2);
 
 double functionPinceArctan(double x, double k1, double k2, double k3);
 
-void makePointPince(Matrice *Xd, Matrice *Yd, Matrice *P,
-        double PosPinceBA, double PosPinceBF, Matrice **Xr, Matrice **Yr, Matrice **Pr, int *ipair, int *ipfir);
+void makePointPince(Matrix *Xd, Matrix *Yd, Matrix *P,
+        double PosPinceBA, double PosPinceBF, Matrix **Xr, Matrix **Yr, Matrix **Pr, int *ipair, int *ipfir);
 
-void CalculPinceAloneAbs(WindPatternsProject* gfd, Matrice *Xd, Matrice *Yd,
-        Matrice *Xd0, Matrice *Yd0,
-        Matrice *X, Matrice *Y, Matrice *Z, Matrice *P,
-        Matrice *X0, Matrice *Y0, Matrice *Z0, Matrice *P0,
+void calcPinceAloneAbs(WindPatternsProject* gfd, Matrix *Xd, Matrix *Yd,
+        Matrix *Xd0, Matrix *Yd0,
+        Matrix *X, Matrix *Y, Matrix *Z, Matrix *P,
+        Matrix *X0, Matrix *Y0, Matrix *Z0, Matrix *P0,
         double PosPinceBA, double AmpPinceBA, double PosPinceBF, double AmpPinceBF, double modePincesT,
-        Matrice **Xdp, Matrice **Ydp, Matrice **Pp);
+        Matrix **Xdp, Matrix **Ydp, Matrix **Pp);
 
-void CalculPinceAlone(WindPatternsProject* gfd,Matrice *Xd, Matrice *Yd, Matrice *Xd0, Matrice *Yd0, Matrice *X, Matrice *Y, Matrice *Z, Matrice *P, Matrice *X0, Matrice *Y0, Matrice *Z0, Matrice *P0,
+void calcPinceAlone(WindPatternsProject* gfd,Matrix *Xd, Matrix *Yd, Matrix *Xd0, Matrix *Yd0, Matrix *X, Matrix *Y, Matrix *Z, Matrix *P, Matrix *X0, Matrix *Y0, Matrix *Z0, Matrix *P0,
         double PosPinceBA, double AmpPinceBA, double PosPinceBF, double AmpPinceBF, double modePincesT,
-        Matrice **Xdp, Matrice **Ydp, Matrice **Pp);
+        Matrix **Xdp, Matrix **Ydp, Matrix **Pp);
 
 
-void CalculPinceAloneAbsFunc(Matrice *Xd, Matrice *Yd,
-                             Matrice *Xd0, Matrice *Yd0,
-                            Matrice *X, Matrice *Y, Matrice *Z, Matrice *P,
-        Matrice *X0, Matrice *Y0, Matrice *Z0, Matrice *P0, Pince* p, double ampa, double ampf, int no,
-        Matrice **Xdp, Matrice **Ydp, Matrice **Pp);
+void calcPinceAloneAbsFunc(Matrix *Xd, Matrix *Yd,
+                             Matrix *Xd0, Matrix *Yd0,
+                            Matrix *X, Matrix *Y, Matrix *Z, Matrix *P,
+        Matrix *X0, Matrix *Y0, Matrix *Z0, Matrix *P0, Pince* p, double ampa, double ampf, int no,
+        Matrix **Xdp, Matrix **Ydp, Matrix **Pp);
 
-void CalculPinceNew(Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
-        Matrice *X1, Matrice *Y1, Matrice *Z1, Matrice *P1,
-        Matrice *X2, Matrice *Y2, Matrice *Z2, Matrice *P2, Pince* p,
-        Matrice **Xdp1, Matrice **Ydp1, Matrice **Pp1,
-        Matrice **Xdp2, Matrice **Ydp2, Matrice **Pp2);
+void calcPinceNew(Matrix *Xd1, Matrix *Yd1, Matrix *Xd2, Matrix *Yd2,
+        Matrix *X1, Matrix *Y1, Matrix *Z1, Matrix *P1,
+        Matrix *X2, Matrix *Y2, Matrix *Z2, Matrix *P2, Pince* p,
+        Matrix **Xdp1, Matrix **Ydp1, Matrix **Pp1,
+        Matrix **Xdp2, Matrix **Ydp2, Matrix **Pp2);
 
-void CalculPince(WindPatternsProject* gfd, Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
-        Matrice *X1, Matrice *Y1, Matrice *Z1, Matrice *P1,
-        Matrice *X2, Matrice *Y2, Matrice *Z2, Matrice *P2,
+void calcPince(WindPatternsProject* gfd, Matrix *Xd1, Matrix *Yd1, Matrix *Xd2, Matrix *Yd2,
+        Matrix *X1, Matrix *Y1, Matrix *Z1, Matrix *P1,
+        Matrix *X2, Matrix *Y2, Matrix *Z2, Matrix *P2,
         double PosPinceBA, double AmpPinceBA, double PosPinceBF, double AmpPinceBF, double modePincesT,
-        Matrice **Xdp1, Matrice **Ydp1, Matrice **Pp1, Matrice **Xdp2, Matrice **Ydp2, Matrice **Pp2);
+        Matrix **Xdp1, Matrix **Ydp1, Matrix **Pp1, Matrix **Xdp2, Matrix **Ydp2, Matrix **Pp2);
 
-void CalculPinceDiff(WindPatternsProject* gfd, Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
-        Matrice *X1, Matrice *Y1, Matrice *Z1, Matrice *P1,
-        Matrice *X2, Matrice *Y2, Matrice *Z2, Matrice *P2,
+void calcPinceDiff(WindPatternsProject* gfd, Matrix *Xd1, Matrix *Yd1, Matrix *Xd2, Matrix *Yd2,
+        Matrix *X1, Matrix *Y1, Matrix *Z1, Matrix *P1,
+        Matrix *X2, Matrix *Y2, Matrix *Z2, Matrix *P2,
         double PosPinceBA1, double AmpPinceBA1, double PosPinceBF1, double AmpPinceBF1,
         double PosPinceBA2, double AmpPinceBA2, double PosPinceBF2, double AmpPinceBF2,
         double mode,
-        Matrice **Xdp1, Matrice **Ydp1, Matrice **Pp1, Matrice **Xdp2, Matrice **Ydp2, Matrice **Pp2);
+        Matrix **Xdp1, Matrix **Ydp1, Matrix **Pp1, Matrix **Xdp2, Matrix **Ydp2, Matrix **Pp2);
 
 Pince* getPince(WindPatternsProject* gfd, int nerv1, int nerv2, int face);
 
-void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face, int* ipa, int* ipf, Matrice** Pout,
-                        Matrice** FuncFunction1,Matrice** FuncFunction2, double* ampFfA, double* ampFfF,
-                        Matrice** RadiusFunction, double* ampRfA, double* ampRfF);
+void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face, int* ipa, int* ipf, Matrix** Pout,
+                        Matrix** FuncFunction1,Matrix** FuncFunction2, double* ampFfA, double* ampFfF,
+                        Matrix** RadiusFunction, double* ampRfA, double* ampRfF);
 
 void getPinceRadiusFunction(WindPatternsProject* gfd, int nerv1, int nerv2, int face);
 
@@ -119,12 +119,12 @@ Pince* getPincePlus(WindPatternsProject* gfd,
                         int nerv1, int nerv2,
                         float deb1, float fin1, float deb2, float fin2, int faceDeb, int faceFin );
 
-void CalculPincePlusNew(Matrice *Xd1, Matrice *Yd1, Matrice *Xd2, Matrice *Yd2,
+void calcPincePlusNew(Matrix *Xd1, Matrix *Yd1, Matrix *Xd2, Matrix *Yd2,
                             Pince* p,
-                            Matrice **Xdp1, Matrice **Ydp1,
-                            Matrice **Xdp2, Matrice **Ydp2);
+                            Matrix **Xdp1, Matrix **Ydp1,
+                            Matrix **Xdp2, Matrix **Ydp2);
 
-void CalculPincePlusAloneAbsFunc(Matrice *Xd, Matrice *Yd,
-                                Matrice *Xd0, Matrice *Yd0, Pince* p, int no,
-                                Matrice **Xdp, Matrice **Ydp);
+void calcPincePlusAloneAbsFunc(Matrix *Xd, Matrix *Yd,
+                                Matrix *Xd0, Matrix *Yd0, Pince* p, int no,
+                                Matrix **Xdp, Matrix **Ydp);
 

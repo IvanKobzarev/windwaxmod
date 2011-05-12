@@ -31,10 +31,10 @@ Rasklad::~Rasklad() {
 }
 
 Rasklad::Rasklad(int n) {
-    funcL1 = new Matrice*[n - 1];
-    funcR1 = new Matrice*[n - 1];
-    funcL2 = new Matrice*[n - 1];
-    funcR2 = new Matrice*[n - 1];
+    funcL1 = new Matrix*[n - 1];
+    funcR1 = new Matrix*[n - 1];
+    funcL2 = new Matrix*[n - 1];
+    funcR2 = new Matrix*[n - 1];
 
     pinceLAAmp1 = new double[n - 1];
     pinceRAAmp1 = new double[n - 1];
@@ -67,8 +67,8 @@ Rasklad::Rasklad(int n) {
     isCenterPanel = false;
 }
 
-Rasklad* CalculIndepPinceRasklad(WindPatternsProject* gfd, Forme* F) {
-    if ( gfd->debug ) printf("\n CalculIndepPinceRasklad()");
+Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F) {
+    if ( gfd->debug ) printf("\n calcIndepPinceRasklad()");
 
     char name[255];
     if (getLayoutLogger() == NULL) {
@@ -78,10 +78,10 @@ Rasklad* CalculIndepPinceRasklad(WindPatternsProject* gfd, Forme* F) {
         LayoutLoggerInit(name);
     }
     getLayoutLogger()->logprintf("\nPROJECT %s", gfd->name);
-    getLayoutLogger()->logprintf("\nFORME %s", gfd->NomFichierForme);
-    getLayoutLogger()->logprintf("\nREP_POINTS %s", gfd->NomFichierRepPoints);
-    getLayoutLogger()->logprintf("\nDIAG_NERVS %s", gfd->NomFichierDiagNerv);
-    getLayoutLogger()->logprintf("\nVENT_HOLES %s", gfd->NomFichierVentHoles);
+    getLayoutLogger()->logprintf("\nFORME %s", gfd->fileNameForm);
+    getLayoutLogger()->logprintf("\nREP_POINTS %s", gfd->fileNameRepPoints);
+    getLayoutLogger()->logprintf("\nDIAG_NERVS %s", gfd->fileNameDiagNerv);
+    getLayoutLogger()->logprintf("\nVENT_HOLES %s", gfd->fileNameVentHoles);
     int n = F->m_nbProfils;
     bool isCenterPanel = (1 & F->NbCaiss);
     Rasklad* rasklad = new Rasklad(n);
@@ -129,13 +129,13 @@ Rasklad* CalculIndepPinceRasklad(WindPatternsProject* gfd, Forme* F) {
 	//printf ("\n 4");
     //if (DEBUG) printf("\n");
 
-    // Calcul Profile Nervures
+    // calc Profile Nervures
     for (int inoNerv = 0; inoNerv < n - 1; inoNerv++) {
         goCalcNervureWithPince(gfd, inoNerv, 2, inoNerv, 1,
                 rasklad->lenp2[inoNerv], rasklad->lenp1[inoNerv], &(rasklad->coeffn[inoNerv]));
     }
     //if (DEBUG) printf("\n");
-    // Calcul Diagonal Nervures
+    // calc Diagonal Nervures
 	if (gfd->DiagNervs) {
 		int isave = 0;
 		for (int i = 0; i < gfd->quantDiag; i++) {
@@ -151,9 +151,9 @@ Rasklad* CalculIndepPinceRasklad(WindPatternsProject* gfd, Forme* F) {
 void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     if (gfd->debug) printf("\n SaveRasklad2()");
     int startNoNerv = 0, noNerv = 0, face = 1;
-    Matrice * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
-    Matrice * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
-    int n = gfd->Forme->m_nbProfils;
+    Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+    int n = gfd->Form->m_nbProfils;
     int size = 6 * n + 2 + 10;
     double *H, *W;
     TAxe **AxeP, **AxePD, **AxePTD, **AxeMD, **AxeCD, **AxeRepD;
@@ -169,7 +169,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     int *n1, *n2, *fd1, *ff1, *fd2, *ff2, *isPince,*isKlapan, *vent;
     bool *s1, *s2;
     double *coeff, *p1a0, *p1a00, *p1a01, *p1f0, *p1a1, *p1f1, *p2a0, *p2a00, *p2f0, *p2a1, *p2a01, *p2f1, *posDeb1, *posDeb2, *posFin1, *posFin2, *posKlapanIntDeb, *posKlapanFin;
-    Matrice **func1f0, **func1f1, **func2f0, **func2f1;
+    Matrix **func1f0, **func1f1, **func2f0, **func2f1;
 
     fd1 = new int[size];
     fd2 = new int[size];
@@ -205,10 +205,10 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     posKlapanFin = new double[size];
 
 
-    func1f0 = new Matrice*[size];
-    func1f1 = new Matrice*[size];
-    func2f0 = new Matrice*[size];
-    func2f1 = new Matrice*[size];
+    func1f0 = new Matrix*[size];
+    func1f1 = new Matrix*[size];
+    func2f0 = new Matrix*[size];
+    func2f1 = new Matrix*[size];
 
     isPince = new int[size];
     isKlapan = new int[size];
@@ -871,7 +871,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     int q = isave;
     char text[100];
     double _pa0, _pa00, _pf0, _pa1, _pa01, _pf1;
-    Matrice *_f0, *_f1;
+    Matrix *_f0, *_f1;
     bool debug = false;
 
     char* charname = new char[1];
@@ -882,23 +882,23 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
         //if (t==36) debug = false;
         //if (t==0) t=112;
         getLayoutLogger()->logprintf("\n\n t=%d ", t);
-        if (debug) printf ("\n go CalculPatron..");
+        if (debug) printf ("\n go calcPatron..");
         if (!isKlapan[t])
-            CalculPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
+            calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
                     n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
                     &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                     &X[0], &Y[0], &Z[0], &P[0],
                     &X[1], &Y[1], &Z[1], &P[1]);
         else {
-            //printf ("\n go CalculPatronKlapan..");
-            CalculPatronKlapan(gfd, n1[t], s1[t], n2[t], s2[t], posKlapanIntDeb[t], posKlapanFin[t],
+            //printf ("\n go calcPatronKlapan..");
+            calcPatronKlapan(gfd, n1[t], s1[t], n2[t], s2[t], posKlapanIntDeb[t], posKlapanFin[t],
                     &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                     &X[0], &Y[0], &Z[0], &P[0],
                     &X[1], &Y[1], &Z[1], &P[1]);
             charname="K";
         }
         
-        if (debug) printf ("\n ...CalculPatron..");
+        if (debug) printf ("\n ...calcPatron..");
         if (isPince[t]) {
             if (ff1[t] == 1) {
                 _pa00 = p1a00[t];
@@ -942,13 +942,13 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             } else {
                 if (posDeb1[t] > posDeb2[t]) myDeb = posDeb1[t]; else myDeb = posDeb2[t];
             }
-            if (debug) printf ("CalculPatron myDeb myFin");
-            CalculPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], myDeb, myFin,
+            if (debug) printf ("calcPatron myDeb myFin");
+            calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], myDeb, myFin,
                     n2[t], s2[t], fd2[t], ff2[t], myDeb, myFin,
                     &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                     &X[0], &Y[0], &Z[0], &P[0],
                     &X[1], &Y[1], &Z[1], &P[1]);
-            if (debug) printf ("...CalculPatron myDeb myFin");
+            if (debug) printf ("...calcPatron myDeb myFin");
             getLayoutLogger()->logprintf("p[%4.1f %4.1f %4.1f %4.1f]", _pa0 * 1000, _pf0 * 1000, _pa1 * 1000, _pf1 * 1000);
             getLayoutLogger()->logprintf(" %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1[t], n2[t], posDeb1[t], fd1[t], posFin1[t],  ff1[t], posDeb2[t], fd2[t], posFin2[t],  ff2[t]);
             Pince* pince = new Pince();
@@ -968,7 +968,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             //printf("\n pince->i01=%d", pince->i01);
             //printf("\n pince->ipa1=%d", pince->ipa1);
             //printf("\n pince->ipf1=%d", pince->ipf1);
-            CalculPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
+            calcPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
 
                 if ((myDeb != posDeb1[t])||(myDeb != posDeb2[t])) {
                     // rezem Xd, newXd
@@ -1021,7 +1021,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
 
             if (coeff[t] != 0) {
-                CalculPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
+                calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
                 delete (Xd[0]);
                 delete (Yd[0]);
                 delete(Xd[1]);
@@ -1096,7 +1096,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     Xdp[1], Ydp[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
                     &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug,
 					true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
-                CalculMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
+                calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
                 if (debug) printf("\n go delete isPince");
                 delete (Xdp[0]);
                 delete (Ydp[0]);
@@ -1108,7 +1108,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
                     Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
                     &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
-                CalculMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+                calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
             }
         }
         else {
@@ -1117,9 +1117,9 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
                     Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
                     &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, false, debug);
-                CalculMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+                calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
 	        if (debug) printf("\n ...go generate courbe");
-	        if (debug) printf("\n ...after CalculMaxWH");
+	        if (debug) printf("\n ...after calcMaxWH");
         }
         if (debug) printf("\n go delete");
         delete (X[0]);
@@ -1136,55 +1136,55 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
         delete (Yd[1]);
     }
     delete charname;
-    CString NomFichier;
-    LPTSTR PtrNomFichier;
+    CString fileName;
+    LPTSTR PtrfileName;
     char ext[10];
     strcpy(ext, "*.dxf");
     CFileDialog DlgOpen(FALSE, NULL, ext, OFN_OVERWRITEPROMPT, NULL, NULL);
     if (DlgOpen.DoModal() == IDOK) {
-        NomFichier = DlgOpen.GetPathName();
-        PtrNomFichier = NomFichier.GetBuffer(1);
-        EcritureManyFichierPolyDXF2(PtrNomFichier, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        EcritureManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
         char filename[255];
-        strcpy(filename, PtrNomFichier);
+        strcpy(filename, PtrfileName);
         strcat (filename,".log");
         //printf ("\n logfilename=[%s]", filename);
         //printf ("\n gfd->logfilename=[%s]", gfd->logFileName);
-        //printf ("\n ptrnomfichier=[%s]", PtrNomFichier);
+        //printf ("\n ptrnomfichier=[%s]", PtrfileName);
 
         CopyFile(gfd->logFileName, filename, false);
         
     }
     for (i = 0; i < q; i++) {
-        LibererCourbesAxe(AxeP[i]);
-        LibererCourbesAxe(AxePD[i]);
-        LibererCourbesAxe(AxePTD[i]);
-        LibererCourbesAxe(AxeMD[i]);
-        LibererCourbesAxe(AxeCD[i]);
-        LibererCourbesAxe(AxeRepD[i]);
+        clearCourbesAxe(AxeP[i]);
+        clearCourbesAxe(AxePD[i]);
+        clearCourbesAxe(AxePTD[i]);
+        clearCourbesAxe(AxeMD[i]);
+        clearCourbesAxe(AxeCD[i]);
+        clearCourbesAxe(AxeRepD[i]);
     }
 
 }
 
-void makeEqualSize(Matrice** X0,Matrice** Y0, Matrice** Z0,Matrice** P0,
-				   Matrice** X1,Matrice** Y1, Matrice** Z1,Matrice** P1) {
-    Matrice *iAv, *iAp, *Res;
+void makeEqualSize(Matrix** X0,Matrix** Y0, Matrix** Z0,Matrix** P0,
+				   Matrix** X1,Matrix** Y1, Matrix** Z1,Matrix** P1) {
+    Matrix *iAv, *iAp, *Res;
     if ((*X0)->GetLignes() > (*X1)->GetLignes()) {
         iAv = LinSpace(0.0f, (double) (*X1)->GetLignes() - 1, (*X1)->GetLignes());
         iAp = LinSpace(0.0f, (double) (*X1)->GetLignes() - 1, (*X0)->GetLignes());
-        Res = new Matrice((*X0)->GetLignes(), 1);
+        Res = new Matrix((*X0)->GetLignes(), 1);
         InterpLinMat(iAv, (*X1), iAp, Res);
         delete(*X1);
         *X1 = Res;
-        Res = new Matrice((*X0)->GetLignes(), 1);
+        Res = new Matrix((*X0)->GetLignes(), 1);
         InterpLinMat(iAv, *Y1, iAp, Res);
         delete(*Y1);
         *Y1 = Res;
-        Res = new Matrice((*X0)->GetLignes(), 1);
+        Res = new Matrix((*X0)->GetLignes(), 1);
         InterpLinMat(iAv, *Z1, iAp, Res);
         delete(*Z1);
         *Z1 = Res;
-        Res = new Matrice((*X0)->GetLignes(), 1);
+        Res = new Matrix((*X0)->GetLignes(), 1);
         InterpLinMat(iAv, *P1, iAp, Res);
         delete(*P1);
         *P1 = Res;
@@ -1193,19 +1193,19 @@ void makeEqualSize(Matrice** X0,Matrice** Y0, Matrice** Z0,Matrice** P0,
     } else if ((*X1)->GetLignes() > (*X0)->GetLignes()) {
         iAv = LinSpace(0.0f, (double) (*X0)->GetLignes() - 1, (*X0)->GetLignes());
         iAp = LinSpace(0.0f, (double) (*X0)->GetLignes() - 1, (*X1)->GetLignes());
-        Res = new Matrice((*X1)->GetLignes(), 1);
+        Res = new Matrix((*X1)->GetLignes(), 1);
         InterpLinMat(iAv, *X0, iAp, Res);
         delete(*X0);
         *X0 = Res;
-        Res = new Matrice((*X1)->GetLignes(), 1);
+        Res = new Matrix((*X1)->GetLignes(), 1);
         InterpLinMat(iAv, *Y0, iAp, Res);
         delete(*Y0);
         *Y0 = Res;
-        Res = new Matrice((*X1)->GetLignes(), 1);
+        Res = new Matrix((*X1)->GetLignes(), 1);
         InterpLinMat(iAv, *Z0, iAp, Res);
         delete(*Z0);
         *Z0 = Res;
-        Res = new Matrice((*X1)->GetLignes(), 1);
+        Res = new Matrix((*X1)->GetLignes(), 1);
         InterpLinMat(iAv, *P0, iAp, Res);
         delete(*P0);
         *P0 = Res;
@@ -1215,11 +1215,11 @@ void makeEqualSize(Matrice** X0,Matrice** Y0, Matrice** Z0,Matrice** P0,
 }
 
 void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT,
-			  Matrice* xExtProf, Matrice* XExt,Matrice* YExt,Matrice* ZExt,
-			  Matrice* xIntProf, Matrice* XInt,Matrice* YInt,Matrice* ZInt,
-                   Matrice** X0,Matrice** Y0, Matrice** Z0,Matrice** P0,
-		   Matrice** X1,Matrice** Y1, Matrice** Z1,Matrice** P1) {
-    Matrice * X[2], *Y[2], *Z[2], *P[2];
+			  Matrix* xExtProf, Matrix* XExt,Matrix* YExt,Matrix* ZExt,
+			  Matrix* xIntProf, Matrix* XInt,Matrix* YInt,Matrix* ZInt,
+                   Matrix** X0,Matrix** Y0, Matrix** Z0,Matrix** P0,
+		   Matrix** X1,Matrix** Y1, Matrix** Z1,Matrix** P1) {
+    Matrix * X[2], *Y[2], *Z[2], *P[2];
 	//printf ("\n DebT[%f, %f]", DebT[0], DebT[1]);
 	//printf ("\n FinT[%f, %f]", FinT[0], FinT[1]);
     int iDeb, iFin, iCol;
@@ -1235,10 +1235,10 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
                 Ind(DebT[i], xExtProf, &iDeb, &iCol);
                 Ind(FinT[i], xExtProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZExt->Element(nerv[i], iDeb + j));
@@ -1247,10 +1247,10 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
         {
             Ind(DebT[i], xExtProf, &iDeb, &iCol);
             Ind(FinT[i], xIntProf, &iFin, &iCol);
-            X[i] = new Matrice(iFin + iDeb - 1, 1);
-            Y[i] = new Matrice(iFin + iDeb - 1, 1);
-            Z[i] = new Matrice(iFin + iDeb - 1, 1);
-            P[i] = new Matrice(iFin + iDeb - 1, 1);
+            X[i] = new Matrix(iFin + iDeb - 1, 1);
+            Y[i] = new Matrix(iFin + iDeb - 1, 1);
+            Z[i] = new Matrix(iFin + iDeb - 1, 1);
+            P[i] = new Matrix(iFin + iDeb - 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb - j));
@@ -1264,10 +1264,10 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
             Ind(DebT[i], xIntProf, &iDeb, &iCol);
             Ind(FinT[i], xExtProf, &iFin, &iCol);
 			//printf ("\n iDeb=%d iFin=%d", iDeb, iFin);
-            X[i] = new Matrice(iFin + iDeb + 1, 1);
-            Y[i] = new Matrice(iFin + iDeb + 1, 1);
-            Z[i] = new Matrice(iFin + iDeb + 1, 1);
-            P[i] = new Matrice(iFin + iDeb + 1, 1);
+            X[i] = new Matrix(iFin + iDeb + 1, 1);
+            Y[i] = new Matrix(iFin + iDeb + 1, 1);
+            Z[i] = new Matrix(iFin + iDeb + 1, 1);
+            P[i] = new Matrix(iFin + iDeb + 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb - j));
@@ -1286,10 +1286,10 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
                 Ind(DebT[i], xIntProf, &iDeb, &iCol);
                 Ind(FinT[i], xIntProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZInt->Element(nerv[i], iDeb + j));
@@ -1300,7 +1300,7 @@ void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT
     (*X1) = X[1]; (*Y1) = Y[1]; (*Z1) = Z[1]; (*P1) = P[1];
 }
 
-void makePosProfile(Matrice* Ext, Matrice* Int, double percent, Matrice** ExtRes) {
+void makePosProfile(Matrix* Ext, Matrix* Int, double percent, Matrix** ExtRes) {
     //printf ("\n makePosProfile()");
     //IntRes = CloneMat(Int);
     (*ExtRes) = CloneMat(Ext);
@@ -1314,17 +1314,17 @@ void makePosProfile(Matrice* Ext, Matrice* Int, double percent, Matrice** ExtRes
     }
     //printf ("\n ...makePosProfile()");
 }
-/*void makeChangePoints(Matrice* XExt,Matrice*  YExt,Matrice*  ZExt,
-                      Matrice*  XInt,Matrice*  YInt,Matrice*  ZInt,
-        Matrice**  XExt1,Matrice** YExt1, Matrice** ZExt1,
-        Matrice** XInt1, Matrice** YInt1, Matrice** ZInt1, int nerv, float pos)
+/*void makeChangePoints(Matrix* XExt,Matrix*  YExt,Matrix*  ZExt,
+                      Matrix*  XInt,Matrix*  YInt,Matrix*  ZInt,
+        Matrix**  XExt1,Matrix** YExt1, Matrix** ZExt1,
+        Matrix** XInt1, Matrix** YInt1, Matrix** ZInt1, int nerv, float pos)
 {
     XExt1=CloneMat(XExt); YExt1=CloneMat(YExt); ZExt1=CloneMat(ZExt);
     XInt1=CloneMat(XInt); YInt1=CloneMat(YInt); ZInt1=CloneMat(ZInt);
     int n = XInt->GetColonnes();
-    Matrice* interpXInt = new Matrice(n, 2);
-    Matrice* interpYInt = new Matrice(n, 2);
-    Matrice* interpZInt = new Matrice(n, 2);
+    Matrix* interpXInt = new Matrix(n, 2);
+    Matrix* interpYInt = new Matrix(n, 2);
+    Matrix* interpZInt = new Matrix(n, 2);
     for (int i = 0; i<n;i++) {
         interpXInt->SetElement(i,0,XInt->Element(nerv, i));
         interpXInt->SetElement(i,1,XInt->Element(nerv, i));
@@ -1334,26 +1334,26 @@ void makePosProfile(Matrice* Ext, Matrice* Int, double percent, Matrice** ExtRes
     }
 }*/
 
-void CalculPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
+void calcPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
         int noNerv2, bool sym2, int FaceDeb2, int FaceFin2, double Deb2, double Fin2,
-        Matrice **Xdev1, Matrice **Ydev1, Matrice **Xdev2, Matrice **Ydev2,
-        Matrice **X0, Matrice **Y0, Matrice **Z0, Matrice **P0,
-        Matrice **X1, Matrice **Y1, Matrice **Z1, Matrice **P1)
+        Matrix **Xdev1, Matrix **Ydev1, Matrix **Xdev2, Matrix **Ydev2,
+        Matrix **X0, Matrix **Y0, Matrix **Z0, Matrix **P0,
+        Matrix **X1, Matrix **Y1, Matrix **Z1, Matrix **P1)
 {
-    //printf ("\n CalculPatronPosNerv()");
-    Matrice *XExt, *YExt, *ZExt;
-    Matrice *XInt, *YInt, *ZInt;
-    Matrice *XExt1, *YExt1, *ZExt1;
-    Matrice *XInt1, *YInt1, *ZInt1;
-    Matrice *XExt2, *YExt2, *ZExt2;
-    Matrice *XInt2, *YInt2, *ZInt2;
+    //printf ("\n calcPatronPosNerv()");
+    Matrix *XExt, *YExt, *ZExt;
+    Matrix *XInt, *YInt, *ZInt;
+    Matrix *XExt1, *YExt1, *ZExt1;
+    Matrix *XInt1, *YInt1, *ZInt1;
+    Matrix *XExt2, *YExt2, *ZExt2;
+    Matrix *XInt2, *YInt2, *ZInt2;
 
     int i, j;
     bool symetrique[2] = {sym1, sym2};
     int nerv[2];
-    Matrice *X[2], *Y[2], *Z[2], *P[2];
-	Matrice *Xt[2], *Yt[2], *Zt[2], *Pt[2];
-    Matrice *xExtProf, *xIntProf;
+    Matrix *X[2], *Y[2], *Z[2], *P[2];
+	Matrix *Xt[2], *Yt[2], *Zt[2], *Pt[2];
+    Matrix *xExtProf, *xIntProf;
     int NoNervT[2] = {noNerv1, noNerv2};
     double DebT[2] = {Deb1, Deb2}, FinT[2] = {Fin1, Fin2};
     int FaceDebT[2], FaceFinT[2];
@@ -1362,8 +1362,8 @@ void CalculPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int F
     FaceFinT[0] = 1;
     FaceFinT[1] = 1;
 
-    //Matrice *ExtProfCent1, *IntProfCent1, *ExtProfCent2, *IntProfCent2;
-    //Matrice *ExtProfBout1, *IntProfBout1, *ExtProfBout2, *IntProfBout2;
+    //Matrix *ExtProfCent1, *IntProfCent1, *ExtProfCent2, *IntProfCent2;
+    //Matrix *ExtProfBout1, *IntProfBout1, *ExtProfBout2, *IntProfBout2;
 /*
     printf ("\n before makePosProfile()");
     makePosProfile(gfd->ExtProfCent, gfd->IntProfCent, gfd->PosNerv[0], &ExtProfCent1);
@@ -1373,21 +1373,21 @@ void CalculPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int F
     makePosProfile(gfd->ExtProfCent, gfd->IntProfCent, gfd->PosNerv[1], &ExtProfCent2);
     makePosProfile(gfd->ExtProfBout, gfd->IntProfCent, gfd->PosNerv[1], &ExtProfBout2);
     printf ("\n after makePosProfile()");*/
-    //printf ("\n before Forme0");
-    CalculForme3D(gfd->Forme,0, 0.0f,
+    //printf ("\n before Form0");
+    calcForm3D(gfd->Form,0, 0.0f,
             gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-    //printf ("\n before Forme1");
-    CalculForme3D(gfd->Forme, 1, gfd->PosNerv[0],
+    //printf ("\n before Form1");
+    calcForm3D(gfd->Form, 1, gfd->PosNerv[0],
             gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout,
             &XExt1, &YExt1, &ZExt1, &XInt1, &YInt1, &ZInt1);
-    //printf ("\n before Forme1");
-    CalculForme3D(gfd->Forme, 1, gfd->PosNerv[1],
+    //printf ("\n before Form1");
+    calcForm3D(gfd->Form, 1, gfd->PosNerv[1],
             gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout,
             &XExt2, &YExt2, &ZExt2, &XInt2, &YInt2, &ZInt2);
-    //printf ("\n after CalculForme3D");
-    xExtProf = new Matrice(gfd->ExtProfCent->GetLignes(), 1);
-    xIntProf = new Matrice(gfd->IntProfCent->GetLignes(), 1);
+    //printf ("\n after calcForm3D");
+    xExtProf = new Matrix(gfd->ExtProfCent->GetLignes(), 1);
+    xIntProf = new Matrix(gfd->IntProfCent->GetLignes(), 1);
 
     for (i = 0; i < gfd->ExtProfCent->GetLignes(); i++)   xExtProf->SetElement(i, 0, gfd->ExtProfCent->Element(i, 0));
     for (i = 0; i < gfd->IntProfCent->GetLignes(); i++)   xIntProf->SetElement(i, 0, gfd->IntProfCent->Element(i, 0));
@@ -1419,7 +1419,7 @@ void CalculPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int F
                 X[i]->MultiplyElement(j, 0, -1.0f);
         }
     }
-    CalculDeveloppe(
+    calcDeveloppe(
             X[0], Y[0], Z[0], X[1], Y[1], Z[1],
             Xdev1, Ydev1, Xdev2, Ydev2);
     
@@ -1466,45 +1466,45 @@ void CalculPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int F
     delete(P[1]);
 
 }
-/*        CalculPatronKlapan(getWindPatternsProject(), nerv[0], symetrique[0], nerv[1], symetrique[1], PosKlapanInt, PosKlapanFin,
+/*        calcPatronKlapan(getWindPatternsProject(), nerv[0], symetrique[0], nerv[1], symetrique[1], PosKlapanInt, PosKlapanFin,
                     &Xd[0], &Yd[0], &Xd[1], &Yd[1],
                     &X[0], &Y[0], &Z[0], &P[0],
                     &X[1], &Y[1], &Z[1], &P[1]);*/
-void CalculPatronKlapan(WindPatternsProject* gfd, int noNerv1, bool sym1, int noNerv2, bool sym2, double posKlapanInt, double posKlapanFin,
-        Matrice **Xdev1, Matrice **Ydev1, Matrice **Xdev2, Matrice **Ydev2,
-        Matrice **X0, Matrice **Y0, Matrice **Z0, Matrice **P0,
-        Matrice **X1, Matrice **Y1, Matrice **Z1, Matrice **P1)
+void calcPatronKlapan(WindPatternsProject* gfd, int noNerv1, bool sym1, int noNerv2, bool sym2, double posKlapanInt, double posKlapanFin,
+        Matrix **Xdev1, Matrix **Ydev1, Matrix **Xdev2, Matrix **Ydev2,
+        Matrix **X0, Matrix **Y0, Matrix **Z0, Matrix **P0,
+        Matrix **X1, Matrix **Y1, Matrix **Z1, Matrix **P1)
 {
 
-    Matrice *XExt, *YExt, *ZExt,*XExt0, *YExt0, *ZExt0;
-    Matrice *XInt, *YInt, *ZInt,*XInt0, *YInt0, *ZInt0;
+    Matrix *XExt, *YExt, *ZExt,*XExt0, *YExt0, *ZExt0;
+    Matrix *XInt, *YInt, *ZInt,*XInt0, *YInt0, *ZInt0;
     int i, j;
     bool symetrique[2] = {sym1, sym2};
     int nerv[2], iDebInt, iFinExt, iCol;
     int NoNervT[2] = {noNerv1, noNerv2};
 
-    Matrice * X[2], *Y[2], *Z[2], *P[2];
-    Matrice *xExtProf, *xIntProf;
+    Matrix * X[2], *Y[2], *Z[2], *P[2];
+    Matrix *xExtProf, *xIntProf;
 
-    CalculForme3D(gfd->Forme,0, 0.0f,
+    calcForm3D(gfd->Form,0, 0.0f,
             gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 
-    xExtProf = new Matrice(gfd->ExtProfCent->GetLignes(), 1);
-    xIntProf = new Matrice(gfd->IntProfCent->GetLignes(), 1);
+    xExtProf = new Matrix(gfd->ExtProfCent->GetLignes(), 1);
+    xIntProf = new Matrix(gfd->IntProfCent->GetLignes(), 1);
     for (i = 0; i < gfd->ExtProfCent->GetLignes(); i++)   xExtProf->SetElement(i, 0, gfd->ExtProfCent->Element(i, 0));
     for (i = 0; i < gfd->IntProfCent->GetLignes(); i++)   xIntProf->SetElement(i, 0, gfd->IntProfCent->Element(i, 0));
 
     Ind(posKlapanInt, xIntProf, &iDebInt, &iCol);
 
-    Matrice* zeroExtProfCent, *zeroExtProfBout;
+    Matrix* zeroExtProfCent, *zeroExtProfBout;
 
     zeroExtProfCent = CloneMat(gfd-> ExtProfCent);
     for ( i = 0; i < gfd->ExtProfCent->GetLignes(); i++) zeroExtProfCent->SetElement(i, 1, 0.0f);
     zeroExtProfBout = CloneMat(gfd-> ExtProfBout);
     for ( i = 0; i < gfd->ExtProfBout->GetLignes(); i++) zeroExtProfBout->SetElement(i, 1, 0.0f);
 
-    CalculForme3D(gfd->Forme,0, 0.0f,
+    calcForm3D(gfd->Form,0, 0.0f,
             zeroExtProfCent, gfd->IntProfCent, zeroExtProfBout, gfd->IntProfBout,
             &XExt0, &YExt0, &ZExt0, &XInt0, &YInt0, &ZInt0);
     Ind(posKlapanFin, xExtProf, &iFinExt, &iCol);
@@ -1517,14 +1517,14 @@ void CalculPatronKlapan(WindPatternsProject* gfd, int noNerv1, bool sym1, int no
         }
     }
 
-    X[0] = new Matrice(2, 1);
-    X[1] = new Matrice(2, 1);
-    Y[0] = new Matrice(2, 1);
-    Y[1] = new Matrice(2, 1);
-    Z[0] = new Matrice(2, 1);
-    Z[1] = new Matrice(2, 1);
-    P[0] = new Matrice(2, 1);
-    P[1] = new Matrice(2, 1);
+    X[0] = new Matrix(2, 1);
+    X[1] = new Matrix(2, 1);
+    Y[0] = new Matrix(2, 1);
+    Y[1] = new Matrix(2, 1);
+    Z[0] = new Matrix(2, 1);
+    Z[1] = new Matrix(2, 1);
+    P[0] = new Matrix(2, 1);
+    P[1] = new Matrix(2, 1);
 
     for ( i = 0; i < 2; i++) {
         X[i]->SetElement(0,0,XInt->Element(nerv[i], iDebInt));
@@ -1545,7 +1545,7 @@ void CalculPatronKlapan(WindPatternsProject* gfd, int noNerv1, bool sym1, int no
         }
     }
 
-    CalculDeveloppe(
+    calcDeveloppe(
             X[0], Y[0], Z[0], X[1], Y[1], Z[1],
             Xdev1, Ydev1, Xdev2, Ydev2);
 
@@ -1577,29 +1577,29 @@ void CalculPatronKlapan(WindPatternsProject* gfd, int noNerv1, bool sym1, int no
 }
 
 
-void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
+void calcPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
         int noNerv2, bool sym2, int FaceDeb2, int FaceFin2, double Deb2, double Fin2,
-        Matrice **Xdev1, Matrice **Ydev1, Matrice **Xdev2, Matrice **Ydev2,
-        Matrice **X0, Matrice **Y0, Matrice **Z0, Matrice **P0,
-        Matrice **X1, Matrice **Y1, Matrice **Z1, Matrice **P1)
+        Matrix **Xdev1, Matrix **Ydev1, Matrix **Xdev2, Matrix **Ydev2,
+        Matrix **X0, Matrix **Y0, Matrix **Z0, Matrix **P0,
+        Matrix **X1, Matrix **Y1, Matrix **Z1, Matrix **P1)
 {
 
-    //printf ("\n CalculPatron()");
+    //printf ("\n calcPatron()");
 	//printf ("\n FaceDeb1=%d FaceFin1=%d FaceDeb2=%d FaceFin2=%d", FaceDeb1, FaceFin1, FaceDeb2, FaceFin2);
 	//printf ("\n[%f, %f] [%f, %f]", Deb1, Fin1, Deb2, Fin2);
 
-    Matrice *XExt, *YExt, *ZExt;
-    Matrice *XInt, *YInt, *ZInt;
+    Matrix *XExt, *YExt, *ZExt;
+    Matrix *XInt, *YInt, *ZInt;
 
     int i, j;
     bool symetrique[2] = {sym1, sym2};
     int nerv[2];
 
-    Matrice * X[2], *Y[2], *Z[2], *P[2];
+    Matrix * X[2], *Y[2], *Z[2], *P[2];
     //int iDeb, iFin, iCol;
 
-    Matrice *xExtProf, *xIntProf;
-    //Matrice *iAv, *iAp, *Res;
+    Matrix *xExtProf, *xIntProf;
+    //Matrix *iAv, *iAp, *Res;
 
     int NoNervT[2] = {noNerv1, noNerv2};
     double DebT[2] = {Deb1, Deb2}, FinT[2] = {Fin1, Fin2};
@@ -1609,17 +1609,17 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
     FaceFinT[0] = FaceFin1;
     FaceFinT[1] = FaceFin2;
 
-    CalculForme3D(gfd->Forme,0, 0.0f,
+    calcForm3D(gfd->Form,0, 0.0f,
             gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-    /*ajoute points de suspentage*/
-    //	if(VisuPtsSuspentes){
-    //		AjoutPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
-    //			VisuSymetrique, &PtsSuspentes);}
+    /*adde points de suspentage*/
+    //	if(ViewPtsSuspentes){
+    //		addPtsSuspentage(Axe3d, F, IntProfCent, XExt, YExt, ZExt, XInt, YInt, ZInt,
+    //			ViewSymetrique, &PtsSuspentes);}
 
     //------ BEGIN fill X, Y, Z, P [i] ----------
-    xExtProf = new Matrice(gfd->ExtProfCent->GetLignes(), 1);
-    xIntProf = new Matrice(gfd->IntProfCent->GetLignes(), 1);
+    xExtProf = new Matrix(gfd->ExtProfCent->GetLignes(), 1);
+    xIntProf = new Matrix(gfd->IntProfCent->GetLignes(), 1);
     for (i = 0; i < gfd->ExtProfCent->GetLignes(); i++)   xExtProf->SetElement(i, 0, gfd->ExtProfCent->Element(i, 0));
     for (i = 0; i < gfd->IntProfCent->GetLignes(); i++)   xIntProf->SetElement(i, 0, gfd->IntProfCent->Element(i, 0));
 
@@ -1658,10 +1658,10 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
                 Ind(DebT[i], xExtProf, &iDeb, &iCol);
                 Ind(FinT[i], xExtProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZExt->Element(nerv[i], iDeb + j));
@@ -1670,10 +1670,10 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
         {
             Ind(DebT[i], xExtProf, &iDeb, &iCol);
             Ind(FinT[i], xIntProf, &iFin, &iCol);
-            X[i] = new Matrice(iFin + iDeb - 1, 1);
-            Y[i] = new Matrice(iFin + iDeb - 1, 1);
-            Z[i] = new Matrice(iFin + iDeb - 1, 1);
-            P[i] = new Matrice(iFin + iDeb - 1, 1);
+            X[i] = new Matrix(iFin + iDeb - 1, 1);
+            Y[i] = new Matrix(iFin + iDeb - 1, 1);
+            Z[i] = new Matrix(iFin + iDeb - 1, 1);
+            P[i] = new Matrix(iFin + iDeb - 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YExt->Element(nerv[i], iDeb - j));
@@ -1686,10 +1686,10 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
         {
             Ind(DebT[i], xIntProf, &iDeb, &iCol);
             Ind(FinT[i], xExtProf, &iFin, &iCol);
-            X[i] = new Matrice(iFin + iDeb + 1, 1);
-            Y[i] = new Matrice(iFin + iDeb + 1, 1);
-            Z[i] = new Matrice(iFin + iDeb + 1, 1);
-            P[i] = new Matrice(iFin + iDeb + 1, 1);
+            X[i] = new Matrix(iFin + iDeb + 1, 1);
+            Y[i] = new Matrix(iFin + iDeb + 1, 1);
+            Z[i] = new Matrix(iFin + iDeb + 1, 1);
+            P[i] = new Matrix(iFin + iDeb + 1, 1);
             for (j = 0; j <= iDeb; j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb - j));
             for (j = iDeb + 1; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XExt->Element(nerv[i], j - iDeb));
             for (j = 0; j <= iDeb; j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb - j));
@@ -1708,10 +1708,10 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
                 Ind(DebT[i], xIntProf, &iDeb, &iCol);
                 Ind(FinT[i], xIntProf, &iFin, &iCol);
             }
-            X[i] = new Matrice(iFin - iDeb + 1, 1);
-            Y[i] = new Matrice(iFin - iDeb + 1, 1);
-            Z[i] = new Matrice(iFin - iDeb + 1, 1);
-            P[i] = new Matrice(iFin - iDeb + 1, 1);
+            X[i] = new Matrix(iFin - iDeb + 1, 1);
+            Y[i] = new Matrix(iFin - iDeb + 1, 1);
+            Z[i] = new Matrix(iFin - iDeb + 1, 1);
+            P[i] = new Matrix(iFin - iDeb + 1, 1);
             for (j = 0; j < X[i]->GetLignes(); j++) X[i]->SetElement(j, 0, XInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Y[i]->GetLignes(); j++) Y[i]->SetElement(j, 0, YInt->Element(nerv[i], iDeb + j));
             for (j = 0; j < Z[i]->GetLignes(); j++) Z[i]->SetElement(j, 0, ZInt->Element(nerv[i], iDeb + j));
@@ -1730,19 +1730,19 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
     /*if (X[0]->GetLignes() > X[1]->GetLignes()) {
         iAv = LinSpace(0.0f, (double) X[1]->GetLignes() - 1, X[1]->GetLignes());
         iAp = LinSpace(0.0f, (double) X[1]->GetLignes() - 1, X[0]->GetLignes());
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, X[1], iAp, Res);
         delete(X[1]);
         X[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, Y[1], iAp, Res);
         delete(Y[1]);
         Y[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, Z[1], iAp, Res);
         delete(Z[1]);
         Z[1] = Res;
-        Res = new Matrice(X[0]->GetLignes(), 1);
+        Res = new Matrix(X[0]->GetLignes(), 1);
         InterpLinMat(iAv, P[1], iAp, Res);
         delete(P[1]);
         P[1] = Res;
@@ -1751,19 +1751,19 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
     } else if (X[1]->GetLignes() > X[0]->GetLignes()) {
         iAv = LinSpace(0.0f, (double) X[0]->GetLignes() - 1, X[0]->GetLignes());
         iAp = LinSpace(0.0f, (double) X[0]->GetLignes() - 1, X[1]->GetLignes());
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, X[0], iAp, Res);
         delete(X[0]);
         X[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, Y[0], iAp, Res);
         delete(Y[0]);
         Y[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, Z[0], iAp, Res);
         delete(Z[0]);
         Z[0] = Res;
-        Res = new Matrice(X[1]->GetLignes(), 1);
+        Res = new Matrix(X[1]->GetLignes(), 1);
         InterpLinMat(iAv, P[0], iAp, Res);
         delete(P[0]);
         P[0] = Res;
@@ -1779,14 +1779,14 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
         }
     }
 
-    //--- BEGIN calculate Developpe in Xd[0], Yd[0]   Xd[1], Yd[1]
+    //--- BEGIN calcate Developpe in Xd[0], Yd[0]   Xd[1], Yd[1]
     //        printf ("\n calcp |X0|=%d |Y0|=%d |Z0|=%d |P0|=%d ", X[0]->GetLignes(), Y[0]->GetLignes(), Z[0]->GetLignes(), P[0]->GetLignes());
     //        printf ("\n calcp |X1|=%d |Y1|=%d |Z1|=%d |P1|=%d ", X[1]->GetLignes(), Y[1]->GetLignes(), Z[1]->GetLignes(), P[1]->GetLignes());
 
-    CalculDeveloppe(
+    calcDeveloppe(
             X[0], Y[0], Z[0], X[1], Y[1], Z[1],
             Xdev1, Ydev1, Xdev2, Ydev2);
-    //--- END calculate Developpe in Xd[0], Yd[0]   Xd[1], Yd[1]
+    //--- END calcate Developpe in Xd[0], Yd[0]   Xd[1], Yd[1]
     *X0 = CloneMat(X[0]);
     *Y0 = CloneMat(Y[0]);
     *Z0 = CloneMat(Z[0]);
@@ -1811,19 +1811,19 @@ void CalculPatron(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1
     delete(Y[1]);
     delete(Z[1]);
     delete(P[1]);
-    //printf ("\n ...CalculPatron()");
+    //printf ("\n ...calcPatron()");
 }
 
-double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int face) {
-    Matrice * Xd1[2], *Yd1[2]; //, *Xd1p[2], *Yd1p[2];
-    Matrice * X1[2], *Y1[2], *Z1[2], *P1[2];
-    CalculPatron(gfd, noNerv1, false, face, face, 0.0f, 100.0f,
+double calcWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int face) {
+    Matrix * Xd1[2], *Yd1[2]; //, *Xd1p[2], *Yd1p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2];
+    calcPatron(gfd, noNerv1, false, face, face, 0.0f, 100.0f,
             noNerv2, false, face, face, 0.0f, 100.0f,
             &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
             &X1[0], &Y1[0], &Z1[0], &P1[0],
             &X1[1], &Y1[1], &Z1[1], &P1[1]);
     double width;
-    CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &width);
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &width);
     delete (Xd1[0]);
     delete (Yd1[0]);
     delete (Xd1[1]);
@@ -1839,12 +1839,12 @@ double CalculWidthNervs(WindPatternsProject* gfd, int noNerv1, int noNerv2, int 
     return width;
 }
 
-void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matrice** XProf, Matrice** YProf) 
+void GetProfileXY(WindPatternsProject* gfd, Form* F, int nerv, int face, Matrix** XProf, Matrix** YProf) 
 {
 	//printf ("\n getProfileXY()");
-    Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+    Matrix *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
 	//printf ("\n 1");
-    CalculForme3D(F, 0, 0.0f,
+    calcForm3D(F, 0, 0.0f,
 		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 	//printf ("\n 1.1");
     double LongNerv = 100.0f;
@@ -1873,8 +1873,8 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
-    *XProf = new Matrice(n, 1);
-    *YProf = new Matrice(n, 1);
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
 	//printf ("\n 4");
     if (face == 1) {
         for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
@@ -1894,14 +1894,14 @@ void GetProfileXY(WindPatternsProject* gfd, Forme* F, int nerv, int face, Matric
 	//printf ("\n ..getProfileXY()");
 }
 
-ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
+ProfilGeom* getProfile(WindPatternsProject* gfd, Form* F, int nerv) {
 	//printf ("\n getProfileGeom()");
 	ProfilGeom* pg = new ProfilGeom();
 
-	Matrice* XExt, *YExt, *XInt, *YInt;
+	Matrix* XExt, *YExt, *XInt, *YInt;
 	GetProfileXY(gfd, F, nerv, 1, &XExt, &YExt);
 	int n = XExt->GetLignes();
-	pg->ExtProf = new Matrice (n,2);
+	pg->ExtProf = new Matrix (n,2);
 	for (int i = 0; i < n; i++ ) {
 		pg->ExtProf->SetElement(i, 0, XExt->Element(i, 0));
 		pg->ExtProf->SetElement(i, 1, YExt->Element(i, 0));
@@ -1909,7 +1909,7 @@ ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
 
 	GetProfileXY(gfd, F, nerv, 2, &XInt, &YInt);
 	n = XInt->GetLignes();
-	pg->IntProf = new Matrice (n,2);
+	pg->IntProf = new Matrix (n,2);
 	for (int i = 0; i < n; i++ ) {
 		pg->IntProf->SetElement(i, 0, XInt->Element(i, 0));
 		pg->IntProf->SetElement(i, 1, YInt->Element(i, 0));
@@ -1918,9 +1918,9 @@ ProfilGeom* getProfile(WindPatternsProject* gfd, Forme* F, int nerv) {
 	return pg;
 }
 
-void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face, int realMashtab, Matrice** XProf, Matrice** YProf) {
-    /*Matrice *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
-    CalculForme3D(F, 0, 0.0f,
+void GetMiddleProfile(WindPatternsProject* gfd, Form* F, int nerv1, int nerv2, int face, int realMashtab, Matrix** XProf, Matrix** YProf) {
+    /*Matrix *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+    calcForm3D(F, 0, 0.0f,
 		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);*/
     int i1 = nerv1;
     int i2 = nerv2;
@@ -1949,8 +1949,8 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
     double xp, yp;
     int n = 0, j = 0;
     if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
-    *XProf = new Matrice(n, 1);
-    *YProf = new Matrice(n, 1);
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
     if (face == 1) {
         for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
             xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
@@ -1969,7 +1969,7 @@ void GetMiddleProfile(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, 
 
 }
 
-void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv2, int face,  int realMashtab, Matrice** XProf, Matrice** YProf) {
+void GetMiddleProfileBal(WindPatternsProject* gfd, Form* F, int nerv1, int nerv2, int face,  int realMashtab, Matrix** XProf, Matrix** YProf) {
 	double EpaiRel, xp, yp;
 	double EpaiRelProfCent, EpaiRelProfBout;
 	double coeffx, coeffy, coeffyCent, coeffyBout;
@@ -2000,8 +2000,8 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 
     int n = 0;
     if (face == 1) n = pg->ExtProf->GetLignes(); else n = pg->IntProf->GetLignes();
-    *XProf = new Matrice(n, 1);
-    *YProf = new Matrice(n, 1);
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
 	if (face == 1) {
 		for (j=0; j < pg->ExtProf->GetLignes(); j++)
 		{
@@ -2021,30 +2021,30 @@ void GetMiddleProfileBal(WindPatternsProject* gfd, Forme* F, int nerv1, int nerv
 	}
 }
 
-void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrice** fl, double *pRA, double *pRF, Matrice** fr, double *len) {
-    Matrice * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
-    Matrice * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
-    Matrice * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
-    Matrice * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
+void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrix** fl, double *pRA, double *pRF, Matrix** fr, double *len) {
+    Matrix * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
+    Matrix * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
+    Matrix * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
     bool showPoints = false;
     int i = 0;
-    CalculPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
+    calcPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
             noNerv, false, face, face, 0.0f, 100.0f,
             &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
             &X1[0], &Y1[0], &Z1[0], &P1[0],
             &X1[1], &Y1[1], &Z1[1], &P1[1]);
-    Matrice *lenm1 = Longueur(Xd1[1], Yd1[1]);
+    Matrix *lenm1 = Longueur(Xd1[1], Yd1[1]);
     double len1 = lenm1->Element(lenm1->GetLignes() - 1, 0);
     double w1, w2;
-    CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
-    CalculPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
+    calcPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
             noNerv + 1, false, face, face, 0.0f, 100.0f,
             &Xd2[0], &Yd2[0], &Xd2[1], &Yd2[1],
             &X2[0], &Y2[0], &Z2[0], &P2[0],
             &X2[1], &Y2[1], &Z2[1], &P2[1]);
-    Matrice *lenm2 = Longueur(Xd2[0], Yd2[0]);
+    Matrix *lenm2 = Longueur(Xd2[0], Yd2[0]);
     double len2 = lenm2->Element(lenm2->GetLignes() - 1, 0);
-    CalculWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
+    calcWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
 
     double ppA = gfd->PosPinceBA[0];
     double apAPercInit = gfd->AmpPinceBA[0];
@@ -2062,7 +2062,7 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
     double middleInit = w1 / (w1 + w2);
     double apAAbs1, apFAbs1, apAAbs2, apFAbs2;
     double middle = 0.0f;
-    Matrice *long1p1, *long2p0;
+    Matrix *long1p1, *long2p0;
     double minDelta = 1000000.0f, minMiddle = -1.0f, minDeltaMiddleInit = 1000000.0f, minlp1 = 1000000.0f, minlp2 = 1000000.0f;
     double l1p1 = -1.0f, l2p0 = -1.0f, delta = 0.0f, deltaMiddleInit = 0.0f, mina1, mina2;
 
@@ -2073,14 +2073,14 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
         apFAbs1 = apFSumAbs*middle;
         apFAbs2 = apFSumAbs - apFAbs1;
 
-        CalculPinceAloneAbsFunc(Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
+        calcPinceAloneAbsFunc(Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
                 pince1, apAAbs1, apFAbs1, 1,
                 &Xd1p[1], &Yd1p[1], &newP1[1]);
 
         long1p1 = Longueur(Xd1p[1], Yd1p[1]);
         l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
 
-        CalculPinceAloneAbsFunc(Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
+        calcPinceAloneAbsFunc(Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
                 pince2, apAAbs2, apFAbs2, 0,
                 &Xd2p[0], &Yd2p[0], &newP2[0]);
         long2p0 = Longueur(Xd2p[0], Yd2p[0]);
@@ -2158,16 +2158,16 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
 
 
 void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, int noNerv2, int face2, double lp1, double lp2, double *rcoeff) {
-    Matrice * Xd[2], *Yd[2], *newXd[2], *newYd[2];
-    Matrice * X[2], *Y[2], *Z[2], *P[2];
-    CalculPatron(gfd, noNerv1, false, face1, face1, 0.0f, 100.0f,
+    Matrix * Xd[2], *Yd[2], *newXd[2], *newYd[2];
+    Matrix * X[2], *Y[2], *Z[2], *P[2];
+    calcPatron(gfd, noNerv1, false, face1, face1, 0.0f, 100.0f,
             noNerv2, false, face2, face2, 0.0f, 100.0f,
             &Xd[0], &Yd[0], &Xd[1], &Yd[1],
             &X[0], &Y[0], &Z[0], &P[0],
             &X[1], &Y[1], &Z[1], &P[1]);
-    Matrice *long1 = Longueur(Xd[0], Yd[0]);
+    Matrix *long1 = Longueur(Xd[0], Yd[0]);
     double len1 = long1->Element(long1->GetLignes() - 1, 0);
-    Matrice *long2 = Longueur(Xd[1], Yd[1]);
+    Matrix *long2 = Longueur(Xd[1], Yd[1]);
     double len2 = long2->Element(long2->GetLignes() - 1, 0);
 
     //if (DEBUG) printf("\n in (%f %f)", len1, len2);
@@ -2202,29 +2202,29 @@ void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, in
 void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, double *pRA, double *pRF, double *len) {
     double mode1 = gfd->modePinces;
     double mode2 = gfd->modePinces;
-    Matrice * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
-    Matrice * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
-    Matrice * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
-    Matrice * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
+    Matrix * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
+    Matrix * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
+    Matrix * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
     bool showPoints = false;
     int i = 0;
-    CalculPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
+    calcPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
             noNerv, false, face, face, 0.0f, 100.0f,
             &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
             &X1[0], &Y1[0], &Z1[0], &P1[0],
             &X1[1], &Y1[1], &Z1[1], &P1[1]);
-    Matrice *lenm1 = Longueur(Xd1[1], Yd1[1]);
+    Matrix *lenm1 = Longueur(Xd1[1], Yd1[1]);
     double len1 = lenm1->Element(lenm1->GetLignes() - 1, 0);
     double w1, w2;
-    CalculWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
-    CalculPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
+    calcPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
             noNerv + 1, false, face, face, 0.0f, 100.0f,
             &Xd2[0], &Yd2[0], &Xd2[1], &Yd2[1],
             &X2[0], &Y2[0], &Z2[0], &P2[0],
             &X2[1], &Y2[1], &Z2[1], &P2[1]);
-    Matrice *lenm2 = Longueur(Xd2[0], Yd2[0]);
+    Matrix *lenm2 = Longueur(Xd2[0], Yd2[0]);
     double len2 = lenm2->Element(lenm2->GetLignes() - 1, 0);
-    CalculWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
+    calcWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
 
     double ppA = gfd->PosPinceBA[0];
     double apAPercInit = gfd->AmpPinceBA[0];
@@ -2237,7 +2237,7 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
     double middleInit = w1 / (w1 + w2);
     double apAAbs1, apFAbs1, apAAbs2, apFAbs2;
     double middle = 0.0f;
-    Matrice *long1p1, *long2p0;
+    Matrix *long1p1, *long2p0;
     double minDelta = 1000000.0f, minMiddle = -1.0f, minDeltaMiddleInit = 1000000.0f, minlp1 = 1000000.0f, minlp2 = 1000000.0f;
     double l1p1 = -1.0f, l2p0 = -1.0f, delta = 0.0f, deltaMiddleInit = 0.0f, mina1, mina2;
     for (middle = 0.0f; middle <= 1.0f; middle += 0.001f) {
@@ -2247,13 +2247,13 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
         apFAbs1 = apFSumAbs*middle;
         apFAbs2 = apFSumAbs - apFAbs1;
 
-        CalculPinceAloneAbs(gfd, Xd1[1], Yd1[1], Xd1[0], Yd1[0],
+        calcPinceAloneAbs(gfd, Xd1[1], Yd1[1], Xd1[0], Yd1[0],
                 X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
                 ppA, apAAbs1, ppF, apFAbs1, mode1, &Xd1p[1], &Yd1p[1], &newP1[1]);
 
         long1p1 = Longueur(Xd1p[1], Yd1p[1]);
         l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
-        CalculPinceAloneAbs(gfd, Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
+        calcPinceAloneAbs(gfd, Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
                 ppA, apAAbs2, ppF, apFAbs2, mode2, &Xd2p[0], &Yd2p[0], &newP2[0]);
         long2p0 = Longueur(Xd2p[0], Yd2p[0]);
         l2p0 = long2p0->Element(long2p0->GetLignes() - 1, 0);
@@ -2335,7 +2335,7 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
 }
 
 
-int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* y) {
+int calcRepPointByLength(Matrix* Xd, Matrix* Yd, double l, double* x, double* y) {
 
 	if (l < 0) {
 		getLayoutLogger()->logprintf("\n!!! calcRepPointByLength l=%f return -1", l);
@@ -2379,14 +2379,14 @@ int calcRepPointByLength(Matrice* Xd, Matrice* Yd, double l, double* x, double* 
 
 
 
-void printXY(Matrice* X, Matrice* Y) {
+void printXY(Matrix* X, Matrix* Y) {
 	//printf ("\n printXY");
 	for (int i = 0; i < X->GetLignes(); i++) {
 		printf ("\n$ %d (%f, %f)", i, X->Element(i, 0), Y->Element(i, 0));
 	}
 }
 
-void printM(Matrice* m) {
+void printM(Matrix* m) {
 	printf ("\n printM");
 	for (int i = 0; i < m->GetLignes(); i++) {
 		printf ("\n$ %d (%f)", i, m->Element(i, 0));
@@ -2394,7 +2394,7 @@ void printM(Matrice* m) {
 }
 
 
-Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matrice* P, 
+Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix* P, 
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
     //printf ("\nget Reper Points()");
@@ -2404,7 +2404,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
 	//printf ("\nP");
 	//printM(P);
 	//printf ("\n...");
-    Matrice *interpXSuspente, *interpYSuspente, *interpXSuspente0, *interpYSuspente0;
+    Matrix *interpXSuspente, *interpYSuspente, *interpXSuspente0, *interpYSuspente0;
     bool cerezNos = false;
     int i0 = 0;
     if ((faceDeb != faceFin) && (deb != 0.0f)) {
@@ -2475,7 +2475,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     if (gfd->ReperPointsFromFile) nrp = gfd->ReperPoints[1] -> GetLignes();
     else nrp = P -> GetLignes();
     int n = 20 * nrp + 12;
-    Matrice* res = new Matrice(n, 5);
+    Matrix* res = new Matrix(n, 5);
     isave = 0;
     double posSuspente, x, y;
     int mark, MARK_SUSPENTE=REP_TRIANGLE, MARK_REP=REP_CROSS, MARK_DIAG=REP_LINE;
@@ -2488,11 +2488,11 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     
     for (int j = 0; j < 11; j++) {
         switch (j) {
-            case 0: posSuspente = gfd->Forme->m_pProfils[nerv]->m_fPosA; break;
-            case 1: posSuspente = gfd->Forme->m_pProfils[nerv]->m_fPosB; break;
-            case 2: posSuspente = gfd->Forme->m_pProfils[nerv]->m_fPosC; break;
-            case 3: posSuspente = gfd->Forme->m_pProfils[nerv]->m_fPosD; break;
-            case 4: posSuspente = gfd->Forme->m_pProfils[nerv]->m_fPosE; break;
+            case 0: posSuspente = gfd->Form->m_pProfils[nerv]->m_fPosA; break;
+            case 1: posSuspente = gfd->Form->m_pProfils[nerv]->m_fPosB; break;
+            case 2: posSuspente = gfd->Form->m_pProfils[nerv]->m_fPosC; break;
+            case 3: posSuspente = gfd->Form->m_pProfils[nerv]->m_fPosD; break;
+            case 4: posSuspente = gfd->Form->m_pProfils[nerv]->m_fPosE; break;
             case 5: posSuspente = posda; break;
             case 6: posSuspente = posdf; break;
             case 7: posSuspente = 0.0f; break;
@@ -2629,7 +2629,7 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
     }
     //printf ("...7");
     //printf ("\n isave=%d", isave);
-    Matrice* resexit = new Matrice(isave, 5);
+    Matrix* resexit = new Matrix(isave, 5);
     for (int i = 0; i < isave; i++)
         for (int j = 0; j < 5; j++) resexit->SetElement(i, j, res->Element(i, j));
     //printf ("\n dels");
@@ -2646,13 +2646,13 @@ Matrice* getReperPoints(WindPatternsProject* gfd, Matrice* Xd, Matrice* Yd, Matr
 }
 
 
-double calculPolyLength(Matrice* X, Matrice* Y, double xrp, double yrp) {
+double calcPolyLength(Matrix* X, Matrix* Y, double xrp, double yrp) {
 	int i  = 0, res = 0;
 	int n = X->GetLignes();
 	double sumLength = 0;
 	if ( (xrp==X->Element(0, 0)) && (yrp==Y->Element(0, 0)) ) return 0;
 
-	if (X->Element(0,0) > X->Element(X->GetLignes() - 1,0)) getLayoutLogger()->logprintf ("\n calculPolyLength()... Achtung! X->Element(0,0) > X->Element(%d,0)", X->GetLignes() - 1);
+	if (X->Element(0,0) > X->Element(X->GetLignes() - 1,0)) getLayoutLogger()->logprintf ("\n calcPolyLength()... Achtung! X->Element(0,0) > X->Element(%d,0)", X->GetLignes() - 1);
 
 	for (i = 0; i < n-1;i++ ) {
 		res = pointAtSegment(xrp, yrp, X->Element(i,0), Y->Element(i,0), X->Element(i+1,0), Y->Element(i+1,0));
@@ -2666,7 +2666,7 @@ double calculPolyLength(Matrice* X, Matrice* Y, double xrp, double yrp) {
 	return -1;
 }
 
-Matrice* getReperPointsPince(WindPatternsProject* gfd,  Matrice* Xd0, Matrice* Yd0, double coeff, Matrice* Xd, Matrice* Yd, Matrice* P, 
+Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0, double coeff, Matrix* Xd, Matrix* Yd, Matrix* P, 
 								int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
 	// printf ("\n\n\n Xd0 Yd0");
@@ -2679,16 +2679,16 @@ Matrice* getReperPointsPince(WindPatternsProject* gfd,  Matrice* Xd0, Matrice* Y
 		printf ("\n!!!\n!!!\n!!!ACHTUNG! getRepPointsPince() Xd0->GetL[%d] != P->GetL[%d]\n!!!", Xd0->GetLignes(), P->GetLignes());
 	}
 
-	Matrice *reperPoints0 = getReperPoints(gfd, Xd0, Yd0, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
+	Matrix *reperPoints0 = getReperPoints(gfd, Xd0, Yd0, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
 
 	//printf ("\n=1===============================================");
-	Matrice *reperPointsP = getReperPoints(gfd, Xd, Yd, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
+	Matrix *reperPointsP = getReperPoints(gfd, Xd, Yd, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
 	//printf ("\n=2===============================================");
 	
 	//printf ("\n\n Xd0 Yd0");
     //printXY(Xd0, Yd0);
 
-	printf ("\n(Xd0, Yd0).length=%f coeff=%f", 1000*calculCourbeLength(Xd0, Yd0), coeff);
+	printf ("\n(Xd0, Yd0).length=%f coeff=%f", 1000*calcCourbeLength(Xd0, Yd0), coeff);
 
 	for (int i = 0; i < reperPoints0->GetLignes(); i++) {
 		// printf ("\n ");
@@ -2698,10 +2698,10 @@ Matrice* getReperPointsPince(WindPatternsProject* gfd,  Matrice* Xd0, Matrice* Y
 		double xrpP = reperPointsP -> Element(i, 0);
 		double yrpP = reperPointsP -> Element(i, 1);
 
-		double l = calculPolyLength(Xd0, Yd0, xrp, yrp);
+		double l = calcPolyLength(Xd0, Yd0, xrp, yrp);
 		// printf ("\n l=%f l*coeff=%f", l, l*coeff);
 		// printf ("\n xrp, yrp (%f, %f)", xrp, yrp);
-		double lP0 = calculPolyLength(Xd, Yd, xrpP, yrpP);
+		double lP0 = calcPolyLength(Xd, Yd, xrpP, yrpP);
 
 		double newx = 0, newy = 0;
 		
@@ -2712,8 +2712,8 @@ Matrice* getReperPointsPince(WindPatternsProject* gfd,  Matrice* Xd0, Matrice* Y
 		if (res) {
 			//getLayoutLogger()->logprintf ("\n Ahtung! calcRepPointByLength() == %d ", res);
 			//getLayoutLogger()->logprintf (" l=%f   coeff=%f", l, coeff);
-			double XY0length =  calculCourbeLength(Xd0, Yd0);
-			double XYlength =  calculCourbeLength(Xd, Yd);
+			double XY0length =  calcCourbeLength(Xd0, Yd0);
+			double XYlength =  calcCourbeLength(Xd, Yd);
 			double realCoeff = XYlength / XY0length;
 
 			if (res == -1) {
