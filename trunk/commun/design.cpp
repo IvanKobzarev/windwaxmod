@@ -383,67 +383,6 @@ void setMeshPoint3d2d(TMesh *mesh3,TMesh *mesh2, int i, int j, double x, double 
 }
 
 
-void addColorSegmentToAxeProjection(TAxe *AxeProjection, FormProjection* fp, ColorSegment* colorSegment, int symetric,  double dy, double ymult, double ymin) {
-	TMesh *Mesh;
-	Mesh = createMesh();
-	Mesh->segments=OFF; Mesh->faces=ON;
-	Mesh->colorFaces[0] = colorSegment->color->r;
-	Mesh->colorFaces[1] = colorSegment->color->g;
-	Mesh->colorFaces[2] = colorSegment->color->b;
-	Mesh->colorFaces[3] = 1.0f;
-	if(symetric==1) Mesh->symX = ON;
-
-	int nerv = colorSegment->nerv;
-	/*
-		nerv               nerv+1
-
-		p10	-------------- p11
-		|					|
-		|					|
-		|					|
-		|					|
-		|					|
-		p00	-------------- p01
-
-	*/
-	double p00 = colorSegment->p00;
-	double p01 = colorSegment->p01;
-
-	double p10 = colorSegment->p10;
-	double p11 = colorSegment->p11;
-
-	double x0nerv1 = fp->X->Element(nerv, 0);
-	double y0nerv1 = fp->Y->Element(nerv, 0);
-
-	double x1nerv1 = fp->X->Element(nerv, 1);
-	double y1nerv1 = fp->Y->Element(nerv, 1);
-
-	double xp00 = x0nerv1 + p00 * 0.01 * (x1nerv1 - x0nerv1);
-	double yp00 = y0nerv1 + p00 * 0.01 * (y1nerv1 - y0nerv1);
-	double xp10 = x0nerv1 + p10 * 0.01 * (x1nerv1 - x0nerv1);
-	double yp10 = y0nerv1 + p10 * 0.01 * (y1nerv1 - y0nerv1);
-
-	double x0nerv2 = fp->X->Element(nerv+1, 0);
-	double y0nerv2 = fp->Y->Element(nerv+1, 0);
-	double x1nerv2 = fp->X->Element(nerv+1, 1);
-	double y1nerv2 = fp->Y->Element(nerv+1, 1);
-
-	double xp01 = x0nerv2 + p01 * 0.01 * (x1nerv2 - x0nerv2);
-	double yp01 = y0nerv2 + p01 * 0.01 * (y1nerv2 - y0nerv2);
-	double xp11 = x0nerv2 + p11 * 0.01 * (x1nerv2 - x0nerv2);
-	double yp11 = y0nerv2 + p11 * 0.01 * (y1nerv2 - y0nerv2);
-
-	Mesh->x=new Matrix(2, 2);
-	Mesh->y=new Matrix(2, 2);
-	Mesh->z=new Matrix(2, 2);
-
-	setMeshPoint(Mesh, 0, 0, xp00, dy + ymult*yp00 - ymin, 0.0f);
-	setMeshPoint(Mesh, 0, 1, xp01, dy + ymult*yp01 - ymin, 0.0f);
-
-	setMeshPoint(Mesh, 1, 0, xp10, dy + ymult*yp10 - ymin, 0.0f);
-	setMeshPoint(Mesh, 1, 1, xp11, dy + ymult*yp11 - ymin, 0.0f);
-	addMesh(AxeProjection, Mesh);
-}
 
 void addColorSegmentToAxe3d2d(TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, ColorSegment* colorSegment, int side, int symetric, double dy, double ymult, double ymin) {
 	//printf ("\ndesign:addColorSegmentToAxe3d()");
@@ -715,109 +654,6 @@ void addColorSegmentToAxe3d2d(TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, ColorSegmen
 	addMesh(Axe3d, mesh3d);
 	addMesh(Axe2d, mesh2d);
 }
-/*
-void addColorSegmentToAxe3dOld(TAxe *Axe3d, Form3D* f3d, ColorSegment* colorSegment, int side, int symetric) {
-	printf ("\ndesign:addColorSegmentToAxe3d()");
-	Axe3d->eclairage = ON;
-	TMesh *Mesh;
-	Mesh = createMesh();
-
-	Mesh->segments=OFF; Mesh->faces=ON;
-	if (side == INT_SIDE) Mesh->InvNormales=ON;
-
-	int nerv = colorSegment->nerv;
-	printf ("\n design:addColorSegmentToAxe3d() nerv=%d", nerv);
-	double x00, y00, z00, x01, y01, z01, x10, y10, z10, x11, y11, z11;
-
-	getPoint3dFormByPosNerv(f3d, nerv, side, colorSegment->p00, &x00, &y00, &z00) ;
-	getPoint3dFormByPosNerv(f3d, nerv+1, side, colorSegment->p01, &x01, &y01, &z01) ;
-
-	getPoint3dFormByPosNerv(f3d, nerv, side, colorSegment->p10, &x10, &y10, &z10) ;
-	getPoint3dFormByPosNerv(f3d, nerv+1, side, colorSegment->p11, &x11, &y11, &z11) ;
-
-	Matrix* mProf;
-	if (side == INT_SIDE) mProf = f3d->forme->getIntProf(nerv,false); else mProf = f3d->forme->getExtProf(nerv,false);
-
-	int i00 = indexAfterPosProf(mProf,  colorSegment->p00);
-	int i01 = indexAfterPosProf(mProf,  colorSegment->p01);
-
-	int i10 = indexBeforePosProf(mProf,  colorSegment->p10);
-	int i11 = indexBeforePosProf(mProf,  colorSegment->p11);
-	
-	printf ("\ni00=%d", i00);
-	printf ("\ni01=%d", i01);
-	printf ("\ni10=%d", i10);
-	printf ("\ni11=%d", i11);
-
-	int max = 0;
-	if ((i10-i00) > (i11-i01)) max= (i10-i00); else max = (i11-i01);
-
-	int nPts = max + 3;
-	printf ("\nnPts=%d", nPts);
-	Mesh->x=new Matrix(nPts, 2);
-	Mesh->y=new Matrix(nPts, 2);
-	Mesh->z=new Matrix(nPts, 2);
-	Mesh->colorFaces[0] = colorSegment->color->r;
-	Mesh->colorFaces[1] = colorSegment->color->g;
-	Mesh->colorFaces[2] = colorSegment->color->b;
-
-	if(symetric==1)
-	{
-		Mesh->symX = ON;
-	}
-
-	Mesh->x->SetElement(0,0, x00);
-	Mesh->y->SetElement(0,0, y00);
-	Mesh->z->SetElement(0,0, z00);
-
-	Mesh->x->SetElement(0,1, x01);
-	Mesh->y->SetElement(0,1, y01);
-	Mesh->z->SetElement(0,1, z01);
-
-	int il = i00;
-	int ir = i01;
-	int _i = 1;
-	while ((il <= i10) && (ir <= i11))
-	{
-		if (side == INT_SIDE) {
-			Mesh->x->SetElement(_i, 0, f3d->XInt->Element(nerv, il));
-			Mesh->y->SetElement(_i, 0, f3d->YInt->Element(nerv, il));
-			Mesh->z->SetElement(_i, 0, f3d->ZInt->Element(nerv, il));
-
-			Mesh->x->SetElement(_i, 1, f3d->XInt->Element(nerv + 1, ir));
-			Mesh->y->SetElement(_i, 1, f3d->YInt->Element(nerv + 1, ir));
-			Mesh->z->SetElement(_i, 1, f3d->ZInt->Element(nerv + 1, ir));
-		} else {
-			Mesh->x->SetElement(_i, 0, f3d->XExt->Element(nerv, il));
-			Mesh->y->SetElement(_i, 0, f3d->YExt->Element(nerv, il));
-			Mesh->z->SetElement(_i, 0, f3d->ZExt->Element(nerv, il));
-
-			Mesh->x->SetElement(_i, 1, f3d->XExt->Element(nerv + 1, ir));
-			Mesh->y->SetElement(_i, 1, f3d->YExt->Element(nerv + 1, ir));
-			Mesh->z->SetElement(_i, 1, f3d->ZExt->Element(nerv + 1, ir));
-		}
-		//printf ("\n%d %d %d -> (%f, %f, %f) (%f, %f, %f)", _i, il, ir, Mesh->x->Element(_i,0), Mesh->y->Element(_i,0), Mesh->z->Element(_i,0), Mesh->x->Element(_i,1), Mesh->y->Element(_i,1), Mesh->z->Element(_i,1));
-		_i++;
-
-		if ((il == i10) && (ir == i11)) break;
-		if (il < i10) il++;
-		if (ir < i11) ir++;
-	}
-
-	Mesh->x->SetElement(_i, 0, x10);
-	Mesh->y->SetElement(_i, 0, y10);
-	Mesh->z->SetElement(_i, 0, z10);
-
-	Mesh->x->SetElement(_i, 1, x11);
-	Mesh->y->SetElement(_i, 1, y11);
-	Mesh->z->SetElement(_i, 1, z11);
-	//printf ("\n(%f, %f, %f) (%f, %f, %f)",x10, y10,z10,x11, y11,z11);
-
-	addMesh(Axe3d, Mesh);
-
-}
-*/
-
 void KiteDesign::addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, float opac, int side, int symetric, double dy, double ymult, double ymin){
 	printf ("\nKiteDesign::addMeshesToAxe3d");
 	/*
@@ -849,20 +685,6 @@ void KiteDesign::addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, floa
 	printf ("\n...KiteDesign::addMeshesToAxe3d");
 }
  
-void KiteDesign::addMeshesToAxeProjection( TAxe *AxeProjection, FormProjection* fp, int symetric, double dy, double ymult, double ymin){
-	ColorSegmentsTable* cst = getColorSegmentsTable(fp->X->GetLignes());
-	for (int nerv = 0; nerv < fp->X->GetLignes(); nerv++) {
-		vector<ColorSegment*> vcs = cst->table[nerv];
-		for (int i = 0; i < vcs.size(); i++) {
-			ColorSegment* cs = vcs[i];
-			addColorSegmentToAxeProjection(AxeProjection, fp, cs, symetric, dy, ymult, ymin);
-		}
-    }
-}
-
-/**************************/
-/* addForm3DKiteDesign */
-/**************************/
 double calcYminFp(FormProjection* fp, double ymult) {
 	int n = fp->X->GetLignes();
 	int m = fp->X->GetColonnes();
@@ -877,7 +699,6 @@ double calcYminFp(FormProjection* fp, double ymult) {
 
 	return ymin;
 }
-
 
 
 void addForm3d2dKiteDesign( TAxe *Axe3d,TAxe *Axe2d, Form3D* f3d, FormProjection* fp, KiteDesign* kdExt, int dire, float opacExt, KiteDesign* kdInt, int diri, float opacInt, int mesh, int symetric) 
@@ -908,33 +729,7 @@ void addForm3d2dKiteDesign( TAxe *Axe3d,TAxe *Axe2d, Form3D* f3d, FormProjection
 	ColorTable* ct = kdExt->colorTable;
 	kdExt->addMeshesToAxe3d2d( Axe3d, Axe2d, f3d, opacExt, EXT_SIDE, symetric, 2.0f, ymulte, ymine );
 
-	//-------------------------------------------------------------------------
 }
-
-void addFormProjectionKiteDesign(TAxe* axe, FormProjection* fp, KiteDesign* kd, int symetric, double dy, int dir) {
-	//calcate kite design courbes
-	double ymult = 1;
-	if (dir == DIR_NOSE_DOWN) ymult=-1;
-	int n = fp->X->GetLignes();
-	int m = fp->X->GetColonnes();
-
-	double ymin = 1000000;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			double y = fp->Y->Element(i, j);
-			if (y*ymult < ymin) ymin = y*ymult;
-		}
-	}
-	ColorTable* ct = kd->colorTable;
-	kd -> addMeshesToAxeProjection( axe, fp, symetric, dy, ymult, ymin );
-
-	for (int i = 0; i < kd->n_elements; i++) {
-		KiteDesignElement* kde = kd->kiteDesignElements[i];
-		kde -> addCourbesToAxe( axe, fp, symetric, dy, ymult, ymin );
-	}
-
-}
-
 
 void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt){
 	*courbeExt = new Courbe("ProfileExt");

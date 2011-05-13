@@ -526,11 +526,21 @@ void modifSpinnerInt(int /*control*/) {
 	display();
 }
 
+
+void initAxe2d() {
+    AxeProjections->XAuto = ON;
+    AxeProjections->YAuto = ON;
+    AxeProjections->ZAuto = ON;
+    AxeProjections->xmin = -100.0;
+    AxeProjections->xmax = 100.0;
+    AxeProjections->ymin = -100.0;
+    AxeProjections->ymax = 100.0;
+	AxeProjections->XGrid = XYGrid;
+	AxeProjections->YGrid = XYGrid;
+	AxeProjections->ZGrid = OFF;
+}
+
 void Apply(int /*control*/) {
-	// 3D
-	// forme visualisation
-	//printf ("\nclearCourbesAxe(Axe3d);");
-    //clearCourbesAxe(Axe3d);
 	printf ("\nclearMeshsAxe(Axe3d);");
     clearMeshsAxe(Axe3d);
 
@@ -542,11 +552,6 @@ void Apply(int /*control*/) {
 	Form3D* f3d = getForm3D(F, 0, 0.0f);
 	FormProjection* fp = getFormProjection(f3d);
 
-	//ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
-    //addForm3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, ViewFace, ViewSymetrique);
-	//YExt0 = Zeros(f3d->YExt->GetLignes(), f3d->YExt->GetColonnes());
-	//YInt0 = Zeros(f3d->YInt->GetLignes(), f3d->YInt->GetColonnes());
-
 	printf ("\nOpacity:");
 	printf ("\nopacExt=%f opacInt=%f", opacExt, opacInt);
 
@@ -554,34 +559,15 @@ void Apply(int /*control*/) {
 	
 	// 2D
 	//------------------------ Projections window calcation -------------------------------------
-    AxeProjections->XAuto = ON;
-    AxeProjections->YAuto = ON;
-    AxeProjections->ZAuto = ON;
-    AxeProjections->xmin = -100.0;
-    AxeProjections->xmax = 100.0;
-    AxeProjections->ymin = -100.0;
-    AxeProjections->ymax = 100.0;
-	AxeProjections->XGrid = XYGrid;
-	AxeProjections->YGrid = XYGrid;
-	AxeProjections->ZGrid = OFF;
+	initAxe2d();
 
 	clearCourbesAxe(AxeProjections);
     clearMeshsAxe(AxeProjections);
 	
 	addForm3d2dKiteDesign( Axe3d, AxeProjections, f3d, fp, kiteDesignExt, ExtPrjNoseUp, opacExt, kiteDesignInt, IntPrjNoseUp, opacInt, ViewFace, ViewSymetrique);
 
-	//addCourbe(AxeProjections, cint4);
-	//printf ("\n FormProjection* fp = getFormProjection(f3d);");
-	//printf ("\n addFormProjectionCourbesToAxe(fp, AxeProjections);");
-
-	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
-	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
-
 	addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
 	addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
-
-	//addFormProjectionCourbesToAxe(FormProjection* fp, TAxe* axe)
-	//printf ("\n display()");
 
 	// Zoom
     CourbZoom = new Courbe("Zoom");

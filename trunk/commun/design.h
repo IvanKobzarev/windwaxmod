@@ -133,8 +133,6 @@ class KiteDesign
 
 void addColorSegmentToAxe3d2d(TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, ColorSegment* colorSegment, int side, int symetric);
 
-void addColorSegmentToAxeProjection(TAxe *AxeProjection, FormProjection* fp, ColorSegment* colorSegment, int symetric,  double dy, double ymult, double ymin);
-
 void setMeshPoint(TMesh *Mesh, int i, int j, double x, double y, double z);
 
 void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbeInt);
@@ -142,5 +140,3 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 void addFormProjectionCourbesToAxe(TAxe* axe, FormProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
 
 void addForm3d2dKiteDesign( TAxe *Axe3d,TAxe *Axe2d, Form3D* f3d, FormProjection* fp, KiteDesign* kdExt, int dire, float opacExt, KiteDesign* kdInt, int diri, float opacInt, int mesh, int symetric);
-
-void addFormProjectionKiteDesign(TAxe* axe, FormProjection* fp, KiteDesign* kd, int symetric, double dy, int dir);
