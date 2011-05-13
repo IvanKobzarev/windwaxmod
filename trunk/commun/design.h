@@ -122,7 +122,7 @@ class KiteDesign
 		KiteDesignElement** kiteDesignElements;
 		ColorTable* colorTable;
 
-		void addMeshesToAxe3d2d( TAxe *Axe3d,  TAxe *Axe2d, Form3D* f3d, float opac, int side, int symetric);
+		void addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, float opac, int side, int symetric, double dy, double ymult, double ymin);
 		void addMeshesToAxeProjection( TAxe *AxeProjection, FormProjection* fp, int symetric, double dy, double ymult, double ymin);
 		
 		ColorSegmentsTable* getColorSegmentsTable(int n_profils );
@@ -141,6 +141,6 @@ void getCourbeFromProfilGeom(ProfilGeom* pg, Courbe** courbeExt, Courbe** courbe
 
 void addFormProjectionCourbesToAxe(TAxe* axe, FormProjection* fp, KiteDesign* kd, int symetrie, double dy, int dir);
 
-void addForm3d2dKiteDesign( TAxe *Axe3d,TAxe *Axe2d, Form3D* f3d, KiteDesign* kdExt, float transpExt, KiteDesign* kdInt, float transpInt, int mesh, int symetric);
+void addForm3d2dKiteDesign( TAxe *Axe3d,TAxe *Axe2d, Form3D* f3d, FormProjection* fp, KiteDesign* kdExt, int dire, float opacExt, KiteDesign* kdInt, int diri, float opacInt, int mesh, int symetric);
 
 void addFormProjectionKiteDesign(TAxe* axe, FormProjection* fp, KiteDesign* kd, int symetric, double dy, int dir);
