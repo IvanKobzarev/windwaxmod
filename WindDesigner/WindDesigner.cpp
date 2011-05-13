@@ -100,18 +100,10 @@ void display(void) {
     glutSwapBuffers();
 }
 
-/*****************/
-/* reshape       */
-/*****************/
-
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     display();
 }
-
-/*****************/
-/* motion        */
-/*****************/
 
 void motion(int x, int y) {
     //pour gestion zoom dans fenetre patron
@@ -548,6 +540,7 @@ void Apply(int /*control*/) {
             ExtProfCent, IntProfCent, ExtProfBout, IntProfBout,
             &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
 	Form3D* f3d = getForm3D(F, 0, 0.0f);
+	FormProjection* fp = getFormProjection(f3d);
 
 	//ExtProfCent, IntProfCent, ExtProfBout, IntProfBout);
     //addForm3D(Axe3d, XExt, YExt, ZExt, XInt, YInt, ZInt, ViewFace, ViewSymetrique);
@@ -559,8 +552,6 @@ void Apply(int /*control*/) {
 
 	addForm3D(Axe3d, f3d->XExt, f3d->YExt, f3d->ZExt, f3d->XInt, f3d->YInt, f3d->ZInt, ViewFace, ViewSymetrique);
 	
-	
-
 	// 2D
 	//------------------------ Projections window calcation -------------------------------------
     AxeProjections->XAuto = ON;
@@ -574,20 +565,20 @@ void Apply(int /*control*/) {
 	AxeProjections->YGrid = XYGrid;
 	AxeProjections->ZGrid = OFF;
 
-    clearCourbesAxe(AxeProjections);
+	clearCourbesAxe(AxeProjections);
+    clearMeshsAxe(AxeProjections);
 	
-	addForm3d2dKiteDesign( Axe3d, AxeProjections, f3d, kiteDesignExt, opacExt, kiteDesignInt, opacInt, ViewFace, ViewSymetrique);
+	addForm3d2dKiteDesign( Axe3d, AxeProjections, f3d, fp, kiteDesignExt, ExtPrjNoseUp, opacExt, kiteDesignInt, IntPrjNoseUp, opacInt, ViewFace, ViewSymetrique);
 
 	//addCourbe(AxeProjections, cint4);
 	//printf ("\n FormProjection* fp = getFormProjection(f3d);");
-	FormProjection* fp = getFormProjection(f3d);
 	//printf ("\n addFormProjectionCourbesToAxe(fp, AxeProjections);");
 
 	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
 	//addFormProjectionKiteDesign( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
 
-	//addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
-	//addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
+	addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignInt, ViewSymetrique, 0.0, IntPrjNoseUp );
+	addFormProjectionCourbesToAxe( AxeProjections, fp, kiteDesignExt, ViewSymetrique, 2.0, ExtPrjNoseUp );
 
 	//addFormProjectionCourbesToAxe(FormProjection* fp, TAxe* axe)
 	//printf ("\n display()");
@@ -663,8 +654,10 @@ int main(int argc, char** argv)
 	window3d = glutCreateWindow("3d design");
     InitWindow();
     InitLight();
+
     Axe3d = createAxe(window3d);
     Axe3d->axe3d = ON;
+
     glutSetWindow(window3d);
     glutPositionWindow((int) (0.25 * (double) ws), (int) (0.0 * (double) hs));
     glutReshapeWindow((int) (0.75 * (double) ws), (int) (0.48 * (double) hs));
