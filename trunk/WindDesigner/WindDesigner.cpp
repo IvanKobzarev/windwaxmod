@@ -18,7 +18,7 @@
 #include "../commun/fichier.h"
 #include "../commun/profil.h"
 #include "../commun/pince.h"
-#include "../commun/rasklad.h"
+#include "../commun/layout.h"
 #include "../commun/logger.h"
 #include "../commun/design.h"
 
@@ -78,16 +78,16 @@ int ZoomTwist3d = OFF;
 
 Courbe *CourbZoom;
 
-void Apply(int /*control*/);
+void apply(int /*control*/);
 
-void ModifView3d(int /*control*/) {
+void modifView3d(int /*control*/) {
     ViewAxe(Axe3d);
     glutSwapBuffers();
 }
 
-void ModifViewSymetrique(int /*control*/) {
-	//printf ("\n ModifVisySymetrique()");
-	Apply(0);
+void modifViewSymetrique(int /*control*/) {
+	//printf ("\n modifVisySymetrique()");
+	apply(0);
     ViewAxe(Axe3d);
     glutSwapBuffers();
 }
@@ -453,7 +453,7 @@ void readFileDesignExt(int /*control*/) {
 		delete(oldKd);
         FicDesignExt->set_text(fileNameDesignExt);
     }
-    Apply(0);
+    apply(0);
     display();
     glui->sync_live();
 }
@@ -473,7 +473,7 @@ void readFileDesignInt(int /*control*/) {
 		delete(oldKd);
         FicDesignInt->set_text(fileNameDesignInt);
     }
-    Apply(0);
+    apply(0);
     display();
     glui->sync_live();
 }
@@ -494,7 +494,7 @@ void readProject(int /*control*/) {
         delete(oldWpp);
         FicProject->set_text(fileNameProject);
     }
-    //Appliquer(0);
+    //apply(0);
     display();
     glui->sync_live();
 }
@@ -540,7 +540,7 @@ void initAxe2d() {
 	AxeProjections->ZGrid = OFF;
 }
 
-void Apply(int /*control*/) {
+void apply(int /*control*/) {
 	printf ("\nclearMeshsAxe(Axe3d);");
     clearMeshsAxe(Axe3d);
 
@@ -582,24 +582,24 @@ void Apply(int /*control*/) {
 	display();
 }
 
-void ModifXYGrid(int /*control*/) {
-	//printf ("\n ModifXYGrid()");
+void modifXYGrid(int /*control*/) {
+	//printf ("\n modifXYGrid()");
 	AxeProjections->XGrid = XYGrid;
 	AxeProjections->YGrid = XYGrid;
 	display();
 }
 
-void ModifExtPrjNoseUp(int /*control*/) {
-	Apply(0);
+void modifExtPrjNoseUp(int /*control*/) {
+	apply(0);
 	display();
 }
 
-void ModifIntPrjNoseUp(int /*control*/) {
-	Apply(0);
+void modifIntPrjNoseUp(int /*control*/) {
+	apply(0);
 	display();
 }
 
-void ModifProjection3d(int /*control*/) {
+void modifProjection3d(int /*control*/) {
     /*test type de proj.*/
 	if (ProjOrthoPers == 0) {
         Axe3d->proj = PROJ_ORTHOGONALE;
@@ -684,16 +684,16 @@ int main(int argc, char** argv)
 
 	//FicDesign->set_h(10);
 	GLUI_Panel *panel2dOptions = glui->add_panel("2D");
-	glui->add_checkbox_to_panel(panel2dOptions, "XY grid", &XYGrid, 0,  &ModifXYGrid);
+	glui->add_checkbox_to_panel(panel2dOptions, "XY grid", &XYGrid, 0,  &modifXYGrid);
 
-	glui->add_checkbox_to_panel(panel2dOptions, "Ext Projection nose up", &ExtPrjNoseUp, 0,  &ModifExtPrjNoseUp);
-	glui->add_checkbox_to_panel(panel2dOptions, "Int Projection nose up", &IntPrjNoseUp, 0,  &ModifIntPrjNoseUp);
+	glui->add_checkbox_to_panel(panel2dOptions, "Ext Projection nose up", &ExtPrjNoseUp, 0,  &modifExtPrjNoseUp);
+	glui->add_checkbox_to_panel(panel2dOptions, "Int Projection nose up", &IntPrjNoseUp, 0,  &modifIntPrjNoseUp);
 
     GLUI_Panel *panelViewOptions = glui->add_panel("");
-    glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &ViewSymetrique, 0, &ModifViewSymetrique);
+    glui->add_checkbox_to_panel(panelViewOptions, "symetrique", &ViewSymetrique, 0, &modifViewSymetrique);
     GLUI_Panel *panel_proj = glui->add_panel_to_panel(panelViewOptions, "Projection");
     GLUI_RadioGroup *radio_proj =
-            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &ModifProjection3d);
+            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &modifProjection3d);
     glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
@@ -704,13 +704,13 @@ int main(int argc, char** argv)
 	GLUI_Spinner *intTranspSpinner = glui->add_spinner_to_panel(panelOpacity, "Int", GLUI_SPINNER_FLOAT, &(opacInt), 0, &modifSpinnerInt);
 	
 	intTranspSpinner->set_float_limits(0.0f,1.0f);
-    glui->add_button("Apply", 0, &Apply);
+    glui->add_button("apply", 0, &apply);
 	// ----- end of constructing GUI ----- 
 
     GLUI_Master.set_glutIdleFunc(NULL);
 	glui->sync_live();
 
-	Apply(0);
+	apply(0);
 	AxeSel = Axe3d;
     display();
     glutMainLoop();

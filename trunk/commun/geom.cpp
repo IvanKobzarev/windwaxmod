@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include "plot.h"
-#include "rasklad.h"
+#include "layout.h"
 #include "matrice.h"
 #include "geom.h"
 #include "fichier.h"
@@ -880,7 +880,7 @@ void int_cer(
 		}
 		// choix de la solution au sens des moindres carrï¿½s ...
 		//test normeO1P=r1 et normeO2P=r2
-		//choix des deux valeurs mini ...
+		//choix des deux Value mini ...
 		distmin1=1000000000000.0f; imin1=0;
 		for(i=0; i<4; i++){
 			if (distmin1 > distR[i]){

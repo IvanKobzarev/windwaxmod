@@ -18,7 +18,7 @@
 #include "../commun/fichier.h"
 #include "../commun/profil.h"
 #include "../commun/pince.h"
-#include "../commun/rasklad.h"
+#include "../commun/layout.h"
 #include "../commun/logger.h"
 
 #include "GL/glui.h"
@@ -220,14 +220,14 @@ void readProject(int /*control*/) {
         delete(oldWpp);
         FicProject->set_text(fileNameProject);
     }
-    //Appliquer(0);
+    //apply(0);
     display();
     glui->sync_live();
 }
 
 
 
-void Apply(int /*control*/) {
+void apply(int /*control*/) {
     AxeProfiles->XAuto = ON;
     AxeProfiles->YAuto = ON;
     AxeProfiles->ZAuto = ON;
@@ -302,8 +302,8 @@ void Apply(int /*control*/) {
 	display();
 }
 
-void ModifXYGrid(int /*control*/) {
-	printf ("\n ModifXYGrid()");
+void modifXYGrid(int /*control*/) {
+	printf ("\n modifXYGrid()");
 	AxeProfiles->XGrid = XYGrid;
 	AxeProfiles->YGrid = XYGrid;
 
@@ -355,11 +355,11 @@ int main(int argc, char** argv)
     //SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
 
 
-	glui->add_checkbox("XY grid", &XYGrid, 0,  &ModifXYGrid);
+	glui->add_checkbox("XY grid", &XYGrid, 0,  &modifXYGrid);
 
-    GLUI_Button *btnApply =
-            glui->add_button("Apply", 0, &Apply);
-    btnApply->set_w(10);
+    GLUI_Button *btnapply =
+            glui->add_button("apply", 0, &apply);
+    btnapply->set_w(10);
 
     glui->add_column(true);
 
@@ -397,7 +397,7 @@ int main(int argc, char** argv)
     //GLUI_Panel *panel = glui->add_panel("");
 
     GLUI_Master.set_glutIdleFunc(NULL);
-	Apply(0);
+	apply(0);
     glui->sync_live();
 
     display();

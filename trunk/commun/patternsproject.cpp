@@ -9,7 +9,7 @@
 #include "matrice.h"
 #include "patternsproject.h"
 #include "geom.h"
-#include "rasklad.h"
+#include "layout.h"
 #define sqr(f1) ((f1)*(f1))
 #define pi 3.141592675f
 

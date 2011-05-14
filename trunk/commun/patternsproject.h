@@ -32,7 +32,7 @@ class WindPatternsProject
         float PosPinceBF[2];
         float AmpPinceBA[2];
         float AmpPinceBF[2];
-        int RaskladSymetrique;
+        int LayoutSymetrique;
         Matrix *IntProfCent, *ExtProfCent, *IntProfBout ,*ExtProfBout;
         int PinceNosRadio;
         int PinceHvostRadio;
@@ -56,7 +56,7 @@ class WindPatternsProject
         int PinceHvostEqualAmp;
         int PinceNos0Amp;
         int PinceHvost0Amp;
-        int RaskladKlapans;
+        int LayoutKlapans;
         int Ventilation;
         int VentilationLayout;
         int ReperPointsPlotterFormat;
@@ -64,7 +64,7 @@ class WindPatternsProject
 
         float textX;
         float textY;
-        float tochnostRasklad2;
+        float tochnostLayout2;
         float modePinces;
         int  VentHoles;
         int RepPoints;

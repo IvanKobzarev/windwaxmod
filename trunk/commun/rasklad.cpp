@@ -8,7 +8,7 @@
 #include <conio.h>
 #include <math.h>
 
-#include "rasklad.h"
+#include "layout.h"
 #include "geom.h"
 #include "fichier.h"
 #include "plot.h"
@@ -26,11 +26,11 @@
 #endif
 
 
-Rasklad::~Rasklad() {
+Layout::~Layout() {
 
 }
 
-Rasklad::Rasklad(int n) {
+Layout::Layout(int n) {
     funcL1 = new Matrix*[n - 1];
     funcR1 = new Matrix*[n - 1];
     funcL2 = new Matrix*[n - 1];
@@ -67,8 +67,8 @@ Rasklad::Rasklad(int n) {
     isCenterPanel = false;
 }
 
-Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F) {
-    if ( gfd->debug ) printf("\n calcIndepPinceRasklad()");
+Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
+    if ( gfd->debug ) printf("\n calcIndepPinceLayout()");
 
     char name[255];
     if (getLayoutLogger() == NULL) {
@@ -84,8 +84,8 @@ Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F) {
     getLayoutLogger()->logprintf("\nVENT_HOLES %s", gfd->fileNameVentHoles);
     int n = F->m_nbProfils;
     bool isCenterPanel = (1 & F->NbCaiss);
-    Rasklad* rasklad = new Rasklad(n);
-    rasklad->isCenterPanel = isCenterPanel;
+    Layout* Layout = new Layout(n);
+    Layout->isCenterPanel = isCenterPanel;
     int startNerv;
     //printf ("\n 1");
     if (isCenterPanel) {
@@ -94,37 +94,37 @@ Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F) {
         startNerv = 1;
 
         Pince* p0f1 = getPince(gfd, 0, 1, 1);
-        rasklad->pinceLAAmp1[0] = p0f1->AmpA;
-        rasklad->pinceLFAmp1[0] = p0f1->AmpF;
-        rasklad->pinceRAAmp1[0] = p0f1->AmpA;
-        rasklad->pinceRFAmp1[0] = p0f1->AmpF;
-        rasklad->funcL1[0] = p0f1->function1;
-        rasklad->funcR1[0] = p0f1->function1;
-        goCalcPinceLen(gfd, 0, 1, &(rasklad->lenp1[0]));
+        Layout->pinceLAAmp1[0] = p0f1->AmpA;
+        Layout->pinceLFAmp1[0] = p0f1->AmpF;
+        Layout->pinceRAAmp1[0] = p0f1->AmpA;
+        Layout->pinceRFAmp1[0] = p0f1->AmpF;
+        Layout->funcL1[0] = p0f1->function1;
+        Layout->funcR1[0] = p0f1->function1;
+        goCalcPinceLen(gfd, 0, 1, &(Layout->lenp1[0]));
 
         Pince* p0f2 = getPince(gfd, 0, 1, 2);
-        rasklad->pinceLAAmp2[0] = p0f2->AmpA;
-        rasklad->pinceRAAmp2[0] = p0f2->AmpA;
-        rasklad->pinceLFAmp2[0] = p0f2->AmpF;
-        rasklad->pinceRFAmp2[0] = p0f2->AmpF;
-        rasklad->funcL2[0] = p0f2->function1;
-        rasklad->funcR2[0] = p0f2->function1;
-        goCalcPinceLen(gfd, 0, 2, &(rasklad->lenp2[0]));
+        Layout->pinceLAAmp2[0] = p0f2->AmpA;
+        Layout->pinceRAAmp2[0] = p0f2->AmpA;
+        Layout->pinceLFAmp2[0] = p0f2->AmpF;
+        Layout->pinceRFAmp2[0] = p0f2->AmpF;
+        Layout->funcL2[0] = p0f2->function1;
+        Layout->funcR2[0] = p0f2->function1;
+        goCalcPinceLen(gfd, 0, 2, &(Layout->lenp2[0]));
     }
 	//printf ("\n 2");
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 1,
-                &(rasklad->pinceLAAmp1[inoNerv]), &(rasklad->pinceLFAmp1[inoNerv]), &(rasklad->funcL1[inoNerv]),
-                &(rasklad->pinceRAAmp1[inoNerv]), &(rasklad->pinceRFAmp1[inoNerv]), &(rasklad->funcR1[inoNerv]),
-                &(rasklad->lenp1[inoNerv]));
+                &(Layout->pinceLAAmp1[inoNerv]), &(Layout->pinceLFAmp1[inoNerv]), &(Layout->funcL1[inoNerv]),
+                &(Layout->pinceRAAmp1[inoNerv]), &(Layout->pinceRFAmp1[inoNerv]), &(Layout->funcR1[inoNerv]),
+                &(Layout->lenp1[inoNerv]));
     }
 	//printf ("\n 3");
     getLayoutLogger()->logprintf("\n");
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 2,
-                &(rasklad->pinceLAAmp2[inoNerv]), &(rasklad->pinceLFAmp2[inoNerv]), &(rasklad->funcL2[inoNerv]),
-                &(rasklad->pinceRAAmp2[inoNerv]), &(rasklad->pinceRFAmp2[inoNerv]), &(rasklad->funcR2[inoNerv]),
-                &(rasklad->lenp2[inoNerv]));
+                &(Layout->pinceLAAmp2[inoNerv]), &(Layout->pinceLFAmp2[inoNerv]), &(Layout->funcL2[inoNerv]),
+                &(Layout->pinceRAAmp2[inoNerv]), &(Layout->pinceRFAmp2[inoNerv]), &(Layout->funcR2[inoNerv]),
+                &(Layout->lenp2[inoNerv]));
     }
 	//printf ("\n 4");
     //if (DEBUG) printf("\n");
@@ -132,24 +132,24 @@ Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F) {
     // calc Profile Nervures
     for (int inoNerv = 0; inoNerv < n - 1; inoNerv++) {
         goCalcNervureWithPince(gfd, inoNerv, 2, inoNerv, 1,
-                rasklad->lenp2[inoNerv], rasklad->lenp1[inoNerv], &(rasklad->coeffn[inoNerv]));
+                Layout->lenp2[inoNerv], Layout->lenp1[inoNerv], &(Layout->coeffn[inoNerv]));
     }
     //if (DEBUG) printf("\n");
     // calc Diagonal Nervures
 	if (gfd->DiagNervs) {
 		int isave = 0;
 		for (int i = 0; i < gfd->quantDiag; i++) {
-			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] - 1, 1, rasklad->lenp2[gfd->noNervD[i]], rasklad->lenp1[gfd->noNervD[i] - 1], &(rasklad->coeffd[isave]));
+			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] - 1, 1, Layout->lenp2[gfd->noNervD[i]], Layout->lenp1[gfd->noNervD[i] - 1], &(Layout->coeffd[isave]));
 			isave++;
-			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] + 1, 1, rasklad->lenp2[gfd->noNervD[i]], rasklad->lenp1[gfd->noNervD[i] + 1], &(rasklad->coeffd[isave]));
+			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] + 1, 1, Layout->lenp2[gfd->noNervD[i]], Layout->lenp1[gfd->noNervD[i] + 1], &(Layout->coeffd[isave]));
 			isave++;
 		}
 	}
-    return rasklad;
+    return Layout;
 }
 
-void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
-    if (gfd->debug) printf("\n SaveRasklad2()");
+void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
+    if (gfd->debug) printf("\n SaveLayout2()");
     int startNoNerv = 0, noNerv = 0, face = 1;
     Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
@@ -234,7 +234,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
     for (face = 1; face <= 2; face++) {
         numncol[col] = isave;
         col++;
-        if (gfd->RaskladSymetrique) {
+        if (gfd->LayoutSymetrique) {
 	    //TOTEST not tested yet
             for (i = n - 1; i > 0; i--) {
                 if (face == 1) {
@@ -253,16 +253,16 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     posDeb2[isave] = debBorder;
                     posFin2[isave] = 100.0f;
 
-                    p1a0[isave] = rasklad->pinceLAAmp1 [i];
-                    p1a00[isave] = rasklad->pinceLAAmp2 [i];
+                    p1a0[isave] = Layout->pinceLAAmp1 [i];
+                    p1a00[isave] = Layout->pinceLAAmp2 [i];
 
-                    p1f0[isave] = rasklad->pinceLFAmp1 [i];
-                    func1f0[isave] = rasklad->funcL1[i];
-                    func1f1[isave] = rasklad->funcR1[i - 1];
-                    p1a1[isave] = rasklad->pinceRAAmp1 [i - 1];
-                    p1a01[isave] = rasklad->pinceRAAmp2 [i - 1];
+                    p1f0[isave] = Layout->pinceLFAmp1 [i];
+                    func1f0[isave] = Layout->funcL1[i];
+                    func1f1[isave] = Layout->funcR1[i - 1];
+                    p1a1[isave] = Layout->pinceRAAmp1 [i - 1];
+                    p1a01[isave] = Layout->pinceRAAmp2 [i - 1];
 
-                    p1f1[isave] = rasklad->pinceRFAmp1 [i - 1];
+                    p1f1[isave] = Layout->pinceRFAmp1 [i - 1];
                     isPince[isave] = 1;
                     coeff[isave] = 0.0f;
                     isave++;
@@ -288,16 +288,16 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     posFin1[isave] = tpF1;
                     posDeb2[isave] = debBorder;
                     posFin2[isave] = tpF2;
-                    p2a0[isave] = rasklad->pinceLAAmp2 [i];
+                    p2a0[isave] = Layout->pinceLAAmp2 [i];
                     p2a00[isave] = 0.0f;
 
-                    p2f0[isave] = rasklad->pinceLFAmp2 [i];
-                    func2f0[isave] = rasklad->funcL2[i];
-                    func2f1[isave] = rasklad->funcR2[i - 1];
-                    p2a1[isave] = rasklad->pinceRAAmp2 [i - 1];
+                    p2f0[isave] = Layout->pinceLFAmp2 [i];
+                    func2f0[isave] = Layout->funcL2[i];
+                    func2f1[isave] = Layout->funcR2[i - 1];
+                    p2a1[isave] = Layout->pinceRAAmp2 [i - 1];
                     p2a01[isave] = 0.0f;
 
-                    p2f1[isave] = rasklad->pinceRFAmp2 [i - 1];
+                    p2f1[isave] = Layout->pinceRFAmp2 [i - 1];
                     isPince[isave] = 1;
                     coeff[isave] = 0.0f;
                     isave++;
@@ -315,17 +315,17 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                         posFin1[isave] = 100.0f;
                         posDeb2[isave] = gfd->VentHolesFin;
                         posFin2[isave] = 100.0f;
-                        p2a0[isave] = rasklad->pinceLAAmp2 [i];
+                        p2a0[isave] = Layout->pinceLAAmp2 [i];
                         p2a00[isave] = 0.0f;
 
 
-                        p2f0[isave] = rasklad->pinceLFAmp2 [i];
-                        func2f0[isave] = rasklad->funcL2[i];
-                        func2f1[isave] = rasklad->funcR2[i - 1];
-                        p2a1[isave] = rasklad->pinceRAAmp2 [i - 1];
+                        p2f0[isave] = Layout->pinceLFAmp2 [i];
+                        func2f0[isave] = Layout->funcL2[i];
+                        func2f1[isave] = Layout->funcR2[i - 1];
+                        p2a1[isave] = Layout->pinceRAAmp2 [i - 1];
                         p2a01[isave] = 0.0f;
 
-                        p2f1[isave] = rasklad->pinceRFAmp2 [i - 1];
+                        p2f1[isave] = Layout->pinceRFAmp2 [i - 1];
                         isPince[isave] = 1;
                         coeff[isave] = 0.0f;
                         isave++;
@@ -335,7 +335,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             }
         }
 
-        if (rasklad->isCenterPanel) {
+        if (Layout->isCenterPanel) {
             if (face == 1) {
                 n1[isave] = -1;
                 n2[isave] = 0;
@@ -353,16 +353,16 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 posDeb2[isave] = debBorder;
                 posFin2[isave] = 100.0f;
 
-                p1a00[isave] = rasklad->pinceLAAmp2[0];
-                p1a0[isave] = rasklad->pinceLAAmp1[0];
-                p1f0[isave] = rasklad->pinceLFAmp1[0];
+                p1a00[isave] = Layout->pinceLAAmp2[0];
+                p1a0[isave] = Layout->pinceLAAmp1[0];
+                p1f0[isave] = Layout->pinceLFAmp1[0];
 
-                p1a01[isave] = rasklad->pinceLAAmp2[0];
-                p1a1[isave] = rasklad->pinceLAAmp1[0];
-                p1f1[isave] = rasklad->pinceLFAmp1[0];
+                p1a01[isave] = Layout->pinceLAAmp2[0];
+                p1a1[isave] = Layout->pinceLAAmp1[0];
+                p1f1[isave] = Layout->pinceLFAmp1[0];
 
-                func1f0[isave] = rasklad->funcL1[0];
-                func1f1[isave] = rasklad->funcL1[0];
+                func1f0[isave] = Layout->funcL1[0];
+                func1f1[isave] = Layout->funcL1[0];
                 if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
                     posDeb1[isave] = 0.0f;
                     posDeb2[isave] = 0.0f;
@@ -392,15 +392,15 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     posFin2[isave] = debBorder;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = rasklad->pinceRAAmp2 [i];
-                    p2f0[isave] = rasklad->pinceRFAmp2 [i];
+                    p2a0[isave] = Layout->pinceRAAmp2 [i];
+                    p2f0[isave] = Layout->pinceRFAmp2 [i];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = rasklad->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = rasklad->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
 
-                    func2f0[isave] = rasklad->funcR2[i];
-                    func2f1[isave] = rasklad->funcL2[i + 1];
+                    func2f0[isave] = Layout->funcR2[i];
+                    func2f1[isave] = Layout->funcL2[i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -430,15 +430,15 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 posFin2[isave] = tpF2;
 
                 p2a00[isave] = 0.0f;
-                p2a0[isave] = rasklad->pinceLAAmp2[0];
-                p2f0[isave] = rasklad->pinceLFAmp2[0];
+                p2a0[isave] = Layout->pinceLAAmp2[0];
+                p2f0[isave] = Layout->pinceLFAmp2[0];
 
                 p2a01[isave] = 0.0f;
-                p2a1[isave] = rasklad->pinceLAAmp2[0];
-                p2f1[isave] = rasklad->pinceLFAmp2[0];
+                p2a1[isave] = Layout->pinceLAAmp2[0];
+                p2f1[isave] = Layout->pinceLFAmp2[0];
 
-                func2f0[isave] = rasklad->funcL2[0];
-                func2f1[isave] = rasklad->funcL2[0];
+                func2f0[isave] = Layout->funcL2[0];
+                func2f1[isave] = Layout->funcL2[0];
                 isave++;
 
                 if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
@@ -461,18 +461,18 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = rasklad->pinceLAAmp2[0];
-                    p2f0[isave] = rasklad->pinceLFAmp2[0];
+                    p2a0[isave] = Layout->pinceLAAmp2[0];
+                    p2f0[isave] = Layout->pinceLFAmp2[0];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = rasklad->pinceLAAmp2[0];
-                    p2f1[isave] = rasklad->pinceLFAmp2[0];
+                    p2a1[isave] = Layout->pinceLAAmp2[0];
+                    p2f1[isave] = Layout->pinceLFAmp2[0];
 
-                    func2f0[isave] = rasklad->funcL2[0];
-                    func2f1[isave] = rasklad->funcL2[0];
+                    func2f0[isave] = Layout->funcL2[0];
+                    func2f1[isave] = Layout->funcL2[0];
                     isave++;
 
-                    if (gfd->RaskladKlapans) {
+                    if (gfd->LayoutKlapans) {
                         if (gfd->VentHolesDouble){
                             n1[isave] = -1;
                             n2[isave] = 0;
@@ -524,16 +524,16 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 posDeb2[isave] = debBorder;
                 posFin2[isave] = 100.0f;
 
-                p1a00[isave] = rasklad->pinceRAAmp2 [i];
-                p1a0[isave] = rasklad->pinceRAAmp1 [i];
-                p1f0[isave] = rasklad->pinceRFAmp1 [i];
+                p1a00[isave] = Layout->pinceRAAmp2 [i];
+                p1a0[isave] = Layout->pinceRAAmp1 [i];
+                p1f0[isave] = Layout->pinceRFAmp1 [i];
 
-                p1a01[isave] = rasklad->pinceLAAmp2 [i + 1];
-                p1a1[isave] = rasklad->pinceLAAmp1 [i + 1];
-                p1f1[isave] = rasklad->pinceLFAmp1 [i + 1];
+                p1a01[isave] = Layout->pinceLAAmp2 [i + 1];
+                p1a1[isave] = Layout->pinceLAAmp1 [i + 1];
+                p1f1[isave] = Layout->pinceLFAmp1 [i + 1];
 
-                func1f0[isave] = rasklad->funcR1[i];
-                func1f1[isave] = rasklad->funcL1[i + 1];
+                func1f0[isave] = Layout->funcR1[i];
+                func1f1[isave] = Layout->funcL1[i + 1];
 
                 ff1[isave] = 1;
                 ff2[isave] = 1;
@@ -585,15 +585,15 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     posFin2[isave] = debBorder;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = rasklad->pinceRAAmp2 [i];
-                    p2f0[isave] = rasklad->pinceRFAmp2 [i];
+                    p2a0[isave] = Layout->pinceRAAmp2 [i];
+                    p2f0[isave] = Layout->pinceRFAmp2 [i];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = rasklad->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = rasklad->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
 
-                    func2f0[isave] = rasklad->funcR2[i];
-                    func2f1[isave] = rasklad->funcL2[i + 1];
+                    func2f0[isave] = Layout->funcR2[i];
+                    func2f1[isave] = Layout->funcL2[i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -614,15 +614,15 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 posFin2[isave] = tpF2;
 
                 p2a00[isave] = 0.0f;
-                p2a0[isave] = rasklad->pinceRAAmp2 [i];
-                p2f0[isave] = rasklad->pinceRFAmp2 [i];
+                p2a0[isave] = Layout->pinceRAAmp2 [i];
+                p2f0[isave] = Layout->pinceRFAmp2 [i];
 
                 p2a01[isave] = 0.0f;
-                p2a1[isave] = rasklad->pinceLAAmp2 [i + 1];
-                p2f1[isave] = rasklad->pinceLFAmp2 [i + 1];
+                p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
+                p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
 
-                func2f0[isave] = rasklad->funcR2[i];
-                func2f1[isave] = rasklad->funcL2[i + 1];
+                func2f0[isave] = Layout->funcR2[i];
+                func2f1[isave] = Layout->funcL2[i + 1];
 
                 fd1[isave] = 2;
                 fd2[isave] = 2;
@@ -657,15 +657,15 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     posFin2[isave] = 100.0f;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = rasklad->pinceRAAmp2 [i];
-                    p2f0[isave] = rasklad->pinceRFAmp2 [i];
+                    p2a0[isave] = Layout->pinceRAAmp2 [i];
+                    p2f0[isave] = Layout->pinceRFAmp2 [i];
 
-                    func2f0[isave] = rasklad->funcR2[i];
-                    func2f1[isave] = rasklad->funcL2[i + 1];
+                    func2f0[isave] = Layout->funcR2[i];
+                    func2f1[isave] = Layout->funcL2[i + 1];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = rasklad->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = rasklad->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -683,7 +683,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                     }
                     isave++;
 
-                    if (gfd->RaskladKlapans) {
+                    if (gfd->LayoutKlapans) {
                         if (gfd->VentHolesDouble){
                             n1[isave] = i;
                             n2[isave] = i+1;
@@ -743,7 +743,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
             col++;
 
             // profile
-            if (gfd->RaskladSymetrique) {
+            if (gfd->LayoutSymetrique) {
                 for (i = n - 2; i > 0; i--) {
                     n1[isave] = i;
                     n2[isave] = i;
@@ -779,7 +779,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 
                 fd2[isave] = 1;
                 ff2[isave] = 1;
-                coeff[isave] = rasklad->coeffn[i];
+                coeff[isave] = Layout->coeffn[i];
                 isave++;
 
             }
@@ -788,7 +788,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 
 			if (gfd->DiagNervs) {
 				int k = 2 * gfd->quantDiag - 1;
-				if (gfd->RaskladSymetrique) {
+				if (gfd->LayoutSymetrique) {
 					for (int i = gfd->quantDiag - 1; i >= 0; i--) {
 						n1[isave] = gfd->noNervD[i];
 						n2[isave] = gfd->noNervD[i] + 1;
@@ -803,7 +803,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 						posFin1[isave] = gfd->PosDiagNerv2F;
 						posDeb2[isave] = gfd->PosDiagNerv1A;
 						posFin2[isave] = gfd->PosDiagNerv1F;
-						coeff[isave] = rasklad->coeffd[k];
+						coeff[isave] = Layout->coeffd[k];
 						isave++;
 						k--;
 						n1[isave] = gfd->noNervD[i];
@@ -821,7 +821,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 						posFin1[isave] = gfd->PosDiagNerv2F;
 						posDeb2[isave] = gfd->PosDiagNerv1A;
 						posFin2[isave] = gfd->PosDiagNerv1F;
-						coeff[isave] = rasklad->coeffd[k];
+						coeff[isave] = Layout->coeffd[k];
 						isave++;
 						k--;
 					}
@@ -842,7 +842,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
 
                 posDeb2[isave] = gfd->PosDiagNerv1A;
                 posFin2[isave] = gfd->PosDiagNerv1F;
-                coeff[isave] = rasklad->coeffd[k];
+                coeff[isave] = Layout->coeffd[k];
                 isave++;
                 k++;
 
@@ -860,7 +860,7 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
                 posFin1[isave] = gfd->PosDiagNerv2F;
                 posDeb2[isave] = gfd->PosDiagNerv1A;
                 posFin2[isave] = gfd->PosDiagNerv1F;
-                coeff[isave] = rasklad->coeffd[k];
+                coeff[isave] = Layout->coeffd[k];
                 isave++;
                 k++;
             }
@@ -1086,10 +1086,10 @@ void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad) {
         if (!isKlapan[t]) {
             if (isPince[t]) {
 
-				double coeff1 = rasklad->coeffn[n1[t]];
-				double coeff2 = rasklad->coeffn[n2[t]];
+				double coeff1 = Layout->coeffn[n1[t]];
+				double coeff2 = Layout->coeffn[n2[t]];
 
-				if (n1[t] == -1) coeff1 = rasklad->coeffn[0];
+				if (n1[t] == -1) coeff1 = Layout->coeffn[0];
 				if (n2[t] == n-1) coeff2 = -1;
 
                 GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
@@ -2089,7 +2089,7 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
         delta = fabs(l1p1 - l2p0);
         deltaMiddleInit = fabs(middle - middleInit);
 
-        if (minDelta < (gfd->tochnostRasklad2 * 0.001f)) {
+        if (minDelta < (gfd->tochnostLayout2 * 0.001f)) {
             if (deltaMiddleInit < minDeltaMiddleInit) {
                 minDelta = delta;
                 minlp1 = l1p1;
@@ -2121,7 +2121,7 @@ void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double 
     }
     getLayoutLogger()->logprintf("\n%2df%d D=%6.4f(M=%5.3f)[%5.3f] %8.5f/%8.5f l%8.5f a%6.4f a%6.4f",
             noNerv, face, (minDelta * 1000), minMiddle, minMiddle - middleInit, minlp1, minlp2, len1, mina1, mina2);
-    if (minDelta < (gfd->tochnostRasklad2 * 0.001f)) getLayoutLogger()->logprintf(" OK:)"); else getLayoutLogger()->logprintf(" BAD!");
+    if (minDelta < (gfd->tochnostLayout2 * 0.001f)) getLayoutLogger()->logprintf(" OK:)"); else getLayoutLogger()->logprintf(" BAD!");
     *len = (minlp1 + minlp2) * 0.5f;
 
     *pLA = apASumAbs*minMiddle;
@@ -2188,9 +2188,9 @@ void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, in
     long2 = Longueur(newXd[1], newYd[1]);
     len2 = long2->Element(long2->GetLignes() - 1, 0);
     getLayoutLogger()->logprintf("... d1=%f d2=%f", 1000 * (lp1 - len1), 1000 * (lp2 - len2));
-    if (1000 * (lp1 - len1) < gfd->tochnostRasklad2) getLayoutLogger()->logprintf(" OK");
+    if (1000 * (lp1 - len1) < gfd->tochnostLayout2) getLayoutLogger()->logprintf(" OK");
     else getLayoutLogger()->logprintf(" BAD");
-    if (1000 * (lp2 - len2) < gfd->tochnostRasklad2) getLayoutLogger()->logprintf(" OK");
+    if (1000 * (lp2 - len2) < gfd->tochnostLayout2) getLayoutLogger()->logprintf(" OK");
     else getLayoutLogger()->logprintf(" BAD");
     delete (long1);
     delete (long2);
@@ -2261,7 +2261,7 @@ void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pL
         deltaMiddleInit = fabs(middle - middleInit);
 
 
-        if (minDelta < (gfd->tochnostRasklad2 / 1000.0f)) {
+        if (minDelta < (gfd->tochnostLayout2 / 1000.0f)) {
             if (deltaMiddleInit < minDeltaMiddleInit) {
                 minDelta = delta;
                 minlp1 = l1p1;

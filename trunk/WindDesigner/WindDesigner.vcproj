@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\layout.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\logger.cpp"
 				>
 			</File>
@@ -206,10 +210,6 @@
 			</File>
 			<File
 				RelativePath="..\commun\profil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\commun\rasklad.cpp"
 				>
 			</File>
 			<File
@@ -255,6 +255,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\layout.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\logger.h"
 				>
 			</File>
@@ -276,10 +280,6 @@
 			</File>
 			<File
 				RelativePath="..\commun\profil.h"
-				>
-			</File>
-			<File
-				RelativePath="..\commun\rasklad.h"
 				>
 			</File>
 			<File

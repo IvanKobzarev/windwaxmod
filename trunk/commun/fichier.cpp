@@ -40,7 +40,7 @@ using namespace std;
 Form::Form() 
 	: m_pProfils( NULL ), m_nbProfils(0)
 {
-	//valeurs par default
+	//Value par default
 	CoeffProgGeom = 0.93f;
         CoeffExp = 0.0f;
 	EpaiRelCent = 17.0f;
@@ -446,11 +446,11 @@ void Ballonement::loadFromFile(const char* fileName) {
 	CPF *m_pPF;
 
 	m_pSF = new CSF();
-	m_pSF->m_bModified = false;
+	m_pSF->m_bmodified = false;
 	m_pSF->InitSplineFoil();
 
 	m_pPF = new CPF();
-	m_pPF->m_bModified = false;
+	m_pPF->m_bmodified = false;
 	m_pPF->InitSplinedFoil();
 
 	m_pSF->Serialize(ar, true);
@@ -915,7 +915,7 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                     case 36: fscanf(fid,"%f", &(wpp->VentHolesDeb)); break;
                     case 37: fscanf(fid,"%f", &(wpp->VentHolesFin)); break;
 
-                    case 38: fscanf(fid,"%d", &(wpp->RaskladKlapans)); break;
+                    case 38: fscanf(fid,"%d", &(wpp->LayoutKlapans)); break;
                     case 39: fscanf(fid,"%d", &(wpp->VentHolesDouble)); break;
                     case 40: fscanf(fid,"%f", &(wpp->PosKlapanFin)); break;
 
@@ -931,7 +931,7 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
                     case 48: fscanf(fid,"%f", &(wpp->margeFinDiagNerv)); break;
 
 
-                    case 49: fscanf(fid,"%f", &(wpp->tochnostRasklad2)); break;
+                    case 49: fscanf(fid,"%f", &(wpp->tochnostLayout2)); break;
                     case 50: fscanf(fid,"%f", &(wpp->XMashtab)); break;
                     case 51: fscanf(fid,"%f", &(wpp->textX)); break;
                     case 52: fscanf(fid,"%f", &(wpp->textY)); break;
@@ -1033,7 +1033,7 @@ void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
                     fprintf(fid,"\n%s %f", motsClef[36],wpp->VentHolesDeb);
                     fprintf(fid,"\n%s %f", motsClef[37],wpp->VentHolesFin);
 
-                    fprintf(fid,"\n\n%s %d", motsClef[38],wpp->RaskladKlapans);
+                    fprintf(fid,"\n\n%s %d", motsClef[38],wpp->LayoutKlapans);
                     fprintf(fid,"\n%s %d", motsClef[39],wpp->VentHolesDouble);
                     fprintf(fid,"\n%s %f", motsClef[40],wpp->PosKlapanFin);
 
@@ -1048,7 +1048,7 @@ void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
                     fprintf(fid,"\n%s %f", motsClef[47],wpp->margeFinNerv);
                     fprintf(fid,"\n%s %f", motsClef[48],wpp->margeFinDiagNerv);
 
-                    fprintf(fid,"\n%s %f", motsClef[49],wpp->tochnostRasklad2);
+                    fprintf(fid,"\n%s %f", motsClef[49],wpp->tochnostLayout2);
                     fprintf(fid,"\n%s %f", motsClef[50],wpp->XMashtab);
                     fprintf(fid,"\n%s %f", motsClef[51],wpp->textX);
                     fprintf(fid,"\n%s %f", motsClef[52],wpp->textY);
@@ -3436,7 +3436,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                             }
             }
 
-            if ((i==0) && (nerv1==nerv2) && (gfd->RaskladKlapans) && (gfd->VentHoles)) {
+            if ((i==0) && (nerv1==nerv2) && (gfd->LayoutKlapans) && (gfd->VentHoles)) {
                 //printf ("\n go make shov!");
                 bool match = false;
 				int _i, _j;
