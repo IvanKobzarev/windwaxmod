@@ -9,7 +9,7 @@
 #include "plot.h"
 #include "pince.h"
 #include "matrice.h"
-#include "rasklad.h"
+#include "layout.h"
 #include "patternsproject.h"
 
 

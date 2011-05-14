@@ -20,7 +20,7 @@
 #include "../commun/fichier.h"
 #include "../commun/profil.h"
 #include "../commun/pince.h"
-#include "../commun/rasklad.h"
+#include "../commun/layout.h"
 #include "../commun/logger.h"
 
 
@@ -59,8 +59,8 @@ float VentHolesDeb = 2.0f;
 float VentHolesFin = 6.0f;
 
 int ViewSymetrique = 0;
-int RaskladSymetrique = 0;
-int RaskladKlapans = 0;
+int LayoutSymetrique = 0;
+int LayoutKlapans = 0;
 int ViewPtsSuspentes = 1; /*visualise pts de suspentage*/
 int ReperesCoutures = 1;
 int ReperesSuspentes[2] = {1, 1};
@@ -70,6 +70,7 @@ int Numerotation = 0;
 int Ventilation = 0;
 int RepPoints = 1;
 int VentilationLayout = 1;
+int layoutWithDesign = 0;
 int CorrectRepPoints = 1;
 
 int PincePowerA = 0;
@@ -111,7 +112,7 @@ float PosPinceBF[2] = {25.0, 25.0};
 float AmpPinceBA[2] = {2.5f, 2.5f};
 float AmpPinceBF[2] = {2.0f, 2.0f};
 
-float tochnostRasklad2 = 0.7f;
+float tochnostLayout2 = 0.7f;
 float margeFinExt = 4.0f;
 float margeFinInt = 1.0f;
 float margeFinNerv = 1.0f;
@@ -187,10 +188,19 @@ char fileNameRepPoints[255];
 char fileNameVentHoles[255];
 char fileNameDiagNerv[255];
 
+char fileNameDesignExt[255];
+char fileNameDesignInt[255];
+
+
 GLUI *glui;
 GLUI_StaticText *FicForm, *FicRepPoints, *FicVentHoles, *FicDiagNerv, *BlankST, *BlankST2, *FicProject;
+GLUI_StaticText *FicDesignExt;
+GLUI_StaticText *FicDesignInt;
 GLUI_EditText *NumText, *DiagNervText, *VentHolesNervsText;
 GLUI_Spinner *SpinNoNerv[2];
+
+KiteDesign* kiteDesignExt = 0;
+KiteDesign* kiteDesignInt = 0;
 
 /***********************************************/
 /*liste des procedures definies dans ce fichier*/
@@ -209,22 +219,22 @@ void InitWindow(void);
 void InitLight(void);
 void calcVue3dEtPatron(void);
 void calcMagicPinceR(int noNerv1, double perc, int face, double* percNew);
-void ModifProjection3d(int control);
-void ModifView3d(int control);
-void ModifViewSymetrique(int control);
-void Appliquer(int control);
-void AppliquerMagic(int control);
+void modifProjection3d(int control);
+void modifView3d(int control);
+void modifViewSymetrique(int control);
+void apply(int control);
+void applyMagic(int control);
 
-void Quitter(int control);
+void quit(int control);
 void Info(int control);
 void readForm(int control);
 
 Matrix** LectureFichierReperPoints(char* NomFic);
 
-void InitValeursDialogue(void);
+void initValueDialogue(void);
 void adder(int control);
 void getPointByPos (Matrix *Xd, Matrix *Yd, Matrix *P, double Pos, double *xr, double *yr);
-void calcMagicPincesRasklad();
+void calcMagicPincesLayout();
 
 WindPatternsProject* gfd = new WindPatternsProject();
 
@@ -263,7 +273,7 @@ WindPatternsProject* getWindPatternsProject() {
     gfd->PinceRadiusAlgKNos=PinceRadiusAlgKNos;
     gfd->PinceRadiusAlgKHvost=PinceRadiusAlgKHvost;
     gfd->Form=F;
-    gfd->RaskladSymetrique=RaskladSymetrique;
+    gfd->LayoutSymetrique=LayoutSymetrique;
     gfd->PosDiagNerv1A=PosDiagNerv1A;
     gfd->PosDiagNerv1F=PosDiagNerv1F;
     gfd->PosDiagNerv2A=PosDiagNerv2A;
@@ -288,7 +298,7 @@ WindPatternsProject* getWindPatternsProject() {
     gfd->textX=textX;
     gfd->textY=textY;
 
-    gfd->tochnostRasklad2=tochnostRasklad2;
+    gfd->tochnostLayout2=tochnostLayout2;
 
     gfd->PinceNosEqualAmp=PinceNosEqualAmp;
     gfd->PinceHvostEqualAmp=PinceHvostEqualAmp;
@@ -303,7 +313,7 @@ WindPatternsProject* getWindPatternsProject() {
     gfd->VentHolesDeb = VentHolesDeb;
     gfd->VentHolesFin = VentHolesFin;
     gfd->VentHolesDouble = VentHolesDouble;
-    gfd->RaskladKlapans = RaskladKlapans;
+    gfd->LayoutKlapans = LayoutKlapans;
 
     gfd->quantVH = quantVH;
     gfd->VentCentralNerv=VentCentralNerv;
@@ -419,7 +429,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 
     PinceRadiusAlgKNos=gfd->PinceRadiusAlgKNos;
     PinceRadiusAlgKHvost=gfd->PinceRadiusAlgKHvost;
-    //RaskladSymetrique=gfd->RaskladSymetrique;
+    //LayoutSymetrique=gfd->LayoutSymetrique;
     PosDiagNerv1A=gfd->PosDiagNerv1A;
     PosDiagNerv1F=gfd->PosDiagNerv1F;
     PosDiagNerv2A=gfd->PosDiagNerv2A;
@@ -450,18 +460,59 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
     textX=gfd->textX;
     textY=gfd->textY;
 
-    tochnostRasklad2=gfd->tochnostRasklad2;
+    tochnostLayout2=gfd->tochnostLayout2;
     PinceNosEqualAmp=gfd->PinceNosEqualAmp;
     PinceHvostEqualAmp=gfd->PinceHvostEqualAmp;
     VentHoles = gfd->VentHoles;
     VentHolesDeb = gfd->VentHolesDeb;
     VentHolesFin = gfd->VentHolesFin;
     VentHolesDouble = gfd->VentHolesDouble;
-    RaskladKlapans = gfd->RaskladKlapans;
+    LayoutKlapans = gfd->LayoutKlapans;
     PosKlapanFin = gfd->PosKlapanFin;
 }
 
-void InitValeursDialogue(void) {
+
+void readFileDesignExt(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
+    KiteDesign* oldKd;
+
+    CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
+    if (DlgOpen.DoModal() == IDOK) {
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameDesignExt, PtrfileName);
+        oldKd = kiteDesignExt;
+        kiteDesignExt = readKiteDesignFromFile(fileNameDesignExt);
+		delete(oldKd);
+        FicDesignExt->set_text(fileNameDesignExt);
+    }
+    apply(0);
+    display();
+    glui->sync_live();
+}
+
+void readFileDesignInt(int /*control*/) {
+    CString fileName;
+    char* PtrfileName;
+    KiteDesign* oldKd;
+
+    CFileDialog DlgOpen(TRUE, NULL, "*.wdn", OFN_OVERWRITEPROMPT, NULL, NULL);
+    if (DlgOpen.DoModal() == IDOK) {
+        fileName = DlgOpen.GetPathName();
+        PtrfileName = fileName.GetBuffer(1);
+        strcpy(fileNameDesignInt, PtrfileName);
+        oldKd = kiteDesignInt;
+        kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
+		delete(oldKd);
+        FicDesignInt->set_text(fileNameDesignInt);
+    }
+    apply(0);
+    display();
+    glui->sync_live();
+}
+
+void initValueDialogue(void) {
     NoNerv[0] = 7;
     NoNerv[1] = 7;
 
@@ -497,7 +548,7 @@ void readRepPoints(int /*control*/) {
         delete(oldRP);
         FicRepPoints->set_text(fileNameRepPoints);
     }
-    if (ReperPointsFromFile==1) Appliquer(0);
+    if (ReperPointsFromFile==1) apply(0);
 }
 
 
@@ -558,7 +609,7 @@ void readProject(int /*control*/) {
         delete(oldWpp);
         FicProject->set_text(fileNameProject);
     }
-    Appliquer(0);
+    apply(0);
     display();
     glui->sync_live();
 }
@@ -601,11 +652,11 @@ void readForm(int /*control*/) {
         AxePatron->YAuto = ON;
         AxePatron->ZAuto = ON;
         //mise a jour limite/valeur boite de dialogue
-        InitValeursDialogue();
+        initValueDialogue();
     }
     //mise a jour affichage
     //calcVue3dEtPatron();
-    Appliquer(0);
+    apply(0);
     display();
 
 }
@@ -646,33 +697,33 @@ void readForm2(int /*control*/) {
         AxePatron->ZAuto = ON;
 
         //mise a jour limite/valeur boite de dialogue
-        InitValeursDialogue();
+        initValueDialogue();
     }
     //mise a jour affichage
     calcVue3dEtPatron();
     display();
 }
 
-void ModifPinceNosRadio(int /*control*/) {
+void modifPinceNosRadio(int /*control*/) {
     calcVue3dEtPatron();
     display();
 }
 
-void ModifRepPts(int /*control*/) {
+void modifRepPts(int /*control*/) {
     calcVue3dEtPatron();
     display();
 }
 
-void ModifVentilation(int /*control*/) {
-    Appliquer(0);
+void modifVentilation(int /*control*/) {
+    apply(0);
 }
 
-void ModifPinceHvostRadio(int /*control*/) {
+void modifPinceHvostRadio(int /*control*/) {
     calcVue3dEtPatron();
     display();
 }
 
-void ModifProjection3d(int /*control*/) {
+void modifProjection3d(int /*control*/) {
     /*test type de proj.*/
 	if (ProjOrthoPers == 0) {
         Axe3d->proj = PROJ_ORTHOGONALE;
@@ -689,9 +740,9 @@ void ModifProjection3d(int /*control*/) {
 }
 
 /***************/
-/* ModifView3d */
+/* modifView3d */
 /***************/
-void ModifView3d(int /*control*/) {
+void modifView3d(int /*control*/) {
     /*recalc et retrace la vue 3d*/
     calcVue3dEtPatron();
     ViewAxe(Axe3d);
@@ -702,9 +753,9 @@ void ModifView3d(int /*control*/) {
 }
 
 /***********************/
-/* ModifViewSymetrique */
+/* modifViewSymetrique */
 /***********************/
-void ModifViewSymetrique(int /*control*/) {
+void modifViewSymetrique(int /*control*/) {
     /*recalc et retrace la vue 3d*/
     calcVue3dEtPatron();
     ViewAxe(Axe3d);
@@ -714,16 +765,20 @@ void ModifViewSymetrique(int /*control*/) {
 
 }
 
-void ModifGoPince(int /*control*/) {
+void modifGoPince(int /*control*/) {
     calcVue3dEtPatron();
     display();
 }
 
-void ModifRaskladSymetrique(int /*control*/) {
+void modifLayoutSymetrique(int /*control*/) {
 
 }
 
-void ModifVentilationLayout(int /*control*/) {
+void modifVentilationLayout(int /*control*/) {
+
+}
+
+void modifLayoutWithDesign(int /*control*/) {
 
 }
 
@@ -731,7 +786,7 @@ void adder(int /*control*/) {
 
 }
 
-void Appliquer(int /*control*/) {
+void apply(int /*control*/) {
     int i; //,j;
     Matrix *xe, *xi;
     Matrix *extProf, *intProf;
@@ -804,7 +859,7 @@ void Appliquer(int /*control*/) {
 }
 
 
-void AppliquerMagic2(int /*control*/) {
+void applyMagic2(int /*control*/) {
     int i; //,j;
     Matrix *xe, *xi;
     Matrix *extProf, *intProf;
@@ -851,15 +906,15 @@ void AppliquerMagic2(int /*control*/) {
     delete(xi);
     delete(extProf);
     delete(intProf);
-    //printf ("gocalcPinceRasklad()");
-	Rasklad* rasklad = calcIndepPinceRasklad(getWindPatternsProject(), F);
-    //printf ("...gocalcPinceRasklad()");
-	//printf ("goSaveRasklad2()");
-    SaveRasklad2(getWindPatternsProject(), rasklad);
-	//printf ("...goSaveRasklad2()");
+    //printf ("gocalcPinceLayout()");
+	Layout* Layout = calcIndepPinceLayout(getWindPatternsProject(), F);
+    //printf ("...gocalcPinceLayout()");
+	//printf ("goSaveLayout2()");
+    SaveLayout2(getWindPatternsProject(), Layout);
+	//printf ("...goSaveLayout2()");
 }
 
-void SauverFichier3dDXF( int ) //
+void saveFichier3dDXF( int ) //
 {
 	CString fileName;
 	LPTSTR PtrfileName;
@@ -899,10 +954,10 @@ void ExportWpa( int ) //
 
 
 /*************/
-/* Sauver    */
+/* save    */
 /*************/
 
-void Sauver(int dxf) {
+void save(int dxf) {
     //boite de dialogue fichier
     CString fileName;
     LPTSTR PtrfileName;
@@ -951,7 +1006,7 @@ void Sauver(int dxf) {
 
 }
 
-void SauverProject(int /*control*/) {
+void saveProject(int /*control*/) {
     //boite de dialogue fichier
     CString fileName;
     LPTSTR PtrfileName;
@@ -974,11 +1029,11 @@ void SauverProject(int /*control*/) {
 
 
 /***********/
-/* Quitter */
+/* quit */
 /***********/
 
-void Quitter(int control) {
-    if (MessageBox(NULL, "Voulez-vous vraiment quitter l'application ?", "Confirmation", MB_YESNO) == IDYES) {
+void quit(int control) {
+    if (MessageBox(NULL, "Voulez-vous vraiment quit l'application ?", "Confirmation", MB_YESNO) == IDYES) {
         /*liberation espace memoire*/
         clearAxe(Axe3d);
         //clearAxe(Axe3dBal);
@@ -1005,7 +1060,7 @@ void Info(int /*control*/) {
 
 }
 
-void calcMagicPincesRasklad() {
+void calcMagicPincesLayout() {
     int n = F->m_nbProfils;
     pincePercentage1 = new double[n];
     pincePercentage2 = new double[n];
@@ -1152,7 +1207,7 @@ void Test(int control) {
 }
 
 
-void SaveRasklad() {
+void SaveLayout() {
     int startNoNerv = 0, noNerv = 0, face = 1;
     Matrix * Xd[2], *Yd[2];//, *Xdp[2], *Ydp[2];
     Matrix * X[2], *Y[2], *Z[2], *P[2];//, *newP[2];
@@ -1442,7 +1497,7 @@ void calcMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
     printf("\n%2df%d %6.4f (%5.3f) %6.4f(%7.4f)[%4.3f] M%7.4f(%7.4f) w%5.3f/%5.3f",
             noNerv1, face, (minDelta * 1000), minapAI1, l1p1, len1, perc, minp2, len2, w1, w2);
     *percNew = minapAI1;
-    if (minDelta < (tochnostRasklad2 * 0.001)) {
+    if (minDelta < (tochnostLayout2 * 0.001)) {
         printf(" OK:)");
     } else {
         printf(" BAD!");
@@ -2607,7 +2662,7 @@ void calcVue3dEtPatron(void)
                         
                     }
 
-            if ((i==0) && (NoNerv[0]==NoNerv[1]) && (RaskladKlapans) && (VentHoles)) {
+            if ((i==0) && (NoNerv[0]==NoNerv[1]) && (LayoutKlapans) && (VentHoles)) {
                 bool match = false;
                 int _i, _j;
                 //printf ("\nnoNervVH: %d %d", noNervVH[NoNerv[0]], noNervVH[NoNerv[0]-1]);
@@ -3077,7 +3132,7 @@ void BoutonSouris(int button, int state, int x, int y) {
 
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
-        case 27: Quitter(0);
+        case 27: quit(0);
             break;
         default:;
     }
@@ -3120,8 +3175,6 @@ void InitLight(void) {
 
 
 int main(int argc, char** argv) {
-   
-    //int i;
     int ws, hs;
     double EpaiRelProfCent, EpaiRelProfBout;
     /*message*/
@@ -3220,13 +3273,13 @@ int main(int argc, char** argv) {
 
     /*Reperes 1*/
     /*
-            GLUI_Panel *panel_Rep1 = glui->add_panel("");//, GLUI_PANEL_NONE);
-            GLUI_Spinner *SpinPosRep1 = glui->add_spinner_to_panel(
-                    panel_Rep1,"% Rep", GLUI_SPINNER_FLOAT, &(PosRep[0]));
-            SpinPosRep1 -> set_float_limits( 0.0, 100.0 );
-            GLUI_Listbox *ListRep1 = glui->add_listbox_to_panel(panel_Rep1,"Face",&FaceRep[0]);
-            ListRep1->add_item( 1, "Ext" ); ListRep1->add_item( 2, "Int" );
-            glui->add_button_to_panel(panel_Rep1, "adder", 0, adder );
+        GLUI_Panel *panel_Rep1 = glui->add_panel("");//, GLUI_PANEL_NONE);
+        GLUI_Spinner *SpinPosRep1 = glui->add_spinner_to_panel(
+                panel_Rep1,"% Rep", GLUI_SPINNER_FLOAT, &(PosRep[0]));
+        SpinPosRep1 -> set_float_limits( 0.0, 100.0 );
+        GLUI_Listbox *ListRep1 = glui->add_listbox_to_panel(panel_Rep1,"Face",&FaceRep[0]);
+        ListRep1->add_item( 1, "Ext" ); ListRep1->add_item( 2, "Int" );
+        glui->add_button_to_panel(panel_Rep1, "adder", 0, adder );
      */
 
     /*Marge de couture en cm*/
@@ -3263,10 +3316,10 @@ int main(int argc, char** argv) {
             "k (d.width)", GLUI_SPINNER_FLOAT, &(PinceRadiusAlgKNos));
     pinceRadiusAlgKNosSpinner -> set_float_limits(0.0001, 5.0);
 
-    glui->add_checkbox_to_panel(panel_PinceTypeA, "Set = Amp to Hvost", &PinceNosEqualAmp, 0, &ModifPinceNosRadio);
-    //glui->add_checkbox_to_panel(panel_PinceTypeA, "Amp 0", &PinceNos0Amp, 0,  &ModifPinceNosRadio);
+    glui->add_checkbox_to_panel(panel_PinceTypeA, "Set = Amp to Hvost", &PinceNosEqualAmp, 0, &modifPinceNosRadio);
+    //glui->add_checkbox_to_panel(panel_PinceTypeA, "Amp 0", &PinceNos0Amp, 0,  &modifPinceNosRadio);
     GLUI_RadioGroup *radio_pinceNos =
-            glui->add_radiogroup_to_panel(panel_PinceTypeA, &PinceNosRadio, 0, &ModifPinceNosRadio);
+            glui->add_radiogroup_to_panel(panel_PinceTypeA, &PinceNosRadio, 0, &modifPinceNosRadio);
 
     glui->add_radiobutton_to_group(radio_pinceNos, "Radius auto alg");
 
@@ -3355,13 +3408,13 @@ int main(int argc, char** argv) {
     //ListFin2->set_int_val(1);
     /*Reperes 2*/
     /*
-            GLUI_Panel *panel_Rep2 = glui->add_panel("");//, GLUI_PANEL_NONE);
-            GLUI_Spinner *SpinPosRep2 = glui->add_spinner_to_panel(
-                    panel_Rep2,"% Rep", GLUI_SPINNER_FLOAT, &(PosRep[1]));
-            SpinPosRep2 -> set_float_limits( 0.0, 100.0 );
-            GLUI_Listbox *ListRep2 = glui->add_listbox_to_panel(panel_Rep2,"Face",&FaceRep[1]);
-            ListRep2->add_item( 1, "Ext" ); ListRep2->add_item( 2, "Int" );
-            glui->add_button_to_panel(panel_Rep2, "adder", 1, adder );
+        GLUI_Panel *panel_Rep2 = glui->add_panel("");//, GLUI_PANEL_NONE);
+        GLUI_Spinner *SpinPosRep2 = glui->add_spinner_to_panel(
+                panel_Rep2,"% Rep", GLUI_SPINNER_FLOAT, &(PosRep[1]));
+        SpinPosRep2 -> set_float_limits( 0.0, 100.0 );
+        GLUI_Listbox *ListRep2 = glui->add_listbox_to_panel(panel_Rep2,"Face",&FaceRep[1]);
+        ListRep2->add_item( 1, "Ext" ); ListRep2->add_item( 2, "Int" );
+        glui->add_button_to_panel(panel_Rep2, "adder", 1, adder );
      */
 
     /*Marge de couture en cm*/
@@ -3397,10 +3450,10 @@ int main(int argc, char** argv) {
             "k (d.width)", GLUI_SPINNER_FLOAT, &(PinceRadiusAlgKHvost));
     pinceRadiusAlgKHvostSpinner -> set_float_limits(0.0001, 5.0);
 
-    glui->add_checkbox_to_panel(panel_PinceTypeF, "Set = Amp to Nos", &PinceHvostEqualAmp, 0, &ModifPinceHvostRadio);
-    //glui->add_checkbox_to_panel(panel_PinceTypeF, "Amp 0", &PinceHvost0Amp, 0,  &ModifPinceNosRadio);
+    glui->add_checkbox_to_panel(panel_PinceTypeF, "Set = Amp to Nos", &PinceHvostEqualAmp, 0, &modifPinceHvostRadio);
+    //glui->add_checkbox_to_panel(panel_PinceTypeF, "Amp 0", &PinceHvost0Amp, 0,  &modifPinceNosRadio);
     GLUI_RadioGroup *radio_pinceHvost =
-            glui->add_radiogroup_to_panel(panel_PinceTypeF, &PinceHvostRadio, 0, &ModifPinceHvostRadio);
+            glui->add_radiogroup_to_panel(panel_PinceTypeF, &PinceHvostRadio, 0, &modifPinceHvostRadio);
     glui->add_radiobutton_to_group(radio_pinceHvost, "Radius auto alg");
     glui->add_radiobutton_to_group(radio_pinceHvost, "Function");
     glui->add_checkbox_to_panel(panel_PinceTypeF, "Power", &PincePowerF);
@@ -3423,7 +3476,7 @@ int main(int argc, char** argv) {
     //GLUI_Panel *panel_Vent = glui->add_panel_to_panel(RolloutVent, "Vent holes");
     glui->add_checkbox_to_panel(panel_Vent, "Vent holes", &VentHoles);
     glui->add_checkbox_to_panel(panel_Vent, "double vents", &VentHolesDouble);
-    glui->add_checkbox_to_panel(panel_Vent, "klapans", &RaskladKlapans);
+    glui->add_checkbox_to_panel(panel_Vent, "klapans", &LayoutKlapans);
     GLUI_Spinner *SpinVentDeb = glui->add_spinner_to_panel(panel_Vent, "Deb", GLUI_SPINNER_FLOAT, &(VentHolesDeb));
     SpinVentDeb -> set_float_limits(0.0, 100.0);
     GLUI_Spinner *SpinVentFin = glui->add_spinner_to_panel(panel_Vent, "Fin", GLUI_SPINNER_FLOAT, &(VentHolesFin));
@@ -3480,7 +3533,7 @@ int main(int argc, char** argv) {
             glui->add_checkbox("reperes couture",&ReperesCoutures);
      */
     /*numerotation*/
-    glui->add_checkbox("ventilation", &Ventilation, 0, &ModifVentilation);
+    glui->add_checkbox("ventilation", &Ventilation, 0, &modifVentilation);
 
     GLUI_Rollout *RolloutNum=glui->add_rollout("Numerotation",false);
     //GLUI_Panel *panelNum = glui->add_panel_to_panel(RolloutNum, "Numerotation");
@@ -3520,13 +3573,13 @@ int main(int argc, char** argv) {
             glui->add_button_to_panel(panel_project, "Load", 0, &readProject);
     boutonLoadProject -> set_w(10);
     glui->add_column_to_panel(panel_project, false);
-    GLUI_Button *boutonSauverProject = 
-			glui->add_button_to_panel(panel_project, "Save", 0, &SauverProject);
-	boutonSauverProject -> set_w(10);
+    GLUI_Button *boutonsaveProject = 
+			glui->add_button_to_panel(panel_project, "Save", 0, &saveProject);
+	boutonsaveProject -> set_w(10);
     //
     GLUI_Panel *panel_proj = glui->add_panel("Projection");
     GLUI_RadioGroup *radio_proj =
-            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &ModifProjection3d);
+            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &modifProjection3d);
     glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
@@ -3535,9 +3588,9 @@ int main(int argc, char** argv) {
 	// GLUI_Panel *panelNum = glui->add_panel_to_panel(RolloutNum, "Numerotation");
 
     GLUI_Panel *panel_RepPoints = glui->add_panel_to_panel(RolloutPts, "Rep pts");
-    glui->add_checkbox_to_panel(panel_RepPoints, "from file", &ReperPointsFromFile, 0, &ModifRepPts);
-    glui->add_checkbox_to_panel(RolloutPts, "pts suspentes", &ViewPtsSuspentes, 0, &ModifViewSymetrique);
-    glui->add_checkbox_to_panel(RolloutPts, "plotter format", &ReperPointsPlotterFormat, 0, &ModifRepPts);
+    glui->add_checkbox_to_panel(panel_RepPoints, "from file", &ReperPointsFromFile, 0, &modifRepPts);
+    glui->add_checkbox_to_panel(RolloutPts, "pts suspentes", &ViewPtsSuspentes, 0, &modifViewSymetrique);
+    glui->add_checkbox_to_panel(RolloutPts, "plotter format", &ReperPointsPlotterFormat, 0, &modifRepPts);
     GLUI_Spinner *SpinXMashtab = glui->add_spinner_to_panel(RolloutPts, "X mashtab", GLUI_SPINNER_FLOAT, &(XMashtab));
     SpinXMashtab -> set_float_limits(0.01, 100);
 
@@ -3552,50 +3605,79 @@ int main(int argc, char** argv) {
     boutonLoadRepPoints->set_w(10);
 
 
-    glui->add_checkbox("symetrique", &ViewSymetrique, 0, &ModifViewSymetrique);
+    glui->add_checkbox("symetrique", &ViewSymetrique, 0, &modifViewSymetrique);
 
     /*choix visu des points de suspentage*/
 
-    glui->add_checkbox("make pinces", &GoPince, 0, &ModifViewSymetrique);
-    /* bouton appliquer */
+    glui->add_checkbox("make pinces", &GoPince, 0, &modifViewSymetrique);
+    /* bouton apply */
 
     GLUI_Spinner *SpinCoeff = glui->add_spinner("Coeff", GLUI_SPINNER_FLOAT, &(coeffMult));
     SpinCoeff -> set_float_limits(0.0, 2.0);
 
-    glui->add_button("Appliquer", 0, &Appliquer);
-    //glui->add_button("Rasklad1 to DXF", 0, &AppliquerMagic);
-    //GLUI_Panel *panel_rasklad2 = glui->add_panel("Layout");
-    GLUI_Rollout *panel_rasklad2 = glui->add_rollout("Layout",false);
+    glui->add_button("apply", 0, &apply);
+    //glui->add_button("Layout1 to DXF", 0, &applyMagic);
+    //GLUI_Panel *panel_Layout2 = glui->add_panel("Layout");
+    
+	GLUI_Rollout *panel_Layout2 = glui->add_rollout("Layout",false);
+    glui->add_button_to_panel(panel_Layout2, "Layout to DXF", 0, &applyMagic2);
+    //glui->add_checkbox_to_panel(panel_Layout2, "sym layout", &LayoutSymetrique, 0, &modifLayoutSymetrique);
+    glui->add_checkbox_to_panel(panel_Layout2, "ventilation", &VentilationLayout, 0, &modifVentilationLayout);
+	glui->add_checkbox_to_panel(panel_Layout2, "correct rep points", &CorrectRepPoints, 0, &modifVentilationLayout);
 
-    glui->add_button_to_panel(panel_rasklad2, "Layout to DXF", 0, &AppliquerMagic2);
-    //glui->add_checkbox_to_panel(panel_rasklad2, "sym layout", &RaskladSymetrique, 0, &ModifRaskladSymetrique);
-    glui->add_checkbox_to_panel(panel_rasklad2, "ventilation", &VentilationLayout, 0, &ModifVentilationLayout);
-	glui->add_checkbox_to_panel(panel_rasklad2, "correct rep points", &CorrectRepPoints, 0, &ModifVentilationLayout);
+	//--------------- Design GUI -------------------
+	GLUI_Rollout *panelDesign = glui->add_rollout("Design", false);
+    glui->add_checkbox_to_panel(panelDesign, "Layout with design", &layoutWithDesign, 0, &modifLayoutWithDesign);
 
-    GLUI_Spinner *SpinTochnostRasklad2 = glui->add_spinner_to_panel(panel_rasklad2, "Accuracy", GLUI_SPINNER_FLOAT, &(tochnostRasklad2));
-    SpinTochnostRasklad2 -> set_float_limits(0.0, 3.0);
-    /* bouton Sauver au format Texte */
-    glui->add_button("Sauver TXT", 0, &Sauver);
-    /* bouton Sauver au format DXF */
-    //glui->add_button("Sauver DXF", 1, &Sauver);
-    /* bouton Sauver au format Poly DXF */
-    glui->add_button("Sauver Poly DXF", 2, &Sauver);
-    glui->add_button( "3D->DXF", 0, &SauverFichier3dDXF );
+	GLUI_Button *btnLoadDesignExt = glui->add_button_to_panel(panelDesign, "Load design Ext", 0, &readFileDesignExt);
+    btnLoadDesignExt->set_w(10);
+
+	GLUI_Button *btnLoadDesignInt = glui->add_button_to_panel(panelDesign, "Load design Int", 0, &readFileDesignInt);
+    btnLoadDesignInt->set_w(10);
+
+    glui->add_column_to_panel(panelDesign, false);
+
+	glui->add_statictext_to_panel(panelDesign, "");
+
+	// load default design
+	strcpy(fileNameDesignExt, "f17ext.wdn");
+    FicDesignExt = glui->add_statictext_to_panel(panelDesign, "???");
+    FicDesignExt->set_text(fileNameDesignExt);
+	kiteDesignExt = readKiteDesignFromFile(fileNameDesignExt);
+
+	strcpy(fileNameDesignInt, "f17int.wdn");
+    FicDesignInt = glui->add_statictext_to_panel(panelDesign, "???");
+    FicDesignInt->set_text(fileNameDesignInt);
+	kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
+
+	//----------------------------------------------
+
+
+
+    GLUI_Spinner *SpinTochnostLayout2 = glui->add_spinner_to_panel(panel_Layout2, "Accuracy", GLUI_SPINNER_FLOAT, &(tochnostLayout2));
+    SpinTochnostLayout2 -> set_float_limits(0.0, 3.0);
+    /* bouton save au format Texte */
+    glui->add_button("save TXT", 0, &save);
+    /* bouton save au format DXF */
+    //glui->add_button("save DXF", 1, &save);
+    /* bouton save au format Poly DXF */
+    glui->add_button("save Poly DXF", 2, &save);
+    glui->add_button( "3D->DXF", 0, &saveFichier3dDXF );
 
     //glui->add_button("Export to WPA", 0, &ExportWpa);
-    /* bouton quitter */
-    glui->add_button("Quitter", 0, &Quitter);
+    /* bouton quit */
+    glui->add_button("quit", 0, &quit);
     if (TEST_BUTTON) glui->add_button("Test", 0, &Test);
     /* Link windows to GLUI, and register idle callback */
     glui->set_main_gfx_window(windowPatron);
     /* We register the idle callback with GLUI, not with GLUT */
     GLUI_Master.set_glutIdleFunc(NULL);
-    /*init valeurs boite de dialogue*/
-    InitValeursDialogue();
+    /*init Value boite de dialogue*/
+    initValueDialogue();
     glui->sync_live();
     /*premiers calcs et trace des axes*/
     //calcVue3dEtPatron();
-    Appliquer(0);
+    apply(0);
     AxeSel = Axe3d;
     display();
     /*boucle glut*/

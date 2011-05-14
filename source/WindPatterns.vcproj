@@ -200,6 +200,14 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\commun\design.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\design.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\fichier.cpp"
 			>
 			<FileConfiguration
@@ -245,6 +253,14 @@
 		</File>
 		<File
 			RelativePath="..\commun\geom.h"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\layout.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\layout.h"
 			>
 		</File>
 		<File
@@ -386,30 +402,6 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\commun\rasklad.cpp"
-			>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\commun\rasklad.h"
-			>
 		</File>
 		<File
 			RelativePath="WindPatterns.cpp"
