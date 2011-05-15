@@ -12,15 +12,14 @@
 
 class WindPatternsProject;
 
-class Rasklad
+class Layout
 {
     public:
-        Rasklad ()
+        Layout ()
         {
-
         }
-        Rasklad (int n);
-        virtual ~Rasklad();
+        Layout (int n);
+        virtual ~Layout();
 
         double *pinceLA0Amp1;
         double *pinceLAAmp1;
@@ -55,6 +54,32 @@ class Rasklad
         bool isCenterPanel;
 };
 
+class LayoutElement
+{
+    public:
+        LayoutElement ()
+        {
+        }
+
+        LayoutElement ();
+        virtual ~LayoutElement();
+
+		int n1, n2;
+		int vent;
+		boolean s1, s2;
+		int faceFin1, faceDeb1, faceFin2, faceDeb2;
+		double posDeb1, posDeb2, posFin1, posFin2;
+		double coeff;
+        double p1a0, p1a00, p1f0, p1a1, p1a01, p1f1;
+		double p2a0, p2a00, p2f0, p2a1, p2a01, p2f1;
+		double posKlapanIntDeb;
+		double posKlapanFin;
+		int isPince;
+		int isKlapan;
+        Matrix* func1f0;
+        Matrix* func1f1;
+};
+
 const int REP_TRIANGLE = 1;
 const int REP_LINE = 2;
 const int REP_CROSS = 3;
@@ -65,9 +90,9 @@ const int REP_KLAPAN_FIN = 7;
 const int REP_V = 8;
 const int REP_MIDDLE_LINE = 9;
 
-Rasklad* calcIndepPinceRasklad(WindPatternsProject* gfd, Form* F);
+Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F);
 
-void SaveRasklad2(WindPatternsProject* gfd, Rasklad* rasklad);
+void SaveLayout2(WindPatternsProject* gfd, Layout* Layout);
 
 void calcPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
         int noNerv2, bool sym2, int FaceDeb2, int FaceFin2, double Deb2, double Fin2,

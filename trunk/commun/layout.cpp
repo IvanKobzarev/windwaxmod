@@ -25,9 +25,13 @@
     #define DEBUG false
 #endif
 
+LayoutElement::~LayoutElement() {
+}
+
+LayoutElement::LayoutElement() {
+}
 
 Layout::~Layout() {
-
 }
 
 Layout::Layout(int n) {
@@ -84,8 +88,8 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
     getLayoutLogger()->logprintf("\nVENT_HOLES %s", gfd->fileNameVentHoles);
     int n = F->m_nbProfils;
     bool isCenterPanel = (1 & F->NbCaiss);
-    Layout* Layout = new Layout(n);
-    Layout->isCenterPanel = isCenterPanel;
+    Layout* layout = new Layout(n);
+    layout->isCenterPanel = isCenterPanel;
     int startNerv;
     //printf ("\n 1");
     if (isCenterPanel) {
@@ -94,37 +98,37 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
         startNerv = 1;
 
         Pince* p0f1 = getPince(gfd, 0, 1, 1);
-        Layout->pinceLAAmp1[0] = p0f1->AmpA;
-        Layout->pinceLFAmp1[0] = p0f1->AmpF;
-        Layout->pinceRAAmp1[0] = p0f1->AmpA;
-        Layout->pinceRFAmp1[0] = p0f1->AmpF;
-        Layout->funcL1[0] = p0f1->function1;
-        Layout->funcR1[0] = p0f1->function1;
-        goCalcPinceLen(gfd, 0, 1, &(Layout->lenp1[0]));
+        layout->pinceLAAmp1[0] = p0f1->AmpA;
+        layout->pinceLFAmp1[0] = p0f1->AmpF;
+        layout->pinceRAAmp1[0] = p0f1->AmpA;
+        layout->pinceRFAmp1[0] = p0f1->AmpF;
+        layout->funcL1[0] = p0f1->function1;
+        layout->funcR1[0] = p0f1->function1;
+        goCalcPinceLen(gfd, 0, 1, &(layout->lenp1[0]));
 
         Pince* p0f2 = getPince(gfd, 0, 1, 2);
-        Layout->pinceLAAmp2[0] = p0f2->AmpA;
-        Layout->pinceRAAmp2[0] = p0f2->AmpA;
-        Layout->pinceLFAmp2[0] = p0f2->AmpF;
-        Layout->pinceRFAmp2[0] = p0f2->AmpF;
-        Layout->funcL2[0] = p0f2->function1;
-        Layout->funcR2[0] = p0f2->function1;
-        goCalcPinceLen(gfd, 0, 2, &(Layout->lenp2[0]));
+        layout->pinceLAAmp2[0] = p0f2->AmpA;
+        layout->pinceRAAmp2[0] = p0f2->AmpA;
+        layout->pinceLFAmp2[0] = p0f2->AmpF;
+        layout->pinceRFAmp2[0] = p0f2->AmpF;
+        layout->funcL2[0] = p0f2->function1;
+        layout->funcR2[0] = p0f2->function1;
+        goCalcPinceLen(gfd, 0, 2, &(layout->lenp2[0]));
     }
 	//printf ("\n 2");
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 1,
-                &(Layout->pinceLAAmp1[inoNerv]), &(Layout->pinceLFAmp1[inoNerv]), &(Layout->funcL1[inoNerv]),
-                &(Layout->pinceRAAmp1[inoNerv]), &(Layout->pinceRFAmp1[inoNerv]), &(Layout->funcR1[inoNerv]),
-                &(Layout->lenp1[inoNerv]));
+                &(layout->pinceLAAmp1[inoNerv]), &(layout->pinceLFAmp1[inoNerv]), &(layout->funcL1[inoNerv]),
+                &(layout->pinceRAAmp1[inoNerv]), &(layout->pinceRFAmp1[inoNerv]), &(layout->funcR1[inoNerv]),
+                &(layout->lenp1[inoNerv]));
     }
 	//printf ("\n 3");
     getLayoutLogger()->logprintf("\n");
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 2,
-                &(Layout->pinceLAAmp2[inoNerv]), &(Layout->pinceLFAmp2[inoNerv]), &(Layout->funcL2[inoNerv]),
-                &(Layout->pinceRAAmp2[inoNerv]), &(Layout->pinceRFAmp2[inoNerv]), &(Layout->funcR2[inoNerv]),
-                &(Layout->lenp2[inoNerv]));
+                &(layout->pinceLAAmp2[inoNerv]), &(layout->pinceLFAmp2[inoNerv]), &(layout->funcL2[inoNerv]),
+                &(layout->pinceRAAmp2[inoNerv]), &(layout->pinceRFAmp2[inoNerv]), &(layout->funcR2[inoNerv]),
+                &(layout->lenp2[inoNerv]));
     }
 	//printf ("\n 4");
     //if (DEBUG) printf("\n");
@@ -132,23 +136,23 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
     // calc Profile Nervures
     for (int inoNerv = 0; inoNerv < n - 1; inoNerv++) {
         goCalcNervureWithPince(gfd, inoNerv, 2, inoNerv, 1,
-                Layout->lenp2[inoNerv], Layout->lenp1[inoNerv], &(Layout->coeffn[inoNerv]));
+                layout->lenp2[inoNerv], layout->lenp1[inoNerv], &(layout->coeffn[inoNerv]));
     }
     //if (DEBUG) printf("\n");
     // calc Diagonal Nervures
 	if (gfd->DiagNervs) {
 		int isave = 0;
 		for (int i = 0; i < gfd->quantDiag; i++) {
-			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] - 1, 1, Layout->lenp2[gfd->noNervD[i]], Layout->lenp1[gfd->noNervD[i] - 1], &(Layout->coeffd[isave]));
+			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] - 1, 1, layout->lenp2[gfd->noNervD[i]], layout->lenp1[gfd->noNervD[i] - 1], &(layout->coeffd[isave]));
 			isave++;
-			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] + 1, 1, Layout->lenp2[gfd->noNervD[i]], Layout->lenp1[gfd->noNervD[i] + 1], &(Layout->coeffd[isave]));
+			goCalcNervureWithPince(gfd, gfd->noNervD[i], 2, gfd->noNervD[i] + 1, 1, layout->lenp2[gfd->noNervD[i]], layout->lenp1[gfd->noNervD[i] + 1], &(layout->coeffd[isave]));
 			isave++;
 		}
 	}
-    return Layout;
+    return layout;
 }
 
-void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
+void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
     if (gfd->debug) printf("\n SaveLayout2()");
     int startNoNerv = 0, noNerv = 0, face = 1;
     Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
@@ -253,16 +257,16 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                     posDeb2[isave] = debBorder;
                     posFin2[isave] = 100.0f;
 
-                    p1a0[isave] = Layout->pinceLAAmp1 [i];
-                    p1a00[isave] = Layout->pinceLAAmp2 [i];
+                    p1a0[isave] = layout->pinceLAAmp1 [i];
+                    p1a00[isave] = layout->pinceLAAmp2 [i];
 
-                    p1f0[isave] = Layout->pinceLFAmp1 [i];
-                    func1f0[isave] = Layout->funcL1[i];
-                    func1f1[isave] = Layout->funcR1[i - 1];
-                    p1a1[isave] = Layout->pinceRAAmp1 [i - 1];
-                    p1a01[isave] = Layout->pinceRAAmp2 [i - 1];
+                    p1f0[isave] = layout->pinceLFAmp1 [i];
+                    func1f0[isave] = layout->funcL1[i];
+                    func1f1[isave] = layout->funcR1[i - 1];
+                    p1a1[isave] = layout->pinceRAAmp1 [i - 1];
+                    p1a01[isave] = layout->pinceRAAmp2 [i - 1];
 
-                    p1f1[isave] = Layout->pinceRFAmp1 [i - 1];
+                    p1f1[isave] = layout->pinceRFAmp1 [i - 1];
                     isPince[isave] = 1;
                     coeff[isave] = 0.0f;
                     isave++;
@@ -288,16 +292,16 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                     posFin1[isave] = tpF1;
                     posDeb2[isave] = debBorder;
                     posFin2[isave] = tpF2;
-                    p2a0[isave] = Layout->pinceLAAmp2 [i];
+                    p2a0[isave] = layout->pinceLAAmp2 [i];
                     p2a00[isave] = 0.0f;
 
-                    p2f0[isave] = Layout->pinceLFAmp2 [i];
-                    func2f0[isave] = Layout->funcL2[i];
-                    func2f1[isave] = Layout->funcR2[i - 1];
-                    p2a1[isave] = Layout->pinceRAAmp2 [i - 1];
+                    p2f0[isave] = layout->pinceLFAmp2 [i];
+                    func2f0[isave] = layout->funcL2[i];
+                    func2f1[isave] = layout->funcR2[i - 1];
+                    p2a1[isave] = layout->pinceRAAmp2 [i - 1];
                     p2a01[isave] = 0.0f;
 
-                    p2f1[isave] = Layout->pinceRFAmp2 [i - 1];
+                    p2f1[isave] = layout->pinceRFAmp2 [i - 1];
                     isPince[isave] = 1;
                     coeff[isave] = 0.0f;
                     isave++;
@@ -315,17 +319,17 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                         posFin1[isave] = 100.0f;
                         posDeb2[isave] = gfd->VentHolesFin;
                         posFin2[isave] = 100.0f;
-                        p2a0[isave] = Layout->pinceLAAmp2 [i];
+                        p2a0[isave] = layout->pinceLAAmp2 [i];
                         p2a00[isave] = 0.0f;
 
 
-                        p2f0[isave] = Layout->pinceLFAmp2 [i];
-                        func2f0[isave] = Layout->funcL2[i];
-                        func2f1[isave] = Layout->funcR2[i - 1];
-                        p2a1[isave] = Layout->pinceRAAmp2 [i - 1];
+                        p2f0[isave] = layout->pinceLFAmp2 [i];
+                        func2f0[isave] = layout->funcL2[i];
+                        func2f1[isave] = layout->funcR2[i - 1];
+                        p2a1[isave] = layout->pinceRAAmp2 [i - 1];
                         p2a01[isave] = 0.0f;
 
-                        p2f1[isave] = Layout->pinceRFAmp2 [i - 1];
+                        p2f1[isave] = layout->pinceRFAmp2 [i - 1];
                         isPince[isave] = 1;
                         coeff[isave] = 0.0f;
                         isave++;
@@ -335,7 +339,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
             }
         }
 
-        if (Layout->isCenterPanel) {
+        if (layout->isCenterPanel) {
             if (face == 1) {
                 n1[isave] = -1;
                 n2[isave] = 0;
@@ -353,16 +357,16 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                 posDeb2[isave] = debBorder;
                 posFin2[isave] = 100.0f;
 
-                p1a00[isave] = Layout->pinceLAAmp2[0];
-                p1a0[isave] = Layout->pinceLAAmp1[0];
-                p1f0[isave] = Layout->pinceLFAmp1[0];
+                p1a00[isave] = layout->pinceLAAmp2[0];
+                p1a0[isave] = layout->pinceLAAmp1[0];
+                p1f0[isave] = layout->pinceLFAmp1[0];
 
-                p1a01[isave] = Layout->pinceLAAmp2[0];
-                p1a1[isave] = Layout->pinceLAAmp1[0];
-                p1f1[isave] = Layout->pinceLFAmp1[0];
+                p1a01[isave] = layout->pinceLAAmp2[0];
+                p1a1[isave] = layout->pinceLAAmp1[0];
+                p1f1[isave] = layout->pinceLFAmp1[0];
 
-                func1f0[isave] = Layout->funcL1[0];
-                func1f1[isave] = Layout->funcL1[0];
+                func1f0[isave] = layout->funcL1[0];
+                func1f1[isave] = layout->funcL1[0];
                 if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
                     posDeb1[isave] = 0.0f;
                     posDeb2[isave] = 0.0f;
@@ -392,15 +396,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                     posFin2[isave] = debBorder;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = Layout->pinceRAAmp2 [i];
-                    p2f0[isave] = Layout->pinceRFAmp2 [i];
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
 
-                    func2f0[isave] = Layout->funcR2[i];
-                    func2f1[isave] = Layout->funcL2[i + 1];
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -430,15 +434,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                 posFin2[isave] = tpF2;
 
                 p2a00[isave] = 0.0f;
-                p2a0[isave] = Layout->pinceLAAmp2[0];
-                p2f0[isave] = Layout->pinceLFAmp2[0];
+                p2a0[isave] = layout->pinceLAAmp2[0];
+                p2f0[isave] = layout->pinceLFAmp2[0];
 
                 p2a01[isave] = 0.0f;
-                p2a1[isave] = Layout->pinceLAAmp2[0];
-                p2f1[isave] = Layout->pinceLFAmp2[0];
+                p2a1[isave] = layout->pinceLAAmp2[0];
+                p2f1[isave] = layout->pinceLFAmp2[0];
 
-                func2f0[isave] = Layout->funcL2[0];
-                func2f1[isave] = Layout->funcL2[0];
+                func2f0[isave] = layout->funcL2[0];
+                func2f1[isave] = layout->funcL2[0];
                 isave++;
 
                 if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
@@ -461,15 +465,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
 
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = Layout->pinceLAAmp2[0];
-                    p2f0[isave] = Layout->pinceLFAmp2[0];
+                    p2a0[isave] = layout->pinceLAAmp2[0];
+                    p2f0[isave] = layout->pinceLFAmp2[0];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = Layout->pinceLAAmp2[0];
-                    p2f1[isave] = Layout->pinceLFAmp2[0];
+                    p2a1[isave] = layout->pinceLAAmp2[0];
+                    p2f1[isave] = layout->pinceLFAmp2[0];
 
-                    func2f0[isave] = Layout->funcL2[0];
-                    func2f1[isave] = Layout->funcL2[0];
+                    func2f0[isave] = layout->funcL2[0];
+                    func2f1[isave] = layout->funcL2[0];
                     isave++;
 
                     if (gfd->LayoutKlapans) {
@@ -524,16 +528,16 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                 posDeb2[isave] = debBorder;
                 posFin2[isave] = 100.0f;
 
-                p1a00[isave] = Layout->pinceRAAmp2 [i];
-                p1a0[isave] = Layout->pinceRAAmp1 [i];
-                p1f0[isave] = Layout->pinceRFAmp1 [i];
+                p1a00[isave] = layout->pinceRAAmp2 [i];
+                p1a0[isave] = layout->pinceRAAmp1 [i];
+                p1f0[isave] = layout->pinceRFAmp1 [i];
 
-                p1a01[isave] = Layout->pinceLAAmp2 [i + 1];
-                p1a1[isave] = Layout->pinceLAAmp1 [i + 1];
-                p1f1[isave] = Layout->pinceLFAmp1 [i + 1];
+                p1a01[isave] = layout->pinceLAAmp2 [i + 1];
+                p1a1[isave] = layout->pinceLAAmp1 [i + 1];
+                p1f1[isave] = layout->pinceLFAmp1 [i + 1];
 
-                func1f0[isave] = Layout->funcR1[i];
-                func1f1[isave] = Layout->funcL1[i + 1];
+                func1f0[isave] = layout->funcR1[i];
+                func1f1[isave] = layout->funcL1[i + 1];
 
                 ff1[isave] = 1;
                 ff2[isave] = 1;
@@ -585,15 +589,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                     posFin2[isave] = debBorder;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = Layout->pinceRAAmp2 [i];
-                    p2f0[isave] = Layout->pinceRFAmp2 [i];
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
 
-                    func2f0[isave] = Layout->funcR2[i];
-                    func2f1[isave] = Layout->funcL2[i + 1];
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -614,15 +618,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                 posFin2[isave] = tpF2;
 
                 p2a00[isave] = 0.0f;
-                p2a0[isave] = Layout->pinceRAAmp2 [i];
-                p2f0[isave] = Layout->pinceRFAmp2 [i];
+                p2a0[isave] = layout->pinceRAAmp2 [i];
+                p2f0[isave] = layout->pinceRFAmp2 [i];
 
                 p2a01[isave] = 0.0f;
-                p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
-                p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
+                p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                p2f1[isave] = layout->pinceLFAmp2 [i + 1];
 
-                func2f0[isave] = Layout->funcR2[i];
-                func2f1[isave] = Layout->funcL2[i + 1];
+                func2f0[isave] = layout->funcR2[i];
+                func2f1[isave] = layout->funcL2[i + 1];
 
                 fd1[isave] = 2;
                 fd2[isave] = 2;
@@ -657,15 +661,15 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                     posFin2[isave] = 100.0f;
 
                     p2a00[isave] = 0.0f;
-                    p2a0[isave] = Layout->pinceRAAmp2 [i];
-                    p2f0[isave] = Layout->pinceRFAmp2 [i];
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
 
-                    func2f0[isave] = Layout->funcR2[i];
-                    func2f1[isave] = Layout->funcL2[i + 1];
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
 
                     p2a01[isave] = 0.0f;
-                    p2a1[isave] = Layout->pinceLAAmp2 [i + 1];
-                    p2f1[isave] = Layout->pinceLFAmp2 [i + 1];
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
 
                     fd1[isave] = 2;
                     fd2[isave] = 2;
@@ -779,7 +783,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
 
                 fd2[isave] = 1;
                 ff2[isave] = 1;
-                coeff[isave] = Layout->coeffn[i];
+                coeff[isave] = layout->coeffn[i];
                 isave++;
 
             }
@@ -803,7 +807,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
 						posFin1[isave] = gfd->PosDiagNerv2F;
 						posDeb2[isave] = gfd->PosDiagNerv1A;
 						posFin2[isave] = gfd->PosDiagNerv1F;
-						coeff[isave] = Layout->coeffd[k];
+						coeff[isave] = layout->coeffd[k];
 						isave++;
 						k--;
 						n1[isave] = gfd->noNervD[i];
@@ -821,7 +825,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
 						posFin1[isave] = gfd->PosDiagNerv2F;
 						posDeb2[isave] = gfd->PosDiagNerv1A;
 						posFin2[isave] = gfd->PosDiagNerv1F;
-						coeff[isave] = Layout->coeffd[k];
+						coeff[isave] = layout->coeffd[k];
 						isave++;
 						k--;
 					}
@@ -842,7 +846,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
 
                 posDeb2[isave] = gfd->PosDiagNerv1A;
                 posFin2[isave] = gfd->PosDiagNerv1F;
-                coeff[isave] = Layout->coeffd[k];
+                coeff[isave] = layout->coeffd[k];
                 isave++;
                 k++;
 
@@ -860,7 +864,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
                 posFin1[isave] = gfd->PosDiagNerv2F;
                 posDeb2[isave] = gfd->PosDiagNerv1A;
                 posFin2[isave] = gfd->PosDiagNerv1F;
-                coeff[isave] = Layout->coeffd[k];
+                coeff[isave] = layout->coeffd[k];
                 isave++;
                 k++;
             }
@@ -1086,10 +1090,10 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* Layout) {
         if (!isKlapan[t]) {
             if (isPince[t]) {
 
-				double coeff1 = Layout->coeffn[n1[t]];
-				double coeff2 = Layout->coeffn[n2[t]];
+				double coeff1 = layout->coeffn[n1[t]];
+				double coeff2 = layout->coeffn[n2[t]];
 
-				if (n1[t] == -1) coeff1 = Layout->coeffn[0];
+				if (n1[t] == -1) coeff1 = layout->coeffn[0];
 				if (n2[t] == n-1) coeff2 = -1;
 
                 GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
