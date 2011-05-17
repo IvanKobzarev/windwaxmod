@@ -25,6 +25,8 @@
     #define DEBUG false
 #endif
 
+void calculateLayout(WindPatternsProject* gfd, Layout* layout);
+
 LayoutElement::~LayoutElement() {
 }
 
@@ -152,6 +154,472 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
     return layout;
 }
 
+void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
+    LayoutElement* le1 = new LayoutElement();
+    int n = gfd->Form->m_nbProfils;
+    double tpF1, tpF2;
+    if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+        tpF1 = gfd->VentHolesFin;
+        tpF2 = gfd->VentHolesFin;
+    } else {
+        tpF1 = 100.0f;
+        tpF2 = 100.0f;
+    }
+    //tututu
+    if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->noNervVH[i])) {
+        le1->n1 = i;
+        le1->n2 = i + 1;
+        le1->s1 = false;
+        le1->s2 = false;
+        le1->posDeb1 = 0.0f;
+        le1->posFin1 = debBorder;
+        le1->posDeb2 = 0.0f;
+        le1->posFin2 = debBorder;
+
+        le1->p2a00 = 0.0f;
+        le1->p2a0 = layout->pinceRAAmp2 [i];
+        le1->p2f0 = layout->pinceRFAmp2 [i];
+
+        le1->p2a01 = 0.0f;
+        le1->p2a1 = layout->pinceLAAmp2 [i + 1];
+        le1->p2f1 = layout->pinceLFAmp2 [i + 1];
+
+        le1->func2f0 = layout->funcR2[i];
+        le1->func2f1 = layout->funcL2[i + 1];
+
+        le1->fd1 = 2;
+        le1->fd2 = 2;
+        le1->ff1 = 2;
+        le1->ff2 = 2;
+        le1->isPince = 1;
+        le1->coeff = 0.0f;
+        layout->panelsInt.push_back(le1);
+    }
+
+    LayoutElement* le2 = new LayoutElement();
+    le2->n1 = i;
+    le2->n2 = i + 1;
+    le2->s1 = false;
+    le2->s2 = false;
+    le2->posDeb1 = debBorder;
+    le2->posFin1 = tpF1;
+    le2->posDeb2 = debBorder;
+    le2->posFin2 = tpF2;
+
+    le2->p2a00 = 0.0f;
+    le2->p2a0 = layout->pinceRAAmp2 [i];
+    le2->p2f0 = layout->pinceRFAmp2 [i];
+
+    le2->p2a01 = 0.0f;
+    le2->p2a1 = layout->pinceLAAmp2 [i + 1];
+    le2->p2f1 = layout->pinceLFAmp2 [i + 1];
+
+    le2->func2f0 = layout->funcR2[i];
+    le2->func2f1 = layout->funcL2[i + 1];
+
+    le2->fd1 = 2;
+    le2->fd2 = 2;
+    le2->ff1 = 2;
+    le2->ff2 = 2;
+    le2->isPince = 1;
+    le2->coeff = 0.0f;
+
+    if (i == (n - 2)) {
+        le2->func2f1 = Zeros((le2->func2f0)->GetLignes(), 1);
+        le2->p2a01 = 0.0f;
+        le2->p2a1 = 0.0f;
+        le2->p2f1 = 0.0f;
+
+        if (!((gfd->VentHoles) && (gfd->noNervVH[i]))  ) {
+            le2->posFin1 = 100.0f;
+            le2->posDeb2 = 0.0f;
+            le2->posFin2 = 100.0f;
+        }
+    }
+    layout->panelsInt.push_back(le2);
+
+    if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+        LayoutElement* le3 = new LayoutElement();
+        le3->n1 = i;
+        le3->n2 = i + 1;
+        le3->s1 = false;
+        le3->s2 = false;
+        le3->posDeb1 = gfd->VentHolesFin;
+        le3->posFin1 = 100.0f;
+        le3->posDeb2 = gfd->VentHolesFin;
+        le3->posFin2 = 100.0f;
+
+        le3->p2a00 = 0.0f;
+        le3->p2a0 = layout->pinceRAAmp2 [i];
+        le3->p2f0 = layout->pinceRFAmp2 [i];
+
+        le3->func2f0 = layout->funcR2[i];
+        le3->func2f1 = layout->funcL2[i + 1];
+
+        le3->p2a01 = 0.0f;
+        le3->p2a1 = layout->pinceLAAmp2 [i + 1];
+        le3->p2f1 = layout->pinceLFAmp2 [i + 1];
+
+        le3->fd1 = 2;
+        le3->fd2 = 2;
+        le3->ff1 = 2;
+        le3->ff2 = 2;
+
+        le3->isPince = 1;
+        le3->coeff = 0.0f;
+
+        if (i == (n - 2)) {
+            le3->func2f1 = Zeros((le3->func2f0)->GetLignes(), 1);
+            le3->p2a01 = 0.0f;
+            le3->p2a1 = 0.0f;
+            le3->p2f1 = 0.0f;
+        }
+        layout->panelsInt.push_back(le3);
+
+        if (gfd->LayoutKlapans) {
+            if (gfd->VentHolesDouble){
+                LayoutElement* le4 = new LayoutElement();
+                le4->n1 = i;
+                le4->n2 = i+1;
+                le4->s1 = false;
+                le4->s2 = false;
+                le4->posKlapanIntDeb=0.0f;
+                le4->posKlapanFin=gfd->PosKlapanFin;
+                le4->isPince = 0;
+                le4->isKlapan = 1;
+			    le4->fd1 = 2;
+			    le4->fd2 = 2;
+			    le4->ff1 = 2;
+			    le4->ff2 = 2;
+                layout->panelsInt.push_back(le4);
+            }
+                LayoutElement* le5 = new LayoutElement();
+                le5->n1 = i;
+                le5->n2 = i+1;
+                le5->s1 = false;
+                le5->s2 = false;
+                le5->posKlapanIntDeb=gfd->VentHolesDeb;
+                le5->posKlapanFin=gfd->PosKlapanFin;
+                le5->isPince = 0;
+                le5->isKlapan = 1;
+			    le5->fd1 = 2;
+			    le5->fd2 = 2;
+			    le5->ff1 = 2;
+			    le5->ff2 = 2;
+                layout->panelsInt.push_back(le5);
+
+               LayoutElement* le6 = new LayoutElement();
+                le6->n1 = i;
+                le6->n2 = i+1;
+                le6->s1 = false;
+                le6->s2 = false;
+                le6->posKlapanIntDeb=gfd->VentHolesFin;
+                le6->posKlapanFin=gfd->PosKlapanFin;
+                le6->isPince = 0;
+                le6->isKlapan = 1;
+			    le6->fd1 = 2;
+			    le6->fd2 = 2;
+			    le6->ff1 = 2;
+			    le6->ff2 = 2;
+                layout->panelsInt.push_back(le6);
+
+        }
+
+    }
+}
+
+void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
+    // face == 1
+    LayoutElement* le = new LayoutElement();
+    le->n1 = i;
+    le->n2 = i + 1;
+    le->s1 = false;
+    le->s2 = false;
+    le->posDeb1 = debBorder;
+    le->posFin1 = 100.0f;
+    le->posDeb2 = debBorder;
+    le->posFin2 = 100.0f;
+
+    le->p1a00 = layout->pinceRAAmp2 [i];
+    le->p1a0 = layout->pinceRAAmp1 [i];
+    le->p1f0 = layout->pinceRFAmp1 [i];
+
+    le->p1a01 = layout->pinceLAAmp2 [i + 1];
+    le->p1a1 = layout->pinceLAAmp1 [i + 1];
+    le->p1f1 = layout->pinceLFAmp1 [i + 1];
+
+    le->func1f0 = layout->funcR1[i];
+    le->func1f1 = layout->funcL1[i + 1];
+
+    le->ff1 = 1;
+    le->ff2 = 1;
+    le->fd1 = faceDebBorder;
+    le->fd2 = faceDebBorder;
+
+    le->isPince = 1;
+	le->isKlapan = 0;
+    le->coeff = 0.0f;
+    // tututu
+    if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->noNervVH[i])) {
+        le->posDeb1 = 0.0f;
+        le->posDeb2 = 0.0f;
+        le->fd1 = 1;
+        le->fd2 = 1;
+
+    }
+
+    if (i == (n - 2)) {
+        le->func1f1 = Zeros((le->func1f0)->GetLignes(), 1);
+        le->p1a01 = 0.0f;
+        le->p1a1 = 0.0f;
+        le->p1f1 = 0.0f;
+        if (!((gfd->VentHoles) && (gfd->noNervVH[i]))) {
+            le->posDeb2 = 0.0f;
+            le->fd2 = 2;
+        }
+    }
+    layout->panelsExt.push_back(le);
+}
+
+
+void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
+        double tpF1, tpF2;
+        if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
+            tpF1 = gfd->VentHolesFin;
+            tpF2 = gfd->VentHolesFin;
+        } else {
+            tpF1 = 100.0f;
+            tpF2 = 100.0f;
+        }
+        int i = 0;
+        if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
+            LayoutElement* le = new LayoutElement();
+            le->n1 = -1;
+            le->n2 = 0;
+            le->s1 = false;
+            le->s2 = false;
+            le->posDeb1 = 0.0f;
+            le->posFin1 = debBorder;
+            le->posDeb2 = 0.0f;
+            le->posFin2 = debBorder;
+
+            le->p2a00 = 0.0f;
+            le->p2a0 = layout->pinceRAAmp2 [i];
+            le->p2f0 = layout->pinceRFAmp2 [i];
+
+            le->p2a01 = 0.0f;
+            le->p2a1 = layout->pinceLAAmp2 [i + 1];
+            le->p2f1 = layout->pinceLFAmp2 [i + 1];
+
+            le->func2f0 = layout->funcR2[i];
+            le->func2f1 = layout->funcL2[i + 1];
+
+            le->fd1 = 2;
+            le->fd2 = 2;
+            le->ff1 = 2;
+            le->ff2 = 2;
+            le->isPince = 1;
+            le->coeff = 0.0f;
+            layout->panelsInt.push_back(le);
+        }
+        LayoutElement* le1 = new LayoutElement();
+        le1->n1 = -1;
+        le1->n2 = 0;
+        le1->s1 = false;
+        le1->s2 = false;
+        le1->fd1 = 2;
+        le1->fd2 = 2;
+        le1->ff1 = 2;
+        le1->ff2 = 2;
+
+        le1->isPince = 1;
+        le1->coeff = 0.0f;
+
+        le1->posDeb1 = debBorder;
+        le1->posFin1 = tpF1;
+        le1->posDeb2 = debBorder;
+        le1->posFin2 = tpF2;
+
+        le1->p2a00 = 0.0f;
+        le1->p2a0 = layout->pinceLAAmp2[0];
+        le1->p2f0 = layout->pinceLFAmp2[0];
+
+        le1->p2a01 = 0.0f;
+        le1->p2a1 = layout->pinceLAAmp2[0];
+        le1->p2f1 = layout->pinceLFAmp2[0];
+
+        le1->func2f0 = layout->funcL2[0];
+        le1->func2f1 = layout->funcL2[0];
+        layout->panelsInt.push_back(le1);
+
+        if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
+            LayoutElement* le2 = new LayoutElement();
+            le2->n1 = -1;
+            le2->n2 = 0;
+            le2->s1 = false;
+            le2->s2 = false;
+            le2->fd1 = 2;
+            le2->fd2 = 2;
+            le2->ff1 = 2;
+            le2->ff2 = 2;
+
+            le2->isPince = 1;
+            le2->coeff = 0.0f;
+
+            le2->posDeb1 = gfd->VentHolesFin;
+            le2->posFin1 = 100.0f;
+            le2->posDeb2 = gfd->VentHolesFin;
+            le2->posFin2 = 100.0f;
+
+
+            le2->p2a00 = 0.0f;
+            le2->p2a0 = layout->pinceLAAmp2[0];
+            le2->p2f0 = layout->pinceLFAmp2[0];
+
+            le2->p2a01 = 0.0f;
+            le2->p2a1 = layout->pinceLAAmp2[0];
+            le2->p2f1 = layout->pinceLFAmp2[0];
+
+            le2->func2f0 = layout->funcL2[0];
+            le2->func2f1 = layout->funcL2[0];
+            layout->panelsInt.push_back(le2);
+
+
+            if (gfd->LayoutKlapans) {
+                if (gfd->VentHolesDouble){
+                    LayoutElement* le3 = new LayoutElement();
+                    le3->n1 = -1;
+                    le3->n2 = 0;
+                    le3->s1 = false;
+                    le3->s2 = false;
+                    le3->posKlapanIntDeb = 0.0f;
+                    le3->posKlapanFin = gfd->PosKlapanFin;
+                    le3->isKlapan = 1;
+                    le3->isPince = 0;
+                    //printf ("\n klapan=%d", isave);
+                    layout->panelsInt.push_back(le3);
+                }
+                    LayoutElement* le4 = new LayoutElement();
+                    le4->n1 = -1;
+                    le4->n2 = 0;
+                    le4->s1 = false;
+                    le4->s2 = false;
+                    le4->posKlapanIntDeb = gfd->VentHolesDeb;
+                    le4->posKlapanFin = gfd->PosKlapanFin;
+                    le4->isKlapan = 1;
+                    le4->isPince = 0;
+                    layout->panelsInt.push_back(le4);
+
+
+                    LayoutElement* le5 = new LayoutElement();
+                    le5->n1 = -1;
+                    le5->n2 = 0;
+                    le5->s1 = false;
+                    le5->s2 = false;
+                    le5->posKlapanIntDeb = gfd->VentHolesFin;
+                    le5->posKlapanFin = gfd->PosKlapanFin;
+                    le5->isKlapan = 1;
+                    le5->isPince = 0;
+                    layout->panelsInt.push_back(le5);
+
+            }
+
+        }
+}
+
+void prepareCenterPanelExt(WindPatternsProject* gfd, Layout* layout) {
+    LayoutElement* le = new LayoutElement();
+    le->n1 = -1;
+    le->n2 = 0;
+    le->s1 = false;
+    le->s2 = false;
+    le->fd1 = faceDebBorder;
+    le->fd2 = faceDebBorder;
+    le->ff1 = 1;
+    le->ff2 = 1;
+    le->isPince = 1;
+	le->isKlapan = 0;
+    le->coeff = 0.0f;
+    le->posDeb1 = debBorder;
+    le->posFin1 = 100.0f;
+    le->posDeb2 = debBorder;
+    le->posFin2 = 100.0f;
+    le->p1a00 = layout->pinceLAAmp2[0];
+    le->p1a0 = layout->pinceLAAmp1[0];
+    le->p1f0 = layout->pinceLFAmp1[0];
+    le->p1a01 = layout->pinceLAAmp2[0];
+    le->p1a1 = layout->pinceLAAmp1[0];
+    le->p1f1 = layout->pinceLFAmp1[0];
+
+    le->func1f0 = layout->funcL1[0];
+    le->func1f1 = layout->funcL1[0];
+    if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
+        le->posDeb1 = 0.0f;
+        le->posDeb2 = 0.0f;
+        le->fd1 = 1;
+        le->fd2 = 1;
+    }
+    layout->panelsExt.push_back(le);
+}
+
+void prepareProfile(WindPatternsProject* gfd, Layout* layout, int i) {
+    LayoutElement* lep = new LayoutElement();
+    lep->n1 = i;
+    lep->n2 = i;
+    lep->s1 = false;
+    lep->s2 = false;
+    lep->posDeb1 = 0.0f;
+    lep->posFin1 = 100.0f;
+    lep->posDeb2 = 0.0f;
+    lep->posFin2 = 100.0f;
+    lep->isPince = 0;
+    lep->fd1 = 2;
+    lep->ff1 = 2;
+    lep->fd2 = 1;
+    lep->ff2 = 1;
+    lep->coeff = layout->coeffn[i];
+    layout->profs.push_back(lep);
+}
+
+void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
+    LayoutElement* led1 = new LayoutElement();
+    int k = 2*i - 1;
+    led1->n1 = gfd->noNervD[i];
+    led1->n2 = gfd->noNervD[i] - 1;
+    led1->s1 = false;
+    led1->s2 = false;
+    led1->isPince = 0;
+    led1->fd1 = 2;
+    led1->ff1 = 2;
+    led1->fd2 = 1;
+    led1->ff2 = 1;
+    led1->posDeb1 = gfd->PosDiagNerv2A;
+    led1->posFin1 = gfd->PosDiagNerv2F;
+
+    led1->posDeb2 = gfd->PosDiagNerv1A;
+    led1->posFin2 = gfd->PosDiagNerv1F;
+    led1->coeff = layout->coeffd[k];
+    k++;
+
+    LayoutElement* led2 = new LayoutElement();
+    led2->n1 = gfd->noNervD[i];
+    led2->n2 = gfd->noNervD[i] + 1;
+    led2->s1 = false;
+    led2->s2 = false;
+    led2->isPince = 0;
+    led2->fd1 = 2;
+    led2->ff1 = 2;
+    led2->fd2 = 1;
+    led2->ff2 = 1;
+
+    led2->posDeb1 = gfd->PosDiagNerv2A;
+    led2->posFin1 = gfd->PosDiagNerv2F;
+    led2->posDeb2 = gfd->PosDiagNerv1A;
+    led2->posFin2 = gfd->PosDiagNerv1F;
+    led2->coeff = layout->coeffd[k];
+    layout->diagNervs.push_back(led2);
+}
+
 void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
     if (gfd->debug) printf("\n SaveLayout2()");
     int startNoNerv = 0, noNerv = 0, face = 1;
@@ -159,16 +627,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
     Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
     int n = gfd->Form->m_nbProfils;
     int size = 6 * n + 2 + 10;
-    double *H, *W;
-    TAxe **AxeP, **AxePD, **AxePTD, **AxeMD, **AxeCD, **AxeRepD;
-    H = new double[size];
-    W = new double[size];
-    AxeP = new TAxe*[size];
-    AxePD = new TAxe*[size];
-    AxePTD = new TAxe*[size];
-    AxeMD = new TAxe*[size];
-    AxeCD = new TAxe*[size];
-    AxeRepD = new TAxe*[size];
+
     face = 1;
     int *n1, *n2, *fd1, *ff1, *fd2, *ff2, *isPince,*isKlapan, *vent;
     bool *s1, *s2;
@@ -233,15 +692,22 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
         debBorder = 0.0f;
         faceDebBorder = 1;
     }
+
+	layout->debBorder = debBorder;
+	layout->faceDebBorder = faceDebBorder;
     double tpF1, tpF2;
 
     for (face = 1; face <= 2; face++) {
         numncol[col] = isave;
         col++;
+        /*
         if (gfd->LayoutSymetrique) {
 	    //TOTEST not tested yet
             for (i = n - 1; i > 0; i--) {
                 if (face == 1) {
+					LayoutElement* le = new LayoutElement();
+					layoutElementsList.push_back(le);
+
                     n1[isave] = i;
                     n2[isave] = i - 1;
                     s1[isave] = true;
@@ -338,9 +804,13 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
                 }
             }
         }
+        if layout symetric
+        */
 
         if (layout->isCenterPanel) {
             if (face == 1) {
+                prepareCenterPanelExt(gfd, layout);
+                /*
                 n1[isave] = -1;
                 n2[isave] = 0;
                 s1[isave] = false;
@@ -375,9 +845,10 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
 
                 }
 
-                isave++;
+                isave++;*/
             } else {
-                if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
+                prepareCenterPanelInt(gfd, layout);
+                /*if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
                     tpF1 = gfd->VentHolesFin;
                     tpF2 = gfd->VentHolesFin;
                 } else {
@@ -513,13 +984,14 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
 
                     }
 
-                }
+                }*/
             }
         }
 
         for (i = 0; i < n - 1; i++) {
             if (face == 1) {
-                n1[isave] = i;
+                preparePanelExt(gfd, layout, i);
+                /*n1[isave] = i;
                 n2[isave] = i + 1;
                 s1[isave] = false;
                 s2[isave] = false;
@@ -568,8 +1040,10 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
 
                 }
                 isave++;
-
+                */
             } else {
+                preparePanelInt(gfd, layout, i);
+/*
                 if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
                     tpF1 = gfd->VentHolesFin;
                     tpF2 = gfd->VentHolesFin;
@@ -737,7 +1211,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
                     }
 
                 }
-
+*/
             }
         }
 
@@ -747,6 +1221,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
             col++;
 
             // profile
+            /*
             if (gfd->LayoutSymetrique) {
                 for (i = n - 2; i > 0; i--) {
                     n1[isave] = i;
@@ -768,8 +1243,12 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
                     isave++;
                 }
             }
+            if layout sym
+            */
             for (i = 0; i < n - 1; i++) {
-                n1[isave] = i;
+                prepareProfile(gfd, layout, i);
+
+                /*n1[isave] = i;
                 n2[isave] = i;
                 s1[isave] = false;
                 s2[isave] = false;
@@ -784,7 +1263,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
                 fd2[isave] = 1;
                 ff2[isave] = 1;
                 coeff[isave] = layout->coeffn[i];
-                isave++;
+                isave++;*/
 
             }
             numncol[col] = isave;
@@ -792,6 +1271,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
 
 			if (gfd->DiagNervs) {
 				int k = 2 * gfd->quantDiag - 1;
+/*
 				if (gfd->LayoutSymetrique) {
 					for (int i = gfd->quantDiag - 1; i >= 0; i--) {
 						n1[isave] = gfd->noNervD[i];
@@ -830,9 +1310,13 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
 						k--;
 					}
 				}
+                if layout symetric
+                */
             k = 0;
             for (i = 0; i < gfd->quantDiag; i++) {
-                n1[isave] = gfd->noNervD[i];
+                prepareDiagNerv(gfd, layout, i);
+
+/*                n1[isave] = gfd->noNervD[i];
                 n2[isave] = gfd->noNervD[i] - 1;
                 s1[isave] = false;
                 s2[isave] = false;
@@ -866,12 +1350,30 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
                 posFin2[isave] = gfd->PosDiagNerv1F;
                 coeff[isave] = layout->coeffd[k];
                 isave++;
-                k++;
+                k++;*/
             }
             }
         }
     }
     
+    calculateLayout(gfd, layout);
+}
+
+void calculateLayout(WindPatternsProject* gfd, Layout* layout) {
+    TAxe **AxeP, **AxePD, **AxePTD, **AxeMD, **AxeCD, **AxeRepD;
+    double *H, *W;
+    int n = gfd->Form->m_nbProfils;
+    int size = 6 * n + 2 + 10;
+
+    H = new double[size];
+    W = new double[size];
+    AxeP = new TAxe*[size];
+    AxePD = new TAxe*[size];
+    AxePTD = new TAxe*[size];
+    AxeMD = new TAxe*[size];
+    AxeCD = new TAxe*[size];
+    AxeRepD = new TAxe*[size];
+
     int q = isave;
     char text[100];
     double _pa0, _pa00, _pf0, _pa1, _pa01, _pf1;
@@ -1167,6 +1669,7 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
         clearCourbesAxe(AxeCD[i]);
         clearCourbesAxe(AxeRepD[i]);
     }
+
 
 }
 
