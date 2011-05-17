@@ -1,7 +1,10 @@
 #pragma once
 
+#include <vector>
+#include <algorithm>
 #include "afx.h"		//class CString
 #include "afxdlgs.h"	//class CFileDialog
+
 
 #include "profil.h"
 #include "pince.h"
@@ -11,6 +14,7 @@
 #define HACCUR 0.005f
 
 class WindPatternsProject;
+class LayoutElement;
 
 class Layout
 {
@@ -52,15 +56,19 @@ class Layout
         int *noNervD2;
         int nrp;
         bool isCenterPanel;
+
+		double debBorder;
+		int faceDebBorder;
+
+        std::vector<LayoutElement*> panelsExt;
+		std::vector<LayoutElement*> panelsInt;
+		std::vector<LayoutElement*> diagNervs;
+		std::vector<LayoutElement*> profs;
 };
 
 class LayoutElement
 {
     public:
-        LayoutElement ()
-        {
-        }
-
         LayoutElement ();
         virtual ~LayoutElement();
 
