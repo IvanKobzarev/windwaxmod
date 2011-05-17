@@ -13,6 +13,12 @@
 
 #define HACCUR 0.005f
 
+#define PANEL 1
+#define KLAPAN 2
+#define VENT 3
+#define DIAG 4
+#define PROF 5
+
 class WindPatternsProject;
 class LayoutElement;
 
@@ -66,11 +72,21 @@ class Layout
 		std::vector<LayoutElement*> profs;
 };
 
+class LayoutElementExport {
+public:
+    LayoutElementExport ();
+    virtual ~LayoutElementExport();
+    TAxe *AxeP, *AxePD, *AxePTD, *AxeMD, *AxeCD, *AxeRepD;
+    double H, W;
+}
+
 class LayoutElement
 {
     public:
         LayoutElement ();
         virtual ~LayoutElement();
+        
+        int type;
 
 		int n1, n2;
 		int vent;
@@ -86,6 +102,11 @@ class LayoutElement
 		int isKlapan;
         Matrix* func1f0;
         Matrix* func1f1;
+
+        LayoutElementExport* lee;
+        calculateExport();
+
+
 };
 
 const int REP_TRIANGLE = 1;
