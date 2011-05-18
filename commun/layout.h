@@ -71,7 +71,7 @@ class Layout
 		std::vector<LayoutElement*> diagNervs;
 		std::vector<LayoutElement*> profs;
 
-        void calculateExport();
+        void calculateExport(WindPatternsProject* gfd);
 };
 
 class LayoutElementExport {
@@ -80,7 +80,7 @@ public:
     virtual ~LayoutElementExport();
     TAxe *AxeP, *AxePD, *AxePTD, *AxeMD, *AxeCD, *AxeRepD;
     double H, W;
-}
+};
 
 class LayoutElement
 {
@@ -113,28 +113,28 @@ class KlapanLayoutElement : public LayoutElement {
     public:
 		KlapanLayoutElement();
 		virtual ~KlapanLayoutElement();
-        void calculateExport(); 
+        void calculateExport(WindPatternsProject* gfd); 
 };
 
 class ProfLayoutElement : public LayoutElement {
     public:
 		ProfLayoutElement();
 		virtual ~ProfLayoutElement();
-        void calculateExport(); 
+        void calculateExport(WindPatternsProject* gfd); 
 };
 
 class DiagNervLayoutElement : public LayoutElement {
     public:
 		DiagNervLayoutElement();
 		virtual ~DiagNervLayoutElement();
-        void calculateExport(); 
+        void calculateExport(WindPatternsProject* gfd); 
 };
 
 class PanelLayoutElement : public LayoutElement {
     public:
 		PanelLayoutElement();
 		virtual ~PanelLayoutElement();
-        void calculateExport(); 
+        void calculateExport(WindPatternsProject* gfd); 
 };
 
 

@@ -33,106 +33,93 @@ LayoutElement::~LayoutElement() {
 LayoutElement::LayoutElement() {
 }
 
-void KlapanLayoutElement::calculateExport(){
+void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     calcPatronKlapan(gfd, n1[t], s1[t], n2[t], s2[t], posKlapanIntDeb[t], posKlapanFin[t],
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
     charname="K";
-        double marge1 = gfd->Marge[0];
-        double marge2 = gfd->Marge[1];
-        double margeDeb = gfd->MargeDeb;
-        double margeFin = gfd->MargeFin;
+    double marge1 = gfd->Marge[0];
+    double marge2 = gfd->Marge[1];
+    double margeDeb = gfd->MargeDeb;
+    double margeFin = gfd->MargeFin;
     int n = gfd->Form->m_nbProfils;
     char text[100];
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
+        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
+        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, false, debug);
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+    delete (X[0]);
+    delete (Y[0]);
+    delete (Z[0]);
+    delete (P[0]);
+    delete (X[1]);
+    delete (Y[1]);
+    delete (Z[1]);
+    delete (P[1]);
+    delete (Xd[0]);
+    delete (Yd[0]);
+    delete (Xd[1]);
+    delete (Yd[1]);
+}
+void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
+    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
+        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+        &Xd[0], &Yd[0], &Xd[1], &Yd[1],
+        &X[0], &Y[0], &Z[0], &P[0],
+        &X[1], &Y[1], &Z[1], &P[1]);
 
-sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-        else {
-            // Klapan
-            printf(" Klapan!");
-                GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-                    Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-                    &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, false, debug);
-                calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
-	        if (debug) printf("\n ...go generate courbe");
-	        if (debug) printf("\n ...after calcMaxWH");
-        }
-        delete (X[0]);
-        delete (Y[0]);
-        delete (Z[0]);
-        delete (P[0]);
-        delete (X[1]);
-        delete (Y[1]);
-        delete (Z[1]);
-        delete (P[1]);
+    getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
+    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
+
+    if (coeff[t] != 0) {
+        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
         delete (Xd[0]);
         delete (Yd[0]);
-        delete (Xd[1]);
+        delete(Xd[1]);
         delete (Yd[1]);
-
-
-
-}
-void ProfLayoutElement::calculateExport(){
-                calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-                    n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
-                    &Xd[0], &Yd[0], &Xd[1], &Yd[1],
-                    &X[0], &Y[0], &Z[0], &P[0],
-                    &X[1], &Y[1], &Z[1], &P[1]);
-
-            getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
-            getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
-
-            if (coeff[t] != 0) {
-                calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
-                delete (Xd[0]);
-                delete (Yd[0]);
-                delete(Xd[1]);
-                delete (Yd[1]);
-                Xd[0] = newXd[0];
-                Yd[0] = newYd[0];
-                Xd[1] = newXd[1];
-                Yd[1] = newYd[1];
-            }
-        double marge1 = gfd->Marge[0];
-        double marge2 = gfd->Marge[1];
-        double margeDeb = gfd->MargeDeb;
-        double margeFin = gfd->MargeFin;
-                // nervures
-                margeFin = gfd->margeFinNerv;
-                vent[t] = gfd->VentilationLayout;
-                charname="N";
+        Xd[0] = newXd[0];
+        Yd[0] = newYd[0];
+        Xd[1] = newXd[1];
+        Yd[1] = newYd[1];
+    }
+    double marge1 = gfd->Marge[0];
+    double marge2 = gfd->Marge[1];
+    double margeDeb = gfd->MargeDeb;
+    double margeFin = gfd->MargeFin;
+    // nervures
+    margeFin = gfd->margeFinNerv;
+    vent[t] = gfd->VentilationLayout;
+    charname="N";
     int n = gfd->Form->m_nbProfils;
     char text[100];
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
+        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
+        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
 
-sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-                GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-                    Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-                    &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
 
-                calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
-
-                        delete (X[0]);
-        delete (Y[0]);
-        delete (Z[0]);
-        delete (P[0]);
-        delete (X[1]);
-        delete (Y[1]);
-        delete (Z[1]);
-        delete (P[1]);
-        delete (Xd[0]);
-        delete (Yd[0]);
-        delete (Xd[1]);
-        delete (Yd[1]);
-
-
+    delete (X[0]);
+    delete (Y[0]);
+    delete (Z[0]);
+    delete (P[0]);
+    delete (X[1]);
+    delete (Y[1]);
+    delete (Z[1]);
+    delete (P[1]);
+    delete (Xd[0]);
+    delete (Yd[0]);
+    delete (Xd[1]);
+    delete (Yd[1]);
 }
-void PanelLayoutElement::calculateExport(){
-                calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-                    n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
-                    &Xd[0], &Yd[0], &Xd[1], &Yd[1],
-                    &X[0], &Y[0], &Z[0], &P[0],
-                    &X[1], &Y[1], &Z[1], &P[1]);
+void PanelLayoutElement::calculateExport(WindPatternsProject* gfd){
+    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
+        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+        &Xd[0], &Yd[0], &Xd[1], &Yd[1],
+        &X[0], &Y[0], &Z[0], &P[0],
+        &X[1], &Y[1], &Z[1], &P[1]);
 
         if (isPince[t]) {
             if (ff1[t] == 1) {
@@ -313,70 +300,59 @@ sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
 
 
 }
-void DiagNervLayoutElement::calculateExport(){
-                calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-                    n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
-                    &Xd[0], &Yd[0], &Xd[1], &Yd[1],
-                    &X[0], &Y[0], &Z[0], &P[0],
-                    &X[1], &Y[1], &Z[1], &P[1]);
+void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd){
+    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
+        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+        &Xd[0], &Yd[0], &Xd[1], &Yd[1],
+        &X[0], &Y[0], &Z[0], &P[0],
+        &X[1], &Y[1], &Z[1], &P[1]);
 
-            getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
-            getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
+    getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
+    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
 
-            if (coeff[t] != 0) {
-                calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
-                delete (Xd[0]);
-                delete (Yd[0]);
-                delete(Xd[1]);
-                delete (Yd[1]);
-                Xd[0] = newXd[0];
-                Yd[0] = newYd[0];
-                Xd[1] = newXd[1];
-                Yd[1] = newYd[1];
-            }
-
-        double marge1 = gfd->Marge[0];
-        double marge2 = gfd->Marge[1];
-        double margeDeb = gfd->MargeDeb;
-        double margeFin = gfd->MargeFin;
-
-                    // diagonal nervures
-                    margeFin = gfd->margeFinDiagNerv;
-                    vent[t] = gfd->VentilationLayout;
-                    charname="D";
-                        int n = gfd->Form->m_nbProfils;
-    char text[100];
-
-sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-                GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-                    Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-                    &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
-
-                calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
-
-                        delete (X[0]);
-        delete (Y[0]);
-        delete (Z[0]);
-        delete (P[0]);
-        delete (X[1]);
-        delete (Y[1]);
-        delete (Z[1]);
-        delete (P[1]);
+    if (coeff[t] != 0) {
+        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
         delete (Xd[0]);
         delete (Yd[0]);
-        delete (Xd[1]);
+        delete(Xd[1]);
         delete (Yd[1]);
+        Xd[0] = newXd[0];
+        Yd[0] = newYd[0];
+        Xd[1] = newXd[1];
+        Yd[1] = newYd[1];
+    }
 
+    double marge1 = gfd->Marge[0];
+    double marge2 = gfd->Marge[1];
+    double margeDeb = gfd->MargeDeb;
+    double margeFin = gfd->MargeFin;
 
+    // diagonal nervures
+    margeFin = gfd->margeFinDiagNerv;
+    vent[t] = gfd->VentilationLayout;
+    charname="D";
+    int n = gfd->Form->m_nbProfils;
+    char text[100];
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
+        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
+        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
+
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+
+    delete (X[0]);
+    delete (Y[0]);
+    delete (Z[0]);
+    delete (P[0]);
+    delete (X[1]);
+    delete (Y[1]);
+    delete (Z[1]);
+    delete (P[1]);
+    delete (Xd[0]);
+    delete (Yd[0]);
+    delete (Xd[1]);
+    delete (Yd[1]);
 }
-
-void Layout::calculateExport(){
-    // call all layoutelements .calculateExport()
-}
-
-
-
-
 
 Layout::~Layout() {
 }
@@ -1708,24 +1684,22 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
     if (gfd->debug) printf("\n SaveLayout2()");
     prepareLayoutElements(gfd, layout);
-    layout->calculateExport();
+    layout->calculateExport(gfd);
     saveCalcLayoutToFile(layout);
 }
 
-
-
-LayoutElement::calculateExport(){
+Layout::calculateExport(WindPatternsProject* gfd){
     for (int i = 0; i < panelsExt.size(); i++) {
-        panelsExt[i]->calculateExport();
+        panelsExt[i]->calculateExport(gfd);
     }
     for (int i = 0; i < panelsInt.size(); i++) {
-        panelsInt[i]->calculateExport();
+        panelsInt[i]->calculateExport(gfd);
     }
     for (int i = 0; i < diagNervs.size(); i++) {
-        diagNervs[i]->calculateExport();
+        diagNervs[i]->calculateExport(gfd);
     }
     for (int i = 0; i < profs.size(); i++) {
-        profs[i]->calculateExport();
+        profs[i]->calculateExport(gfd);
     }
 }
 
