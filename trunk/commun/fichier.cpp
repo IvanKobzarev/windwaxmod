@@ -2387,9 +2387,78 @@ void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe 
        //printf ("\n end of EcrFichManyF...");
 
 }
+
+void EcritureLayoutToDXF(char *fileName, Layout* layout) {
+    FILE *fid;
+	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	if( (fid = fopen( fileName, "wt" )) == NULL ) {
+		printf( "\nErreur ouverture fichier '%s'", fileName);
+		exit(0);
+	}
+        fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
+        double dx=0.0f,dy=0.0f,dz=0.0f;
+
+        int povorot1=0, povorot2=0,povorot2d=0, len1=0, len2=0;
+        povorot1=numncon[1];
+        povorot2=numncon[2];
+        povorot2d=numncon[3];
+/*        if (np&1) {
+            povorot1=(2*(np-1));
+            len1=2*(np-1);
+            povorot2=povorot1 + ((np-1));
+            len2=np-1;
+        } else {
+            povorot1=(2*(np-1)+1);
+            len1=2*(np-1)+1;
+            povorot2=povorot1 + ((np));
+            len2=np;
+        }*/
+        
+        double maxW1=-1000000.0f,maxW2=-1000000.0f,maxW3=-1000000.0f;
+
+        for (int i=0; i<povorot1;i++) {
+            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+                                            rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
+            dy=dy + H[i]*2.0f;
+            if (W[i] > maxW1) maxW1 = W[i];
+        }
+        dx=maxW1*2.0; dy=0.0f; maxW2=-1000000.0f; maxW3=-1000000.0f;
+        /* +(np&1) */
+        for (int i=povorot1;i<povorot2;i++) {
+            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+                                            rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
+            dy=dy + H[i]*2.0f;
+			//printf ("\n%d dy+%f",i, H[i]);
+            if (W[i] > maxW2) maxW2 = W[i];
+        }
+        dx=maxW1*2.0 + maxW2*4.0; dy=0.0f;
+        for (int i=povorot2; i<povorot2d;i++) {
+            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+                                            rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
+            dy=dy + H[i]*2.0f;
+			//printf ("\n%d dy+%f",i, H[i]);
+            if (W[i] > maxW3) maxW3 = W[i];
+        }
+
+        dx=maxW1*2.0 + maxW2*4.0 + maxW3*4.0; dy=0.0f;
+        for (int i=povorot2d; i<n;i++) {
+            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+                                            rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
+            dy=dy + H[i]*2.0f;
+        }
+
+       fprintf(fid,"0\nENDSEC\n0\nEOF\n");
+       //printf ("\n...fclose(fid)");
+	if(fclose(fid))	{
+		printf("\nProbleme  la fermeture du fichier");
+		exit(0);
+	}
+
+}
+
 void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
 {
-    	FILE *fid;
+    FILE *fid;
 	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
 	if( (fid = fopen( fileName, "wt" )) == NULL ) {
 		printf( "\nErreur ouverture fichier '%s'", fileName);
