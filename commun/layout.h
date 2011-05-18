@@ -70,6 +70,8 @@ class Layout
 		std::vector<LayoutElement*> panelsInt;
 		std::vector<LayoutElement*> diagNervs;
 		std::vector<LayoutElement*> profs;
+
+        void calculateExport();
 };
 
 class LayoutElementExport {
@@ -104,10 +106,37 @@ class LayoutElement
         Matrix* func1f1;
 
         LayoutElementExport* lee;
-        calculateExport();
-
-
+        virtual void calculateExport();
 };
+
+class KlapanLayoutElement : public LayoutElement {
+    public:
+		KlapanLayoutElement();
+		virtual ~KlapanLayoutElement();
+        void calculateExport(); 
+};
+
+class ProfLayoutElement : public LayoutElement {
+    public:
+		ProfLayoutElement();
+		virtual ~ProfLayoutElement();
+        void calculateExport(); 
+};
+
+class DiagNervLayoutElement : public LayoutElement {
+    public:
+		DiagNervLayoutElement();
+		virtual ~DiagNervLayoutElement();
+        void calculateExport(); 
+};
+
+class PanelLayoutElement : public LayoutElement {
+    public:
+		PanelLayoutElement();
+		virtual ~PanelLayoutElement();
+        void calculateExport(); 
+};
+
 
 const int REP_TRIANGLE = 1;
 const int REP_LINE = 2;
