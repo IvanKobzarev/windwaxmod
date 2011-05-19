@@ -1,9 +1,3 @@
-/*************************************/
-
-/* def type matrice et operateurs ...*/
-
-/*************************************/
-
 #pragma warning(disable:4514)
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,12 +8,6 @@
 #ifndef DEBUG
     #define DEBUG false
 #endif
-
-/************************************/
-
-/* allocation espace pour matrice   */
-
-/************************************/
 
 Matrix::Matrix( int lig, int col )
 	: m_nLig(lig), m_nCol(col)

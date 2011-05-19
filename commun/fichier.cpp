@@ -460,7 +460,7 @@ void Ballonement::loadFromFile(const char* fileName) {
 }
 */
 
-void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
+void writeFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
 
 
 enum trim_type {LEFT=1, RIGHT, LEFT_AND_RIGHT};
@@ -952,11 +952,11 @@ WindPatternsProject* LectureWindPatternsProject(char* NomFic) {
     return wpp;
 }
 
-void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
+void writeWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
 	FILE *fid;
 	/**** message ****/
-	printf("\nEcriture fichier WindPatternsProject: '%s'",fileName);
-	/**** ouverture fichier en ecriture ****/
+	printf("\nwrite fichier WindPatternsProject: '%s'",fileName);
+	/**** ouverture fichier en write ****/
 	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", fileName);
@@ -1598,10 +1598,10 @@ Form* LectureFichierForm2(char* NomFic)
 
 
 /************************/
-/* EcritureFichierForm */
+/* writeFichierForm */
 /************************/
 
-void EcritureFichierForm(char *fileName, Form *f)
+void writeFichierForm(char *fileName, Form *f)
 
 {
 	int i;
@@ -1611,24 +1611,24 @@ void EcritureFichierForm(char *fileName, Form *f)
 		"DIEDRE","MORPHING","VRILLAGE","EPAISSEUR_RELATIVE"};
 	Matrix* m[11];
 	/**** message ****/
-	printf("\nEcriture fichier de Form: '%s'",fileName);
-	/**** ouverture fichier en ecriture ****/
+	printf("\nwrite fichier de Form: '%s'",fileName);
+	/**** ouverture fichier en write ****/
 	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
 
-	/**** Ecriture No de version ****/
+	/**** write No de version ****/
 	fprintf(fid,"\nVERSION %1.2f", NO_VERSION);
 
-	/**** Ecriture des parametres ****/
+	/**** write des parametres ****/
 	fprintf(fid,"\n\nNB_ALVEOLES %d", f->NbCaiss);
 	fprintf(fid,"\nCOEFF_PROG_GEOM %1.5f", f->CoeffProgGeom);
 	fprintf(fid,"\nCOEFF_EXP %1.5f", f->CoeffExp);
 	fprintf(fid,"\nEPAI_REL_CENTRE %2.3f", f->EpaiRelCent);
 
-	/**** Ecriture des points de controle ****/
+	/**** write des points de controle ****/
 	/*init pointeur des matrices de coordonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½es des points de controle*/
 	m [0]=f->mCtrlNez; m [1]=f->mCtrlFui;
 	m [2]=f->mCtrlA; m [3]=f->mCtrlB; m [4]=f->mCtrlC; m [5]=f->mCtrlD;
@@ -1638,7 +1638,7 @@ void EcritureFichierForm(char *fileName, Form *f)
 
 //	m [6]=f->mCtrlDiedre; m [7]=f->mCtrlMorphing;
 //	m [8]=f->mCtrlVrillage; m [9]=f->mCtrlEpaiRel;
-	/*boucle ecriture des points de controle*/
+	/*boucle write des points de controle*/
 
 	for (i=0; i<11; i++)
 		fprintf(fid,"\n%s %1.3f %1.3f  %1.3f %1.3f  %1.3f %1.3f  %1.3f %1.3f",
@@ -1649,11 +1649,11 @@ void EcritureFichierForm(char *fileName, Form *f)
 		m [i]->Element(3,0), m [i]->Element(3,1));
 
 
-	/**** Ecriture noms des profils ****/
+	/**** write noms des profils ****/
 	fprintf(fid,"\n\nPROFIL_CENTRE %s", f->m_strNomProfilCent.c_str());
 	fprintf(fid,"\nPROFIL_BOUT %s", f->m_strNomProfilBout.c_str());
 
-	/**** Ecriture du tableau de forme ****/
+	/**** write du tableau de forme ****/
 	fprintf(fid,"\n\nTABLEAU_FORME %d",f->m_nbProfils);
 	/*boucle ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ partir de la 1ere nervure du centre vers l'extrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½mitÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½*/
 	for (i=0; i<f->m_nbProfils; i++)
@@ -1686,12 +1686,12 @@ void EcritureFichierForm(char *fileName, Form *f)
 }
 
 /************************/
-/* EcritureFichierForm2 */
+/* writeFichierForm2 */
 /************************/
 
-void EcritureFichierForm2(char *fileName, Form *f)
+void writeFichierForm2(char *fileName, Form *f)
 {
-	printf ("EcritureFichierForm2\n");
+	printf ("writeFichierForm2\n");
 	int i;
 	FILE *fid;
 	char* texte[11]={"BORD_ATTAQUE_FORME_COURBE","BORD_DE_FUITE_FORME_COURBE","SUSPENTAGE_LIGNE_A_COURBE",
@@ -1704,20 +1704,20 @@ void EcritureFichierForm2(char *fileName, Form *f)
 	Matrix* m2[10];
 
 	/**** message ****/
-	printf("\nEcriture fichier de Form: '%s'",fileName);
-	/**** ouverture fichier en ecriture ****/
+	printf("\nwrite fichier de Form: '%s'",fileName);
+	/**** ouverture fichier en write ****/
 	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
-	/**** Ecriture No de version ****/
+	/**** write No de version ****/
 	fprintf(fid,"\nVERSION %1.2f", NO_VERSION);
-	/**** Ecriture des parametres ****/
+	/**** write des parametres ****/
 	fprintf(fid,"\n\nNB_ALVEOLES %d", f->NbCaiss);
 	fprintf(fid,"\nCOEFF_PROG_GEOM %1.5f", f->CoeffProgGeom);
 	fprintf(fid,"\nEPAI_REL_CENTRE %2.3f", f->EpaiRelCent);
-	/**** Ecriture des points de controle ****/
+	/**** write des points de controle ****/
 	/*init pointeur des matrices de coordonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½es des points de controle*/
 	m [0]=f->mCourbNez; m [1]=f->mCourbFui;
 	m [2]=f->mCourbA; m [3]=f->mCourbB; m [4]=f->mCourbC; m [5]=f->mCourbD;	m [6]=f->mCourbE;
@@ -1729,7 +1729,7 @@ void EcritureFichierForm2(char *fileName, Form *f)
 	m2 [2]=f->mCtrlA; m2 [3]=f->mCtrlB; m2 [4]=f->mCtrlC; m2 [5]=f->mCtrlD;	m2 [6]=f->mCtrlE;
 	m2 [7]=f->mCtrlDiedre; m2 [8]=f->mCtrlMorphing;
 	m2 [9]=f->mCtrlVrillage; m2 [10]=f->mCtrlEpaiRel;
-	/*boucle ecriture des points de controle*/
+	/*boucle write des points de controle*/
 	int NbNerv=0;
 	if(f->NbCaiss%2==0) 
 		NbNerv=f->NbCaiss/2+1;
@@ -1750,10 +1750,10 @@ void EcritureFichierForm2(char *fileName, Form *f)
 		}
 	}
 	
-	/**** Ecriture noms des profils ****/
+	/**** write noms des profils ****/
 	fprintf(fid,"\n\nPROFIL_CENTRE %s", f->m_strNomProfilCent.c_str());
 	fprintf(fid,"\nPROFIL_BOUT %s", f->m_strNomProfilBout.c_str());
-	/**** Ecriture du tableau de forme ****/
+	/**** write du tableau de forme ****/
 	fprintf(fid,"\n\nTABLEAU_FORME %d",f->m_nbProfils);
 	/*boucle ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ partir de la 1ere nervure du centre vers l'extrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½mitÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½*/
 	for (i=0; i<f->m_nbProfils; i++)
@@ -1960,9 +1960,9 @@ void EcritPolyVertexDXF(FILE *fid, char *nom, int en3d,
 }
 
 /**********************/
-/* EcritureFichierFGen */
+/* writeFichierFGen */
 /**********************/
-void EcritureFichierFGen(char *fileName, Form *foil)
+void writeFichierFGen(char *fileName, Form *foil)
 {
 	ofstream out(fileName,ios::out);
 	if ( out.good() )
@@ -2190,7 +2190,7 @@ void Form::WritePolars (QDataStream &ar) {
 */
 
 /*
-bool EcritureFichierWpa(char *fileName, Form *forme)
+bool writeFichierWpa(char *fileName, Form *forme)
 {
 	//CWaitCursor wait;
 	CFileException fe;
@@ -2205,9 +2205,9 @@ bool EcritureFichierWpa(char *fileName, Form *forme)
 
 	QDataStream ar(&fp);//, CArchive::store);
 	ar.setByteOrder(QDataStream::LittleEndian);
-	printf ("\n EcritureFichierWpa");
+	printf ("\n writeFichierWpa");
 	forme -> SerializeToWpa(ar);
-	printf ("\n...EcritureFichierWpa");
+	printf ("\n...writeFichierWpa");
 	//ar.Close();
 	fp.close();
 	return true;
@@ -2215,10 +2215,10 @@ bool EcritureFichierWpa(char *fileName, Form *forme)
 
 
 /**********************/
-/* EcritureFichierDXF */
+/* writeFichierDXF */
 /**********************/
 
-void EcritureFichierDXF(char *fileName, TAxe *axe)
+void writeFichierDXF(char *fileName, TAxe *axe)
 
 {
 	int i, j, cpt;
@@ -2227,17 +2227,17 @@ void EcritureFichierDXF(char *fileName, TAxe *axe)
 	TMesh *mesh;
 	char text[50];
 	/**** message ****/
-	printf("\nEcriture fichier de DXF: '%s'",fileName);
-	/**** ouverture fichier en ecriture ****/
+	printf("\nwrite fichier de DXF: '%s'",fileName);
+	/**** ouverture fichier en write ****/
 	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
         }
-	/**** ecriture DXF *****/
+	/**** write DXF *****/
 	/* entete DXF minimal !!! */
         fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
-	/*ecriture courbes*/
+	/*write courbes*/
 	courb=axe->Courb; cpt=0;
 	while (courb!=NULL)
 	{
@@ -2272,7 +2272,7 @@ void EcritureFichierDXF(char *fileName, TAxe *axe)
 		}
 		courb=courb->CourbSuiv;
 	}
-	/*ecriture meshs*/
+	/*write meshs*/
 	mesh=axe->Mesh; cpt=0;
 	while (mesh!=NULL)
 	{
@@ -2307,12 +2307,12 @@ void EcritureFichierDXF(char *fileName, TAxe *axe)
 	}
 }
 
-//EcritureManyFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, 1, AxeRepDXF, 0, AxeCercleDXF, Numerotation, AxePatronTextDXF, W, H);
+//writeManyFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, 1, AxeRepDXF, 0, AxeCercleDXF, Numerotation, AxePatronTextDXF, W, H);
 
-void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
+void writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
 {
     	FILE *fid;
-	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	printf("\nwriteMANY POLY fichier de DXF: '%s'",fileName);
 	if( (fid = fopen( fileName, "wt" )) == NULL ) {
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
@@ -2339,7 +2339,7 @@ void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe 
             if (i==povorot1) { dx=maxW1*2.0; dy=0.0f; maxW2=-1000000.0f;}
             if (i==povorot2) { dx=maxW1*2.0 + maxW2*2.0; dy=0.0f;}
             printf ("\nMFP i=%d",i);
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
             if (W[i] > maxW1) maxW1 = W[i];
@@ -2347,7 +2347,7 @@ void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe 
         }*/
 
         for (int i=0; i<povorot1;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
             if (W[i] > maxW1) maxW1 = W[i];
@@ -2360,20 +2360,20 @@ void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe 
             puk = povorot1;
         }*/
         for (int i=povorot2-1;i>=povorot1;i--) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
             if (W[i] > maxW2) maxW2 = W[i];
         }
         for (int i=povorot1+(np&1);i<povorot2;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
             if (W[i] > maxW2) maxW2 = W[i];
         }
         dx=maxW1*2.0 + maxW2*4.0; dy=0.0f;
         for (int i=povorot2; i<n;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
         }
@@ -2381,85 +2381,72 @@ void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe 
        fprintf(fid,"0\nENDSEC\n0\nEOF\n");
        //printf ("\n...fclose(fid)");
 	if(fclose(fid))	{
-		printf("\nProbleme ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½ la fermeture du fichier");
+		printf("\nProbleme close file");
 		exit(0);
 	}
-       //printf ("\n end of EcrFichManyF...");
-
 }
 
-void EcritureLayoutToDXF(char *fileName, Layout* layout) {
+//writeManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
+//writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
+void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd, Layout* layout) {
     FILE *fid;
-	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	printf("\nwrite MANY POLY fichier de DXF: '%s'",fileName);
 	if( (fid = fopen( fileName, "wt" )) == NULL ) {
-		printf( "\nErreur ouverture fichier '%s'", fileName);
+		printf( "\nError write file '%s'", fileName);
 		exit(0);
 	}
-        fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
-        double dx=0.0f,dy=0.0f,dz=0.0f;
+    fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
+    double maxW1 = -1000000.0f, maxW2 = -1000000.0f, maxW3 = -1000000.0f;
+    //panelsExt
+    double dx = 0.0f, dy = 0.0f, dz = 0.0f;
+    for (int i = 0; i < layout->panelsExt.size(); i++) {
+        LayoutElementExport* lee = layout->panelsExt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW1) maxW1 = lee->W;
+    }
 
-        int povorot1=0, povorot2=0,povorot2d=0, len1=0, len2=0;
-        povorot1=numncon[1];
-        povorot2=numncon[2];
-        povorot2d=numncon[3];
-/*        if (np&1) {
-            povorot1=(2*(np-1));
-            len1=2*(np-1);
-            povorot2=povorot1 + ((np-1));
-            len2=np-1;
-        } else {
-            povorot1=(2*(np-1)+1);
-            len1=2*(np-1)+1;
-            povorot2=povorot1 + ((np));
-            len2=np;
-        }*/
-        
-        double maxW1=-1000000.0f,maxW2=-1000000.0f,maxW3=-1000000.0f;
+    //profs
+    dx = maxW1*2.0; dy = 0.0f; maxW2 = -1000000.0f; maxW3 = -1000000.0f;
+    for (int i = 0; i < layout->profs.size(); i++) {
+        LayoutElementExport* lee = layout->profs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW2) maxW2 = lee->W;
+    }
 
-        for (int i=0; i<povorot1;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
-                                            rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
-            dy=dy + H[i]*2.0f;
-            if (W[i] > maxW1) maxW1 = W[i];
-        }
-        dx=maxW1*2.0; dy=0.0f; maxW2=-1000000.0f; maxW3=-1000000.0f;
-        /* +(np&1) */
-        for (int i=povorot1;i<povorot2;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
-                                            rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
-            dy=dy + H[i]*2.0f;
-			//printf ("\n%d dy+%f",i, H[i]);
-            if (W[i] > maxW2) maxW2 = W[i];
-        }
-        dx=maxW1*2.0 + maxW2*4.0; dy=0.0f;
-        for (int i=povorot2; i<povorot2d;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
-                                            rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
-            dy=dy + H[i]*2.0f;
-			//printf ("\n%d dy+%f",i, H[i]);
-            if (W[i] > maxW3) maxW3 = W[i];
-        }
+    //diagNervs
+    dx = maxW1 * 2.0 + maxW2 * 4.0; dy = 0.0f;
+    for (int i = 0; i < layout->diagNervs.size(); i++) {
+        LayoutElementExport* lee = layout->diagNervs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW3) maxW3 = lee->W;
+    }
 
-        dx=maxW1*2.0 + maxW2*4.0 + maxW3*4.0; dy=0.0f;
-        for (int i=povorot2d; i<n;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
-                                            rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
-            dy=dy + H[i]*2.0f;
-        }
+    //panelsInt
+    dx = maxW1 * 2.0 + maxW2 * 4.0 + maxW3 * 4.0; dy = 0.0f;
+    for (int i = 0; i < layout->panelsInt.size(); i++) {
+        LayoutElementExport* lee = layout->panelsInt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+    }
 
-       fprintf(fid,"0\nENDSEC\n0\nEOF\n");
-       //printf ("\n...fclose(fid)");
-	if(fclose(fid))	{
-		printf("\nProbleme  la fermeture du fichier");
-		exit(0);
-	}
-
+    fprintf(fid,"0\nENDSEC\n0\nEOF\n");
+    if(fclose(fid))	{
+	    printf("\nError close file");
+	    exit(0);
+    }
 }
 
-void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
+void writeManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
 {
     FILE *fid;
-	printf("\nEcritureMANY POLY fichier de DXF: '%s'",fileName);
+	printf("\nwriteMANY POLY fichier de DXF: '%s'",fileName);
 	if( (fid = fopen( fileName, "wt" )) == NULL ) {
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
@@ -2486,7 +2473,7 @@ void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe
         double maxW1=-1000000.0f,maxW2=-1000000.0f,maxW3=-1000000.0f;
 
         for (int i=0; i<povorot1;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
             if (W[i] > maxW1) maxW1 = W[i];
@@ -2494,7 +2481,7 @@ void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe
         dx=maxW1*2.0; dy=0.0f; maxW2=-1000000.0f; maxW3=-1000000.0f;
         /* +(np&1) */
         for (int i=povorot1;i<povorot2;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
 			//printf ("\n%d dy+%f",i, H[i]);
@@ -2502,7 +2489,7 @@ void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe
         }
         dx=maxW1*2.0 + maxW2*4.0; dy=0.0f;
         for (int i=povorot2; i<povorot2d;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], vent, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
 			//printf ("\n%d dy+%f",i, H[i]);
@@ -2511,7 +2498,7 @@ void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe
 
         dx=maxW1*2.0 + maxW2*4.0 + maxW3*4.0; dy=0.0f;
         for (int i=povorot2d; i<n;i++) {
-            EcritureFichierPolyDXFDelta(fid, axe[i], axe2[i],
+            writeFichierPolyDXFDelta(fid, axe[i], axe2[i],
                                             rep, axeR[i], 0, axeC[i], num, axeT[i], dx, dy, dz, i);
             dy=dy + H[i]*2.0f;
         }
@@ -2526,10 +2513,10 @@ void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe
 }
 
 /**********************/
-/* EcritureFichierPolyDXF */
+/* writeFichierPolyDXF */
 /**********************/
 
-void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT )
+void writeFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT )
 {
 
 	int i, j, cpt;
@@ -2539,18 +2526,18 @@ void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe
         TMesh *mesh;
 	char text[50];
 	/**** message ****/
-	printf("\nEcriture POLY fichier de DXF: '%s'",fileName);
-	/**** ouverture fichier en ecriture ****/
+	printf("\nwrite POLY fichier de DXF: '%s'",fileName);
+	/**** ouverture fichier en write ****/
 	if( (fid = fopen( fileName, "wt" )) == NULL )
 	{
 		printf( "\nErreur ouverture fichier '%s'", fileName);
 		exit(0);
 	}
-	/**** ecriture DXF *****/
+	/**** write DXF *****/
 	/* entete DXF minimal !!! */
         fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
 	double curx, cury, x1, y1;
-	/*ecriture courbes*/
+	/*write courbes*/
 	for (int _i=0; _i < 2; _i++){
 		curx = -1000000.0f;
 		cury = -2000000.0f;
@@ -2572,7 +2559,7 @@ void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe
 		int q = 0;
 		while (courb != NULL)
 		{
-//			printf ("\n while in ecritureFichierPolyDXF");
+//			printf ("\n while in writeFichierPolyDXF");
 //			printf ("\n courb next");
 
 			if (q == 0) {
@@ -2685,7 +2672,7 @@ void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe
 		}
 	}
 
-	/*ecriture meshs*/
+	/*write meshs*/
 	mesh=axe->Mesh; cpt=0;
 	while (mesh!=NULL)
 	{
@@ -2722,12 +2709,12 @@ void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe
 
 
 /**********************/
-/* EcritureFichierPolyDXFDelta */
+/* writeFichierPolyDXFDelta */
 /**********************/
 
-void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n )
+void writeFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n )
 {
-    //printf ("\n EcritureFichPolyDxfDelta");
+    //printf ("\n writeFichPolyDxfDelta");
 	int i, j, cpt;
 	double fx, fy, fz;
 	Courbe *courb;
@@ -2845,7 +2832,7 @@ void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe
 		}
 	}
 //        printf ("\n before meshes");
-	/*ecriture meshs*/
+	/*write meshs*/
 	mesh=axe->Mesh; cpt=0;
 	while (mesh!=NULL)
 	{

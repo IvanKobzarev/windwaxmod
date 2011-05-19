@@ -34,10 +34,15 @@ LayoutElement::LayoutElement() {
 }
 
 void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
-    calcPatronKlapan(gfd, n1[t], s1[t], n2[t], s2[t], posKlapanIntDeb[t], posKlapanFin[t],
+    bool debug = 0;
+    Matrix * Xd[2], *Yd[2];//,*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
+
+    calcPatronKlapan(gfd, n1, s1, n2, s2, posKlapanIntDeb, posKlapanFin,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
+
     charname="K";
     double marge1 = gfd->Marge[0];
     double marge2 = gfd->Marge[1];
@@ -45,11 +50,12 @@ void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     double margeFin = gfd->MargeFin;
     int n = gfd->Form->m_nbProfils;
     char text[100];
-    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, false, debug);
-    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
+    leexport = new LayoutElementExport();
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
+        Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
+        &(leexport->AxeP), &&(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, false, debug);
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &(leexport->W), &(leexport->H));
     delete (X[0]);
     delete (Y[0]);
     delete (Z[0]);
@@ -64,17 +70,21 @@ void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Yd[1]);
 }
 void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
-    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+    bool debug = 0;
+    Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];//, *Xdp[2], *Ydp[2];//, *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
+
+    calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
+        n2, s2, fd2, ff2, posDeb2, posFin2,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
 
-    getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
-    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
+    getLayoutLogger()->logprintf(" c[%f]", coeff);
+    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1, n2,  ff1, ff2);
 
-    if (coeff[t] != 0) {
-        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
+    if (coeff != 0) {
+        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
         delete (Xd[0]);
         delete (Yd[0]);
         delete(Xd[1]);
@@ -90,16 +100,17 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     double margeFin = gfd->MargeFin;
     // nervures
     margeFin = gfd->margeFinNerv;
-    vent[t] = gfd->VentilationLayout;
+    vent = gfd->VentilationLayout;
     charname="N";
     int n = gfd->Form->m_nbProfils;
     char text[100];
-    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
+    leexport = new LayoutElementExport();
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
+        Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug);
 
-    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &(leexport->W), &(leexport->H));
 
     delete (X[0]);
     delete (Y[0]);
@@ -114,137 +125,142 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Xd[1]);
     delete (Yd[1]);
 }
-void PanelLayoutElement::calculateExport(WindPatternsProject* gfd){
-    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
+    bool debug = 0;
+    Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+
+    calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
+        n2, s2, fd2, ff2, posDeb2, posFin2,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
 
-        if (isPince[t]) {
-            if (ff1[t] == 1) {
-                _pa00 = p1a00[t];
-                _pa0 = p1a0[t];
-                _pf0 = p1f0[t];
+    if (isPince) {
+        if (ff1 == 1) {
+            _pa00 = p1a00;
+            _pa0 = p1a0;
+            _pf0 = p1f0;
 
-                _pa1 = p1a1[t];
-                _pa01 = p1a01[t];
-                _pf1 = p1f1[t];
+            _pa1 = p1a1;
+            _pa01 = p1a01;
+            _pf1 = p1f1;
 
-                _f0 = func1f0[t];
-                _f1 = func1f1[t];
-            } else {
-                _pa0 = p2a0[t];
-                _pa00 = p2a00[t];
-                _pf0 = p2f0[t];
+            _f0 = func1f0;
+            _f1 = func1f1;
+        } else {
+            _pa0 = p2a0;
+            _pa00 = p2a00;
+            _pf0 = p2f0;
 
-                _pa1 = p2a1[t];
-                _pa01 = p2a01[t];
-                _pf1 = p2f1[t];
+            _pa1 = p2a1;
+            _pa01 = p2a01;
+            _pf1 = p2f1;
 
-                _f0 = func2f0[t];
-                _f1 = func2f1[t];
-            }
-            delete (X[0]);
-            delete (Y[0]);
-            delete (Z[0]);
-            delete (P[0]);
-            delete (X[1]);
-            delete (Y[1]);
-            delete (Z[1]);
-            delete (P[1]);
-            delete (Xd[0]);
-            delete (Yd[0]);
-            delete (Xd[1]);
-            delete (Yd[1]);
-            double myDeb = posDeb1[t];
-            double myFin = posFin1[t];
-             if (fd1[t] == ff1[t]) {
-                if (posDeb1[t] < posDeb2[t]) myDeb = posDeb1[t]; else myDeb = posDeb2[t];
-            } else {
-                if (posDeb1[t] > posDeb2[t]) myDeb = posDeb1[t]; else myDeb = posDeb2[t];
-            }
-            if (debug) printf ("calcPatron myDeb myFin");
-            calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], myDeb, myFin,
-                    n2[t], s2[t], fd2[t], ff2[t], myDeb, myFin,
-                    &Xd[0], &Yd[0], &Xd[1], &Yd[1],
-                    &X[0], &Y[0], &Z[0], &P[0],
-                    &X[1], &Y[1], &Z[1], &P[1]);
-            if (debug) printf ("...calcPatron myDeb myFin");
-            getLayoutLogger()->logprintf("p[%4.1f %4.1f %4.1f %4.1f]", _pa0 * 1000, _pf0 * 1000, _pa1 * 1000, _pf1 * 1000);
-            getLayoutLogger()->logprintf(" %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1[t], n2[t], posDeb1[t], fd1[t], posFin1[t],  ff1[t], posDeb2[t], fd2[t], posFin2[t],  ff2[t]);
-            Pince* pince = new Pince();
-            pince -> debug = false;
-            Pince* tmpPince = getPincePlus(gfd, n1[t], n2[t], myDeb, myFin,  myDeb, myFin,  fd1[t], ff1[t]);
-            pince -> SetFunction1(tmpPince->function1);
-            pince -> SetFunction2(tmpPince->function2);
-            pince -> ipa1 = tmpPince -> ipa1;
-            pince -> ipf1 = tmpPince -> ipf1;
-            pince -> ipa2 = tmpPince -> ipa2;
-            pince -> ipf2 = tmpPince -> ipf2;
-            pince -> SetPos(gfd->PosPinceBA[0], gfd->PosPinceBF[0]);
-            pince -> SetDiffAmps(_pa0, _pf0, _pa1, _pf1);
-            pince -> SetDiffAmps0(_pa00, _pa01);
-            pince -> i01 = tmpPince -> i01;
-            pince -> i02 = tmpPince -> i02;
-            //printf("\n pince->i01=%d", pince->i01);
-            //printf("\n pince->ipa1=%d", pince->ipa1);
-            //printf("\n pince->ipf1=%d", pince->ipf1);
-            calcPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
-
-                if ((myDeb != posDeb1[t])||(myDeb != posDeb2[t])) {
-                    // rezem Xd, newXd
-                    rXdp[0] = GetFunctionSrezDeb(P[0], Xdp[0], posDeb1[t]);
-                    rYdp[0] = GetFunctionSrezDeb(P[0], Ydp[0], posDeb1[t]);
-                    delete(Xdp[0]);
-                    Xdp[0]=rXdp[0];
-                    delete(Ydp[0]);
-                    Ydp[0]=rYdp[0];
-
-
-                    rXdp[1] = GetFunctionSrezDeb(P[1], Xdp[1], posDeb2[t]);
-                    rYdp[1] = GetFunctionSrezDeb(P[1], Ydp[1], posDeb2[t]);
-                    delete(Xdp[1]);
-                    Xdp[1]=rXdp[1];
-                    delete(Ydp[1]);
-                    Ydp[1]=rYdp[1];
-
-
-                    rXd[0] = GetFunctionSrezDeb(P[0], Xd[0], posDeb1[t]);
-                    rYd[0] = GetFunctionSrezDeb(P[0], Yd[0], posDeb1[t]);
-                    delete(Xd[0]);
-                    Xd[0]=rXd[0];
-                    delete(Yd[0]);
-                    Yd[0]=rYd[0];
-
-
-                    rXd[1] = GetFunctionSrezDeb(P[1], Xd[1], posDeb2[t]);
-                    rYd[1] = GetFunctionSrezDeb(P[1], Yd[1], posDeb2[t]);
-                    delete(Xd[1]);
-                    Xd[1]=rXd[1];
-                    delete(Yd[1]);
-                    Yd[1]=rYd[1];
-
-                    rP[0] = GetFunctionSrezDeb(P[0], P[0], posDeb1[t]);
-                    delete(P[0]);
-                    P[0]=rP[0];
-
-                    rP[1] = GetFunctionSrezDeb(P[1], P[1], posDeb2[t]);
-                    delete(P[1]);
-                    P[1]=rP[1];
-                }
-
-            //delete(P[0]);
-            //delete(P[1]);
-            //P[0] = newP[0];
-            //P[1] = newP[1];
+            _f0 = func2f0;
+            _f1 = func2f1;
         }
+        delete (X[0]);
+        delete (Y[0]);
+        delete (Z[0]);
+        delete (P[0]);
+        delete (X[1]);
+        delete (Y[1]);
+        delete (Z[1]);
+        delete (P[1]);
+        delete (Xd[0]);
+        delete (Yd[0]);
+        delete (Xd[1]);
+        delete (Yd[1]);
+        double myDeb = posDeb1;
+        double myFin = posFin1;
+         if (fd1 == ff1) {
+            if (posDeb1 < posDeb2) myDeb = posDeb1; else myDeb = posDeb2;
+        } else {
+            if (posDeb1 > posDeb2) myDeb = posDeb1; else myDeb = posDeb2;
+        }
+        if (debug) printf ("calcPatron myDeb myFin");
+        calcPatron(gfd, n1, s1, fd1, ff1, myDeb, myFin,
+                n2, s2, fd2, ff2, myDeb, myFin,
+                &Xd[0], &Yd[0], &Xd[1], &Yd[1],
+                &X[0], &Y[0], &Z[0], &P[0],
+                &X[1], &Y[1], &Z[1], &P[1]);
+        if (debug) printf ("...calcPatron myDeb myFin");
+        getLayoutLogger()->logprintf("p[%4.1f %4.1f %4.1f %4.1f]", _pa0 * 1000, _pf0 * 1000, _pa1 * 1000, _pf1 * 1000);
+        getLayoutLogger()->logprintf(" %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1, n2, posDeb1, fd1, posFin1,  ff1, posDeb2, fd2, posFin2,  ff2);
+        Pince* pince = new Pince();
+        pince -> debug = false;
+        Pince* tmpPince = getPincePlus(gfd, n1, n2, myDeb, myFin,  myDeb, myFin,  fd1, ff1);
+        pince -> SetFunction1(tmpPince->function1);
+        pince -> SetFunction2(tmpPince->function2);
+        pince -> ipa1 = tmpPince -> ipa1;
+        pince -> ipf1 = tmpPince -> ipf1;
+        pince -> ipa2 = tmpPince -> ipa2;
+        pince -> ipf2 = tmpPince -> ipf2;
+        pince -> SetPos(gfd->PosPinceBA[0], gfd->PosPinceBF[0]);
+        pince -> SetDiffAmps(_pa0, _pf0, _pa1, _pf1);
+        pince -> SetDiffAmps0(_pa00, _pa01);
+        pince -> i01 = tmpPince -> i01;
+        pince -> i02 = tmpPince -> i02;
+        //printf("\n pince->i01=%d", pince->i01);
+        //printf("\n pince->ipa1=%d", pince->ipa1);
+        //printf("\n pince->ipf1=%d", pince->ipf1);
+        calcPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
+
+            if ((myDeb != posDeb1)||(myDeb != posDeb2)) {
+                // rezem Xd, newXd
+                rXdp[0] = GetFunctionSrezDeb(P[0], Xdp[0], posDeb1);
+                rYdp[0] = GetFunctionSrezDeb(P[0], Ydp[0], posDeb1);
+                delete(Xdp[0]);
+                Xdp[0]=rXdp[0];
+                delete(Ydp[0]);
+                Ydp[0]=rYdp[0];
+
+
+                rXdp[1] = GetFunctionSrezDeb(P[1], Xdp[1], posDeb2);
+                rYdp[1] = GetFunctionSrezDeb(P[1], Ydp[1], posDeb2);
+                delete(Xdp[1]);
+                Xdp[1]=rXdp[1];
+                delete(Ydp[1]);
+                Ydp[1]=rYdp[1];
+
+
+                rXd[0] = GetFunctionSrezDeb(P[0], Xd[0], posDeb1);
+                rYd[0] = GetFunctionSrezDeb(P[0], Yd[0], posDeb1);
+                delete(Xd[0]);
+                Xd[0]=rXd[0];
+                delete(Yd[0]);
+                Yd[0]=rYd[0];
+
+
+                rXd[1] = GetFunctionSrezDeb(P[1], Xd[1], posDeb2);
+                rYd[1] = GetFunctionSrezDeb(P[1], Yd[1], posDeb2);
+                delete(Xd[1]);
+                Xd[1]=rXd[1];
+                delete(Yd[1]);
+                Yd[1]=rYd[1];
+
+                rP[0] = GetFunctionSrezDeb(P[0], P[0], posDeb1);
+                delete(P[0]);
+                P[0]=rP[0];
+
+                rP[1] = GetFunctionSrezDeb(P[1], P[1], posDeb2);
+                delete(P[1]);
+                P[1]=rP[1];
+            }
+
+        //delete(P[0]);
+        //delete(P[1]);
+        //P[0] = newP[0];
+        //P[1] = newP[1];
+    }
 
         double marge1 = gfd->Marge[0];
         double marge2 = gfd->Marge[1];
         double margeDeb = gfd->MargeDeb;
         double margeFin = gfd->MargeFin;
 
+        /*
         if (t < numncol[1]) {
             // panel exterior
             margeFin = gfd->margeFinExt;
@@ -274,44 +290,41 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd){
                 }
             }
         }
-
-
-
-				double coeff1 = layout->coeffn[n1[t]];
-				double coeff2 = layout->coeffn[n2[t]];
-
-				if (n1[t] == -1) coeff1 = layout->coeffn[0];
-				if (n2[t] == n-1) coeff2 = -1;
-                    int n = gfd->Form->m_nbProfils;
+*/
+    int n = gfd->Form->m_nbProfils;
     char text[100];
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
 
-sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-                GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-                    Xdp[1], Ydp[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-                    &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug,
-					true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
-                calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &W[t], &H[t]);
-                if (debug) printf("\n go delete isPince");
-                delete (Xdp[0]);
-                delete (Ydp[0]);
-                delete (Xdp[1]);
-                delete (Ydp[1]);
-                if (debug) printf("\n... go delete isPince");
+    GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
+        Xdp[1], Ydp[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug,
+		true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
 
+    calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &(leexport->W), &(leexport->H));
 
+    if (debug) printf("\ngo delete isPince");
+    delete (Xdp[0]);
+    delete (Ydp[0]);
+    delete (Xdp[1]);
+    delete (Ydp[1]);
+    if (debug) printf("\n... go delete isPince");
 }
-void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd){
-    calcPatron(gfd, n1[t], s1[t], fd1[t], ff1[t], posDeb1[t], posFin1[t],
-        n2[t], s2[t], fd2[t], ff2[t], posDeb2[t], posFin2[t],
+void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
+    bool debug = 0;
+    Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];
+    Matrix *X[2], *Y[2], *Z[2], *P[2];
+
+    calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
+        n2, s2, fd2, ff2, posDeb2, posFin2,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
 
-    getLayoutLogger()->logprintf(" c[%f]", coeff[t]);
-    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1[t], n2[t],  ff1[t], ff2[t]);
+    getLayoutLogger()->logprintf(" c[%f]", coeff);
+    getLayoutLogger()->logprintf(" %d %d ff1=%d ff2=%d", n1, n2,  ff1, ff2);
 
-    if (coeff[t] != 0) {
-        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff[t], &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
+    if (coeff != 0) {
+        calcPatronWithCoeff(Xd[0], Yd[0], Xd[1], Yd[1], coeff, &newXd[0], &newYd[0], &newXd[1], &newYd[1]);
         delete (Xd[0]);
         delete (Yd[0]);
         delete(Xd[1]);
@@ -329,16 +342,17 @@ void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd){
 
     // diagonal nervures
     margeFin = gfd->margeFinDiagNerv;
-    vent[t] = gfd->VentilationLayout;
+    vent = gfd->VentilationLayout;
     charname="D";
     int n = gfd->Form->m_nbProfils;
     char text[100];
-    sprintf(text, "%s%dF%dt%dF%d", charname, n1[t], ff1[t], n2[t], ff2[t]);
-    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1[t], posDeb1[t], fd1[t], posFin1[t], ff1[t],
-        Xd[1], Yd[1], P[1], n2[t], posDeb2[t], fd2[t], posFin2[t], ff2[t], text,
-        &AxeP[t], &AxePD[t], &AxePTD[t], &AxeMD[t], &AxeCD[t], &AxeRepD[t], vent[t], marge1, marge2, margeDeb, margeFin, true, debug);
+    sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
 
-    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &W[t], &H[t]);
+    GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
+        Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug);
+
+    calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &(leexport->W), &(leexport->H));
 
     delete (X[0]);
     delete (Y[0]);
@@ -475,6 +489,18 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
     return layout;
 }
 
+
+void preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd, Layout* layout) {
+   	double coeff1 = layout->coeffn[le->n1];
+	double coeff2 = layout->coeffn[le->n2];
+    int n = gfd->Form->m_nbProfils;
+	if (le->n1 == -1) coeff1 = layout->coeffn[0];
+	if (le->n2 == n-1) coeff2 = -1;
+    le->coeff1=coeff1;
+    le->coeff2=coeff2;
+
+}
+
 void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
     LayoutElement* le1 = new LayoutElement();
     int n = gfd->Form->m_nbProfils;
@@ -514,6 +540,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le1->ff2 = 2;
         le1->isPince = 1;
         le1->coeff = 0.0f;
+        preparePanelLayoutElementCoeff(le1, gfd, layout);
         layout->panelsInt.push_back(le1);
     }
 
@@ -557,6 +584,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
             le2->posFin2 = 100.0f;
         }
     }
+    preparePanelLayoutElementCoeff(le2, gfd, layout);
     layout->panelsInt.push_back(le2);
 
     if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
@@ -595,6 +623,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
             le3->p2a1 = 0.0f;
             le3->p2f1 = 0.0f;
         }
+        preparePanelLayoutElementCoeff(le3, gfd, layout);
         layout->panelsInt.push_back(le3);
 
         if (gfd->LayoutKlapans) {
@@ -612,6 +641,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le4->fd2 = 2;
 			    le4->ff1 = 2;
 			    le4->ff2 = 2;
+                preparePanelLayoutElementCoeff(le4, gfd, layout);
                 layout->panelsInt.push_back(le4);
             }
                 LayoutElement* le5 = new LayoutElement();
@@ -627,6 +657,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le5->fd2 = 2;
 			    le5->ff1 = 2;
 			    le5->ff2 = 2;
+                preparePanelLayoutElementCoeff(le5, gfd, layout);
                 layout->panelsInt.push_back(le5);
 
                LayoutElement* le6 = new LayoutElement();
@@ -642,6 +673,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le6->fd2 = 2;
 			    le6->ff1 = 2;
 			    le6->ff2 = 2;
+                preparePanelLayoutElementCoeff(le6, gfd, layout);
                 layout->panelsInt.push_back(le6);
 
         }
@@ -699,6 +731,7 @@ void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
             le->fd2 = 2;
         }
     }
+    preparePanelLayoutElementCoeff(le, gfd, layout);
     layout->panelsExt.push_back(le);
 }
 
@@ -804,7 +837,6 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
             le2->func2f0 = layout->funcL2[0];
             le2->func2f1 = layout->funcL2[0];
             layout->panelsInt.push_back(le2);
-
 
             if (gfd->LayoutKlapans) {
                 if (gfd->VentHolesDouble){
@@ -1685,10 +1717,10 @@ void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
     if (gfd->debug) printf("\n SaveLayout2()");
     prepareLayoutElements(gfd, layout);
     layout->calculateExport(gfd);
-    saveCalcLayoutToFile(layout);
+    saveCalcLayoutToFile(gfd, layout);
 }
 
-Layout::calculateExport(WindPatternsProject* gfd){
+void Layout::calculateExport(WindPatternsProject* gfd){
     for (int i = 0; i < panelsExt.size(); i++) {
         panelsExt[i]->calculateExport(gfd);
     }
@@ -1718,7 +1750,7 @@ void calculateLayout(WindPatternsProject* gfd, Layout* layout) {
 }
 
 //void saveCalcLayoutToFile(int n, int q, TAxe **AxePD, TAxe **AxeMD, TAxe **RepD, int gfdVentilationLayout, TAxe **AxeCD, TAxe  **AxePTD, double *H, double *W, int* numncol) {
-void saveCalcLayoutToFile(Layout* layout) {
+void saveCalcLayoutToFile(WindPatternsProject* gfd, Layout* layout) {
     //TAxe **AxeP, **AxePD, **AxePTD, **AxeMD, **AxeCD, **AxeRepD;
     CString fileName;
     LPTSTR PtrfileName;
@@ -1728,26 +1760,25 @@ void saveCalcLayoutToFile(Layout* layout) {
     if (DlgOpen.DoModal() == IDOK) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        EcritureLayoutToDXF(PtrfileName, layout); 
-        //EcritureManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
+        writeLayoutToDXF(PtrfileName, gfd, layout); 
+        //writeManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
         char filename[255];
         strcpy(filename, PtrfileName);
         strcat (filename,".log");
         //printf ("\n logfilename=[%s]", filename);
         //printf ("\n gfd->logfilename=[%s]", gfd->logFileName);
         //printf ("\n ptrnomfichier=[%s]", PtrfileName);
-
         CopyFile(gfd->logFileName, filename, false);
-        
     }
-    for (i = 0; i < q; i++) {
+
+    /*for (i = 0; i < q; i++) {
         clearCourbesAxe(AxeP[i]);
         clearCourbesAxe(AxePD[i]);
         clearCourbesAxe(AxePTD[i]);
         clearCourbesAxe(AxeMD[i]);
         clearCourbesAxe(AxeCD[i]);
         clearCourbesAxe(AxeRepD[i]);
-    }
+    }*/
 
 }
 
