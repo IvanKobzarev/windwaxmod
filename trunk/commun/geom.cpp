@@ -130,7 +130,7 @@ Matrix* MonBezier(Matrix *tab, int NbrPts)
 	int i;
 	/*allocation matrice resultat*/
 	res=new Matrix(NbrPts,2);
-	/*pour simpifier l'ecriture*/
+	/*pour simpifier l'write*/
 	XA=tab->Element(0,0); YA=tab->Element(0,1);
 	XB=tab->Element(1,0); YB=tab->Element(1,1);
 	XC=tab->Element(2,0); YC=tab->Element(2,1);
@@ -172,7 +172,7 @@ void calcVecteurNormal(double xa,double ya,double xb,double yb,
 {
 	double xab, yab, a11, a12, a21, a22, b1, b2; /*var intermï¿½daires*/
 	double delta, delta1, delta2; /*determinant principal et secondaires*/
-	/*pour simplifier ecriture*/
+	/*pour simplifier write*/
 	xab=xb-xa; yab=yb-ya;
 	/*preparation matrices A et B pour resolution AX=B*/
 	a11=-yab; a12=xab;
@@ -1251,7 +1251,7 @@ void Inter2Vecteurs(double xa, double ya,
 {
 	double xab, yab, xcd, ycd;
 	double a11,a12,a21,a22,b1,b2,delta,delta1,delta2;
-	//poursimplifier ecriture
+	//poursimplifier write
 	xab=xb-xa; yab=yb-ya;
 	xcd=xd-xc; ycd=yd-yc;
 	//preparation matrices A et B pour resolution AX=B

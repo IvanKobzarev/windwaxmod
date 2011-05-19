@@ -186,7 +186,7 @@ void ViewAxe(TAxe *axe)
 	Matrix *uni, *uniRot;	/*vecteur unitaire*/
 	double sina, cosa; /*pour pre-calc sinus/cosinus*/
 	double xaxe=0.0, yaxe=0.0, zaxe=0.0;	/*position graduation dans vue 3d*/
-	Matrix *x,*y,*z;	/*pour simplifier ecriture*/
+	Matrix *x,*y,*z;	/*pour simplifier write*/
 	double xv1,yv1,zv1,xv2,yv2,zv2;
 //	double light_position[]={0.0, 0.0, 1.0, 0.0};
 	/*selection de la fenetre de cet axe*/
@@ -740,7 +740,7 @@ void ViewAxe(TAxe *axe)
 	MeshCour=axe->Mesh;
 	while (MeshCour!=NULL)
 	{
-		/*pour simplifier ecriture*/
+		/*pour simplifier write*/
 		x=MeshCour->x; y=MeshCour->y; z=MeshCour->z;
 		/*test matrices non nulles*/
 		if ( (MeshCour->x != NULL)&&(MeshCour->y != NULL)
@@ -1092,7 +1092,7 @@ void addForm3D( TAxe *Axe3d,
 	int NbNerv, i, j;
 	int nbPtsInt, nbPtsExt;
 
-	/*init variables pour simplifier ecriture*/
+	/*init variables pour simplifier write*/
 	nbPtsInt = XInt->GetColonnes(); nbPtsExt = XExt->GetColonnes();	NbNerv = XInt->GetLignes();
     /*creation courbes profils*/
 	if(mesh == 0)
@@ -1229,7 +1229,7 @@ void addPtsSuspentage(
 	Matrix *interpSuspente = NULL;
 	int NbNerv, i, j;
 
-	/*init variables pour simplifier ecriture*/
+	/*init variables pour simplifier write*/
 	NbNerv = XInt->GetLignes();
 
 	//creation courbe des pts de suspentage

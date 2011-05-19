@@ -206,8 +206,8 @@ KiteDesign* kiteDesignInt = 0;
 /*liste des procedures definies dans ce fichier*/
 /***********************************************/
 
-void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
-void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
+void writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
+void writeManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
 void display(void);
 void reshape(int w, int h);
@@ -925,8 +925,8 @@ void saveFichier3dDXF( int ) //
 		//recupere nom de fichier
 		fileName=DlgOpen.GetPathName();
 		PtrfileName = fileName.GetBuffer(1);
-       	//ecriture fichier DXF
-		EcritureFichierDXF(PtrfileName, Axe3d);
+       	//write fichier DXF
+		writeFichierDXF(PtrfileName, Axe3d);
 	}
 }
 
@@ -947,7 +947,7 @@ void ExportWpa( int ) //
 		F->IntProfCent = IntProfCent;
 		F->IntProfBout = IntProfBout;
 
-		if (EcritureFichierWpa(PtrfileName, F))
+		if (writeFichierWpa(PtrfileName, F))
 			printf ("\nForm exported in WPA sucessfully");
 	}*/
 }
@@ -974,16 +974,16 @@ void save(int dxf) {
         //recupere nom de fichier
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        //ecriture fichier patron
+        //write fichier patron
         if (dxf > 0) //format DXF
         {
             if (dxf == 1)
-                EcritureFichierDXF(PtrfileName, AxePatron);
+                writeFichierDXF(PtrfileName, AxePatron);
             else {
-                EcritureFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, (ReperesSuspentes[0] || ReperesSuspentes[1]),
+                writeFichierPolyDXF(PtrfileName, AxePatronDXF, AxeMarginDXF, (ReperesSuspentes[0] || ReperesSuspentes[1]),
                         AxeRepDXF, Ventilation, AxeCercleDXF, Numerotation, AxePatronTextDXF);
                 
-                /*EcritureFichierPolyDXFDelta(fid, AxePatronDXF, AxeMarginDXF,
+                /*writeFichierPolyDXFDelta(fid, AxePatronDXF, AxeMarginDXF,
                                             (ReperesSuspentes[0] || ReperesSuspentes[1]), AxeRepDXF, Ventilation, AxeCercleDXF,
                         Numerotation, AxePatronTextDXF, 0.0f, 0.0f, 0.0f, 0);*/
             }
@@ -1022,7 +1022,7 @@ void saveProject(int /*control*/) {
         //recupere nom de fichier
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        EcritureWindPatternsProject(PtrfileName, getWindPatternsProject());
+        writeWindPatternsProject(PtrfileName, getWindPatternsProject());
     }
 
 }
@@ -1203,7 +1203,7 @@ void Test(int control) {
     for  (int _i = 0; _i < addRepPts->GetLignes();_i++){
         printf ("\n arp %d -> %f", _i, addRepPts->Element(_i, 0));
     }*/
-    //EcritureWindPatternsProject("testproject.txt", getWindPatternsProject());
+    //writeWindPatternsProject("testproject.txt", getWindPatternsProject());
 }
 
 
@@ -1401,7 +1401,7 @@ void SaveLayout() {
     if (DlgOpen.DoModal() == IDOK) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        EcritureManyFichierPolyDXF(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, 0, AxeCD, 1, AxePTD, W, H);
+        writeManyFichierPolyDXF(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, 0, AxeCD, 1, AxePTD, W, H);
     }
     //TAxe *AxeP[n], *AxePD[n], *AxePTD[n], *AxeMD[n], *AxeCD[n], *AxeRepD[n];
     for (i = 0; i < q; i++) {

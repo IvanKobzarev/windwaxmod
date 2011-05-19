@@ -125,21 +125,21 @@ Ballonement* readBallonementFromFile(char* NomFic);
 
 Form* LectureFichierForm2(char* NomFic);
 
-void EcritureFichierForm(char *fileName, Form *f);
+void writeFichierForm(char *fileName, Form *f);
 
-void EcritureFichierForm2(char *fileName, Form *f);
+void writeFichierForm2(char *fileName, Form *f);
 
 bool TrouveMotDansFichierTexte(FILE* fid, char* Mot);
 
-void EcritureFichierDXF(char *fileName, TAxe *axe);
+void writeFichierDXF(char *fileName, TAxe *axe);
 
-bool EcritureFichierWpa(char *fileName, Form *forme);
+bool writeFichierWpa(char *fileName, Form *forme);
 
-void EcritureFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT);
+void writeFichierPolyDXF(char *fileName, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT);
 
-void EcritureFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
+void writeFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
 
-void EcritureFichierFGen(char *fileName, Form *foil);
+void writeFichierFGen(char *fileName, Form *foil);
 
 void calcInfoForm( Form* F, TInfoForm* info );
 
@@ -160,10 +160,12 @@ int* LectureFichierVentHoles(char* NomFic, int* quant, int* central);
 
 int* LectureFichierDiagNervs(char* NomFic, int* quant);
 
-void EcritureManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
+void writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H);
 
-void EcritureManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
+void writeManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
-void EcritureWindPatternsProject(char *fileName, WindPatternsProject *wpp);
+void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd, Layout* layout);
+
+void writeWindPatternsProject(char *fileName, WindPatternsProject *wpp);
 
 KiteDesign* readKiteDesignFromFile(const char* FilePath);

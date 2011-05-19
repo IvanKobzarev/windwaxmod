@@ -91,11 +91,17 @@ class LayoutElement
         int type;
 
 		int n1, n2;
+
+        int fd1, fd2, ff1, ff2;
+
 		int vent;
 		boolean s1, s2;
 		int faceFin1, faceDeb1, faceFin2, faceDeb2;
 		double posDeb1, posDeb2, posFin1, posFin2;
 		double coeff;
+
+        double coeff1, coeff2;
+
         double p1a0, p1a00, p1f0, p1a1, p1a01, p1f1;
 		double p2a0, p2a00, p2f0, p2a1, p2a01, p2f1;
 		double posKlapanIntDeb;
@@ -105,8 +111,8 @@ class LayoutElement
         Matrix* func1f0;
         Matrix* func1f1;
 
-        LayoutElementExport* lee;
-        virtual void calculateExport();
+        LayoutElementExport* leexport;
+        virtual void calculateExport(WindPatternsProject* gfd);
 };
 
 class KlapanLayoutElement : public LayoutElement {
@@ -149,6 +155,8 @@ const int REP_V = 8;
 const int REP_MIDDLE_LINE = 9;
 
 Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F);
+
+void saveCalcLayoutToFile(WindPatternsProject* gfd, Layout* layout);
 
 void SaveLayout2(WindPatternsProject* gfd, Layout* Layout);
 
