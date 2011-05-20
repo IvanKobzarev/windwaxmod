@@ -20,6 +20,7 @@ class Ballonement;
 class KiteDesign;
 class KiteDesignElement;
 class Line;
+class Layout;
 
 class Form
 {
@@ -164,7 +165,7 @@ void writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **a
 
 void writeManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon);
 
-void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd, Layout* layout);
+void writeLayoutToDXF(char *fileName, WindPatternsProject *gfd, Layout *layout);
 
 void writeWindPatternsProject(char *fileName, WindPatternsProject *wpp);
 
