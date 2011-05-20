@@ -33,10 +33,17 @@ LayoutElement::~LayoutElement() {
 LayoutElement::LayoutElement() {
 }
 
+LayoutElementExport::LayoutElementExport(){
+}
+
+LayoutElementExport::~LayoutElementExport(){
+}
+
 void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     bool debug = 0;
     Matrix * Xd[2], *Yd[2];//,*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
+    char* charname = new char[1];
 
     calcPatronKlapan(gfd, n1, s1, n2, s2, posKlapanIntDeb, posKlapanFin,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
@@ -54,7 +61,7 @@ void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     leexport = new LayoutElementExport();
     GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
-        &(leexport->AxeP), &&(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, false, debug);
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, false, debug);
     calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &(leexport->W), &(leexport->H));
     delete (X[0]);
     delete (Y[0]);
@@ -73,6 +80,7 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];//, *Xdp[2], *Ydp[2];//, *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
+    char* charname = new char[1];
 
     calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
         n2, s2, fd2, ff2, posDeb2, posFin2,
@@ -129,6 +137,9 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+    double _pa0, _pa00, _pf0, _pa1, _pa01, _pf1;
+    Matrix *_f0, *_f1;
+    char* charname = new char[1];
 
     calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
         n2, s2, fd2, ff2, posDeb2, posFin2,
@@ -313,6 +324,7 @@ void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];
+    char* charname = new char[1];
 
     calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
         n2, s2, fd2, ff2, posDeb2, posFin2,
@@ -519,9 +531,9 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le1->s1 = false;
         le1->s2 = false;
         le1->posDeb1 = 0.0f;
-        le1->posFin1 = debBorder;
+        le1->posFin1 = layout->debBorder;
         le1->posDeb2 = 0.0f;
-        le1->posFin2 = debBorder;
+        le1->posFin2 = layout->debBorder;
 
         le1->p2a00 = 0.0f;
         le1->p2a0 = layout->pinceRAAmp2 [i];
@@ -549,9 +561,9 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
     le2->n2 = i + 1;
     le2->s1 = false;
     le2->s2 = false;
-    le2->posDeb1 = debBorder;
+    le2->posDeb1 = layout->debBorder;
     le2->posFin1 = tpF1;
-    le2->posDeb2 = debBorder;
+    le2->posDeb2 = layout->debBorder;
     le2->posFin2 = tpF2;
 
     le2->p2a00 = 0.0f;
@@ -682,15 +694,16 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 }
 
 void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
+    int n = gfd->Form->m_nbProfils;
     // face == 1
     LayoutElement* le = new LayoutElement();
     le->n1 = i;
     le->n2 = i + 1;
     le->s1 = false;
     le->s2 = false;
-    le->posDeb1 = debBorder;
+    le->posDeb1 = layout->debBorder;
     le->posFin1 = 100.0f;
-    le->posDeb2 = debBorder;
+    le->posDeb2 = layout->debBorder;
     le->posFin2 = 100.0f;
 
     le->p1a00 = layout->pinceRAAmp2 [i];
@@ -706,8 +719,8 @@ void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
 
     le->ff1 = 1;
     le->ff2 = 1;
-    le->fd1 = faceDebBorder;
-    le->fd2 = faceDebBorder;
+    le->fd1 = layout->faceDebBorder;
+    le->fd2 = layout->faceDebBorder;
 
     le->isPince = 1;
 	le->isKlapan = 0;
@@ -753,9 +766,9 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
             le->s1 = false;
             le->s2 = false;
             le->posDeb1 = 0.0f;
-            le->posFin1 = debBorder;
+            le->posFin1 = layout->debBorder;
             le->posDeb2 = 0.0f;
-            le->posFin2 = debBorder;
+            le->posFin2 = layout->debBorder;
 
             le->p2a00 = 0.0f;
             le->p2a0 = layout->pinceRAAmp2 [i];
@@ -789,9 +802,9 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
         le1->isPince = 1;
         le1->coeff = 0.0f;
 
-        le1->posDeb1 = debBorder;
+        le1->posDeb1 = layout->debBorder;
         le1->posFin1 = tpF1;
-        le1->posDeb2 = debBorder;
+        le1->posDeb2 = layout->debBorder;
         le1->posFin2 = tpF2;
 
         le1->p2a00 = 0.0f;
@@ -886,16 +899,16 @@ void prepareCenterPanelExt(WindPatternsProject* gfd, Layout* layout) {
     le->n2 = 0;
     le->s1 = false;
     le->s2 = false;
-    le->fd1 = faceDebBorder;
-    le->fd2 = faceDebBorder;
+    le->fd1 = layout->faceDebBorder;
+    le->fd2 = layout->faceDebBorder;
     le->ff1 = 1;
     le->ff2 = 1;
     le->isPince = 1;
 	le->isKlapan = 0;
     le->coeff = 0.0f;
-    le->posDeb1 = debBorder;
+    le->posDeb1 = layout->debBorder;
     le->posFin1 = 100.0f;
-    le->posDeb2 = debBorder;
+    le->posDeb2 = layout->debBorder;
     le->posFin2 = 100.0f;
     le->p1a00 = layout->pinceLAAmp2[0];
     le->p1a0 = layout->pinceLAAmp1[0];
@@ -1037,6 +1050,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 
     int isave = 0, i = 0;
     int col = 0;
+
     float debBorder = 0.0f;
     int faceDebBorder = 0;
     if (gfd->VentHoles) {

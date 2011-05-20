@@ -110,9 +110,11 @@ class LayoutElement
 		int isKlapan;
         Matrix* func1f0;
         Matrix* func1f1;
+        Matrix* func2f0;
+        Matrix* func2f1;
 
         LayoutElementExport* leexport;
-        virtual void calculateExport(WindPatternsProject* gfd);
+        virtual void calculateExport(WindPatternsProject* gfd) { }
 };
 
 class KlapanLayoutElement : public LayoutElement {
