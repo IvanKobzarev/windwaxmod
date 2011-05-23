@@ -35,9 +35,29 @@ LayoutElement::LayoutElement() {
 
 LayoutElementExport::LayoutElementExport(){
 }
-
 LayoutElementExport::~LayoutElementExport(){
 }
+
+KlapanLayoutElement::KlapanLayoutElement(){
+}
+KlapanLayoutElement::~KlapanLayoutElement(){
+}
+
+ProfLayoutElement::ProfLayoutElement(){
+}
+ProfLayoutElement::~ProfLayoutElement(){
+}
+
+PanelLayoutElement::PanelLayoutElement(){
+}
+PanelLayoutElement::~PanelLayoutElement(){
+}
+
+DiagNervLayoutElement::DiagNervLayoutElement(){
+}
+DiagNervLayoutElement::~DiagNervLayoutElement(){
+}
+
 
 void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     bool debug = 0;
@@ -271,32 +291,38 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         double margeDeb = gfd->MargeDeb;
         double margeFin = gfd->MargeFin;
 
+        if (side == EXT_SIDE) {
+            margeFin = gfd->margeFinExt;
+            charname="P";
+
+        }
+        if (side == INT_SIDE) {
+            // panels interior
+            margeFin = gfd->margeFinInt;
+            charname="P";
+            if (gfd->VentHoles) 
+                if ((n1==-1) && gfd->VentCentralNerv) {
+                     if (posFin1!=100.0f) {
+                        margeFin = gfd->MargeFin;
+                        charname="V";
+                    } 
+                } else
+                    if (gfd->noNervVH[n1]) {
+                       if (posFin1!=100.0f) {
+                            margeFin = gfd->MargeFin;
+                            charname="V";
+                       }
+                    }
+        }
+
         /*
         if (t < numncol[1]) {
             // panel exterior
-            margeFin = gfd->margeFinExt;
-            charname="P";
         } else {
             if (t < numncol[2]) {
             } else {
                 if (t < numncol[3]) {
                 } else {
-                    // panels interior
-                    margeFin = gfd->margeFinInt;
-                    charname="P";
-                    if (gfd->VentHoles) 
-                        if ((n1[t]==-1) && gfd->VentCentralNerv) {
-                             if (posFin1[t]!=100.0f) {
-                                margeFin = gfd->MargeFin;
-                                charname="V";
-                            } 
-                        } else
-                            if (gfd->noNervVH[n1[t]]) {
-                               if (posFin1[t]!=100.0f) {
-                                    margeFin = gfd->MargeFin;
-                                    charname="V";
-                               }
-                            }
                     
                 }
             }
@@ -514,7 +540,8 @@ void preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd,
 }
 
 void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
-    LayoutElement* le1 = new LayoutElement();
+    PanelLayoutElement* le1 = new PanelLayoutElement();
+    le1->side=INT_SIDE;
     int n = gfd->Form->m_nbProfils;
     double tpF1, tpF2;
     if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
@@ -556,7 +583,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         layout->panelsInt.push_back(le1);
     }
 
-    LayoutElement* le2 = new LayoutElement();
+    PanelLayoutElement* le2 = new PanelLayoutElement();
+    le2->side=INT_SIDE;
     le2->n1 = i;
     le2->n2 = i + 1;
     le2->s1 = false;
@@ -600,7 +628,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
     layout->panelsInt.push_back(le2);
 
     if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
-        LayoutElement* le3 = new LayoutElement();
+        PanelLayoutElement* le3 = new PanelLayoutElement();
+        le3->side=INT_SIDE;
         le3->n1 = i;
         le3->n2 = i + 1;
         le3->s1 = false;
@@ -640,7 +669,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 
         if (gfd->LayoutKlapans) {
             if (gfd->VentHolesDouble){
-                LayoutElement* le4 = new LayoutElement();
+                KlapanLayoutElement* le4 = new KlapanLayoutElement();
+                le4->side=INT_SIDE;
                 le4->n1 = i;
                 le4->n2 = i+1;
                 le4->s1 = false;
@@ -654,9 +684,10 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le4->ff1 = 2;
 			    le4->ff2 = 2;
                 preparePanelLayoutElementCoeff(le4, gfd, layout);
-                layout->panelsInt.push_back(le4);
+                layout->klapans.push_back(le4);
             }
-                LayoutElement* le5 = new LayoutElement();
+                KlapanLayoutElement* le5 = new KlapanLayoutElement();
+                le5->side=INT_SIDE;
                 le5->n1 = i;
                 le5->n2 = i+1;
                 le5->s1 = false;
@@ -670,9 +701,10 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le5->ff1 = 2;
 			    le5->ff2 = 2;
                 preparePanelLayoutElementCoeff(le5, gfd, layout);
-                layout->panelsInt.push_back(le5);
+                layout->klapans.push_back(le5);
 
-               LayoutElement* le6 = new LayoutElement();
+                KlapanLayoutElement* le6 = new KlapanLayoutElement();
+                le6->side=INT_SIDE;
                 le6->n1 = i;
                 le6->n2 = i+1;
                 le6->s1 = false;
@@ -686,7 +718,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 			    le6->ff1 = 2;
 			    le6->ff2 = 2;
                 preparePanelLayoutElementCoeff(le6, gfd, layout);
-                layout->panelsInt.push_back(le6);
+                layout->klapans.push_back(le6);
 
         }
 
@@ -696,7 +728,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
 void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
     int n = gfd->Form->m_nbProfils;
     // face == 1
-    LayoutElement* le = new LayoutElement();
+    PanelLayoutElement* le = new PanelLayoutElement();
+    le->side=EXT_SIDE;
     le->n1 = i;
     le->n2 = i + 1;
     le->s1 = false;
@@ -760,7 +793,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
         }
         int i = 0;
         if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
-            LayoutElement* le = new LayoutElement();
+            PanelLayoutElement* le = new PanelLayoutElement();
+            le->side=INT_SIDE;
             le->n1 = -1;
             le->n2 = 0;
             le->s1 = false;
@@ -789,7 +823,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
             le->coeff = 0.0f;
             layout->panelsInt.push_back(le);
         }
-        LayoutElement* le1 = new LayoutElement();
+        PanelLayoutElement* le1 = new PanelLayoutElement();
+        le1->side=INT_SIDE;
         le1->n1 = -1;
         le1->n2 = 0;
         le1->s1 = false;
@@ -820,7 +855,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
         layout->panelsInt.push_back(le1);
 
         if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
-            LayoutElement* le2 = new LayoutElement();
+            PanelLayoutElement* le2 = new PanelLayoutElement();
+            le2->side=INT_SIDE;
             le2->n1 = -1;
             le2->n2 = 0;
             le2->s1 = false;
@@ -853,7 +889,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
 
             if (gfd->LayoutKlapans) {
                 if (gfd->VentHolesDouble){
-                    LayoutElement* le3 = new LayoutElement();
+                    PanelLayoutElement* le3 = new PanelLayoutElement();
+                    le3->side=INT_SIDE;
                     le3->n1 = -1;
                     le3->n2 = 0;
                     le3->s1 = false;
@@ -865,7 +902,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     //printf ("\n klapan=%d", isave);
                     layout->panelsInt.push_back(le3);
                 }
-                    LayoutElement* le4 = new LayoutElement();
+                    PanelLayoutElement* le4 = new PanelLayoutElement();
+                    le4->side=INT_SIDE;
                     le4->n1 = -1;
                     le4->n2 = 0;
                     le4->s1 = false;
@@ -877,7 +915,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     layout->panelsInt.push_back(le4);
 
 
-                    LayoutElement* le5 = new LayoutElement();
+                    PanelLayoutElement* le5 = new PanelLayoutElement();
+                    le5->side=INT_SIDE;
                     le5->n1 = -1;
                     le5->n2 = 0;
                     le5->s1 = false;
@@ -894,7 +933,8 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
 }
 
 void prepareCenterPanelExt(WindPatternsProject* gfd, Layout* layout) {
-    LayoutElement* le = new LayoutElement();
+    PanelLayoutElement* le = new PanelLayoutElement();
+    le->side=EXT_SIDE;
     le->n1 = -1;
     le->n2 = 0;
     le->s1 = false;
@@ -929,7 +969,7 @@ void prepareCenterPanelExt(WindPatternsProject* gfd, Layout* layout) {
 }
 
 void prepareProfile(WindPatternsProject* gfd, Layout* layout, int i) {
-    LayoutElement* lep = new LayoutElement();
+    ProfLayoutElement* lep = new ProfLayoutElement();
     lep->n1 = i;
     lep->n2 = i;
     lep->s1 = false;
@@ -948,7 +988,7 @@ void prepareProfile(WindPatternsProject* gfd, Layout* layout, int i) {
 }
 
 void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
-    LayoutElement* led1 = new LayoutElement();
+    DiagNervLayoutElement* led1 = new DiagNervLayoutElement();
     int k = 2*i - 1;
     led1->n1 = gfd->noNervD[i];
     led1->n2 = gfd->noNervD[i] - 1;
@@ -967,7 +1007,7 @@ void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
     led1->coeff = layout->coeffd[k];
     k++;
 
-    LayoutElement* led2 = new LayoutElement();
+    DiagNervLayoutElement* led2 = new DiagNervLayoutElement();
     led2->n1 = gfd->noNervD[i];
     led2->n2 = gfd->noNervD[i] + 1;
     led2->s1 = false;

@@ -5,7 +5,7 @@
 #include "afx.h"		//class CString
 #include "afxdlgs.h"	//class CFileDialog
 
-
+#include "plot.h"
 #include "profil.h"
 #include "pince.h"
 #include "matrice.h"
@@ -21,6 +21,84 @@
 
 class WindPatternsProject;
 class LayoutElement;
+
+class LayoutElementExport {
+public:
+    LayoutElementExport ();
+    virtual ~LayoutElementExport();
+    TAxe *AxeP, *AxePD, *AxePTD, *AxeMD, *AxeCD, *AxeRepD;
+    double H, W;
+};
+
+
+
+class LayoutElement
+{
+    public:
+        LayoutElement ();
+        virtual ~LayoutElement();
+        
+        int type;
+
+		int n1, n2;
+
+        int fd1, fd2, ff1, ff2;
+
+		int vent;
+		boolean s1, s2;
+		int faceFin1, faceDeb1, faceFin2, faceDeb2;
+		double posDeb1, posDeb2, posFin1, posFin2;
+		double coeff;
+
+        double coeff1, coeff2;
+
+        double p1a0, p1a00, p1f0, p1a1, p1a01, p1f1;
+		double p2a0, p2a00, p2f0, p2a1, p2a01, p2f1;
+		double posKlapanIntDeb;
+		double posKlapanFin;
+		int isPince;
+		int isKlapan;
+        int side;
+
+        Matrix* func1f0;
+        Matrix* func1f1;
+        Matrix* func2f0;
+        Matrix* func2f1;
+
+        LayoutElementExport* leexport;
+        virtual void calculateExport(WindPatternsProject* gfd) { }
+};
+
+
+class KlapanLayoutElement : public LayoutElement {
+    public:
+		KlapanLayoutElement();
+		virtual ~KlapanLayoutElement();
+        void calculateExport(WindPatternsProject* gfd); 
+};
+
+class ProfLayoutElement : public LayoutElement {
+    public:
+		ProfLayoutElement();
+		virtual ~ProfLayoutElement();
+        void calculateExport(WindPatternsProject* gfd); 
+};
+
+class DiagNervLayoutElement : public LayoutElement {
+    public:
+		DiagNervLayoutElement();
+		virtual ~DiagNervLayoutElement();
+        void calculateExport(WindPatternsProject* gfd); 
+};
+
+class PanelLayoutElement : public LayoutElement {
+    public:
+		PanelLayoutElement();
+		virtual ~PanelLayoutElement();
+        void calculateExport(WindPatternsProject* gfd); 
+};
+
+
 
 class Layout
 {
@@ -65,84 +143,13 @@ class Layout
 
 		double debBorder;
 		int faceDebBorder;
-
-        std::vector<LayoutElement*> panelsExt;
-		std::vector<LayoutElement*> panelsInt;
-		std::vector<LayoutElement*> diagNervs;
-		std::vector<LayoutElement*> profs;
+        std::vector<PanelLayoutElement*> panelsExt;
+		std::vector<PanelLayoutElement*> panelsInt;
+		std::vector<DiagNervLayoutElement*> diagNervs;
+		std::vector<ProfLayoutElement*> profs;
+        std::vector<KlapanLayoutElement*> klapans;
 
         void calculateExport(WindPatternsProject* gfd);
-};
-
-class LayoutElementExport {
-public:
-    LayoutElementExport ();
-    virtual ~LayoutElementExport();
-    TAxe *AxeP, *AxePD, *AxePTD, *AxeMD, *AxeCD, *AxeRepD;
-    double H, W;
-};
-
-class LayoutElement
-{
-    public:
-        LayoutElement ();
-        virtual ~LayoutElement();
-        
-        int type;
-
-		int n1, n2;
-
-        int fd1, fd2, ff1, ff2;
-
-		int vent;
-		boolean s1, s2;
-		int faceFin1, faceDeb1, faceFin2, faceDeb2;
-		double posDeb1, posDeb2, posFin1, posFin2;
-		double coeff;
-
-        double coeff1, coeff2;
-
-        double p1a0, p1a00, p1f0, p1a1, p1a01, p1f1;
-		double p2a0, p2a00, p2f0, p2a1, p2a01, p2f1;
-		double posKlapanIntDeb;
-		double posKlapanFin;
-		int isPince;
-		int isKlapan;
-        Matrix* func1f0;
-        Matrix* func1f1;
-        Matrix* func2f0;
-        Matrix* func2f1;
-
-        LayoutElementExport* leexport;
-        virtual void calculateExport(WindPatternsProject* gfd) { }
-};
-
-class KlapanLayoutElement : public LayoutElement {
-    public:
-		KlapanLayoutElement();
-		virtual ~KlapanLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
-};
-
-class ProfLayoutElement : public LayoutElement {
-    public:
-		ProfLayoutElement();
-		virtual ~ProfLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
-};
-
-class DiagNervLayoutElement : public LayoutElement {
-    public:
-		DiagNervLayoutElement();
-		virtual ~DiagNervLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
-};
-
-class PanelLayoutElement : public LayoutElement {
-    public:
-		PanelLayoutElement();
-		virtual ~PanelLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
 };
 
 
