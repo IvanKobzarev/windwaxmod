@@ -154,6 +154,7 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Yd[1]);
 }
 void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
+    printf ("\n PanelLayoutElement::calculateExport");
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
@@ -285,66 +286,56 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         //P[0] = newP[0];
         //P[1] = newP[1];
     }
+    printf ("\n PanelLayoutElement::calculateExport.1");
+    double marge1 = gfd->Marge[0];
+    double marge2 = gfd->Marge[1];
+    double margeDeb = gfd->MargeDeb;
+    double margeFin = gfd->MargeFin;
 
-        double marge1 = gfd->Marge[0];
-        double marge2 = gfd->Marge[1];
-        double margeDeb = gfd->MargeDeb;
-        double margeFin = gfd->MargeFin;
-
-        if (side == EXT_SIDE) {
-            margeFin = gfd->margeFinExt;
-            charname="P";
-
-        }
-        if (side == INT_SIDE) {
-            // panels interior
-            margeFin = gfd->margeFinInt;
-            charname="P";
-            if (gfd->VentHoles) 
-                if ((n1==-1) && gfd->VentCentralNerv) {
-                     if (posFin1!=100.0f) {
+    if (side == EXT_SIDE) {
+        margeFin = gfd->margeFinExt;
+        charname="P";
+    }
+    if (side == INT_SIDE) {
+        // panels interior
+        margeFin = gfd->margeFinInt;
+        charname="P";
+        if (gfd->VentHoles) 
+            if ((n1==-1) && gfd->VentCentralNerv) {
+                 if (posFin1!=100.0f) {
+                    margeFin = gfd->MargeFin;
+                    charname="V";
+                } 
+            } else
+                if (gfd->noNervVH[n1]) {
+                   if (posFin1!=100.0f) {
                         margeFin = gfd->MargeFin;
                         charname="V";
-                    } 
-                } else
-                    if (gfd->noNervVH[n1]) {
-                       if (posFin1!=100.0f) {
-                            margeFin = gfd->MargeFin;
-                            charname="V";
-                       }
-                    }
-        }
-
-        /*
-        if (t < numncol[1]) {
-            // panel exterior
-        } else {
-            if (t < numncol[2]) {
-            } else {
-                if (t < numncol[3]) {
-                } else {
-                    
+                   }
                 }
-            }
-        }
-*/
+    }
+    printf ("\n PanelLayoutElement::calculateExport.2");
+
     int n = gfd->Form->m_nbProfils;
     char text[100];
     sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
-
+    TAxe *AxeP, *AxePD,  *AxePTD,  *AxeMD,  *AxeCD,  *AxeRepD;
+    printf ("\n PanelLayoutElement::calculateExport.3");
+    leexport = new LayoutElementExport();
     GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xdp[1], Ydp[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
         &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug,
 		true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
+    printf ("\n PanelLayoutElement::calculateExport.3.2");
 
+    printf ("\n PanelLayoutElement::calculateExport.4");
     calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &(leexport->W), &(leexport->H));
-
-    if (debug) printf("\ngo delete isPince");
+    printf ("\n PanelLayoutElement::calculateExport.5");
     delete (Xdp[0]);
     delete (Ydp[0]);
     delete (Xdp[1]);
     delete (Ydp[1]);
-    if (debug) printf("\n... go delete isPince");
+    printf ("\n... PanelLayoutElement::calculateExport");
 }
 void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
     bool debug = 0;
@@ -385,7 +376,7 @@ void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
     int n = gfd->Form->m_nbProfils;
     char text[100];
     sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
-
+    leexport = new LayoutElementExport();
     GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
         &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug);
