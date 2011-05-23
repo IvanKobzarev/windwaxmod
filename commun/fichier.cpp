@@ -2872,13 +2872,13 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 {
     if (debug) printf ("\n GenerateCourbe()");
     double Marge[2]={marge1, marge2};
-
     *AxePatronP = createAxe(gfd->windowPatron);
     *AxePatronDXFP = createAxe(gfd->windowPatron);
     *AxeRepDXFP = createAxe(gfd->windowPatron);
     *AxePatronTextDXFP = createAxe(gfd->windowPatron);
     *AxeMarginDXFP = createAxe(gfd->windowPatron);
     *AxeCercleDXFP = createAxe(gfd->windowPatron);
+    printf ("\n GenerateCourbe def 1");
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
     int ajCo1[2] = {0, 0};
     int ajCo2[2] = {0, 0};
@@ -2889,13 +2889,14 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
     int FaceFin[2]= {faceFin1, faceFin2};
     double Deb[2] = {deb1, deb2};
     double Fin[2] = {fin1, fin2};
+    printf ("\n GenerateCourbe def 2");
     Matrix *distance;
     int n;
     double xText, yText;
     char texte[100], texteExtInt[3] = "EI";
     Matrix *interpXSuspente, *interpYSuspente;
     double posSuspente, xSuspente[2][205], ySuspente[2][205];
-
+    printf ("\n GenerateCourbe def 3");
     Matrix * Xd[2] = {Xd1, Xd2};
 	Matrix * Xd0[2] = {Xd01, Xd02};
     Matrix * Yd[2] = {Yd1, Yd2};
@@ -2903,9 +2904,11 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
     Matrix * P[2] = {P1, P2};
 	double coeff[2]= {coeff1, coeff2};
     int i = 0, j = 0;
+    printf ("\n GenerateCourbe def 4");
     Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
     Courbe *CourbAv, *CourbAvBack, *CourbAr, *CourbArDXF, *CourbMargeAv, *CourbMargeAvBack, *CourbMargeAr, *CourbCoin, *CourbMargeArDXF, *CourbCoin1[2], *CourbCoin1Back[2], *CourbCoin2[2], *CourbCoin2Back[2], *CourbRep, *CourbRepDXF;
     Courbe *CourbCercle, *CourbCercleDXF;
+    printf ("\n GenerateCourbe def 5");
     for (i = 0; i < 2; i++) {
       if (debug) printf ("\n GenerateCourbe 1for: %d", i);
         CourbPatron[i] = new Courbe("Patron");
