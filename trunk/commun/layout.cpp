@@ -60,6 +60,7 @@ DiagNervLayoutElement::~DiagNervLayoutElement(){
 
 
 void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
+    printf ("\n KlapanLayoutElement::calculateExport");
     bool debug = 0;
     Matrix * Xd[2], *Yd[2];//,*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
@@ -97,6 +98,7 @@ void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Yd[1]);
 }
 void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
+    printf ("\n ProfLayoutElement::calculateExport");
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];//, *Xdp[2], *Ydp[2];//, *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];//, *rP[2];//, *newP[2];
@@ -167,7 +169,8 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
-
+    printf ("\n n1=%d fd1=%d ff1=%d posDeb1=%f posFin1=%f", n1, fd1, ff1, posDeb1, posFin1);
+    printf ("\n n2=%d fd2=%d ff2=%d posDeb2=%f posFin2=%f", n2, fd2, ff2, posDeb2, posFin2);
     if (isPince) {
         if (ff1 == 1) {
             _pa00 = p1a00;
@@ -338,6 +341,8 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
     printf ("\n... PanelLayoutElement::calculateExport");
 }
 void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
+    printf ("\n DiagNervLayoutElement::calculateExport");
+
     bool debug = 0;
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2];
@@ -379,7 +384,8 @@ void DiagNervLayoutElement::calculateExport(WindPatternsProject* gfd) {
     leexport = new LayoutElementExport();
     GenerateCourbe(gfd, Xd[0], Yd[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xd[1], Yd[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
-        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug);
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin,
+        true, true);//debug);
 
     calcMaxWH(Xd[0], Yd[0], Xd[1], Yd[1], &(leexport->W), &(leexport->H));
 
@@ -880,7 +886,7 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
 
             if (gfd->LayoutKlapans) {
                 if (gfd->VentHolesDouble){
-                    PanelLayoutElement* le3 = new PanelLayoutElement();
+                    KlapanLayoutElement* le3 = new KlapanLayoutElement();
                     le3->side=INT_SIDE;
                     le3->n1 = -1;
                     le3->n2 = 0;
@@ -891,9 +897,9 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le3->isKlapan = 1;
                     le3->isPince = 0;
                     //printf ("\n klapan=%d", isave);
-                    layout->panelsInt.push_back(le3);
+                    layout->klapans.push_back(le3);
                 }
-                    PanelLayoutElement* le4 = new PanelLayoutElement();
+                    KlapanLayoutElement* le4 = new KlapanLayoutElement();
                     le4->side=INT_SIDE;
                     le4->n1 = -1;
                     le4->n2 = 0;
@@ -903,10 +909,10 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le4->posKlapanFin = gfd->PosKlapanFin;
                     le4->isKlapan = 1;
                     le4->isPince = 0;
-                    layout->panelsInt.push_back(le4);
+                    layout->klapans.push_back(le4);
 
 
-                    PanelLayoutElement* le5 = new PanelLayoutElement();
+                    KlapanLayoutElement* le5 = new KlapanLayoutElement();
                     le5->side=INT_SIDE;
                     le5->n1 = -1;
                     le5->n2 = 0;
@@ -916,7 +922,7 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le5->posKlapanFin = gfd->PosKlapanFin;
                     le5->isKlapan = 1;
                     le5->isPince = 0;
-                    layout->panelsInt.push_back(le5);
+                    layout->klapans.push_back(le5);
 
             }
 

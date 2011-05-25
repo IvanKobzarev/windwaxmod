@@ -3680,6 +3680,8 @@ int main(int argc, char** argv) {
     apply(0);
     AxeSel = Axe3d;
     display();
+
+    applyMagic2(0);
     /*boucle glut*/
     glutMainLoop();
     return 0;

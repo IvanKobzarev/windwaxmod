@@ -163,7 +163,7 @@
 				OutputFile=".\Debug/WindPatterns.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				IgnoreDefaultLibraryNames="msvcrt.lib"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/WindPatterns.pdb"
 				SubSystem="1"
