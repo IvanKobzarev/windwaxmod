@@ -401,340 +401,6 @@ double EpaisseurRelative(Matrix* extrados, Matrix* intrados)
 	return MaxExt-MinInt;
 }
 
-/*****************/
-/* calcForm3D */
-/*****************/
-
-void calcForm3D(Form *forme, int isPercent, double percent,
-				   Matrix *ExtProfCent, Matrix *IntProfCent,
-				   Matrix *ExtProfBout, Matrix *IntProfBout,
-				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
-				   Matrix **XInt, Matrix **YInt, Matrix **ZInt)
-
-{
-    //printf ("\n calcForm3D");
-    Matrix *ExtProfCentN, *ExtProfBoutN;
-	double LongNerv, EpaiRel, xp,yp, xo,yo,zo, a,v,m;
-	double EpaiRelProfCent, EpaiRelProfBout;
-	double coeffx, coeffyCent, coeffyBout;
-	int i,j;
-    bool isCenterPanel = (1 & forme->NbCaiss);
-
-	/*calc epaisseur relative profil central et bout*/
-	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
-	//printf ("\nEpaiRelProfCent=%f", EpaiRelProfCent);
-	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
-	//printf ("\nEpaiRelProfBout=%f", EpaiRelProfBout);
-	/*init matrices extrados*/
-	//delete(*XExt); delete(*YExt); delete(*ZExt); 
-	//*XExt = Zeros(5, 5);
-	*XExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
-	*YExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
-	*ZExt = Zeros(forme->m_nbProfils, ExtProfCent->GetLignes());
-
-	/*init matrices intrados*/
-	//delete(*XInt); delete(*YInt); delete(*ZInt); 
-	*XInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
-	*YInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
-	*ZInt = Zeros(forme->m_nbProfils, IntProfCent->GetLignes());
-	/*boucle ï¿½ partir de la 1ere nervure du centre vers l'extrï¿½mitï¿½*/
-
-
-    if (isPercent) {
-        //printf ("\n isPercent");
-        makePosProfile(ExtProfCent, IntProfCent, percent, &ExtProfCentN);
-        makePosProfile(ExtProfBout, IntProfBout, percent, &ExtProfBoutN);
-    }
-        
-	for (i=0; i<forme->m_nbProfils; i++)
-	{
-		//longueur nervure courante
-		LongNerv = forme->m_pProfils[i]->m_fLength;
-		//epaisseur relative
-		EpaiRel = forme->m_pProfils[i]->m_fWidth;
-		//position xo,yo,zo du nez
-		xo = forme->m_pProfils[i]->m_fNezX;
-		yo = forme->m_pProfils[i]->m_fNezY;
-		zo = forme->m_pProfils[i]->m_fNezZ;
-        //printf ("\n %d long=%f width=%f (%f, %f, %f)", i, forme->m_pProfils[i]->m_fLength, forme->m_pProfils[i]->m_fWidth, xo, yo, zo);
-		//inclinaison de la nervure par rapport a l'horizontale
-		a = forme->m_pProfils[i]->m_fInclin;
-        if ((isCenterPanel) && (i == 0)) a = forme->m_pProfils[0]->m_fInclin - 0.33333333f * fabs(forme->m_pProfils[0]->m_fInclin - forme->m_pProfils[1]->m_fInclin);
-                
-		//angle vrillage
-		v = forme->m_pProfils[i]->m_fWash;
-		//coeff morphing
-		m = forme->m_pProfils[i]->m_fMorph;
-               
-		//printf ("\n%3d -> LNerv=%f EpRel=%f a=%f v=%f m=%f",
-		//				i,  LongNerv, EpaiRel, a * 180.0f/pi, v, m);
-
-		//calc coeffx et coeffy des points du profil en
-		//fonction de l'ï¿½paisseur relative et de la longueur de nervure
-		coeffx = LongNerv/100.0f;
-		coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
-		coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
-
-        /*boucle sur les points du profil en intrados*/
-		for (j=0; j<IntProfCent->GetLignes(); j++)
-		{
-			xp = IntProfCent->Element(j,0)*coeffx;
-			yp = IntProfCent->Element(j,1)*coeffyCent*m
-				+ IntProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-			(*XInt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YInt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZInt)->SetElement(i,j, zo-(xp*(double)cos(v)));
-
-		}
-
-		/*boucle sur les points du profil en extrados*/
-		for (j=0; j<ExtProfCent->GetLignes(); j++)
-		{
-            if (isPercent) {
-                xp = ExtProfCentN->Element(j,0)*coeffx;
-                yp = ExtProfCentN->Element(j,1)*coeffyCent*m
-                        + ExtProfBoutN->Element(j,1)*coeffyBout*(1.0f-m);
-            } else {
-                xp = ExtProfCent->Element(j,0)*coeffx;
-                yp = ExtProfCent->Element(j,1)*coeffyCent*m
-                        + ExtProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-            }
-			(*XExt)->SetElement(i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YExt)->SetElement(i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZExt)->SetElement(i,j, zo-(xp*(double)cos(v)));
-          /*  if (i == 0) {
-                printf ("\n%d DELTA(%f, %f, %f)",j, (yp-xp*(double)sin(v))*(double)cos(a), (yp-xp*(double)sin(v))*(double)sin(a), -(xp*(double)cos(v)));
-            } */
-		}
-
-	}
-    //printf ("\n ...calcForm3D");
-
-}
-
-FormProjection* getFormProjection(Form3D* f3d) 
-{
-	//printf ("\n getFormProjection()");
-	FormProjection* formePrj = new FormProjection();
-	// we should X, 0, Z
-	Matrix *X = Zeros(f3d->XExt->GetLignes(), 2); 
-	Matrix *Y = Zeros(f3d->YExt->GetLignes(), 2);
-		
-	for (int i = 0; i < f3d->XExt->GetLignes(); i++)
-	{
-		X->SetElement(i, 0, f3d->XExt->Element(i, 0));
-		Y->SetElement(i, 0, f3d->ZExt->Element(i, 0));
-		//printf ("\n %d, 0: %f, %f",i, f3d->XExt->Element(i, 0), f3d->ZExt->Element(i, 0));
-		X->SetElement(i, 1, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1));
-		Y->SetElement(i, 1, f3d->ZExt->Element(i, f3d->ZExt->GetColonnes()-1));
-		//printf ("\n %d, 1: %f, %f", i, f3d->XExt->Element(i, f3d->XExt->GetColonnes()-1), f3d->ZExt->Element(i, f3d->XExt->GetColonnes()-1));
-	}
-
-	formePrj->X = X;
-	formePrj->Y = Y;
-	return formePrj;
-}
-
-Form3D* getForm3D(Form *forme, int isPercent, double percent)
-				   //Matrix *ExtProfCent, Matrix *IntProfCent,
-				   //Matrix *ExtProfBout, Matrix *IntProfBout)
-{
-	Form3D* forme3D = new Form3D();
-    Matrix *XExt, *YExt, *ZExt;
-    Matrix *XInt, *YInt, *ZInt;
-
-    calcForm3D(forme, isPercent, percent,
-            forme->ExtProfCent, forme->IntProfCent, forme->ExtProfBout, forme->IntProfBout,
-            &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
-
-	forme3D->XExt=XExt;
-	forme3D->YExt=YExt;
-	forme3D->ZExt=ZExt;
-
-	forme3D->XInt=XInt;
-	forme3D->YInt=YInt;
-	forme3D->ZInt=ZInt;
-
-	//forme3D->ExtProfCent=ExtProfCent;
-	//forme3D->IntProfCent=IntProfCent;
-
-	//forme3D->ExtProfBout=ExtProfBout;
-	//forme3D->IntProfBout=IntProfBout;
-
-	forme3D->forme=forme;
-	return forme3D;
-}
-
-
-
-void calcForm3DBallonement
-				(WindPatternsProject* gfd, Form *forme, int isPercent, double percent,
-				   Matrix *ExtProfCent, Matrix *IntProfCent,
-				   Matrix *ExtProfBout, Matrix *IntProfBout,
-				   Matrix **XExt, Matrix **YExt, Matrix **ZExt,
-				   Matrix **XInt, Matrix **YInt, Matrix **ZInt)
-
-{
-	// !!! support of isPercent, percent not implemented yet!!!
-
-    //printf ("\n calcForm3DBallonement");
-    Matrix *ExtProfCentN, *ExtProfBoutN;
-	double LongNerv, EpaiRel, xp, yp, xo, yo, zo, a, a0, v, m;
-	double EpaiRelProfCent, EpaiRelProfBout;
-	double coeffx, coeffy, coeffyCent, coeffyBout;
-	int i,j;
-    bool isCenterPanel = (1 & forme->NbCaiss);
-
-	/*calc epaisseur relative profil central et bout*/
-	EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
-	EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
-
-	*XExt = Zeros(forme->m_nbProfils*2 - 1, ExtProfCent->GetLignes());
-	*YExt = Zeros(forme->m_nbProfils*2 - 1, ExtProfCent->GetLignes());
-	*ZExt = Zeros(forme->m_nbProfils*2 - 1, ExtProfCent->GetLignes());
-
-	*XInt = Zeros(forme->m_nbProfils*2 - 1, IntProfCent->GetLignes());
-	*YInt = Zeros(forme->m_nbProfils*2 - 1, IntProfCent->GetLignes());
-	*ZInt = Zeros(forme->m_nbProfils*2 - 1, IntProfCent->GetLignes());
-
-    if (isPercent) {
-        makePosProfile(ExtProfCent, IntProfCent, percent, &ExtProfCentN);
-        makePosProfile(ExtProfBout, IntProfBout, percent, &ExtProfBoutN);
-    }
-	//printf ("\n calcForm3DBallonement go in FOR");        
-	for (i=0; i<forme->m_nbProfils; i++)
-	{
-		// normal nervure profile
-		//printf ("\n\n\n %d nervure normal", i);        
-		LongNerv = forme->m_pProfils[i]->m_fLength;
-		EpaiRel = forme->m_pProfils[i]->m_fWidth;
-		xo = forme->m_pProfils[i]->m_fNezX;
-		yo = forme->m_pProfils[i]->m_fNezY;
-		zo = forme->m_pProfils[i]->m_fNezZ;
-		a = forme->m_pProfils[i]->m_fInclin;
-        if ((isCenterPanel) && (i == 0)) a = forme->m_pProfils[0]->m_fInclin - 0.33333333f * fabs(forme->m_pProfils[0]->m_fInclin - forme->m_pProfils[1]->m_fInclin);
-              
-		//angle vrillage
-		v = forme->m_pProfils[i]->m_fWash;
-		//coeff morphing
-		m = forme->m_pProfils[i]->m_fMorph;
-		coeffx = LongNerv/100.0f;
-		coeffyCent = LongNerv*EpaiRel/(EpaiRelProfCent*100.0f);
-		coeffyBout = LongNerv*EpaiRel/(EpaiRelProfBout*100.0f);
-		//printf ("\n %d N longNerv=%f", i, LongNerv);
-		//printf ("\n %d N coeffx=%f coeffy=(%f, %f)", i, coeffx, coeffyCent, coeffyBout);
-		//printf ("\n %d N(init) EpaiRelProfCent=%f", i, EpaiRelProfCent);
-		//printf ("\n %d N(init) EpaiRelProfBout=%f", i, EpaiRelProfBout);
-		for (j=0; j<IntProfCent->GetLignes(); j++)
-		{
-			xp = IntProfCent->Element(j,0)*coeffx;
-			yp = IntProfCent->Element(j,1)*coeffyCent*m
-				+ IntProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-			(*XInt)->SetElement(2*i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YInt)->SetElement(2*i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZInt)->SetElement(2*i,j, zo-(xp*(double)cos(v)));
-
-		}
-		for (j=0; j<ExtProfCent->GetLignes(); j++)
-		{
-            if (isPercent) {
-                xp = ExtProfCentN->Element(j,0)*coeffx;
-                yp = ExtProfCentN->Element(j,1)*coeffyCent*m
-                        + ExtProfBoutN->Element(j,1)*coeffyBout*(1.0f-m);
-            } else {
-                xp = ExtProfCent->Element(j,0)*coeffx;
-                yp = ExtProfCent->Element(j,1)*coeffyCent*m
-                        + ExtProfBout->Element(j,1)*coeffyBout*(1.0f-m);
-            }
-			(*XExt)->SetElement(2*i,j, xo+(yp-xp*(double)sin(v))*(double)cos(a));
-			(*YExt)->SetElement(2*i,j, yo+(yp-xp*(double)sin(v))*(double)sin(a));
-			(*ZExt)->SetElement(2*i,j, zo-(xp*(double)cos(v)));
-		}
-		//printf ("\n len (%d) ext(%d) int(%d)",i, ExtProfCent->GetLignes(), IntProfCent->GetLignes());
-		// --  normal nervure profile
-		if ( i < (forme->m_nbProfils - 1)) {
-			// nervure ballonement
-			LongNerv = (forme->m_pProfils[i]->m_fLength + forme->m_pProfils[i+1]->m_fLength) * 0.5f;
-			EpaiRel = (forme->m_pProfils[i]->m_fWidth + forme->m_pProfils[i+1]->m_fWidth) * 0.5f;
-			xo = (forme->m_pProfils[i]->m_fNezX + forme->m_pProfils[i+1]->m_fNezX) * 0.5f;
-			yo = (forme->m_pProfils[i]->m_fNezY + forme->m_pProfils[i+1]->m_fNezY) * 0.5f;
-			zo = (forme->m_pProfils[i]->m_fNezZ + forme->m_pProfils[i+1]->m_fNezZ) * 0.5f;
-			a0 = (forme->m_pProfils[i]->m_fInclin + forme->m_pProfils[i+1]->m_fInclin) * 0.5f;
-			if ((isCenterPanel) && (i == 0)) a0 = forme->m_pProfils[0]->m_fInclin - 0.33333333f * fabs(forme->m_pProfils[0]->m_fInclin - forme->m_pProfils[1]->m_fInclin);
-			a = (a0 + forme->m_pProfils[i+1]->m_fInclin) * 0.5f;
-			//angle vrillage
-			v = (forme->m_pProfils[i]->m_fWash + forme->m_pProfils[i]->m_fWash) * 0.5f;
-			//coeff morphing
-			m = (forme->m_pProfils[i]->m_fMorph + forme->m_pProfils[i]->m_fMorph) * 0.5f;
-			// time to calcate profile ballone
-			ProfilGeom* pgCur = getProfile(gfd, forme, i);
-			ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, gfd->ballonement->kChord->Element(i, 0), gfd->ballonement->kMf->Element(i, 0), EpaiRel, gfd->ballonement->wN->Element(i, 0), gfd->ballonement->dyw->Element(i, 0));
-			double l = abs (pgCur->ExtProf->Element(pgCur->ExtProf->GetLignes() - 1, 0) - pgCur->ExtProf->Element(0, 0));
-			double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
-			ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, gfd->ballonement->powerTail->Element(i, 0));
-			//  -- time to calcate profile ballone
-			coeffx = LongNerv/100.0f;
-			double EpaiRelCur = EpaisseurRelative(pgCur->ExtProf, pgCur->IntProf);
-			coeffy = LongNerv*EpaiRel/(EpaiRelCur*100.0f);
-			//printf ("\n B longNerv=%f", LongNerv);
-			//printf ("\n B coeffx=%f coeffy=(%f)", coeffx, coeffy);
-			//printf ("\n B EpaiRelCur=%f", EpaiRelCur);
-			double _x=0, _y=0, _z=0;
-			for (j=0; j < pg->IntProf->GetLignes(); j++)
-			{
-				xp = pg->IntProf->Element(j, 0) * coeffx;
-				yp = pg->IntProf->Element(j, 1) * coeffy;
-				_x = xo+(yp-xp*(double)sin(v))*(double)cos(a);
-				_y = yo+(yp-xp*(double)sin(v))*(double)sin(a);
-				_z = zo-(xp*(double)cos(v));
-				(*XInt)->SetElement(2*i+1, j, _x);
-				(*YInt)->SetElement(2*i+1, j, _y);
-				(*ZInt)->SetElement(2*i+1, j, _z);
-			//	printf ("\n int %d (%f, %f, %f)", j, (*XInt)->Element(2*i+1, j), (*YInt)->Element(2*i+1, j), (*ZInt)->Element(2*i+1, j));
-			}
-			if (pg->IntProf->GetLignes() < IntProfCent->GetLignes()){
-				for ( j = pg->IntProf->GetLignes(); j < IntProfCent->GetLignes(); j++) {
-					(*XInt)->SetElement(2*i+1, j, _x);
-					(*YInt)->SetElement(2*i+1, j, _y);
-					(*ZInt)->SetElement(2*i+1, j, _z);
-			//		printf ("\n +int %d (%f, %f, %f)", j, (*XInt)->Element(2*i+1, j), (*YInt)->Element(2*i+1, j), (*ZInt)->Element(2*i+1, j));
-				}
-			}
-
-			//printf ("\n\n ext(%d) int(%d)", pg->ExtProf->GetLignes(), pg->IntProf->GetLignes());
-			//printf ("\n\n BECOME ext(%d) int(%d)", ExtProfCent->GetLignes(), IntProfCent->GetLignes());
-			for (j=0; j < pg->ExtProf->GetLignes(); j++)
-			{
-/*				if (isPercent) {
-					xp = ExtProfCentN->Element(j,0)*coeffx;
-					yp = ExtProfCentN->Element(j,1)*coeffyCent*m
-							+ ExtProfBoutN->Element(j,1)*coeffyBout*(1.0f-m);
-				} else { */
-				xp = pg->ExtProf->Element(j, 0) * coeffx;
-				yp = pg->ExtProf->Element(j, 1) * coeffy;
-				//}
-				_x = xo+(yp-xp*(double)sin(v))*(double)cos(a);
-				_y = yo+(yp-xp*(double)sin(v))*(double)sin(a);
-				_z = zo-(xp*(double)cos(v));
-				(*XExt)->SetElement(2*i+1, j,_x);
-				(*YExt)->SetElement(2*i+1, j, _y);
-				(*ZExt)->SetElement(2*i+1, j, _z);
-			//	printf ("\n ext %d (%f, %f, %f)",j, (*XExt)->Element(2*i+1, j), (*YExt)->Element(2*i+1, j), (*ZExt)->Element(2*i+1, j));
-			}
-			if (pg->ExtProf->GetLignes() < ExtProfCent->GetLignes()){
-				for ( j = pg->ExtProf->GetLignes(); j < ExtProfCent->GetLignes(); j++) {
-					(*XExt)->SetElement(2*i+1, j, _x);
-					(*YExt)->SetElement(2*i+1, j, _y);
-					(*ZExt)->SetElement(2*i+1, j, _z);
-			//		printf ("\n +ext %d (%f, %f, %f)",j, (*XExt)->Element(2*i+1, j), (*YExt)->Element(2*i+1, j), (*ZExt)->Element(2*i+1, j));
-				}
-			}
-
-			//printf ("\n --%d nervure ballone", i);        
-		}
-	}
-}
-
 /***********************/
 /* InterpoleProfilBout */
 /***********************/
@@ -1220,24 +886,15 @@ void Cart2Pol(Matrix *X, Matrix *Y, Matrix **T, Matrix **R)
 /*************************************************/
 
 void Pol2Cart(Matrix *T, Matrix *R, Matrix **X, Matrix **Y)
-
 {
-
 	int i;
-
 	*X=new Matrix(R->GetLignes(),1); 
 	*Y=new Matrix(R->GetLignes(),1);
-
 	for(i=0; i<R->GetLignes(); i++)
-
 	{
-
 		(*X)->SetElement(i,0, (double)(R->Element(i,0)*cos(T->Element(i,0))));
-
 		(*Y)->SetElement(i,0, (double)(R->Element(i,0)*sin(T->Element(i,0))));
-
 	}
-
 }
 
 /*******************************/
@@ -1273,309 +930,6 @@ void Inter2Vecteurs(double xa, double ya,
 		*x=0.0f; *y=0.0f;
 	}
 }
-
-/*******************************************************************************
-*
-*     Linear vorticity surface panel method for airfoils.
-*
-*     Adapted from Kuethe and Chow 4th Edition
-*     This version by I. Kroo  2-2-87
-*
-*     No attempt has been made to make this particularly fast or efficient.
-*
-*     Inputs:
-*     -------
-*     XB, YB     x and y coordinates of panel edges starting at trailing edge
-*                proceeding forward on lower surface, wrapping around
-*                leading edge and then running back to the trailingedge.
-*     alphaD     Angle of attack in degrees
-*
-*     Outputs:
-*     --------
-*     X, Y       coordinates of panel centers
-*     Cp         incompressible pressure coefficient at panel center
-*     
-********************************************************************************/
-
-// version originale en fortran, traduit en C et Matlab par Thierry Pï¿½bayle, 2001
-// function [X,Y,Cp]=LVFoil(XB,YB,alphaD);
-
-void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matrix **Cp )
-{
-	int n, np1, i, ip1, j;
-	double alpha, SINA, COSA;
-	Matrix *S=NULL, *THETA=NULL, *SINT=NULL, *COST=NULL;
-	Matrix *CN1=NULL, *CN2=NULL, *CT1=NULL, *CT2=NULL, *AN=NULL, *AT=NULL, *RHS=NULL, *XX=NULL, *V=NULL;
-	double A,B,C,D,E,F,G,P1,P2,P3,P4,P,Q;
-	double ANmax;
-	//
-	//     calcation of geometric data:
-	//     ------------------------------
-
-	n=XB->GetLignes()-1; // n:Number of panels
-	np1 = n+1;
-
-	
-
-	//init matrices
-
-	*X=Zeros(n,1); *Y=Zeros(n,1); *Cp=Zeros(n,1);
-
-	S=Zeros(n,1); THETA=Zeros(n,1); SINT=Zeros(n,1); COST=Zeros(n,1);
-
-	
-
-	//calc position centre et taille des panneaux 
-
-	for(i=0;i<n; i++)
-
-	{
-
-		ip1=i+1;
-
-		(*X)->SetElement(i,0, .5f * (XB->Element(i,0) + XB->Element(ip1,0)));
-
-		(*Y)->SetElement(i,0, .5f * (YB->Element(i,0) + YB->Element(ip1,0)));
-
-		S->SetElement(i,0, (double)sqrt( sqr(XB->Element(ip1,0)-XB->Element(i,0)) + sqr(YB->Element(ip1,0)-YB->Element(i,0)) ));
-
-		THETA->SetElement(i,0, (double)atan2( (YB->Element(ip1,0)-YB->Element(i,0)), (XB->Element(ip1,0)-XB->Element(i,0)) ));
-
-		SINT->SetElement(i,0, (double)sin(THETA->Element(i,0)));
-
-		COST->SetElement(i,0, (double)cos(THETA->Element(i,0)));
-
-	}	
-
-	alpha = alphaD * DEG2RAD;
-
-	SINA = (double)sin(alpha); 
-
-	COSA = (double)cos(alpha);
-
-	
-
-	//
-
-	//     calcation of influence coefficients
-
-	//     -------------------------------------
-
-	//
-
-	
-
-	// init tableaux
-
-	CN1=Zeros(n,n); CN2=Zeros(n,n); CT1=Zeros(n,n); CT2=Zeros(n,n);
-
-	AN=Zeros(np1,np1); AT=Zeros(np1,np1);
-
-	
-
-	for (i=0; i<n; i++)
-
-	{
-
-		for (j=0; j<n; j++)
-
-		{
-
-			if (i==j) 
-
-			{
-
-				CN1->SetElement(i,j, -1.0);
-
-				CN2->SetElement(i,j, 1.0);
-
-				CT1->SetElement(i,j, 0.5*pi);
-
-				CT2->SetElement(i,j, CT1->Element(i,j));
-
-			}
-
-			else
-
-			{
-
-				A = -((*X)->Element(i,0)-XB->Element(j,0))*COST->Element(j,0)
-
-					- ((*Y)->Element(i,0)-YB->Element(j,0))*SINT->Element(j,0);
-
-				B = sqr((*X)->Element(i,0)-XB->Element(j,0)) + sqr((*Y)->Element(i,0)-YB->Element(j,0));
-
-				C = SINT->Element(i,0)*COST->Element(j,0)-COST->Element(i,0)*SINT->Element(j,0);
-
-				D = COST->Element(i,0)*COST->Element(j,0)+SINT->Element(i,0)*SINT->Element(j,0);
-
-				E = ((*X)->Element(i,0)-XB->Element(j,0))*SINT->Element(j,0)
-
-					- ((*Y)->Element(i,0)-YB->Element(j,0))*COST->Element(j,0);
-
-				F = (double)log( 1. + S->Element(j,0)*(S->Element(j,0)+2.*A)/B );
-
-				G = (double)atan2(E*S->Element(j,0), B+A*S->Element(j,0));
-
-				P1 = 1.0f-2.0f*SINT->Element(j,0)*SINT->Element(j,0);
-
-				P2 = 2.0f*SINT->Element(j,0)*COST->Element(j,0);
-
-				P3 = SINT->Element(i,0)*P1 - COST->Element(i,0)*P2;
-
-				P4 = COST->Element(i,0)*P1 + SINT->Element(i,0)*P2;
-
-				P = ((*X)->Element(i,0)-XB->Element(j,0)) * P3 + ((*Y)->Element(i,0)-YB->Element(j,0)) * P4;
-
-				Q = ((*X)->Element(i,0)-XB->Element(j,0)) * P4 - ((*Y)->Element(i,0)-YB->Element(j,0)) * P3;
-
-				CN2->SetElement(i,j, D + ( .5f*Q*F - (A*C+D*E)*G )/S->Element(j,0));
-
-				CN1->SetElement(i,j, .5f*D*F + C*G - CN2->Element(i,j));
-
-				CT2->SetElement(i,j, C + ( .5f*P*F + (A*D-C*E)*G )/S->Element(j,0));
-
-				CT1->SetElement(i,j, .5f*C*F - D*G - CT2->Element(i,j));
-
-			}
-
-		}
-
-	}
-
-	
-
-	ANmax = 0.0;
-
-	for (i=0; i<n; i++)
-
-	{
-
-		AN->SetElement(i,0, CN1->Element(i,0));
-
-		AN->SetElement(i,n, CN2->Element(i,n-1));
-
-		AT->SetElement(i,0, CT1->Element(i,0));
-
-		AT->SetElement(i,n, CT2->Element(i,n-1));
-
-		for (j=1; j<n; j++)
-
-		{
-
-			AN->SetElement(i,j, CN1->Element(i,j) + CN2->Element(i,j-1));
-
-			AT->SetElement(i,j, CT1->Element(i,j) + CT2->Element(i,j-1));
-
-			if(fabs(AN->Element(i,j))>ANmax)
-
-			{
-
-				ANmax = (double)fabs(AN->Element(i,j));
-
-			}
-
-		}
-
-	}
-
-				
-
-	//     The Kutta Condition is imposed by the relation:
-
-	//     A*gamma(1) + A*gamma(n+1) = 0.  A would be 1 but for matrix
-
-	//     conditioning problems.
-
-			
-
-	AN->SetElement(n,0, 1.0);
-	AN->SetElement(n,n, 1.0);
-
-	for(j=1; j<n; j++)
-	{
-		AN->SetElement(n,j, 0.0);
-	}
-				
-
-	//
-
-	//     Decompose and solve the system:
-
-	//     -------------------------------
-
-	//
-
-	//     AN.XX = RHS
-
-	//     avec  RHS(i) = sin( THETA(i)-alpha )
-
-	//			
-
-	RHS=Zeros(np1,1);
-
-	for(i=0; i<n; i++)
-
-	{
-
-		RHS->SetElement(i,0, SINT->Element(i,0)*COSA - COST->Element(i,0)*SINA);
-
-	}
-
-	//XX=inv(AN)*RHS;
-
-	ResolutionGauss(AN, RHS, &XX);
-
-				
-
-	//
-
-	//     Compute derived quantities:
-
-	//     ---------------------------
-
-	//
-
-	//     V(i) = cos( THETA(i) - alpha )
-
-	V=Zeros(n,1);
-
-	*Cp=Zeros(n,1);
-
-	for (i=0; i<n; i++)
-
-	{
-
-		V->SetElement(i,0,  COST->Element(i,0)*COSA + SINT->Element(i,0)*SINA);
-
-		for (j=0; j<np1; j++)
-
-		{
-
-			V->SetElement(i,0, V->Element(i,0) + AT->Element(i,j) * XX->Element(j,0));
-
-		}
-
-		(*Cp)->SetElement(i,0, 1-V->Element(i,0)*V->Element(i,0));
-
-	}
-
-
-
-	//liberation matrices de calc
-
-	delete(S); delete(THETA); delete(SINT); delete(COST);
-
-	delete(CN1); delete(CN2); delete(CT1); delete(CT2);
-
-	delete(AN); delete(AT); delete(RHS); delete(XX);
-
-	delete(V);
-
-
-
-}
-
 /*********************************************/
 /* calc longueur dï¿½veloppï¿½ d'une courbe XY */
 /*********************************************/
@@ -1762,4 +1116,52 @@ int pointAtSegment(double x, double y, double x1, double y1, double x2, double y
 		return -1;
 
 	return 0;
+}
+
+void makeEqualSize(Matrix** X0,Matrix** Y0, Matrix** Z0,Matrix** P0,
+				   Matrix** X1,Matrix** Y1, Matrix** Z1,Matrix** P1) {
+    Matrix *iAv, *iAp, *Res;
+    if ((*X0)->GetLignes() > (*X1)->GetLignes()) {
+        iAv = LinSpace(0.0f, (double) (*X1)->GetLignes() - 1, (*X1)->GetLignes());
+        iAp = LinSpace(0.0f, (double) (*X1)->GetLignes() - 1, (*X0)->GetLignes());
+        Res = new Matrix((*X0)->GetLignes(), 1);
+        InterpLinMat(iAv, (*X1), iAp, Res);
+        delete(*X1);
+        *X1 = Res;
+        Res = new Matrix((*X0)->GetLignes(), 1);
+        InterpLinMat(iAv, *Y1, iAp, Res);
+        delete(*Y1);
+        *Y1 = Res;
+        Res = new Matrix((*X0)->GetLignes(), 1);
+        InterpLinMat(iAv, *Z1, iAp, Res);
+        delete(*Z1);
+        *Z1 = Res;
+        Res = new Matrix((*X0)->GetLignes(), 1);
+        InterpLinMat(iAv, *P1, iAp, Res);
+        delete(*P1);
+        *P1 = Res;
+        delete(iAv);
+        delete(iAp);
+    } else if ((*X1)->GetLignes() > (*X0)->GetLignes()) {
+        iAv = LinSpace(0.0f, (double) (*X0)->GetLignes() - 1, (*X0)->GetLignes());
+        iAp = LinSpace(0.0f, (double) (*X0)->GetLignes() - 1, (*X1)->GetLignes());
+        Res = new Matrix((*X1)->GetLignes(), 1);
+        InterpLinMat(iAv, *X0, iAp, Res);
+        delete(*X0);
+        *X0 = Res;
+        Res = new Matrix((*X1)->GetLignes(), 1);
+        InterpLinMat(iAv, *Y0, iAp, Res);
+        delete(*Y0);
+        *Y0 = Res;
+        Res = new Matrix((*X1)->GetLignes(), 1);
+        InterpLinMat(iAv, *Z0, iAp, Res);
+        delete(*Z0);
+        *Z0 = Res;
+        Res = new Matrix((*X1)->GetLignes(), 1);
+        InterpLinMat(iAv, *P0, iAp, Res);
+        delete(*P0);
+        *P0 = Res;
+        delete(iAv);
+        delete(iAp);
+    }
 }

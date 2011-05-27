@@ -229,7 +229,7 @@ void quit(int control);
 void Info(int control);
 void readForm(int control);
 
-Matrix** LectureFichierReperPoints(char* NomFic);
+Matrix** readFichierReperPoints(char* NomFic);
 
 void initValueDialogue(void);
 void adder(int control);
@@ -359,7 +359,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	int tmpVentCentralNerv=0;
 
 	try {
-		tmpF = LectureFichierForm(gfd->fileNameForm);
+		tmpF = readFichierForm(gfd->fileNameForm);
 		try {
 		tmpF->Validate();
 		} catch (char* msg) {
@@ -367,11 +367,11 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 			return;
 		}
 
-		LectureFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
-		LectureFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
-		tmpnoNervVH = LectureFichierVentHoles(gfd->fileNameVentHoles, &tmpquantVH, &tmpVentCentralNerv);
-		tmpnoNervD = LectureFichierDiagNervs(gfd->fileNameDiagNerv, &tmpquantDiag);
-		tmpReperPoints = LectureFichierReperPoints(gfd->fileNameRepPoints);
+		readFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
+		readFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
+		tmpnoNervVH = readFichierVentHoles(gfd->fileNameVentHoles, &tmpquantVH, &tmpVentCentralNerv);
+		tmpnoNervD = readFichierDiagNervs(gfd->fileNameDiagNerv, &tmpquantDiag);
+		tmpReperPoints = readFichierReperPoints(gfd->fileNameRepPoints);
 		tmpBallonement = readBallonementFromFile(gfd->ballonementPath);
 	} catch (char* sexception) {
 		printf ("\n Problem loading project: %s", sexception);
@@ -544,7 +544,7 @@ void readRepPoints(int /*control*/) {
         PtrfileName = fileName.GetBuffer(1);
         strcpy(fileNameRepPoints, PtrfileName);
         oldRP = ReperPoints;
-        ReperPoints = LectureFichierReperPoints(fileNameRepPoints);
+        ReperPoints = readFichierReperPoints(fileNameRepPoints);
         delete(oldRP);
         FicRepPoints->set_text(fileNameRepPoints);
     }
@@ -563,7 +563,7 @@ void readDiagNervs(int /*control*/) {
         strcpy(fileNameDiagNerv, PtrfileName);
         oldNoNervD = noNervD;
         
-        noNervD = LectureFichierDiagNervs(fileNameDiagNerv, &quantDiag);
+        noNervD = readFichierDiagNervs(fileNameDiagNerv, &quantDiag);
         delete(oldNoNervD);
         FicDiagNerv->set_text(fileNameDiagNerv);
     }
@@ -585,7 +585,7 @@ void readVentHoles(int /*control*/) {
         strcpy(fileNameVentHoles, PtrfileName);
         oldVH = noNervVH;
         VentCentralNerv = 0;
-        noNervVH = LectureFichierVentHoles(fileNameVentHoles, &quantVH, &VentCentralNerv);
+        noNervVH = readFichierVentHoles(fileNameVentHoles, &quantVH, &VentCentralNerv);
         delete(oldVH);
         FicVentHoles->set_text(fileNameVentHoles);
     }
@@ -604,7 +604,7 @@ void readProject(int /*control*/) {
         PtrfileName = fileName.GetBuffer(1);
         strcpy(fileNameProject, PtrfileName);
         oldWpp = gfd;
-        gfd = LectureWindPatternsProject(fileNameProject);
+        gfd = readWindPatternsProject(fileNameProject);
         LoadFromWindPatternsProject(gfd);
         delete(oldWpp);
         FicProject->set_text(fileNameProject);
@@ -625,18 +625,18 @@ void readForm(int /*control*/) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
         strcpy(fileNameForm, PtrfileName);
-        //lecture fichier de forme
+        //read fichier de forme
         //clearForm(F);
         oldF = F;
-        F = LectureFichierForm(fileNameForm);
+        F = readFichierForm(fileNameForm);
        //libere memoire ancienne forme
         delete(oldF);
         //maj interface GLUI
         FicForm->set_text(fileNameForm);
 
         //chargement profils
-        LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
-        LectureFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
+        readFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
+        readFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
         InterpoleProfilBout(&ExtProfBout, ExtProfCent);
         InterpoleProfilBout(&IntProfBout, IntProfCent);
         
@@ -672,17 +672,17 @@ void readForm2(int /*control*/) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
         strcpy(fileNameForm, PtrfileName);
-        //lecture fichier de forme
+        //read fichier de forme
         //clearForm(F);
         oldF = F;
-        F = LectureFichierForm2(fileNameForm);
+        F = readFichierForm2(fileNameForm);
         //libere memoire ancienne forme
         delete(oldF);
         //maj interface GLUI
         FicForm->set_text(fileNameForm);
         //chargement profils
-        LectureFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
-        LectureFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
+        readFichierProfil(F->m_strNomProfilCent.c_str(), &ExtProfCent, &IntProfCent);
+        readFichierProfil(F->m_strNomProfilBout.c_str(), &ExtProfBout, &IntProfBout);
         InterpoleProfilBout(&ExtProfBout, ExtProfCent);
         InterpoleProfilBout(&IntProfBout, IntProfCent);
         //par defaut pas de zoom, et axe automatique
@@ -3229,7 +3229,7 @@ int main(int argc, char** argv) {
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
 
     strcpy(fileNameProject, "f17project.wpp");
-    gfd = LectureWindPatternsProject(fileNameProject);
+    gfd = readWindPatternsProject(fileNameProject);
 
     LoadFromWindPatternsProject(gfd);
 

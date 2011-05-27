@@ -200,11 +200,27 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\commun\ballon.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\ballon.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\design.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\commun\design.h"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\dxf.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\dxf.h"
 			>
 		</File>
 		<File
@@ -229,6 +245,14 @@
 		</File>
 		<File
 			RelativePath="..\commun\fichier.h"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\form.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\form.h"
 			>
 		</File>
 		<File
@@ -312,6 +336,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\commun\patron.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\patron.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\patternsproject.cpp"
 			>
 			<FileConfiguration
@@ -384,6 +416,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\commun\pressure.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\pressure.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\profil.cpp"
 			>
 			<FileConfiguration
@@ -404,6 +444,14 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\commun\reper.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\reper.h"
+			>
+		</File>
+		<File
 			RelativePath="WindPatterns.cpp"
 			>
 			<FileConfiguration
@@ -422,6 +470,14 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\commun\xflr.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\commun\xflr.h"
+			>
 		</File>
 	</Files>
 	<Globals>
