@@ -371,3 +371,199 @@ ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, d
 */
 	return pgtmp;
 }
+
+void GetProfileXY(WindPatternsProject* gfd, Form* F, int nerv, int face, Matrix** XProf, Matrix** YProf) 
+{
+	//printf ("\n getProfileXY()");
+    Matrix *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+	//printf ("\n 1");
+    calcForm3D(F, 0, 0.0f,
+		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);
+	//printf ("\n 1.1");
+    double LongNerv = 100.0f;
+	//LongNerv = F->m_pProfils[nerv]->m_fLength;
+	LongNerv = 100.0f;
+	double coeffx = LongNerv/100.0f;
+	//coeffx = 1.0;
+	//printf ("\n 2");
+    double EpaiRel = 0.0f;
+    double m = -1.0f;
+    if (nerv != -1) {
+        EpaiRel = F->m_pProfils[nerv]->m_fWidth;
+        m = F->m_pProfils[nerv]->m_fMorph;
+    } else {
+        EpaiRel = F->m_pProfils[0]->m_fWidth;
+        m = 1.0f;
+    }
+	//printf ("\n 3");
+    double EpaiRelProfCent = EpaisseurRelative(gfd->ExtProfCent, gfd->IntProfCent);
+    double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
+	//printf ("\n inGetProfileXY: EpaiRelProfCent=%f", EpaiRelProfCent);
+	//printf ("\n inGetProfileXY: EpaiRelProfBout=%f", EpaiRelProfBout);
+    double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
+    double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
+	//printf ("\n coeffx=%f, coeffyCent=%f, coeffyBout=%f", coeffx, coeffyCent, coeffyBout);
+    double xp, yp;
+    int n = 0, j = 0;
+    if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
+	//printf ("\n 4");
+    if (face == 1) {
+        for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
+            xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
+            yp = gfd->ExtProfCent->Element(j, 1) * coeffyCent * m + gfd->ExtProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    } else {
+        for (j = 0; j < gfd->IntProfCent->GetLignes(); j++) {
+            xp = gfd->IntProfCent->Element(j, 0) * coeffx;
+            yp = gfd->IntProfCent->Element(j, 1) * coeffyCent * m + gfd->IntProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    }
+	//printf ("\n ..getProfileXY()");
+}
+
+ProfilGeom* getProfile(WindPatternsProject* gfd, Form* F, int nerv) {
+	//printf ("\n getProfileGeom()");
+	ProfilGeom* pg = new ProfilGeom();
+
+	Matrix* XExt, *YExt, *XInt, *YInt;
+	GetProfileXY(gfd, F, nerv, 1, &XExt, &YExt);
+	int n = XExt->GetLignes();
+	pg->ExtProf = new Matrix (n,2);
+	for (int i = 0; i < n; i++ ) {
+		pg->ExtProf->SetElement(i, 0, XExt->Element(i, 0));
+		pg->ExtProf->SetElement(i, 1, YExt->Element(i, 0));
+	}
+
+	GetProfileXY(gfd, F, nerv, 2, &XInt, &YInt);
+	n = XInt->GetLignes();
+	pg->IntProf = new Matrix (n,2);
+	for (int i = 0; i < n; i++ ) {
+		pg->IntProf->SetElement(i, 0, XInt->Element(i, 0));
+		pg->IntProf->SetElement(i, 1, YInt->Element(i, 0));
+	}
+	//printf ("\n ...getProfileGeom()");
+	return pg;
+}
+
+void GetMiddleProfile(WindPatternsProject* gfd, Form* F, int nerv1, int nerv2, int face, int realMashtab, Matrix** XProf, Matrix** YProf) {
+    /*Matrix *XExt, *YExt, *ZExt, *XInt, *YInt, *ZInt;
+    calcForm3D(F, 0, 0.0f,
+		gfd->ExtProfCent, gfd->IntProfCent, gfd->ExtProfBout, gfd->IntProfBout, &XExt, &YExt, &ZExt, &XInt, &YInt, &ZInt);*/
+    int i1 = nerv1;
+    int i2 = nerv2;
+	if (i1 == -1) i1 = 0;
+	if (i2 == -1) i2 = 0;
+
+	double LongNerv = 100.0f;
+	if (realMashtab == 1) {
+		LongNerv = 0.5f*(F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength);
+	} 
+    double EpaiRel = 0.0f;
+    double m = -1.0f;
+    if (i1 != -1) {
+        EpaiRel = 0.5f * (F->m_pProfils[i1]->m_fWidth + F->m_pProfils[i2]->m_fWidth);
+        m = 0.5f * (F->m_pProfils[i1]->m_fMorph + F->m_pProfils[i2]->m_fMorph);
+    } else {
+        EpaiRel = F->m_pProfils[0]->m_fWidth;
+        m = 1.0f;
+    }
+    double EpaiRelProfCent = EpaisseurRelative(gfd->ExtProfCent, gfd->IntProfCent);
+    double EpaiRelProfBout = EpaisseurRelative(gfd->ExtProfBout, gfd->IntProfBout);
+    double coeffyCent = LongNerv * EpaiRel / (EpaiRelProfCent * 100.0f);
+    double coeffyBout = LongNerv * EpaiRel / (EpaiRelProfBout * 100.0f);
+	double coeffx = LongNerv/100.0f;
+	//printf ("\n in getMiddleProfile() LongNerv=%f", LongNerv);
+    double xp, yp;
+    int n = 0, j = 0;
+    if (face == 1) n = gfd->ExtProfCent->GetLignes(); else n = gfd->IntProfCent->GetLignes();
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
+    if (face == 1) {
+        for (j = 0; j < gfd->ExtProfCent->GetLignes(); j++) {
+            xp = gfd->ExtProfCent->Element(j, 0) * coeffx;
+            yp = gfd->ExtProfCent->Element(j, 1) * coeffyCent * m + gfd->ExtProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    } else {
+        for (j = 0; j < gfd->IntProfCent->GetLignes(); j++) {
+            xp = gfd->IntProfCent->Element(j, 0) * coeffx;
+            yp = gfd->IntProfCent->Element(j, 1) * coeffyCent * m + gfd->IntProfBout->Element(j, 1) * coeffyBout * (1.0f - m);
+            (*XProf)->SetElement(j, 0, xp);
+            (*YProf)->SetElement(j, 0, yp);
+        }
+    }
+
+}
+
+void GetMiddleProfileBal(WindPatternsProject* gfd, Form* F, int nerv1, int nerv2, int face,  int realMashtab, Matrix** XProf, Matrix** YProf) {
+	double EpaiRel, xp, yp;
+	double EpaiRelProfCent, EpaiRelProfBout;
+	double coeffx, coeffy, coeffyCent, coeffyBout;
+	int i1, i2, j;
+	i1 = nerv1;
+	if (i1 == -1) i1=0;
+	i2 = nerv2;
+	if (i2 == -1) i2=0;
+    //bool isCenterPanel = (1 & forme->NbCaiss);
+	double LongNerv = 100.0f;
+	if (realMashtab == 1) {
+		LongNerv = (F->m_pProfils[i1]->m_fLength + F->m_pProfils[i2]->m_fLength) * 0.5f;
+	} 
+	EpaiRel = (F->m_pProfils[i1]->m_fWidth + F->m_pProfils[i2]->m_fWidth) * 0.5f;
+    if (i1 != -1) {
+        EpaiRel = 0.5f * (F->m_pProfils[i1]->m_fWidth + F->m_pProfils[i2]->m_fWidth);
+    } else {
+        EpaiRel = F->m_pProfils[0]->m_fWidth;
+    }
+	ProfilGeom* pgCur = getProfile(gfd, F, i1);
+	ProfilGeom* pgCurBal = getBalloneProfilGeom(pgCur, gfd->ballonement->kChord->Element(i1, 0), gfd->ballonement->kMf->Element(i1, 0), EpaiRel, gfd->ballonement->wN->Element(i1, 0), gfd->ballonement->dyw->Element(i1, 0));
+	double l = abs (pgCur->ExtProf->Element(pgCur->ExtProf->GetLignes() - 1, 0) - pgCur->ExtProf->Element(0, 0));
+	double xv = l * (100.0f - (gfd->PosPinceBF[0])) * 0.01f;
+	ProfilGeom* pg = getProfilGeomTailDown(pgCurBal, pgCur, xv, gfd->ballonement->powerTail->Element(i1, 0));
+	coeffx = LongNerv/100.0f;
+	double EpaiRelCur = EpaisseurRelative(pgCur->ExtProf, pgCur->IntProf);
+	coeffy = LongNerv*EpaiRel/(EpaiRelCur*100.0f);
+
+    int n = 0;
+    if (face == 1) n = pg->ExtProf->GetLignes(); else n = pg->IntProf->GetLignes();
+    *XProf = new Matrix(n, 1);
+    *YProf = new Matrix(n, 1);
+	if (face == 1) {
+		for (j=0; j < pg->ExtProf->GetLignes(); j++)
+		{
+			xp = pg->ExtProf->Element(j, 0) * coeffx;
+			yp = pg->ExtProf->Element(j, 1) * coeffy;
+			(*XProf)->SetElement(j, 0, xp);
+			(*YProf)->SetElement(j, 0, yp);
+		}
+	} else {
+		for (j=0; j < pg->IntProf->GetLignes(); j++)
+		{
+			xp = pg->IntProf->Element(j, 0) * coeffx;
+			yp = pg->IntProf->Element(j, 1) * coeffy;
+			(*XProf)->SetElement(j, 0, xp);
+			(*YProf)->SetElement(j, 0, yp);
+		}
+	}
+}
+void makePosProfile(Matrix* Ext, Matrix* Int, double percent, Matrix** ExtRes) {
+    //printf ("\n makePosProfile()");
+    //IntRes = CloneMat(Int);
+    (*ExtRes) = CloneMat(Ext);
+    double perc = percent*0.01f;
+    double yInt, yExt;
+    for (int i = 0; i < Ext->GetLignes(); i++) {
+        yExt = Ext->Element(i, 1);
+        yInt = InterpLinX(Int, Ext->Element(i,0));
+        (*ExtRes)->SetElement(i, 1, yInt + perc*(yExt-yInt));
+        //printf ("\n%d -> (%f, %f) => (%f,%f)", i, Ext->Element(i,0), Ext->Element(i,1), (*ExtRes)->Element(i,0), (*ExtRes)->Element(i,1));
+    }
+    //printf ("\n ...makePosProfile()");
+}

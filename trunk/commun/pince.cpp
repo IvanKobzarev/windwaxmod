@@ -1120,3 +1120,316 @@ void goCalcPinceLen(WindPatternsProject* gfd, int noNerv, int face, double *len)
 
     delete (long1);
 }
+
+void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrix** fl, double *pRA, double *pRF, Matrix** fr, double *len) {
+    Matrix * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
+    Matrix * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
+    Matrix * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
+    bool showPoints = false;
+    int i = 0;
+    calcPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
+            noNerv, false, face, face, 0.0f, 100.0f,
+            &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
+            &X1[0], &Y1[0], &Z1[0], &P1[0],
+            &X1[1], &Y1[1], &Z1[1], &P1[1]);
+    Matrix *lenm1 = Longueur(Xd1[1], Yd1[1]);
+    double len1 = lenm1->Element(lenm1->GetLignes() - 1, 0);
+    double w1, w2;
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
+    calcPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
+            noNerv + 1, false, face, face, 0.0f, 100.0f,
+            &Xd2[0], &Yd2[0], &Xd2[1], &Yd2[1],
+            &X2[0], &Y2[0], &Z2[0], &P2[0],
+            &X2[1], &Y2[1], &Z2[1], &P2[1]);
+    Matrix *lenm2 = Longueur(Xd2[0], Yd2[0]);
+    double len2 = lenm2->Element(lenm2->GetLignes() - 1, 0);
+    calcWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
+
+    double ppA = gfd->PosPinceBA[0];
+    double apAPercInit = gfd->AmpPinceBA[0];
+    double ppF = gfd->PosPinceBF[0];
+    double apFPercInit = gfd->AmpPinceBF[0];
+
+    Pince* pince1 = getPince(gfd, noNerv - 1, noNerv, face);
+    (*fl) = pince1->function2;
+    Pince* pince2 = getPince(gfd, noNerv, noNerv + 1, face);
+    (*fr) = pince2->function1;
+
+    double apASumAbs = pince1 ->AmpA + pince2->AmpA;
+    double apFSumAbs = pince1 ->AmpF + pince2->AmpF;
+
+    double middleInit = w1 / (w1 + w2);
+    double apAAbs1, apFAbs1, apAAbs2, apFAbs2;
+    double middle = 0.0f;
+    Matrix *long1p1, *long2p0;
+    double minDelta = 1000000.0f, minMiddle = -1.0f, minDeltaMiddleInit = 1000000.0f, minlp1 = 1000000.0f, minlp2 = 1000000.0f;
+    double l1p1 = -1.0f, l2p0 = -1.0f, delta = 0.0f, deltaMiddleInit = 0.0f, mina1, mina2;
+
+    for (middle = 0.0f; middle <= 1.0f; middle += HACCUR) {
+        apAAbs1 = apASumAbs*middle;
+        apAAbs2 = apASumAbs - apAAbs1;
+
+        apFAbs1 = apFSumAbs*middle;
+        apFAbs2 = apFSumAbs - apFAbs1;
+
+        calcPinceAloneAbsFunc(Xd1[1], Yd1[1], Xd1[0], Yd1[0], X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
+                pince1, apAAbs1, apFAbs1, 1,
+                &Xd1p[1], &Yd1p[1], &newP1[1]);
+
+        long1p1 = Longueur(Xd1p[1], Yd1p[1]);
+        l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
+
+        calcPinceAloneAbsFunc(Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
+                pince2, apAAbs2, apFAbs2, 0,
+                &Xd2p[0], &Yd2p[0], &newP2[0]);
+        long2p0 = Longueur(Xd2p[0], Yd2p[0]);
+
+        l2p0 = long2p0->Element(long2p0->GetLignes() - 1, 0);
+        delta = fabs(l1p1 - l2p0);
+        deltaMiddleInit = fabs(middle - middleInit);
+
+        if (minDelta < (gfd->tochnostLayout2 * 0.001f)) {
+            if (deltaMiddleInit < minDeltaMiddleInit) {
+                minDelta = delta;
+                minlp1 = l1p1;
+                minMiddle = middle;
+                minDeltaMiddleInit = deltaMiddleInit;
+                mina1 = apAAbs1;
+                mina2 = apAAbs2;
+                minlp2 = l2p0;
+            }
+        } else {
+            if (delta < minDelta) {
+                minDelta = delta;
+                minlp1 = l1p1;
+                minMiddle = middle;
+                minDeltaMiddleInit = deltaMiddleInit;
+                mina1 = apAAbs1;
+                mina2 = apAAbs2;
+                minlp2 = l2p0;
+            }
+        }
+        delete (long1p1);
+        delete (Xd1p[1]);
+        delete (Yd1p[1]);
+        delete (long2p0);
+        delete (Xd2p[0]);
+        delete (Yd2p[0]);
+        delete (newP1[1]);
+        delete (newP2[0]);
+    }
+    getLayoutLogger()->logprintf("\n%2df%d D=%6.4f(M=%5.3f)[%5.3f] %8.5f/%8.5f l%8.5f a%6.4f a%6.4f",
+            noNerv, face, (minDelta * 1000), minMiddle, minMiddle - middleInit, minlp1, minlp2, len1, mina1, mina2);
+    if (minDelta < (gfd->tochnostLayout2 * 0.001f)) getLayoutLogger()->logprintf(" OK:)"); else getLayoutLogger()->logprintf(" BAD!");
+    *len = (minlp1 + minlp2) * 0.5f;
+
+    *pLA = apASumAbs*minMiddle;
+    *pRA = apASumAbs * (1.0f - minMiddle);
+    *pLF = apFSumAbs*minMiddle;
+    *pRF = apFSumAbs * (1.0f - minMiddle);
+    delete (X1[0]);
+    delete (Y1[0]);
+    delete (Z1[0]);
+    delete (P1[0]);
+    delete (X1[1]);
+    delete (Y1[1]);
+    delete (Z1[1]);
+    delete (P1[1]);
+    delete (X2[0]);
+    delete (Y2[0]);
+    delete (Z2[0]);
+    delete (P2[0]);
+    delete (X2[1]);
+    delete (Y2[1]);
+    delete (Z2[1]);
+    delete (P2[1]);
+    delete (Xd1[0]);
+    delete (Yd1[0]);
+    delete (Xd2[0]);
+    delete (Yd2[0]);
+    delete (Xd1[1]);
+    delete (Yd1[1]);
+    delete (Xd2[1]);
+    delete (Yd2[1]);
+    delete (lenm1);
+    delete (lenm2);
+}
+
+
+void goCalcNervureWithPince(WindPatternsProject* gfd, int noNerv1, int face1, int noNerv2, int face2, double lp1, double lp2, double *rcoeff) {
+    Matrix * Xd[2], *Yd[2], *newXd[2], *newYd[2];
+    Matrix * X[2], *Y[2], *Z[2], *P[2];
+    calcPatron(gfd, noNerv1, false, face1, face1, 0.0f, 100.0f,
+            noNerv2, false, face2, face2, 0.0f, 100.0f,
+            &Xd[0], &Yd[0], &Xd[1], &Yd[1],
+            &X[0], &Y[0], &Z[0], &P[0],
+            &X[1], &Y[1], &Z[1], &P[1]);
+    Matrix *long1 = Longueur(Xd[0], Yd[0]);
+    double len1 = long1->Element(long1->GetLignes() - 1, 0);
+    Matrix *long2 = Longueur(Xd[1], Yd[1]);
+    double len2 = long2->Element(long2->GetLignes() - 1, 0);
+
+    //if (DEBUG) printf("\n in (%f %f)", len1, len2);
+    //if (DEBUG) printf(" out (%f %f)", lp1, lp2);
+    getLayoutLogger()->logprintf("\n(%d, %d) _d1=%f _d2=%f", noNerv1, noNerv2, 1000 * (lp1 - len1), 1000 * (lp2 - len2));
+
+    double coeff1 = lp1 / len1;
+    double coeff2 = lp2 / len2;
+    double coeff = (coeff1 + coeff2) / 2.0f;
+    newXd[0] = MultReelMat(Xd[0], coeff);
+    newYd[0] = MultReelMat(Yd[0], coeff);
+    newXd[1] = MultReelMat(Xd[1], coeff);
+    newYd[1] = MultReelMat(Yd[1], coeff);
+    delete (long1);
+    delete (long2);
+    long1 = Longueur(newXd[0], newYd[0]);
+    len1 = long1->Element(long1->GetLignes() - 1, 0);
+    long2 = Longueur(newXd[1], newYd[1]);
+    len2 = long2->Element(long2->GetLignes() - 1, 0);
+    getLayoutLogger()->logprintf("... d1=%f d2=%f", 1000 * (lp1 - len1), 1000 * (lp2 - len2));
+    if (1000 * (lp1 - len1) < gfd->tochnostLayout2) getLayoutLogger()->logprintf(" OK");
+    else getLayoutLogger()->logprintf(" BAD");
+    if (1000 * (lp2 - len2) < gfd->tochnostLayout2) getLayoutLogger()->logprintf(" OK");
+    else getLayoutLogger()->logprintf(" BAD");
+    delete (long1);
+    delete (long2);
+    *rcoeff = coeff;
+}
+
+
+
+void goCalcIndepPince(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, double *pRA, double *pRF, double *len) {
+    double mode1 = gfd->modePinces;
+    double mode2 = gfd->modePinces;
+    Matrix * Xd1[2], *Yd1[2], *Xd1p[2], *Yd1p[2];
+    Matrix * Xd2[2], *Yd2[2], *Xd2p[2], *Yd2p[2];
+    Matrix * X1[2], *Y1[2], *Z1[2], *P1[2], *newP1[2];
+    Matrix * X2[2], *Y2[2], *Z2[2], *P2[2], *newP2[2];
+    bool showPoints = false;
+    int i = 0;
+    calcPatron(gfd, noNerv - 1, false, face, face, 0.0f, 100.0f,
+            noNerv, false, face, face, 0.0f, 100.0f,
+            &Xd1[0], &Yd1[0], &Xd1[1], &Yd1[1],
+            &X1[0], &Y1[0], &Z1[0], &P1[0],
+            &X1[1], &Y1[1], &Z1[1], &P1[1]);
+    Matrix *lenm1 = Longueur(Xd1[1], Yd1[1]);
+    double len1 = lenm1->Element(lenm1->GetLignes() - 1, 0);
+    double w1, w2;
+    calcWidth(Xd1[0], Yd1[0], Xd1[1], Yd1[1], &w1);
+    calcPatron(gfd, noNerv, false, face, face, 0.0f, 100.0f,
+            noNerv + 1, false, face, face, 0.0f, 100.0f,
+            &Xd2[0], &Yd2[0], &Xd2[1], &Yd2[1],
+            &X2[0], &Y2[0], &Z2[0], &P2[0],
+            &X2[1], &Y2[1], &Z2[1], &P2[1]);
+    Matrix *lenm2 = Longueur(Xd2[0], Yd2[0]);
+    double len2 = lenm2->Element(lenm2->GetLignes() - 1, 0);
+    calcWidth(Xd2[0], Yd2[0], Xd2[1], Yd2[1], &w2);
+
+    double ppA = gfd->PosPinceBA[0];
+    double apAPercInit = gfd->AmpPinceBA[0];
+    double ppF = gfd->PosPinceBF[0];
+    double apFPercInit = gfd->AmpPinceBF[0];
+
+    double apASumAbs = (w1 + w2) * apAPercInit / 100.0f;
+    double apFSumAbs = (w1 + w2) * apFPercInit / 100.0f;
+
+    double middleInit = w1 / (w1 + w2);
+    double apAAbs1, apFAbs1, apAAbs2, apFAbs2;
+    double middle = 0.0f;
+    Matrix *long1p1, *long2p0;
+    double minDelta = 1000000.0f, minMiddle = -1.0f, minDeltaMiddleInit = 1000000.0f, minlp1 = 1000000.0f, minlp2 = 1000000.0f;
+    double l1p1 = -1.0f, l2p0 = -1.0f, delta = 0.0f, deltaMiddleInit = 0.0f, mina1, mina2;
+    for (middle = 0.0f; middle <= 1.0f; middle += 0.001f) {
+        apAAbs1 = apASumAbs*middle;
+        apAAbs2 = apASumAbs - apAAbs1;
+
+        apFAbs1 = apFSumAbs*middle;
+        apFAbs2 = apFSumAbs - apFAbs1;
+
+        calcPinceAloneAbs(gfd, Xd1[1], Yd1[1], Xd1[0], Yd1[0],
+                X1[1], Y1[1], Z1[1], P1[1], X1[0], Y1[0], Z1[0], P1[0],
+                ppA, apAAbs1, ppF, apFAbs1, mode1, &Xd1p[1], &Yd1p[1], &newP1[1]);
+
+        long1p1 = Longueur(Xd1p[1], Yd1p[1]);
+        l1p1 = long1p1->Element(long1p1->GetLignes() - 1, 0);
+        calcPinceAloneAbs(gfd, Xd2[0], Yd2[0], Xd2[1], Yd2[1], X2[0], Y2[0], Z2[0], P2[0], X2[1], Y2[1], Z2[1], P2[1],
+                ppA, apAAbs2, ppF, apFAbs2, mode2, &Xd2p[0], &Yd2p[0], &newP2[0]);
+        long2p0 = Longueur(Xd2p[0], Yd2p[0]);
+        l2p0 = long2p0->Element(long2p0->GetLignes() - 1, 0);
+        delta = fabs(l1p1 - l2p0);
+        deltaMiddleInit = fabs(middle - middleInit);
+
+
+        if (minDelta < (gfd->tochnostLayout2 / 1000.0f)) {
+            if (deltaMiddleInit < minDeltaMiddleInit) {
+                minDelta = delta;
+                minlp1 = l1p1;
+                minMiddle = middle;
+                minDeltaMiddleInit = deltaMiddleInit;
+                mina1 = apAAbs1;
+                mina2 = apAAbs2;
+                minlp2 = l2p0;
+            }
+        } else {
+            if (delta < minDelta) {
+                minDelta = delta;
+                minlp1 = l1p1;
+                minMiddle = middle;
+                minDeltaMiddleInit = deltaMiddleInit;
+                mina1 = apAAbs1;
+                mina2 = apAAbs2;
+                minlp2 = l2p0;
+            }
+        }
+
+        //printf ("\n [%f] delta=%f  %f/%f", middle, delta,l1p1,l2p0);
+        delete (long1p1);
+        delete (Xd1p[1]);
+        delete (Yd1p[1]);
+        delete (long2p0);
+        delete (Xd2p[0]);
+        delete (Yd2p[0]);
+        delete (newP1[1]);
+        delete (newP2[0]);
+    }
+    getLayoutLogger()->logprintf("\n%2df%d %6.4f(%5.3f)[%5.3f] %9.6f/%9.6f l%9.6f a%6.4f a%6.4f",
+            noNerv, face, (minDelta * 1000), minMiddle, minMiddle - middleInit, minlp1, minlp2, len1, mina1, mina2);
+    if (minDelta < (0.5 * 0.001)) {
+        getLayoutLogger()->logprintf(" OK:)");
+    } else {
+        getLayoutLogger()->logprintf(" BAD!");
+    }
+    *len = (minlp1 + minlp2) / 2.0f;
+    *pLA = apASumAbs*minMiddle;
+    *pRA = apASumAbs - *pLA;
+    *pLF = apFSumAbs*minMiddle;
+    *pRF = apFSumAbs - *pLF;
+
+    delete (X1[0]);
+    delete (Y1[0]);
+    delete (Z1[0]);
+    delete (P1[0]);
+    delete (X1[1]);
+    delete (Y1[1]);
+    delete (Z1[1]);
+    delete (P1[1]);
+    delete (X2[0]);
+    delete (Y2[0]);
+    delete (Z2[0]);
+    delete (P2[0]);
+    delete (X2[1]);
+    delete (Y2[1]);
+    delete (Z2[1]);
+    delete (P2[1]);
+    delete (Xd1[0]);
+    delete (Yd1[0]);
+    delete (Xd2[0]);
+    delete (Yd2[0]);
+    delete (Xd1[1]);
+    delete (Yd1[1]);
+    delete (Xd2[1]);
+    delete (Yd2[1]);
+    delete (lenm1);
+    delete (lenm2);
+}

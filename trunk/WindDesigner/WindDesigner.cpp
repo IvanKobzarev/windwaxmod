@@ -394,7 +394,7 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 	int tmpVentCentralNerv=0;
 
 	try {
-		tmpF = LectureFichierForm(gfd->fileNameForm);
+		tmpF = readFichierForm(gfd->fileNameForm);
 		try {
 		tmpF->Validate();
 		} catch (char* msg) {
@@ -402,8 +402,8 @@ void LoadFromWindPatternsProject(WindPatternsProject* gfd) {
 			return;
 		}
 
-		LectureFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
-		LectureFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
+		readFichierProfil(tmpF->m_strNomProfilCent.c_str(), &tmpExtProfCent, &tmpIntProfCent);
+		readFichierProfil(tmpF->m_strNomProfilBout.c_str(), &tmpExtProfBout, &tmpIntProfBout);
 
 
 	} catch (char* sexception) {
@@ -489,7 +489,7 @@ void readProject(int /*control*/) {
         PtrfileName = fileName.GetBuffer(1);
         strcpy(fileNameProject, PtrfileName);
         oldWpp = gfd;
-        gfd = LectureWindPatternsProject(fileNameProject);
+        gfd = readWindPatternsProject(fileNameProject);
         LoadFromWindPatternsProject(gfd);
         delete(oldWpp);
         FicProject->set_text(fileNameProject);
@@ -658,7 +658,7 @@ int main(int argc, char** argv)
     glui->add_column_to_panel(panelProject, false);
 	// loading Default project
 	strcpy(fileNameProject, "f17project.wpp");
-	gfd = LectureWindPatternsProject(fileNameProject);
+	gfd = readWindPatternsProject(fileNameProject);
     LoadFromWindPatternsProject(gfd);
     FicProject = glui->add_statictext_to_panel(panelProject, "???");
     FicProject->set_text(fileNameProject);
