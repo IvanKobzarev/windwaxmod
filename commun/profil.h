@@ -1,5 +1,4 @@
-#ifndef __PROFIL_H__
-#define __PROFIL_H__
+#pragma once
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -59,5 +58,3 @@ public:
 ProfilGeom* getBalloneProfilGeom(ProfilGeom* pg0, double kChord, double kMf, double w0, double wN, double dyw);
 
 ProfilGeom* getProfilGeomTailDown(ProfilGeom* pg1, ProfilGeom* pg0, double xv, double power);
-
-#endif

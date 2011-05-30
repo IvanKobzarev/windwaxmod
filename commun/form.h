@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "profil.h"
 #include "plot.h"
 #include "pince.h"
 #include "matrice.h"
@@ -17,6 +18,7 @@ class KiteDesign;
 class KiteDesignElement;
 class Line;
 class Layout;
+class Form3D;
 
 class Form
 {
@@ -98,3 +100,4 @@ class Ballonement
 		Matrix* powerTail;
 		void loadFromFile(const char* fileName);
 };
+

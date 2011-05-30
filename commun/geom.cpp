@@ -1,5 +1,3 @@
-#pragma warning(disable:4514)
-
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>

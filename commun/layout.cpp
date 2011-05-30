@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include "layout.h"
+#include "dxf.h"
 #include "geom.h"
 #include "fichier.h"
 #include "plot.h"
@@ -16,7 +17,7 @@
 #include "profil.h"
 #include "matrice.h"
 #include "logger.h"
-
+#include "patron.h"
 
 #define sqr(f1) ((f1)*(f1))
 #define pi	3.141592675f

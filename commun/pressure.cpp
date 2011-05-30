@@ -1,3 +1,25 @@
+#include <math.h>
+
+#include "pressure.h"
+
+#include "plot.h"
+#include "layout.h"
+#include "matrice.h"
+#include "geom.h"
+#include "fichier.h"
+#include "profil.h"
+#include "patternsproject.h"
+
+#define sqr(l1) ((l1)*(l1))
+#define pi	3.141592675f
+
+#ifndef DEG2RAD
+#define DEG2RAD	(3.141592675f/180.0f)
+#endif
+
+#ifndef DEBUG
+#define DEBUG false
+#endif
 
 /*******************************************************************************
 *
@@ -21,9 +43,6 @@
 *     Cp         incompressible pressure coefficient at panel center
 *     
 ********************************************************************************/
-
-// version originale en fortran, traduit en C et Matlab par Thierry P�bayle, 2001
-// function [X,Y,Cp]=LVFoil(XB,YB,alphaD);
 
 void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matrix **Cp )
 {
@@ -271,16 +290,9 @@ void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matri
 
 
 	//liberation matrices de calc
-
 	delete(S); delete(THETA); delete(SINT); delete(COST);
-
 	delete(CN1); delete(CN2); delete(CT1); delete(CT2);
-
 	delete(AN); delete(AT); delete(RHS); delete(XX);
-
 	delete(V);
-
-
-
 }
 

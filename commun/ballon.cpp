@@ -1,3 +1,4 @@
+#include "ballon.h"
 
 void calcForm3DBallonement
 				(WindPatternsProject* gfd, Form *forme, int isPercent, double percent,

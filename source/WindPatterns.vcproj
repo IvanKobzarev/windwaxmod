@@ -444,6 +444,10 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\commun\profil.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\reper.cpp"
 			>
 		</File>

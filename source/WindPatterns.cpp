@@ -22,7 +22,7 @@
 #include "../commun/pince.h"
 #include "../commun/layout.h"
 #include "../commun/logger.h"
-
+#include "../commun/dxf.h"
 
 #include "GL/glui.h"
 #include "GL/glut.h"

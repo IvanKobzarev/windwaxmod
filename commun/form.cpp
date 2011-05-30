@@ -1,3 +1,6 @@
+#include "form.h"
+#include "matrice.h"
+
 Form::Form() 
 	: m_pProfils( NULL ), m_nbProfils(0)
 {

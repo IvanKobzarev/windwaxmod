@@ -1,3 +1,10 @@
+#pragma once
+
+#include "form.h"
+#include "ballon.h"
+#include "patternsproject.h"
+#include "design.h"
+
 
 typedef struct InfoForm TInfoForm;
 

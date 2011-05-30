@@ -1,3 +1,6 @@
+#include "reper.h"
+#include "logger.h"
+
 Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix* P, 
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {

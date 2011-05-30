@@ -1,3 +1,17 @@
+#include "patron.h"
+
+#include "matrice.h"
+#include "geom.h"
+#include "plot.h"
+#include "patternsproject.h"
+
+#define sqr(l1) ((l1)*(l1))
+#define pi	3.141592675f
+
+#ifndef DEG2RAD
+#define DEG2RAD	(3.141592675f/180.0f)
+#endif
+
 
 void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 					Matrix *Yd1, Matrix *P1,
