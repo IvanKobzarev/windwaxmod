@@ -1,6 +1,5 @@
-
-
 #pragma warning(disable:4514)
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
@@ -10,6 +9,8 @@
 #include "pince.h"
 #include "geom.h"
 #include "layout.h"
+#include "logger.h"
+
 #define sqr(f1) ((f1)*(f1))
 #define pi	3.141592675f
 
@@ -18,7 +19,7 @@
 #endif
 
 
-Pince :: Pince( int n1, int n2 ) : nerv1(n1), nerv2(n2)
+Pince::Pince( int n1, int n2 ) : nerv1(n1), nerv2(n2)
 {
     diffAmps=false;
     debug=false;

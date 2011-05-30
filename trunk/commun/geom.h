@@ -1,5 +1,4 @@
-#ifndef __GEOM_H__
-#define __GEOM_H__
+#pragma once
 
 #define NO 0
 #define ONE 1
@@ -123,4 +122,6 @@ double dist3d(double x1, double y1, double z1, double x2, double y2, double z2);
 double calcCourbeLength(Matrix* X, Matrix* Y);
 
 int pointAtSegment(double x, double y, double x1, double y1, double x2, double y2 );
-#endif
+
+void makeEqualSize(Matrix** X0,Matrix** Y0, Matrix** Z0,Matrix** P0,
+				   Matrix** X1,Matrix** Y1, Matrix** Z1,Matrix** P1);

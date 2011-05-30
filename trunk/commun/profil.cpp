@@ -1,4 +1,5 @@
 #include "profil.h"
+#include "form.h"
 
 Profil::Profil()
 {

@@ -1,7 +1,3 @@
-/**************************************
-* gestion chargement divers fichiers
-* forme ,profil, patrons ...
-***************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,10 +10,11 @@
 
 using namespace std;
 
-#include "fichier.h"
 #include "profil.h"
 #include "geom.h"
 #include "design.h"
+#include "form.h"
+#include "fichier.h"
 
 #define sqr(f1) ((f1)*(f1))
 #define CHISLOPI	3.141592675f
@@ -25,6 +22,8 @@ using namespace std;
 #ifndef DEBUG
 #define DEBUG false
 #endif
+
+#define NO_VERSION 1
 
 void writeFichierPolyDXFDelta(FILE *fid, TAxe *axe, TAxe *axe2, int rep, TAxe *axeR, int vent, TAxe *axeC, int num, TAxe *axeT, double dx, double dy, double dz, int n );
 
@@ -57,9 +56,6 @@ bool TrouveMotDansFichierTexte(FILE* fid, char* Mot)
 
 
 
-/************************/
-/* readFichierProfil */
-/************************/
 
 KiteDesign* readKiteDesignFromFile(const char* FilePath) {
 	cout << "readKiteDesignFromFile: " << FilePath << endl;
@@ -276,9 +272,6 @@ int* readFichierVentHoles(char* NomFic, int* quant, int* central) {
     return m;
 }
 
-/***********************/
-/* readFichierReperPoints */
-/***********************/
 
 Matrix** readFichierReperPoints(char* NomFic) {
     FILE *fid;
@@ -841,9 +834,6 @@ Form* readFichierForm(char* NomFic)
 }
 
 
-/***********************/
-/* readFichierForm2 */
-/***********************/
 
 Form* readFichierForm2(char* NomFic)
 
@@ -1163,9 +1153,6 @@ Form* readFichierForm2(char* NomFic)
 }
 
 
-/************************/
-/* writeFichierForm */
-/************************/
 
 void writeFichierForm(char *fileName, Form *f)
 
@@ -1251,9 +1238,6 @@ void writeFichierForm(char *fileName, Form *f)
 	}
 }
 
-/************************/
-/* writeFichierForm2 */
-/************************/
 
 void writeFichierForm2(char *fileName, Form *f)
 {

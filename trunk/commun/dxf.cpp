@@ -1,7 +1,26 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <string>
+#include <math.h>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 
-/*****************/
-/* EcritLigneDXF */
-/*****************/
+using namespace std;
+
+#include "dxf.h"
+#include "profil.h"
+#include "geom.h"
+#include "design.h"
+#include "form.h"
+
+#define sqr(f1) ((f1)*(f1))
+#define CHISLOPI	3.141592675f
+
+#ifndef DEBUG
+#define DEBUG false
+#endif
 
 void EcritLigneDXF(FILE *fid, char *nom, int en3d,
 				   double x1, double y1, double z1,
@@ -12,27 +31,17 @@ void EcritLigneDXF(FILE *fid, char *nom, int en3d,
 	fprintf(fid,"11\n%3.3f\n21\n%3.3f\n", x2*1000.0f, y2*1000.0f);
 	if(en3d) fprintf(fid,"31\n%3.3f\n", z2*1000.0f);
 }
-/*****************/
-/* EcritPolyBeginDXF */
-/*****************/
 
 void EcritPolyBeginDXF(FILE *fid, char *nom)
 {
 	fprintf(fid,"0\nPOLYLINE\n8\n%s\n66\n1\n70\n1\n", nom);
 }
-/*****************/
-/* EcritPolyEndDXF */
-/*****************/
 
 void EcritPolyEndDXF(FILE *fid, char *nom)
 {
 	fprintf(fid,"0\nSEQEND\n", nom);
 }
 
-
-/*****************/
-/* EcritPolyVertexDXF */
-/*****************/
 
 void EcritPolyVertexDXF(FILE *fid, char *nom, int en3d,
 				   double x1, double y1, double z1)
@@ -41,11 +50,6 @@ void EcritPolyVertexDXF(FILE *fid, char *nom, int en3d,
 	if(en3d) fprintf(fid,"30\n%3.3f\n", z1*1000.0f);
 }
 
-
-
-/**********************/
-/* writeFichierDXF */
-/**********************/
 
 void writeFichierDXF(char *fileName, TAxe *axe)
 
