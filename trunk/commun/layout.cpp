@@ -537,6 +537,66 @@ void preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd,
 
 }
 
+
+void prepareKlapan(WindPatternsProject* gfd, Layout* layout, int i) {
+    if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+        if (gfd->LayoutKlapans) {
+            if (gfd->VentHolesDouble){
+                KlapanLayoutElement* le4 = new KlapanLayoutElement();
+                le4->side=INT_SIDE;
+                le4->n1 = i;
+                le4->n2 = i+1;
+                le4->s1 = false;
+                le4->s2 = false;
+                le4->posKlapanIntDeb=0.0f;
+                le4->posKlapanFin=gfd->PosKlapanFin;
+                le4->isPince = 0;
+                le4->isKlapan = 1;
+		        le4->fd1 = 2;
+		        le4->fd2 = 2;
+		        le4->ff1 = 2;
+		        le4->ff2 = 2;
+                preparePanelLayoutElementCoeff(le4, gfd, layout);
+                layout->klapans.push_back(le4);
+            }
+
+            KlapanLayoutElement* le5 = new KlapanLayoutElement();
+            le5->side=INT_SIDE;
+            le5->n1 = i;
+            le5->n2 = i+1;
+            le5->s1 = false;
+            le5->s2 = false;
+            le5->posKlapanIntDeb=gfd->VentHolesDeb;
+            le5->posKlapanFin=gfd->PosKlapanFin;
+            le5->isPince = 0;
+            le5->isKlapan = 1;
+	        le5->fd1 = 2;
+	        le5->fd2 = 2;
+	        le5->ff1 = 2;
+	        le5->ff2 = 2;
+            preparePanelLayoutElementCoeff(le5, gfd, layout);
+            layout->klapans.push_back(le5);
+
+            KlapanLayoutElement* le6 = new KlapanLayoutElement();
+            le6->side=INT_SIDE;
+            le6->n1 = i;
+            le6->n2 = i+1;
+            le6->s1 = false;
+            le6->s2 = false;
+            le6->posKlapanIntDeb=gfd->VentHolesFin;
+            le6->posKlapanFin=gfd->PosKlapanFin;
+            le6->isPince = 0;
+            le6->isKlapan = 1;
+	        le6->fd1 = 2;
+	        le6->fd2 = 2;
+	        le6->ff1 = 2;
+	        le6->ff2 = 2;
+            preparePanelLayoutElementCoeff(le6, gfd, layout);
+            layout->klapans.push_back(le6);
+
+        }
+    }
+}
 void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
     PanelLayoutElement* le1 = new PanelLayoutElement();
     le1->side=INT_SIDE;
@@ -664,62 +724,6 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         }
         preparePanelLayoutElementCoeff(le3, gfd, layout);
         layout->panelsInt.push_back(le3);
-
-        if (gfd->LayoutKlapans) {
-            if (gfd->VentHolesDouble){
-                KlapanLayoutElement* le4 = new KlapanLayoutElement();
-                le4->side=INT_SIDE;
-                le4->n1 = i;
-                le4->n2 = i+1;
-                le4->s1 = false;
-                le4->s2 = false;
-                le4->posKlapanIntDeb=0.0f;
-                le4->posKlapanFin=gfd->PosKlapanFin;
-                le4->isPince = 0;
-                le4->isKlapan = 1;
-			    le4->fd1 = 2;
-			    le4->fd2 = 2;
-			    le4->ff1 = 2;
-			    le4->ff2 = 2;
-                preparePanelLayoutElementCoeff(le4, gfd, layout);
-                layout->klapans.push_back(le4);
-            }
-                KlapanLayoutElement* le5 = new KlapanLayoutElement();
-                le5->side=INT_SIDE;
-                le5->n1 = i;
-                le5->n2 = i+1;
-                le5->s1 = false;
-                le5->s2 = false;
-                le5->posKlapanIntDeb=gfd->VentHolesDeb;
-                le5->posKlapanFin=gfd->PosKlapanFin;
-                le5->isPince = 0;
-                le5->isKlapan = 1;
-			    le5->fd1 = 2;
-			    le5->fd2 = 2;
-			    le5->ff1 = 2;
-			    le5->ff2 = 2;
-                preparePanelLayoutElementCoeff(le5, gfd, layout);
-                layout->klapans.push_back(le5);
-
-                KlapanLayoutElement* le6 = new KlapanLayoutElement();
-                le6->side=INT_SIDE;
-                le6->n1 = i;
-                le6->n2 = i+1;
-                le6->s1 = false;
-                le6->s2 = false;
-                le6->posKlapanIntDeb=gfd->VentHolesFin;
-                le6->posKlapanFin=gfd->PosKlapanFin;
-                le6->isPince = 0;
-                le6->isKlapan = 1;
-			    le6->fd1 = 2;
-			    le6->fd2 = 2;
-			    le6->ff1 = 2;
-			    le6->ff2 = 2;
-                preparePanelLayoutElementCoeff(le6, gfd, layout);
-                layout->klapans.push_back(le6);
-
-        }
-
     }
 }
 
@@ -1449,6 +1453,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
                 */
             } else {
                 preparePanelInt(gfd, layout, i);
+                prepareKlapan(gfd, layout, i);
 /*
                 if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
                     tpF1 = gfd->VentHolesFin;
