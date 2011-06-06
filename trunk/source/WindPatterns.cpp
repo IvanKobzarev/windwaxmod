@@ -952,11 +952,6 @@ void ExportWpa( int ) //
 	}*/
 }
 
-
-/*************/
-/* save    */
-/*************/
-
 void save(int dxf) {
     //boite de dialogue fichier
     CString fileName;
@@ -1051,10 +1046,6 @@ void quit(int control) {
         exit(0);
     }
 }
-
-/********/
-/* Info */
-
 
 void Info(int /*control*/) {
 

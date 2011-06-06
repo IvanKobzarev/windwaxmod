@@ -177,7 +177,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\dxf.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\fichier.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\form.cpp"
 				>
 			</File>
 			<File
@@ -197,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\patron.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\patternsproject.cpp"
 				>
 			</File>
@@ -210,6 +222,10 @@
 			</File>
 			<File
 				RelativePath="..\commun\profil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\reper.cpp"
 				>
 			</File>
 			<File
@@ -247,7 +263,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\dxf.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\fichier.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\form.h"
 				>
 			</File>
 			<File
@@ -267,6 +291,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\commun\patron.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\patternsproject.h"
 				>
 			</File>
@@ -280,6 +308,10 @@
 			</File>
 			<File
 				RelativePath="..\commun\profil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\reper.h"
 				>
 			</File>
 			<File
