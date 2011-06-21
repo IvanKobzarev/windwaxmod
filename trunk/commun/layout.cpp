@@ -526,19 +526,18 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
 }
 
 
-void preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd, Layout* layout) {
-   	double coeff1 = layout->coeffn[le->n1];
-	double coeff2 = layout->coeffn[le->n2];
+void Layout::preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd) {
+   	double coeff1 = coeffn[le->n1];
+	double coeff2 = coeffn[le->n2];
     int n = gfd->Form->m_nbProfils;
-	if (le->n1 == -1) coeff1 = layout->coeffn[0];
+	if (le->n1 == -1) coeff1 = coeffn[0];
 	if (le->n2 == n-1) coeff2 = -1;
     le->coeff1=coeff1;
     le->coeff2=coeff2;
-
 }
 
 
-void prepareKlapan(WindPatternsProject* gfd, Layout* layout, int i) {
+void Layout::prepareKlapan(WindPatternsProject* gfd, int i) {
     if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
         if (gfd->LayoutKlapans) {
             if (gfd->VentHolesDouble){
@@ -556,8 +555,8 @@ void prepareKlapan(WindPatternsProject* gfd, Layout* layout, int i) {
 		        le4->fd2 = 2;
 		        le4->ff1 = 2;
 		        le4->ff2 = 2;
-                preparePanelLayoutElementCoeff(le4, gfd, layout);
-                layout->klapans.push_back(le4);
+                preparePanelLayoutElementCoeff(le4, gfd);
+                klapans.push_back(le4);
             }
 
             KlapanLayoutElement* le5 = new KlapanLayoutElement();
@@ -574,8 +573,8 @@ void prepareKlapan(WindPatternsProject* gfd, Layout* layout, int i) {
 	        le5->fd2 = 2;
 	        le5->ff1 = 2;
 	        le5->ff2 = 2;
-            preparePanelLayoutElementCoeff(le5, gfd, layout);
-            layout->klapans.push_back(le5);
+            preparePanelLayoutElementCoeff(le5, gfd);
+            klapans.push_back(le5);
 
             KlapanLayoutElement* le6 = new KlapanLayoutElement();
             le6->side=INT_SIDE;
@@ -591,13 +590,13 @@ void prepareKlapan(WindPatternsProject* gfd, Layout* layout, int i) {
 	        le6->fd2 = 2;
 	        le6->ff1 = 2;
 	        le6->ff2 = 2;
-            preparePanelLayoutElementCoeff(le6, gfd, layout);
-            layout->klapans.push_back(le6);
+            preparePanelLayoutElementCoeff(le6, gfd);
+            klapans.push_back(le6);
 
         }
     }
 }
-void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
+void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
     PanelLayoutElement* le1 = new PanelLayoutElement();
     le1->side=INT_SIDE;
     int n = gfd->Form->m_nbProfils;
@@ -616,20 +615,20 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le1->s1 = false;
         le1->s2 = false;
         le1->posDeb1 = 0.0f;
-        le1->posFin1 = layout->debBorder;
+        le1->posFin1 = debBorder;
         le1->posDeb2 = 0.0f;
-        le1->posFin2 = layout->debBorder;
+        le1->posFin2 = debBorder;
 
         le1->p2a00 = 0.0f;
-        le1->p2a0 = layout->pinceRAAmp2 [i];
-        le1->p2f0 = layout->pinceRFAmp2 [i];
+        le1->p2a0 = pinceRAAmp2 [i];
+        le1->p2f0 = pinceRFAmp2 [i];
 
         le1->p2a01 = 0.0f;
-        le1->p2a1 = layout->pinceLAAmp2 [i + 1];
-        le1->p2f1 = layout->pinceLFAmp2 [i + 1];
+        le1->p2a1 = pinceLAAmp2 [i + 1];
+        le1->p2f1 = pinceLFAmp2 [i + 1];
 
-        le1->func2f0 = layout->funcR2[i];
-        le1->func2f1 = layout->funcL2[i + 1];
+        le1->func2f0 = funcR2[i];
+        le1->func2f1 = funcL2[i + 1];
 
         le1->fd1 = 2;
         le1->fd2 = 2;
@@ -637,8 +636,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le1->ff2 = 2;
         le1->isPince = 1;
         le1->coeff = 0.0f;
-        preparePanelLayoutElementCoeff(le1, gfd, layout);
-        layout->panelsInt.push_back(le1);
+        preparePanelLayoutElementCoeff(le1, gfd);
+        panelsInt.push_back(le1);
     }
 
     PanelLayoutElement* le2 = new PanelLayoutElement();
@@ -647,21 +646,21 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
     le2->n2 = i + 1;
     le2->s1 = false;
     le2->s2 = false;
-    le2->posDeb1 = layout->debBorder;
+    le2->posDeb1 = debBorder;
     le2->posFin1 = tpF1;
-    le2->posDeb2 = layout->debBorder;
+    le2->posDeb2 = debBorder;
     le2->posFin2 = tpF2;
 
     le2->p2a00 = 0.0f;
-    le2->p2a0 = layout->pinceRAAmp2 [i];
-    le2->p2f0 = layout->pinceRFAmp2 [i];
+    le2->p2a0 = pinceRAAmp2 [i];
+    le2->p2f0 = pinceRFAmp2 [i];
 
     le2->p2a01 = 0.0f;
-    le2->p2a1 = layout->pinceLAAmp2 [i + 1];
-    le2->p2f1 = layout->pinceLFAmp2 [i + 1];
+    le2->p2a1 = pinceLAAmp2 [i + 1];
+    le2->p2f1 = pinceLFAmp2 [i + 1];
 
-    le2->func2f0 = layout->funcR2[i];
-    le2->func2f1 = layout->funcL2[i + 1];
+    le2->func2f0 = funcR2[i];
+    le2->func2f1 = funcL2[i + 1];
 
     le2->fd1 = 2;
     le2->fd2 = 2;
@@ -682,8 +681,8 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
             le2->posFin2 = 100.0f;
         }
     }
-    preparePanelLayoutElementCoeff(le2, gfd, layout);
-    layout->panelsInt.push_back(le2);
+    preparePanelLayoutElementCoeff(le2, gfd);
+    panelsInt.push_back(le2);
 
     if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
         PanelLayoutElement* le3 = new PanelLayoutElement();
@@ -698,15 +697,15 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le3->posFin2 = 100.0f;
 
         le3->p2a00 = 0.0f;
-        le3->p2a0 = layout->pinceRAAmp2 [i];
-        le3->p2f0 = layout->pinceRFAmp2 [i];
+        le3->p2a0 = pinceRAAmp2 [i];
+        le3->p2f0 = pinceRFAmp2 [i];
 
-        le3->func2f0 = layout->funcR2[i];
-        le3->func2f1 = layout->funcL2[i + 1];
+        le3->func2f0 = funcR2[i];
+        le3->func2f1 = funcL2[i + 1];
 
         le3->p2a01 = 0.0f;
-        le3->p2a1 = layout->pinceLAAmp2 [i + 1];
-        le3->p2f1 = layout->pinceLFAmp2 [i + 1];
+        le3->p2a1 = pinceLAAmp2 [i + 1];
+        le3->p2f1 = pinceLFAmp2 [i + 1];
 
         le3->fd1 = 2;
         le3->fd2 = 2;
@@ -723,12 +722,12 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
             le3->p2a1 = 0.0f;
             le3->p2f1 = 0.0f;
         }
-        preparePanelLayoutElementCoeff(le3, gfd, layout);
-        layout->panelsInt.push_back(le3);
+        preparePanelLayoutElementCoeff(le3, gfd);
+        panelsInt.push_back(le3);
     }
 }
 
-void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
+void Layout::preparePanelExt(WindPatternsProject* gfd, int i) {
     int n = gfd->Form->m_nbProfils;
     // face == 1
     PanelLayoutElement* le = new PanelLayoutElement();
@@ -737,26 +736,26 @@ void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
     le->n2 = i + 1;
     le->s1 = false;
     le->s2 = false;
-    le->posDeb1 = layout->debBorder;
+    le->posDeb1 = debBorder;
     le->posFin1 = 100.0f;
-    le->posDeb2 = layout->debBorder;
+    le->posDeb2 = debBorder;
     le->posFin2 = 100.0f;
 
-    le->p1a00 = layout->pinceRAAmp2 [i];
-    le->p1a0 = layout->pinceRAAmp1 [i];
-    le->p1f0 = layout->pinceRFAmp1 [i];
+    le->p1a00 = pinceRAAmp2 [i];
+    le->p1a0 = pinceRAAmp1 [i];
+    le->p1f0 = pinceRFAmp1 [i];
 
-    le->p1a01 = layout->pinceLAAmp2 [i + 1];
-    le->p1a1 = layout->pinceLAAmp1 [i + 1];
-    le->p1f1 = layout->pinceLFAmp1 [i + 1];
+    le->p1a01 = pinceLAAmp2 [i + 1];
+    le->p1a1 = pinceLAAmp1 [i + 1];
+    le->p1f1 = pinceLFAmp1 [i + 1];
 
-    le->func1f0 = layout->funcR1[i];
-    le->func1f1 = layout->funcL1[i + 1];
+    le->func1f0 = funcR1[i];
+    le->func1f1 = funcL1[i + 1];
 
     le->ff1 = 1;
     le->ff2 = 1;
-    le->fd1 = layout->faceDebBorder;
-    le->fd2 = layout->faceDebBorder;
+    le->fd1 = faceDebBorder;
+    le->fd2 = faceDebBorder;
 
     le->isPince = 1;
 	le->isKlapan = 0;
@@ -780,12 +779,12 @@ void preparePanelExt(WindPatternsProject* gfd, Layout* layout, int i) {
             le->fd2 = 2;
         }
     }
-    preparePanelLayoutElementCoeff(le, gfd, layout);
-    layout->panelsExt.push_back(le);
+    preparePanelLayoutElementCoeff(le, gfd);
+    panelsExt.push_back(le);
 }
 
 
-void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
+void Layout::prepareCenterPanelInt(WindPatternsProject* gfd) {
         double tpF1, tpF2;
         if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
             tpF1 = gfd->VentHolesFin;
@@ -803,20 +802,20 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
             le->s1 = false;
             le->s2 = false;
             le->posDeb1 = 0.0f;
-            le->posFin1 = layout->debBorder;
+            le->posFin1 = debBorder;
             le->posDeb2 = 0.0f;
-            le->posFin2 = layout->debBorder;
+            le->posFin2 = debBorder;
 
             le->p2a00 = 0.0f;
-            le->p2a0 = layout->pinceRAAmp2 [i];
-            le->p2f0 = layout->pinceRFAmp2 [i];
+            le->p2a0 = pinceRAAmp2 [i];
+            le->p2f0 = pinceRFAmp2 [i];
 
             le->p2a01 = 0.0f;
-            le->p2a1 = layout->pinceLAAmp2 [i + 1];
-            le->p2f1 = layout->pinceLFAmp2 [i + 1];
+            le->p2a1 = pinceLAAmp2 [i + 1];
+            le->p2f1 = pinceLFAmp2 [i + 1];
 
-            le->func2f0 = layout->funcR2[i];
-            le->func2f1 = layout->funcL2[i + 1];
+            le->func2f0 = funcR2[i];
+            le->func2f1 = funcL2[i + 1];
 
             le->fd1 = 2;
             le->fd2 = 2;
@@ -824,7 +823,7 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
             le->ff2 = 2;
             le->isPince = 1;
             le->coeff = 0.0f;
-            layout->panelsInt.push_back(le);
+            panelsInt.push_back(le);
         }
         PanelLayoutElement* le1 = new PanelLayoutElement();
         le1->side=INT_SIDE;
@@ -840,22 +839,22 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
         le1->isPince = 1;
         le1->coeff = 0.0f;
 
-        le1->posDeb1 = layout->debBorder;
+        le1->posDeb1 = debBorder;
         le1->posFin1 = tpF1;
-        le1->posDeb2 = layout->debBorder;
+        le1->posDeb2 = debBorder;
         le1->posFin2 = tpF2;
 
         le1->p2a00 = 0.0f;
-        le1->p2a0 = layout->pinceLAAmp2[0];
-        le1->p2f0 = layout->pinceLFAmp2[0];
+        le1->p2a0 = pinceLAAmp2[0];
+        le1->p2f0 = pinceLFAmp2[0];
 
         le1->p2a01 = 0.0f;
-        le1->p2a1 = layout->pinceLAAmp2[0];
-        le1->p2f1 = layout->pinceLFAmp2[0];
+        le1->p2a1 = pinceLAAmp2[0];
+        le1->p2f1 = pinceLFAmp2[0];
 
-        le1->func2f0 = layout->funcL2[0];
-        le1->func2f1 = layout->funcL2[0];
-        layout->panelsInt.push_back(le1);
+        le1->func2f0 = funcL2[0];
+        le1->func2f1 = funcL2[0];
+        panelsInt.push_back(le1);
 
         if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
             PanelLayoutElement* le2 = new PanelLayoutElement();
@@ -879,16 +878,16 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
 
 
             le2->p2a00 = 0.0f;
-            le2->p2a0 = layout->pinceLAAmp2[0];
-            le2->p2f0 = layout->pinceLFAmp2[0];
+            le2->p2a0 = pinceLAAmp2[0];
+            le2->p2f0 = pinceLFAmp2[0];
 
             le2->p2a01 = 0.0f;
-            le2->p2a1 = layout->pinceLAAmp2[0];
-            le2->p2f1 = layout->pinceLFAmp2[0];
+            le2->p2a1 = pinceLAAmp2[0];
+            le2->p2f1 = pinceLFAmp2[0];
 
-            le2->func2f0 = layout->funcL2[0];
-            le2->func2f1 = layout->funcL2[0];
-            layout->panelsInt.push_back(le2);
+            le2->func2f0 = funcL2[0];
+            le2->func2f1 = funcL2[0];
+            panelsInt.push_back(le2);
 
             if (gfd->LayoutKlapans) {
                 if (gfd->VentHolesDouble){
@@ -903,7 +902,7 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le3->isKlapan = 1;
                     le3->isPince = 0;
                     //printf ("\n klapan=%d", isave);
-                    layout->klapans.push_back(le3);
+                    klapans.push_back(le3);
                 }
                     KlapanLayoutElement* le4 = new KlapanLayoutElement();
                     le4->side=INT_SIDE;
@@ -915,7 +914,7 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le4->posKlapanFin = gfd->PosKlapanFin;
                     le4->isKlapan = 1;
                     le4->isPince = 0;
-                    layout->klapans.push_back(le4);
+                    klapans.push_back(le4);
 
 
                     KlapanLayoutElement* le5 = new KlapanLayoutElement();
@@ -928,50 +927,48 @@ void prepareCenterPanelInt(WindPatternsProject* gfd, Layout* layout) {
                     le5->posKlapanFin = gfd->PosKlapanFin;
                     le5->isKlapan = 1;
                     le5->isPince = 0;
-                    layout->klapans.push_back(le5);
-
+                    klapans.push_back(le5);
             }
-
         }
 }
 
-void prepareCenterPanelExt(WindPatternsProject* gfd, Layout* layout) {
+void Layout::prepareCenterPanelExt(WindPatternsProject* gfd) {
     PanelLayoutElement* le = new PanelLayoutElement();
     le->side=EXT_SIDE;
     le->n1 = -1;
     le->n2 = 0;
     le->s1 = false;
     le->s2 = false;
-    le->fd1 = layout->faceDebBorder;
-    le->fd2 = layout->faceDebBorder;
+    le->fd1 = faceDebBorder;
+    le->fd2 = faceDebBorder;
     le->ff1 = 1;
     le->ff2 = 1;
     le->isPince = 1;
 	le->isKlapan = 0;
     le->coeff = 0.0f;
-    le->posDeb1 = layout->debBorder;
+    le->posDeb1 = debBorder;
     le->posFin1 = 100.0f;
-    le->posDeb2 = layout->debBorder;
+    le->posDeb2 = debBorder;
     le->posFin2 = 100.0f;
-    le->p1a00 = layout->pinceLAAmp2[0];
-    le->p1a0 = layout->pinceLAAmp1[0];
-    le->p1f0 = layout->pinceLFAmp1[0];
-    le->p1a01 = layout->pinceLAAmp2[0];
-    le->p1a1 = layout->pinceLAAmp1[0];
-    le->p1f1 = layout->pinceLFAmp1[0];
+    le->p1a00 = pinceLAAmp2[0];
+    le->p1a0 = pinceLAAmp1[0];
+    le->p1f0 = pinceLFAmp1[0];
+    le->p1a01 = pinceLAAmp2[0];
+    le->p1a1 = pinceLAAmp1[0];
+    le->p1f1 = pinceLFAmp1[0];
 
-    le->func1f0 = layout->funcL1[0];
-    le->func1f1 = layout->funcL1[0];
+    le->func1f0 = funcL1[0];
+    le->func1f1 = funcL1[0];
     if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
         le->posDeb1 = 0.0f;
         le->posDeb2 = 0.0f;
         le->fd1 = 1;
         le->fd2 = 1;
     }
-    layout->panelsExt.push_back(le);
+    panelsExt.push_back(le);
 }
 
-void prepareProfile(WindPatternsProject* gfd, Layout* layout, int i) {
+void Layout::prepareProfile(WindPatternsProject* gfd, int i) {
     ProfLayoutElement* lep = new ProfLayoutElement();
     lep->n1 = i;
     lep->n2 = i;
@@ -986,11 +983,11 @@ void prepareProfile(WindPatternsProject* gfd, Layout* layout, int i) {
     lep->ff1 = 2;
     lep->fd2 = 1;
     lep->ff2 = 1;
-    lep->coeff = layout->coeffn[i];
-    layout->profs.push_back(lep);
+    lep->coeff = coeffn[i];
+    profs.push_back(lep);
 }
 
-void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
+void Layout::prepareDiagNerv(WindPatternsProject* gfd, int i) {
     DiagNervLayoutElement* led1 = new DiagNervLayoutElement();
     int k = 2*i - 1;
     led1->n1 = gfd->noNervD[i];
@@ -1007,7 +1004,7 @@ void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
 
     led1->posDeb2 = gfd->PosDiagNerv1A;
     led1->posFin2 = gfd->PosDiagNerv1F;
-    led1->coeff = layout->coeffd[k];
+    led1->coeff = coeffd[k];
     k++;
 
     DiagNervLayoutElement* led2 = new DiagNervLayoutElement();
@@ -1025,12 +1022,12 @@ void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
     led2->posFin1 = gfd->PosDiagNerv2F;
     led2->posDeb2 = gfd->PosDiagNerv1A;
     led2->posFin2 = gfd->PosDiagNerv1F;
-    led2->coeff = layout->coeffd[k];
-    layout->diagNervs.push_back(led2);
+    led2->coeff = coeffd[k];
+    diagNervs.push_back(led2);
 }
 
 
-void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
+void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
     //int startNoNerv = 0, noNerv = 0, face = 1;
     //Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     //Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
@@ -1102,8 +1099,8 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
         faceDebBorder = 1;
     }
 
-	layout->debBorder = debBorder;
-	layout->faceDebBorder = faceDebBorder;
+	debBorder = debBorder;
+	faceDebBorder = faceDebBorder;
     double tpF1, tpF2;
 
     for (face = 1; face <= 2; face++) {
@@ -1216,9 +1213,9 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
         if layout symetric
         */
 
-        if (layout->isCenterPanel) {
+        if (isCenterPanel) {
             if (face == 1) {
-                prepareCenterPanelExt(gfd, layout);
+                prepareCenterPanelExt(gfd);
                 /*
                 n1[isave] = -1;
                 n2[isave] = 0;
@@ -1256,7 +1253,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 
                 isave++;*/
             } else {
-                prepareCenterPanelInt(gfd, layout);
+                prepareCenterPanelInt(gfd);
                 /*if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
                     tpF1 = gfd->VentHolesFin;
                     tpF2 = gfd->VentHolesFin;
@@ -1399,7 +1396,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 
         for (i = 0; i < n - 1; i++) {
             if (face == 1) {
-                preparePanelExt(gfd, layout, i);
+                preparePanelExt(gfd, i);
                 /*n1[isave] = i;
                 n2[isave] = i + 1;
                 s1[isave] = false;
@@ -1451,8 +1448,8 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
                 isave++;
                 */
             } else {
-                preparePanelInt(gfd, layout, i);
-                prepareKlapan(gfd, layout, i);
+                preparePanelInt(gfd, i);
+                prepareKlapan(gfd, i);
 /*
                 if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
                     tpF1 = gfd->VentHolesFin;
@@ -1656,7 +1653,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
             if layout sym
             */
             for (i = 0; i < n - 1; i++) {
-                prepareProfile(gfd, layout, i);
+                prepareProfile(gfd, i);
 
                 /*n1[isave] = i;
                 n2[isave] = i;
@@ -1724,7 +1721,7 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
                 */
             k = 0;
             for (i = 0; i < gfd->quantDiag; i++) {
-                prepareDiagNerv(gfd, layout, i);
+                prepareDiagNerv(gfd, i);
 
 /*                n1[isave] = gfd->noNervD[i];
                 n2[isave] = gfd->noNervD[i] - 1;
@@ -1769,11 +1766,11 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 
 }
 
-void SaveLayout2(WindPatternsProject* gfd, Layout* layout) {
+void Layout::SaveLayout2(WindPatternsProject* gfd) {
     if (gfd->debug) printf("\n SaveLayout2()");
-    prepareLayoutElements(gfd, layout);
-    layout->calculateExport(gfd);
-    saveCalcLayoutToFile(gfd, layout);
+    prepareLayoutElements(gfd);
+    calculateExport(gfd);
+    saveCalcLayoutToFile(gfd);
 }
 
 void Layout::calculateExport(WindPatternsProject* gfd){
@@ -1806,7 +1803,64 @@ void calculateLayout(WindPatternsProject* gfd, Layout* layout) {
 }
 
 //void saveCalcLayoutToFile(int n, int q, TAxe **AxePD, TAxe **AxeMD, TAxe **RepD, int gfdVentilationLayout, TAxe **AxeCD, TAxe  **AxePTD, double *H, double *W, int* numncol) {
-void saveCalcLayoutToFile(WindPatternsProject* gfd, Layout* layout) {
+
+void Layout::writeLayoutToDXF(char *fileName, WindPatternsProject* gfd) {
+    FILE *fid;
+	printf("\nwrite MANY POLY fichier de DXF: '%s'",fileName);
+	if( (fid = fopen( fileName, "wt" )) == NULL ) {
+		printf( "\nError write file '%s'", fileName);
+		exit(0);
+	}
+    fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
+    double maxW1 = -1000000.0f, maxW2 = -1000000.0f, maxW3 = -1000000.0f;
+    //panelsExt
+    double dx = 0.0f, dy = 0.0f, dz = 0.0f;
+    for (int i = 0; i < panelsExt.size(); i++) {
+        LayoutElementExport* lee = panelsExt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW1) maxW1 = lee->W;
+    }
+
+    //profs
+    dx = maxW1*2.0; dy = 0.0f; maxW2 = -1000000.0f; maxW3 = -1000000.0f;
+    for (int i = 0; i < profs.size(); i++) {
+        LayoutElementExport* lee = profs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW2) maxW2 = lee->W;
+    }
+
+    //diagNervs
+    dx = maxW1 * 2.0 + maxW2 * 4.0; dy = 0.0f;
+    for (int i = 0; i < diagNervs.size(); i++) {
+        LayoutElementExport* lee = diagNervs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW3) maxW3 = lee->W;
+    }
+
+    //panelsInt
+    dx = maxW1 * 2.0 + maxW2 * 4.0 + maxW3 * 4.0; dy = 0.0f;
+    for (int i = 0; i < panelsInt.size(); i++) {
+        LayoutElementExport* lee = panelsInt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+    }
+
+    fprintf(fid,"0\nENDSEC\n0\nEOF\n");
+    if(fclose(fid))	{
+	    printf("\nError close file");
+	    exit(0);
+    }
+}
+
+
+void Layout::saveCalcLayoutToFile(WindPatternsProject* gfd) {
     //TAxe **AxeP, **AxePD, **AxePTD, **AxeMD, **AxeCD, **AxeRepD;
     CString fileName;
     LPTSTR PtrfileName;
@@ -1816,7 +1870,7 @@ void saveCalcLayoutToFile(WindPatternsProject* gfd, Layout* layout) {
     if (DlgOpen.DoModal() == IDOK) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        writeLayoutToDXF(PtrfileName, gfd, layout); 
+        writeLayoutToDXF(PtrfileName, gfd); 
         //writeManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
         char filename[255];
         strcpy(filename, PtrfileName);

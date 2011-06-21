@@ -910,7 +910,7 @@ void applyMagic2(int /*control*/) {
 	Layout* Layout = calcIndepPinceLayout(getWindPatternsProject(), F);
     //printf ("...gocalcPinceLayout()");
 	//printf ("goSaveLayout2()");
-    SaveLayout2(getWindPatternsProject(), Layout);
+    Layout->SaveLayout2(getWindPatternsProject());
 	//printf ("...goSaveLayout2()");
 }
 
