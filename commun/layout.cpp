@@ -716,6 +716,7 @@ void preparePanelInt(WindPatternsProject* gfd, Layout* layout, int i) {
         le3->isPince = 1;
         le3->coeff = 0.0f;
 
+        //edge
         if (i == (n - 2)) {
             le3->func2f1 = Zeros((le3->func2f0)->GetLignes(), 1);
             le3->p2a01 = 0.0f;
@@ -1030,69 +1031,67 @@ void prepareDiagNerv(WindPatternsProject* gfd, Layout* layout, int i) {
 
 
 void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
+    //int startNoNerv = 0, noNerv = 0, face = 1;
+    //Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    //Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+    //int size = 6 * n + 2 + 10;
 
-    int startNoNerv = 0, noNerv = 0, face = 1;
-    Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
-    Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+    //int *n1, *n2, *fd1, *ff1, *fd2, *ff2, *isPince,*isKlapan, *vent;
+    //bool *s1, *s2;
+    //double *coeff, *p1a0, *p1a00, *p1a01, *p1f0, *p1a1, *p1f1, *p2a0, *p2a00, *p2f0, *p2a1, *p2a01, *p2f1, *posDeb1, *posDeb2, *posFin1, *posFin2, *posKlapanIntDeb, *posKlapanFin;
+    //Matrix **func1f0, **func1f1, **func2f0, **func2f1;
+
+    //fd1 = new int[size];
+    //fd2 = new int[size];
+    //ff1 = new int[size];
+    //ff2 = new int[size];
+    //n1 = new int[size];
+    //n2 = new int[size];
+    //s1 = new bool[size];
+    //s2 = new bool[size];
+
+    //posDeb1 = new double[size];
+    //posFin1 = new double[size];
+    //posDeb2 = new double[size];
+    //posFin2 = new double[size];
+
+    //coeff = new double[size];
+
+    //p1a0 = new double[size];
+    //p1a00 = new double[size];
+    //p1f0 = new double[size];
+    //p1a1 = new double[size];
+    //p1a01 = new double[size];
+    //p1f1 = new double[size];
+
+    //p2a0 = new double[size];
+    //p2a00 = new double[size];
+    //p2f0 = new double[size];
+    //p2a1 = new double[size];
+    //p2a01 = new double[size];
+    //p2f1 = new double[size];
+
+    //posKlapanIntDeb = new double[size];
+    //posKlapanFin = new double[size];
+
+
+    //func1f0 = new Matrix*[size];
+    //func1f1 = new Matrix*[size];
+    //func2f0 = new Matrix*[size];
+    //func2f1 = new Matrix*[size];
+
+    //isPince = new int[size];
+    //isKlapan = new int[size];
+	//memset(isPince, 0, sizeof(int)*size);
+	//memset(isKlapan, 0, sizeof(int)*size);
+
+    //vent = new int[size];
+    //int *numncol = new int[6];
+
+    //int isave = 0;
+    //int col = 0;
+    int i = 0, face = 0;
     int n = gfd->Form->m_nbProfils;
-    int size = 6 * n + 2 + 10;
-
-    face = 1;
-    int *n1, *n2, *fd1, *ff1, *fd2, *ff2, *isPince,*isKlapan, *vent;
-    bool *s1, *s2;
-    double *coeff, *p1a0, *p1a00, *p1a01, *p1f0, *p1a1, *p1f1, *p2a0, *p2a00, *p2f0, *p2a1, *p2a01, *p2f1, *posDeb1, *posDeb2, *posFin1, *posFin2, *posKlapanIntDeb, *posKlapanFin;
-    Matrix **func1f0, **func1f1, **func2f0, **func2f1;
-
-    fd1 = new int[size];
-    fd2 = new int[size];
-    ff1 = new int[size];
-    ff2 = new int[size];
-    n1 = new int[size];
-    n2 = new int[size];
-    s1 = new bool[size];
-    s2 = new bool[size];
-
-    posDeb1 = new double[size];
-    posFin1 = new double[size];
-    posDeb2 = new double[size];
-    posFin2 = new double[size];
-
-    coeff = new double[size];
-
-    p1a0 = new double[size];
-    p1a00 = new double[size];
-    p1f0 = new double[size];
-    p1a1 = new double[size];
-    p1a01 = new double[size];
-    p1f1 = new double[size];
-
-    p2a0 = new double[size];
-    p2a00 = new double[size];
-    p2f0 = new double[size];
-    p2a1 = new double[size];
-    p2a01 = new double[size];
-    p2f1 = new double[size];
-
-    posKlapanIntDeb = new double[size];
-    posKlapanFin = new double[size];
-
-
-    func1f0 = new Matrix*[size];
-    func1f1 = new Matrix*[size];
-    func2f0 = new Matrix*[size];
-    func2f1 = new Matrix*[size];
-
-    isPince = new int[size];
-    isKlapan = new int[size];
-	memset(isPince, 0, sizeof(int)*size);
-	memset(isKlapan, 0, sizeof(int)*size);
-
-    vent = new int[size];
-    int *numncol = new int[6];
-
-    int isave = 0, i = 0;
-    int col = 0;
-
     float debBorder = 0.0f;
     int faceDebBorder = 0;
     if (gfd->VentHoles) {
@@ -1108,8 +1107,8 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
     double tpF1, tpF2;
 
     for (face = 1; face <= 2; face++) {
-        numncol[col] = isave;
-        col++;
+        //numncol[col] = isave;
+        //col++;
         /*
         if (gfd->LayoutSymetrique) {
 	    //TOTEST not tested yet
@@ -1628,8 +1627,8 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
 
         //profiles
         if (face == 1) {
-            numncol[col] = isave;
-            col++;
+            //numncol[col] = isave;
+            //col++;
 
             // profile
             /*
@@ -1677,8 +1676,8 @@ void prepareLayoutElements(WindPatternsProject* gfd, Layout* layout) {
                 isave++;*/
 
             }
-            numncol[col] = isave;
-            col++;
+            //numncol[col] = isave;
+            //col++;
 
 			if (gfd->DiagNervs) {
 				int k = 2 * gfd->quantDiag - 1;

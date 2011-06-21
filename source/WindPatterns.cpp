@@ -3560,17 +3560,14 @@ int main(int argc, char** argv) {
     FicProject = glui->add_statictext_to_panel(panel_project, "???");
     FicProject->set_text(fileNameProject);
     glui->add_column_to_panel(panel_project, false);
-    GLUI_Button *boutonLoadProject =
-            glui->add_button_to_panel(panel_project, "Load", 0, &readProject);
+    GLUI_Button *boutonLoadProject = glui->add_button_to_panel(panel_project, "Load", 0, &readProject);
     boutonLoadProject -> set_w(10);
     glui->add_column_to_panel(panel_project, false);
-    GLUI_Button *boutonsaveProject = 
-			glui->add_button_to_panel(panel_project, "Save", 0, &saveProject);
+    GLUI_Button *boutonsaveProject = glui->add_button_to_panel(panel_project, "Save", 0, &saveProject);
 	boutonsaveProject -> set_w(10);
     //
     GLUI_Panel *panel_proj = glui->add_panel("Projection");
-    GLUI_RadioGroup *radio_proj =
-            glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &modifProjection3d);
+    GLUI_RadioGroup *radio_proj = glui->add_radiogroup_to_panel(panel_proj, &ProjOrthoPers, 0, &modifProjection3d);
     glui->add_radiobutton_to_group(radio_proj, "Orthogonale");
     glui->add_radiobutton_to_group(radio_proj, "Perspective");
 
@@ -3591,11 +3588,8 @@ int main(int argc, char** argv) {
     glui->add_column_to_panel(panel_RepPoints, false);
     BlankST = glui->add_statictext_to_panel(panel_RepPoints, "");
     BlankST->set_text("");
-    GLUI_Button *boutonLoadRepPoints =
-            glui->add_button_to_panel(panel_RepPoints, "Load", 0, &readRepPoints);
+    GLUI_Button *boutonLoadRepPoints = glui->add_button_to_panel(panel_RepPoints, "Load", 0, &readRepPoints);
     boutonLoadRepPoints->set_w(10);
-
-
     glui->add_checkbox("symetrique", &ViewSymetrique, 0, &modifViewSymetrique);
 
     /*choix visu des points de suspentage*/
@@ -3642,8 +3636,6 @@ int main(int argc, char** argv) {
 	kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
 
 	//----------------------------------------------
-
-
 
     GLUI_Spinner *SpinTochnostLayout2 = glui->add_spinner_to_panel(panel_Layout2, "Accuracy", GLUI_SPINNER_FLOAT, &(tochnostLayout2));
     SpinTochnostLayout2 -> set_float_limits(0.0, 3.0);
