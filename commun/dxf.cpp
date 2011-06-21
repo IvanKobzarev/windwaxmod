@@ -221,61 +221,6 @@ void writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **a
 
 //writeManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
 //writeManyFichierPolyDXF(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H)
-void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd, Layout* layout) {
-    FILE *fid;
-	printf("\nwrite MANY POLY fichier de DXF: '%s'",fileName);
-	if( (fid = fopen( fileName, "wt" )) == NULL ) {
-		printf( "\nError write file '%s'", fileName);
-		exit(0);
-	}
-    fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
-    double maxW1 = -1000000.0f, maxW2 = -1000000.0f, maxW3 = -1000000.0f;
-    //panelsExt
-    double dx = 0.0f, dy = 0.0f, dz = 0.0f;
-    for (int i = 0; i < layout->panelsExt.size(); i++) {
-        LayoutElementExport* lee = layout->panelsExt[i]->leexport;
-        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
-            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
-        dy = dy + lee->H * 2.0f;
-        if (lee->W > maxW1) maxW1 = lee->W;
-    }
-
-    //profs
-    dx = maxW1*2.0; dy = 0.0f; maxW2 = -1000000.0f; maxW3 = -1000000.0f;
-    for (int i = 0; i < layout->profs.size(); i++) {
-        LayoutElementExport* lee = layout->profs[i]->leexport;
-        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
-            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
-        dy = dy + lee->H * 2.0f;
-        if (lee->W > maxW2) maxW2 = lee->W;
-    }
-
-    //diagNervs
-    dx = maxW1 * 2.0 + maxW2 * 4.0; dy = 0.0f;
-    for (int i = 0; i < layout->diagNervs.size(); i++) {
-        LayoutElementExport* lee = layout->diagNervs[i]->leexport;
-        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
-            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
-        dy = dy + lee->H * 2.0f;
-        if (lee->W > maxW3) maxW3 = lee->W;
-    }
-
-    //panelsInt
-    dx = maxW1 * 2.0 + maxW2 * 4.0 + maxW3 * 4.0; dy = 0.0f;
-    for (int i = 0; i < layout->panelsInt.size(); i++) {
-        LayoutElementExport* lee = layout->panelsInt[i]->leexport;
-        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
-            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
-        dy = dy + lee->H * 2.0f;
-    }
-
-    fprintf(fid,"0\nENDSEC\n0\nEOF\n");
-    if(fclose(fid))	{
-	    printf("\nError close file");
-	    exit(0);
-    }
-}
-
 void writeManyFichierPolyDXF2(char *fileName, int np, int n, TAxe **axe, TAxe **axe2, int rep, TAxe **axeR, int vent, TAxe **axeC, int num, TAxe **axeT, double* W, double* H, int* numncon)
 {
     FILE *fid;

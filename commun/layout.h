@@ -150,6 +150,19 @@ class Layout
         std::vector<KlapanLayoutElement*> klapans;
 
         void calculateExport(WindPatternsProject* gfd);
+
+        void preparePanelLayoutElementCoeff(LayoutElement* le, WindPatternsProject* gfd);
+        void prepareKlapan(WindPatternsProject* gfd, int i);
+        void preparePanelInt(WindPatternsProject* gfd, int i);
+        void preparePanelExt(WindPatternsProject* gfd, int i);
+        void prepareCenterPanelInt(WindPatternsProject* gfd);
+        void prepareCenterPanelExt(WindPatternsProject* gfd);
+        void prepareProfile(WindPatternsProject* gfd, int i);
+        void prepareDiagNerv(WindPatternsProject* gfd, int i);
+        void prepareLayoutElements(WindPatternsProject* gfd);
+        void SaveLayout2(WindPatternsProject* gfd);
+        void saveCalcLayoutToFile(WindPatternsProject* gfd);
+        void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd);
 };
 
 
