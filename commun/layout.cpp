@@ -1781,12 +1781,759 @@ void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
     }
 
 
+
+  
 }
+
+void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
+    //int startNoNerv = 0, noNerv = 0, face = 1;
+    //Matrix * Xd[2], *newXd[2], *Yd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
+    //Matrix * X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
+    //int size = 6 * n + 2 + 10;
+
+    //int *n1, *n2, *fd1, *ff1, *fd2, *ff2, *isPince,*isKlapan, *vent;
+    //bool *s1, *s2;
+    //double *coeff, *p1a0, *p1a00, *p1a01, *p1f0, *p1a1, *p1f1, *p2a0, *p2a00, *p2f0, *p2a1, *p2a01, *p2f1, *posDeb1, *posDeb2, *posFin1, *posFin2, *posKlapanIntDeb, *posKlapanFin;
+    //Matrix **func1f0, **func1f1, **func2f0, **func2f1;
+
+    //fd1 = new int[size];
+    //fd2 = new int[size];
+    //ff1 = new int[size];
+    //ff2 = new int[size];
+    //n1 = new int[size];
+    //n2 = new int[size];
+    //s1 = new bool[size];
+    //s2 = new bool[size];
+
+    //posDeb1 = new double[size];
+    //posFin1 = new double[size];
+    //posDeb2 = new double[size];
+    //posFin2 = new double[size];
+
+    //coeff = new double[size];
+
+    //p1a0 = new double[size];
+    //p1a00 = new double[size];
+    //p1f0 = new double[size];
+    //p1a1 = new double[size];
+    //p1a01 = new double[size];
+    //p1f1 = new double[size];
+
+    //p2a0 = new double[size];
+    //p2a00 = new double[size];
+    //p2f0 = new double[size];
+    //p2a1 = new double[size];
+    //p2a01 = new double[size];
+    //p2f1 = new double[size];
+
+    //posKlapanIntDeb = new double[size];
+    //posKlapanFin = new double[size];
+
+
+    //func1f0 = new Matrix*[size];
+    //func1f1 = new Matrix*[size];
+    //func2f0 = new Matrix*[size];
+    //func2f1 = new Matrix*[size];
+
+    //isPince = new int[size];
+    //isKlapan = new int[size];
+	//memset(isPince, 0, sizeof(int)*size);
+	//memset(isKlapan, 0, sizeof(int)*size);
+
+    //vent = new int[size];
+    //int *numncol = new int[6];
+
+    //int isave = 0;
+    //int col = 0;
+    int i = 0, face = 0;
+    int n = gfd->Form->m_nbProfils;
+    float debBorder = 0.0f;
+    int faceDebBorder = 0;
+    if (gfd->VentHoles) {
+        debBorder = gfd->VentHolesDeb;
+        faceDebBorder = 2;
+    } else {
+        debBorder = 0.0f;
+        faceDebBorder = 1;
+    }
+
+	debBorder = debBorder;
+	faceDebBorder = faceDebBorder;
+    double tpF1, tpF2;
+
+    for (face = 1; face <= 2; face++) {
+        //numncol[col] = isave;
+        //col++;
+        /*
+        if (gfd->LayoutSymetrique) {
+	    //TOTEST not tested yet
+            for (i = n - 1; i > 0; i--) {
+                if (face == 1) {
+					LayoutElement* le = new LayoutElement();
+					layoutElementsList.push_back(le);
+
+                    n1[isave] = i;
+                    n2[isave] = i - 1;
+                    s1[isave] = true;
+                    s2[isave] = true;
+
+                    ff1[isave] = face;
+                    ff2[isave] = face;
+                    fd1[isave] = faceDebBorder;
+                    fd2[isave] = faceDebBorder;
+
+                    posDeb1[isave] = debBorder;
+                    posFin1[isave] = 100.0f;
+                    posDeb2[isave] = debBorder;
+                    posFin2[isave] = 100.0f;
+
+                    p1a0[isave] = layout->pinceLAAmp1 [i];
+                    p1a00[isave] = layout->pinceLAAmp2 [i];
+
+                    p1f0[isave] = layout->pinceLFAmp1 [i];
+                    func1f0[isave] = layout->funcL1[i];
+                    func1f1[isave] = layout->funcR1[i - 1];
+                    p1a1[isave] = layout->pinceRAAmp1 [i - 1];
+                    p1a01[isave] = layout->pinceRAAmp2 [i - 1];
+
+                    p1f1[isave] = layout->pinceRFAmp1 [i - 1];
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+                    isave++;
+
+                } else {
+
+                    if ((gfd->VentHoles) && (gfd->noNervVH[i - 1])) {
+                        tpF1 = gfd->VentHolesFin;
+                        tpF2 = gfd->VentHolesFin;
+                    } else {
+                        tpF1 = 100.0f;
+                        tpF2 = 100.0f;
+                    }
+                    n1[isave] = i;
+                    n2[isave] = i - 1;
+                    s1[isave] = true;
+                    s2[isave] = true;
+                    fd1[isave] = face;
+                    fd2[isave] = face;
+                    ff1[isave] = face;
+                    ff2[isave] = face;
+                    posDeb1[isave] = debBorder;
+                    posFin1[isave] = tpF1;
+                    posDeb2[isave] = debBorder;
+                    posFin2[isave] = tpF2;
+                    p2a0[isave] = layout->pinceLAAmp2 [i];
+                    p2a00[isave] = 0.0f;
+
+                    p2f0[isave] = layout->pinceLFAmp2 [i];
+                    func2f0[isave] = layout->funcL2[i];
+                    func2f1[isave] = layout->funcR2[i - 1];
+                    p2a1[isave] = layout->pinceRAAmp2 [i - 1];
+                    p2a01[isave] = 0.0f;
+
+                    p2f1[isave] = layout->pinceRFAmp2 [i - 1];
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+                    isave++;
+
+                    if ((gfd->VentHoles) && (gfd->noNervVH[i - 1])) {
+                        n1[isave] = i;
+                        n2[isave] = i - 1;
+                        s1[isave] = true;
+                        s2[isave] = true;
+                        fd1[isave] = face;
+                        fd2[isave] = face;
+                        ff1[isave] = face;
+                        ff2[isave] = face;
+                        posDeb1[isave] = gfd->VentHolesFin;
+                        posFin1[isave] = 100.0f;
+                        posDeb2[isave] = gfd->VentHolesFin;
+                        posFin2[isave] = 100.0f;
+                        p2a0[isave] = layout->pinceLAAmp2 [i];
+                        p2a00[isave] = 0.0f;
+
+
+                        p2f0[isave] = layout->pinceLFAmp2 [i];
+                        func2f0[isave] = layout->funcL2[i];
+                        func2f1[isave] = layout->funcR2[i - 1];
+                        p2a1[isave] = layout->pinceRAAmp2 [i - 1];
+                        p2a01[isave] = 0.0f;
+
+                        p2f1[isave] = layout->pinceRFAmp2 [i - 1];
+                        isPince[isave] = 1;
+                        coeff[isave] = 0.0f;
+                        isave++;
+                    }
+
+                }
+            }
+        }
+        if layout symetric
+        */
+
+        if (isCenterPanel) {
+            if (face == 1) {
+                prepareCenterPanelExt(gfd);
+                /*
+                n1[isave] = -1;
+                n2[isave] = 0;
+                s1[isave] = false;
+                s2[isave] = false;
+                fd1[isave] = faceDebBorder;
+                fd2[isave] = faceDebBorder;
+                ff1[isave] = 1;
+                ff2[isave] = 1;
+                isPince[isave] = 1;
+				isKlapan[isave] = 0;
+                coeff[isave] = 0.0f;
+                posDeb1[isave] = debBorder;
+                posFin1[isave] = 100.0f;
+                posDeb2[isave] = debBorder;
+                posFin2[isave] = 100.0f;
+
+                p1a00[isave] = layout->pinceLAAmp2[0];
+                p1a0[isave] = layout->pinceLAAmp1[0];
+                p1f0[isave] = layout->pinceLFAmp1[0];
+
+                p1a01[isave] = layout->pinceLAAmp2[0];
+                p1a1[isave] = layout->pinceLAAmp1[0];
+                p1f1[isave] = layout->pinceLFAmp1[0];
+
+                func1f0[isave] = layout->funcL1[0];
+                func1f1[isave] = layout->funcL1[0];
+                if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
+                    posDeb1[isave] = 0.0f;
+                    posDeb2[isave] = 0.0f;
+                    fd1[isave] = 1;
+                    fd2[isave] = 1;
+
+                }
+
+                isave++;*/
+            } else {
+                prepareCenterPanelInt(gfd);
+                /*if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
+                    tpF1 = gfd->VentHolesFin;
+                    tpF2 = gfd->VentHolesFin;
+                } else {
+                    tpF1 = 100.0f;
+                    tpF2 = 100.0f;
+                }
+
+                if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
+                    n1[isave] = -1;
+                    n2[isave] = 0;
+                    s1[isave] = false;
+                    s2[isave] = false;
+                    posDeb1[isave] = 0.0f;
+                    posFin1[isave] = debBorder;
+                    posDeb2[isave] = 0.0f;
+                    posFin2[isave] = debBorder;
+
+                    p2a00[isave] = 0.0f;
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
+
+                    p2a01[isave] = 0.0f;
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
+
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
+
+                    fd1[isave] = 2;
+                    fd2[isave] = 2;
+                    ff1[isave] = 2;
+                    ff2[isave] = 2;
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+                    isave++;
+
+                }
+                
+                n1[isave] = -1;
+                n2[isave] = 0;
+                s1[isave] = false;
+                s2[isave] = false;
+                fd1[isave] = 2;
+                fd2[isave] = 2;
+                ff1[isave] = 2;
+                ff2[isave] = 2;
+
+                isPince[isave] = 1;
+                coeff[isave] = 0.0f;
+
+                posDeb1[isave] = debBorder;
+                posFin1[isave] = tpF1;
+                posDeb2[isave] = debBorder;
+                posFin2[isave] = tpF2;
+
+                p2a00[isave] = 0.0f;
+                p2a0[isave] = layout->pinceLAAmp2[0];
+                p2f0[isave] = layout->pinceLFAmp2[0];
+
+                p2a01[isave] = 0.0f;
+                p2a1[isave] = layout->pinceLAAmp2[0];
+                p2f1[isave] = layout->pinceLFAmp2[0];
+
+                func2f0[isave] = layout->funcL2[0];
+                func2f1[isave] = layout->funcL2[0];
+                isave++;
+
+                if ((gfd->VentHoles) && (gfd->VentCentralNerv)) {
+                    n1[isave] = -1;
+                    n2[isave] = 0;
+                    s1[isave] = false;
+                    s2[isave] = false;
+                    fd1[isave] = 2;
+                    fd2[isave] = 2;
+                    ff1[isave] = 2;
+                    ff2[isave] = 2;
+
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+
+                    posDeb1[isave] = gfd->VentHolesFin;
+                    posFin1[isave] = 100.0f;
+                    posDeb2[isave] = gfd->VentHolesFin;
+                    posFin2[isave] = 100.0f;
+
+
+                    p2a00[isave] = 0.0f;
+                    p2a0[isave] = layout->pinceLAAmp2[0];
+                    p2f0[isave] = layout->pinceLFAmp2[0];
+
+                    p2a01[isave] = 0.0f;
+                    p2a1[isave] = layout->pinceLAAmp2[0];
+                    p2f1[isave] = layout->pinceLFAmp2[0];
+
+                    func2f0[isave] = layout->funcL2[0];
+                    func2f1[isave] = layout->funcL2[0];
+                    isave++;
+
+                    if (gfd->LayoutKlapans) {
+                        if (gfd->VentHolesDouble){
+                            n1[isave] = -1;
+                            n2[isave] = 0;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=0.0f;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isKlapan[isave] = 1;
+                            isPince[isave] = 0;
+                            //printf ("\n klapan=%d", isave);
+                            isave++;
+                        }
+                            n1[isave] = -1;
+                            n2[isave] = 0;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=gfd->VentHolesDeb;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isKlapan[isave] = 1;
+                            isPince[isave] = 0;
+                            //printf ("\n klapan=%d", isave);
+                            isave++;
+
+                            n1[isave] = -1;
+                            n2[isave] = 0;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=gfd->VentHolesFin;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isKlapan[isave] = 1;
+                            isPince[isave] = 0;
+                            //printf ("\n klapan=%d", isave);
+                            isave++;
+
+                    }
+
+                }*/
+            }
+        }
+
+        for (i = 0; i < n - 1; i++) {
+            if (face == 1) {
+                preparePanelExt(gfd, i);
+                /*n1[isave] = i;
+                n2[isave] = i + 1;
+                s1[isave] = false;
+                s2[isave] = false;
+                posDeb1[isave] = debBorder;
+                posFin1[isave] = 100.0f;
+                posDeb2[isave] = debBorder;
+                posFin2[isave] = 100.0f;
+
+                p1a00[isave] = layout->pinceRAAmp2 [i];
+                p1a0[isave] = layout->pinceRAAmp1 [i];
+                p1f0[isave] = layout->pinceRFAmp1 [i];
+
+                p1a01[isave] = layout->pinceLAAmp2 [i + 1];
+                p1a1[isave] = layout->pinceLAAmp1 [i + 1];
+                p1f1[isave] = layout->pinceLFAmp1 [i + 1];
+
+                func1f0[isave] = layout->funcR1[i];
+                func1f1[isave] = layout->funcL1[i + 1];
+
+                ff1[isave] = 1;
+                ff2[isave] = 1;
+                fd1[isave] = faceDebBorder;
+                fd2[isave] = faceDebBorder;
+
+                isPince[isave] = 1;
+				isKlapan[isave] = 0;
+                coeff[isave] = 0.0f;
+                // tututu
+                if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->noNervVH[i])) {
+                    posDeb1[isave] = 0.0f;
+                    posDeb2[isave] = 0.0f;
+                    fd1[isave] = 1;
+                    fd2[isave] = 1;
+
+                }
+
+                if (i == (n - 2)) {
+                    func1f1[isave] = Zeros(func1f0[isave]->GetLignes(), 1);
+                    p1a01[isave] = 0.0f;
+                    p1a1[isave] = 0.0f;
+                    p1f1[isave] = 0.0f;
+                    if (!((gfd->VentHoles) && (gfd->noNervVH[i]))) {
+                        posDeb2[isave] = 0.0f;
+                        fd2[isave] = 2;
+                    }
+
+                }
+                isave++;
+                */
+            } else {
+                preparePanelInt(gfd, i);
+                prepareKlapan(gfd, i);
+/*
+                if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+                    tpF1 = gfd->VentHolesFin;
+                    tpF2 = gfd->VentHolesFin;
+                } else {
+                    tpF1 = 100.0f;
+                    tpF2 = 100.0f;
+                }
+//tututu
+                if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->noNervVH[i])) {
+                    n1[isave] = i;
+                    n2[isave] = i + 1;
+                    s1[isave] = false;
+                    s2[isave] = false;
+                    posDeb1[isave] = 0.0f;
+                    posFin1[isave] = debBorder;
+                    posDeb2[isave] = 0.0f;
+                    posFin2[isave] = debBorder;
+
+                    p2a00[isave] = 0.0f;
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
+
+                    p2a01[isave] = 0.0f;
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
+
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
+
+                    fd1[isave] = 2;
+                    fd2[isave] = 2;
+                    ff1[isave] = 2;
+                    ff2[isave] = 2;
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+                    isave++;
+                }
+
+                n1[isave] = i;
+                n2[isave] = i + 1;
+                s1[isave] = false;
+                s2[isave] = false;
+                posDeb1[isave] = debBorder;
+                posFin1[isave] = tpF1;
+                posDeb2[isave] = debBorder;
+                posFin2[isave] = tpF2;
+
+                p2a00[isave] = 0.0f;
+                p2a0[isave] = layout->pinceRAAmp2 [i];
+                p2f0[isave] = layout->pinceRFAmp2 [i];
+
+                p2a01[isave] = 0.0f;
+                p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                p2f1[isave] = layout->pinceLFAmp2 [i + 1];
+
+                func2f0[isave] = layout->funcR2[i];
+                func2f1[isave] = layout->funcL2[i + 1];
+
+                fd1[isave] = 2;
+                fd2[isave] = 2;
+                ff1[isave] = 2;
+                ff2[isave] = 2;
+                isPince[isave] = 1;
+                coeff[isave] = 0.0f;
+
+                if (i == (n - 2)) {
+                    func2f1[isave] = Zeros(func2f0[isave]->GetLignes(), 1);
+                    p2a01[isave] = 0.0f;
+                    p2a1[isave] = 0.0f;
+                    p2f1[isave] = 0.0f;
+
+                    if (!((gfd->VentHoles) && (gfd->noNervVH[i]))  ) {
+                        posFin1[isave] = 100.0f;
+                        posDeb2[isave] = 0.0f;
+                        posFin2[isave] = 100.0f;
+                    }
+                }
+
+                isave++;
+
+                if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+                    n1[isave] = i;
+                    n2[isave] = i + 1;
+                    s1[isave] = false;
+                    s2[isave] = false;
+                    posDeb1[isave] = gfd->VentHolesFin;
+                    posFin1[isave] = 100.0f;
+                    posDeb2[isave] = gfd->VentHolesFin;
+                    posFin2[isave] = 100.0f;
+
+                    p2a00[isave] = 0.0f;
+                    p2a0[isave] = layout->pinceRAAmp2 [i];
+                    p2f0[isave] = layout->pinceRFAmp2 [i];
+
+                    func2f0[isave] = layout->funcR2[i];
+                    func2f1[isave] = layout->funcL2[i + 1];
+
+                    p2a01[isave] = 0.0f;
+                    p2a1[isave] = layout->pinceLAAmp2 [i + 1];
+                    p2f1[isave] = layout->pinceLFAmp2 [i + 1];
+
+                    fd1[isave] = 2;
+                    fd2[isave] = 2;
+                    ff1[isave] = 2;
+                    ff2[isave] = 2;
+
+                    isPince[isave] = 1;
+                    coeff[isave] = 0.0f;
+
+                    if (i == (n - 2)) {
+                        func2f1[isave] = Zeros(func2f0[isave]->GetLignes(), 1);
+                        p2a01[isave] = 0.0f;
+                        p2a1[isave] = 0.0f;
+                        p2f1[isave] = 0.0f;
+                    }
+                    isave++;
+
+                    if (gfd->LayoutKlapans) {
+                        if (gfd->VentHolesDouble){
+                            n1[isave] = i;
+                            n2[isave] = i+1;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=0.0f;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isPince[isave] = 0;
+                            isKlapan[isave] = 1;
+                            //printf ("\n klapan=%d", isave);
+							fd1[isave] = 2;
+							fd2[isave] = 2;
+							ff1[isave] = 2;
+							ff2[isave] = 2;
+                            isave++;
+                        }
+                            n1[isave] = i;
+                            n2[isave] = i+1;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=gfd->VentHolesDeb;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isPince[isave] = 0;
+                            isKlapan[isave] = 1;
+                            //printf ("\n klapan=%d", isave);
+							fd1[isave] = 2;
+							fd2[isave] = 2;
+							ff1[isave] = 2;
+							ff2[isave] = 2;
+                           isave++;
+
+                            n1[isave] = i;
+                            n2[isave] = i+1;
+                            s1[isave] = false;
+                            s2[isave] = false;
+                            posKlapanIntDeb[isave]=gfd->VentHolesFin;
+                            posKlapanFin[isave]=gfd->PosKlapanFin;
+                            isPince[isave] = 0;
+                            isKlapan[isave] = 1;
+                            //printf ("\n klapan=%d", isave);
+							fd1[isave] = 2;
+							fd2[isave] = 2;
+							ff1[isave] = 2;
+							ff2[isave] = 2;
+                            isave++;
+
+                    }
+
+                }
+*/
+            }
+        }
+
+        //profiles
+        if (face == 1) {
+            //numncol[col] = isave;
+            //col++;
+
+            // profile
+            /*
+            if (gfd->LayoutSymetrique) {
+                for (i = n - 2; i > 0; i--) {
+                    n1[isave] = i;
+                    n2[isave] = i;
+                    s1[isave] = true;
+                    s2[isave] = true;
+                    fd1[isave] = 2;
+                    ff1[isave] = 2;
+
+                    fd2[isave] = 1;
+                    ff2[isave] = 1;
+
+                    posDeb1[isave] = 0.0f;
+                    posFin1[isave] = 100.0f;
+                    posDeb2[isave] = 0.0f;
+                    posFin2[isave] = 100.0f;
+
+                    isPince[isave] = 0;
+                    isave++;
+                }
+            }
+            if layout sym
+            */
+            for (i = 0; i < n - 1; i++) {
+                prepareProfile(gfd, i);
+
+                /*n1[isave] = i;
+                n2[isave] = i;
+                s1[isave] = false;
+                s2[isave] = false;
+                posDeb1[isave] = 0.0f;
+                posFin1[isave] = 100.0f;
+                posDeb2[isave] = 0.0f;
+                posFin2[isave] = 100.0f;
+                isPince[isave] = 0;
+                fd1[isave] = 2;
+                ff1[isave] = 2;
+
+                fd2[isave] = 1;
+                ff2[isave] = 1;
+                coeff[isave] = layout->coeffn[i];
+                isave++;*/
+
+            }
+            //numncol[col] = isave;
+            //col++;
+
+			if (gfd->DiagNervs) {
+				int k = 2 * gfd->quantDiag - 1;
+/*
+				if (gfd->LayoutSymetrique) {
+					for (int i = gfd->quantDiag - 1; i >= 0; i--) {
+						n1[isave] = gfd->noNervD[i];
+						n2[isave] = gfd->noNervD[i] + 1;
+						s1[isave] = true;
+						s2[isave] = true;
+						isPince[isave] = 0;
+						fd1[isave] = 2;
+						ff1[isave] = 2;
+						fd2[isave] = 1;
+						ff2[isave] = 1;
+						posDeb1[isave] = gfd->PosDiagNerv2A;
+						posFin1[isave] = gfd->PosDiagNerv2F;
+						posDeb2[isave] = gfd->PosDiagNerv1A;
+						posFin2[isave] = gfd->PosDiagNerv1F;
+						coeff[isave] = layout->coeffd[k];
+						isave++;
+						k--;
+						n1[isave] = gfd->noNervD[i];
+						n2[isave] = gfd->noNervD[i] - 1;
+						s1[isave] = true;
+						s2[isave] = true;
+						isPince[isave] = 0;
+						fd1[isave] = 2;
+						ff1[isave] = 2;
+
+						fd2[isave] = 1;
+						ff2[isave] = 1;
+
+						posDeb1[isave] = gfd->PosDiagNerv2A;
+						posFin1[isave] = gfd->PosDiagNerv2F;
+						posDeb2[isave] = gfd->PosDiagNerv1A;
+						posFin2[isave] = gfd->PosDiagNerv1F;
+						coeff[isave] = layout->coeffd[k];
+						isave++;
+						k--;
+					}
+				}
+                if layout symetric
+                */
+            k = 0;
+            for (i = 0; i < gfd->quantDiag; i++) {
+                prepareDiagNerv(gfd, i);
+
+/*                n1[isave] = gfd->noNervD[i];
+                n2[isave] = gfd->noNervD[i] - 1;
+                s1[isave] = false;
+                s2[isave] = false;
+                isPince[isave] = 0;
+                fd1[isave] = 2;
+                ff1[isave] = 2;
+                fd2[isave] = 1;
+                ff2[isave] = 1;
+                posDeb1[isave] = gfd->PosDiagNerv2A;
+                posFin1[isave] = gfd->PosDiagNerv2F;
+
+                posDeb2[isave] = gfd->PosDiagNerv1A;
+                posFin2[isave] = gfd->PosDiagNerv1F;
+                coeff[isave] = layout->coeffd[k];
+                isave++;
+                k++;
+
+                n1[isave] = gfd->noNervD[i];
+                n2[isave] = gfd->noNervD[i] + 1;
+                s1[isave] = false;
+                s2[isave] = false;
+                isPince[isave] = 0;
+                fd1[isave] = 2;
+                ff1[isave] = 2;
+                fd2[isave] = 1;
+                ff2[isave] = 1;
+
+                posDeb1[isave] = gfd->PosDiagNerv2A;
+                posFin1[isave] = gfd->PosDiagNerv2F;
+                posDeb2[isave] = gfd->PosDiagNerv1A;
+                posFin2[isave] = gfd->PosDiagNerv1F;
+                coeff[isave] = layout->coeffd[k];
+                isave++;
+                k++;*/
+            }
+            }
+        }
+    }
+
+
+
+  
+}
+
 
 void Layout::SaveLayout2(WindPatternsProject* gfd) {
     if (gfd->debug) printf("\n SaveLayout2()");
     prepareLayoutElements(gfd);
+    if (isDesign) prepareDesignLayoutElements(gfd);
+
     calculateExport(gfd);
+
     saveCalcLayoutToFile(gfd);
 }
 
@@ -1797,6 +2544,16 @@ void Layout::calculateExport(WindPatternsProject* gfd){
     for (int i = 0; i < panelsInt.size(); i++) {
         panelsInt[i]->calculateExport(gfd);
     }
+    
+    if (isDesign) {
+        for (int i = 0; i < panelsExt.size(); i++) {
+            panelsExtDesign[i]->calculateExport(gfd);
+        }
+        for (int i = 0; i < panelsInt.size(); i++) {
+            panelsIntDesign[i]->calculateExport(gfd);
+        }
+    }
+
     for (int i = 0; i < diagNervs.size(); i++) {
         diagNervs[i]->calculateExport(gfd);
     }
@@ -1820,6 +2577,62 @@ void calculateLayout(WindPatternsProject* gfd, Layout* layout) {
 }
 
 //void saveCalcLayoutToFile(int n, int q, TAxe **AxePD, TAxe **AxeMD, TAxe **RepD, int gfdVentilationLayout, TAxe **AxeCD, TAxe  **AxePTD, double *H, double *W, int* numncol) {
+
+void Layout::writeLayoutWithDesignToDXF(char *fileName, WindPatternsProject* gfd) {
+    FILE *fid;
+	printf("\nwrite MANY POLY fichier de DXF: '%s'",fileName);
+	if( (fid = fopen( fileName, "wt" )) == NULL ) {
+		printf( "\nError write file '%s'", fileName);
+		exit(0);
+	}
+    fprintf(fid,"0\nSECTION\n2\nENTITIES\n");
+    double maxW1 = -1000000.0f, maxW2 = -1000000.0f, maxW3 = -1000000.0f;
+    //panelsExt
+    double dx = 0.0f, dy = 0.0f, dz = 0.0f;
+    for (int i = 0; i < panelsExt.size(); i++) {
+        LayoutElementExport* lee = panelsExt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW1) maxW1 = lee->W;
+    }
+
+    //profs
+    dx = maxW1*2.0; dy = 0.0f; maxW2 = -1000000.0f; maxW3 = -1000000.0f;
+    for (int i = 0; i < profs.size(); i++) {
+        LayoutElementExport* lee = profs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW2) maxW2 = lee->W;
+    }
+
+    //diagNervs
+    dx = maxW1 * 2.0 + maxW2 * 4.0; dy = 0.0f;
+    for (int i = 0; i < diagNervs.size(); i++) {
+        LayoutElementExport* lee = diagNervs[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+        if (lee->W > maxW3) maxW3 = lee->W;
+    }
+
+    //panelsInt
+    dx = maxW1 * 2.0 + maxW2 * 4.0 + maxW3 * 4.0; dy = 0.0f;
+    for (int i = 0; i < panelsInt.size(); i++) {
+        LayoutElementExport* lee = panelsInt[i]->leexport;
+        writeFichierPolyDXFDelta(fid, lee->AxePD, lee->AxeMD,
+            1, lee->AxeRepD, gfd->VentilationLayout, lee->AxeCD, 1, lee->AxePTD, dx, dy, dz, 0);
+        dy = dy + lee->H * 2.0f;
+    }
+
+    fprintf(fid,"0\nENDSEC\n0\nEOF\n");
+    if(fclose(fid))	{
+	    printf("\nError close file");
+	    exit(0);
+    }
+}
+
 
 void Layout::writeLayoutToDXF(char *fileName, WindPatternsProject* gfd) {
     FILE *fid;
@@ -1887,7 +2700,14 @@ void Layout::saveCalcLayoutToFile(WindPatternsProject* gfd) {
     if (DlgOpen.DoModal() == IDOK) {
         fileName = DlgOpen.GetPathName();
         PtrfileName = fileName.GetBuffer(1);
-        writeLayoutToDXF(PtrfileName, gfd); 
+        writeLayoutToDXF(PtrfileName, gfd);
+        if (isDesign) {
+            char filenameLayoutDesign[255];
+            strcpy(filenameLayoutDesign, PtrfileName);
+            strcat (filenameLayoutDesign,"_design.dxf");
+            writeLayoutWithDesignToDXF(filenameLayoutDesign, gfd); 
+        }
+
         //writeManyFichierPolyDXF2(PtrfileName, n, q, AxePD, AxeMD, 1, AxeRepD, gfd->VentilationLayout, AxeCD, 1, AxePTD, W, H, numncol);
         char filename[255];
         strcpy(filename, PtrfileName);
