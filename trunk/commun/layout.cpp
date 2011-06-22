@@ -1043,20 +1043,133 @@ void Layout::prepareDiagNerv(WindPatternsProject* gfd, int i) {
     diagNervs.push_back(led2);
 }
 
+
+PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* p, double d1, double f1, double d2, double f2) {
+    PanelLayoutElement* ple = new PanelLayoutElement();
+    ple->side=p->side;
+    ple->n1 = p->n1;
+    ple->n2 = p->n2;
+    ple->s1 = false;
+    ple->s2 = false;
+    ple->posDeb1 = d1;
+    ple->posFin1 = f1;
+    ple->posDeb2 = d2;
+    ple->posFin2 = f2;
+
+    /*
+    ple->p1a00 = pinceRAAmp2 [i];
+    ple->p1a0 = pinceRAAmp1 [i];
+    ple->p1f0 = pinceRFAmp1 [i];
+
+    ple->p1a01 = pinceLAAmp2 [i + 1];
+    ple->p1a1 = pinceLAAmp1 [i + 1];
+    ple->p1f1 = pinceLFAmp1 [i + 1];
+    */
+
+    ple->func1f0 = funcR1[i];
+    ple->func1f1 = funcL1[i + 1];
+
+    ple->ff1 = p->ff1;
+    ple->ff2 = p->ff2;
+    ple->fd1 = p->fd1;
+    ple->fd2 = p->fd2;
+
+    ple->isPince = p->isPince;
+    ple->isKlapan = p->isKlapan;
+    ple->coeff = p->coeff;
+    return ple;
+}
+void Layout::intersectPanelExtWithColorSegment(PanelLayoutElement* p, ColorSegment* cs) {
+    double pd1 = p->posDeb1;
+    double pf1 = p->posFin1;
+    double pd2 = p->posDeb2;
+    double pf2 = p->posFin2;
+
+    double csd1 = cs->p00;
+    double csf1 = cs->p01;
+    double csd2 = cs->p10;
+    double csf2 = cs->p11;
+
+    PanelLayoutElement* ple = 0;
+
+    if ((csd1 <= pd1) && (csd2 <= pd2)) {
+        if ((pf1  <= csf1) && (pf2 <= csf2)) {
+            // ?
+            // pf1  pf2 
+            // pd1  pd2
+            if ((pd1 < pf1) && (pd2 < pf2)){
+                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, pf1,pd2, pf2);
+            }
+        }
+
+        if ((csf1  <= pf1) && (csf2 <= pf2)) {
+            // ?
+            // csf1  csf2 
+            // pd1   pd2
+            if ((pd1 < csf1) && (pd2 < csf2)){
+                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, csf1,pd2, csf2);
+            }
+        }
+    }
+
+    if ((pd1 <= csd1) && (pd2 <= csd2)) {
+        if ((pf1  <= csf1) && (pf2 <= csf2)) {
+            // ?
+            // pf1  pf2 
+            // csd1  csd2
+            if ((csd1 < pf1) && (csd2 < pf2)){
+                ple = getPanelLayoutElementCopyWithNewBorders(p, csd1, pf1,csd2, pf2);
+            }
+        }
+
+        if ((csf1  <= pf1) && (csf2 <= pf2)) {
+            // ?
+            // csf1  csf2 
+            // csd1   csd2
+            if ((csd1 < csf1) && (csd2 < csf2)){
+                ple = getPanelLayoutElementCopyWithNewBorders(p, csd1, csf1, csd2, csf2);
+            }
+        }
+    }
+
+    panelsExtDesign.push_back(ple);
+}
+
 void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
-      // calculate ColorSegmentsTable here, and pass it (i)
-      // to preparePanelExtDesign(gfd, i, KiteDesignExt . CST[i] // row );
-      // to preparePanelIntDesign(gfd, i, KiteDesignInt . CST[i] // row );
+    // calculate ColorSegmentsTable here, and pass it (i)
+    // to preparePanelExtDesign(gfd, i, KiteDesignExt . CST[i] // row );
+    // to preparePanelIntDesign(gfd, i, KiteDesignInt . CST[i] // row );
+    int n = gfd->Form->m_nbProfils;
+    
+    ColorSegmentsTable* cst = gfd->kiteDesignExt->getColorSegmentsTable( n );
 
-      if (isCenterPanel) {
-		prepareCenterPanelExtDesign(gfd);
-		prepareCenterPanelIntDesign(gfd);
-	  }
+    // ------------------ Ext ------------------------------
 
-      for (i = 0; i < n - 1; i++) {
-          preparePanelExtDesign(gfd, i);
-          preparePanelIntDesign(gfd, i);
-      }
+    for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+        PanelLayoutElement* p = panelsExt[ipe];
+
+        int nerv = p->n1;
+        vector<ColorSegment*> vcs = cst->table[nerv];            
+		for (int i = 0; i < vcs.size(); i++) {
+			ColorSegment* cs = vcs[i];
+            intersectPanelExtWithColorSegment(p, cs);
+
+        }
+    }
+    
+    // -----------------------------------------------------
+
+
+
+    for (int i = 0; i < panelsInt.size(); i++) {
+        panelsInt[i]->calculateExport(gfd);
+    }
+
+    // preparePanelExtDesign(gfd, i);
+    // preparePanelIntDesign(gfd, i);
+
+    // prepareCenterPanelExtDesign(gfd);
+    // prepareCenterPanelIntDesign(gfd);
 }
 
 void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
