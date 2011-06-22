@@ -145,6 +145,11 @@ class Layout
 		int faceDebBorder;
         std::vector<PanelLayoutElement*> panelsExt;
 		std::vector<PanelLayoutElement*> panelsInt;
+
+        std::vector<PanelLayoutElement*> panelsExtDesign;
+		std::vector<PanelLayoutElement*> panelsIntDesign;
+
+
 		std::vector<DiagNervLayoutElement*> diagNervs;
 		std::vector<ProfLayoutElement*> profs;
         std::vector<KlapanLayoutElement*> klapans;
@@ -160,17 +165,21 @@ class Layout
         void prepareProfile(WindPatternsProject* gfd, int i);
         void prepareDiagNerv(WindPatternsProject* gfd, int i);
         void prepareLayoutElements(WindPatternsProject* gfd);
+
+        /* ------------- save ------------------- */
         void SaveLayout2(WindPatternsProject* gfd);
         void saveCalcLayoutToFile(WindPatternsProject* gfd);
         void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd);
-        /* ------------- design ----------------- */
+        void writeLayoutWithDesignToDXF(char *fileName, WindPatternsProject* gfd);
 
+        /* ------------- design ----------------- */
         bool isDesign;
         void preparePanelIntDesign(WindPatternsProject* gfd, int i);
         void preparePanelExtDesign(WindPatternsProject* gfd, int i);
         void prepareCenterPanelIntDesign(WindPatternsProject* gfd);
         void prepareCenterPanelExtDesign(WindPatternsProject* gfd);
 
+        void prepareDesignLayoutElements(WindPatternsProject* gfd);
 };
 
 
@@ -185,10 +194,6 @@ const int REP_V = 8;
 const int REP_MIDDLE_LINE = 9;
 
 Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F);
-
-void saveCalcLayoutToFile(WindPatternsProject* gfd, Layout* layout);
-
-void SaveLayout2(WindPatternsProject* gfd, Layout* Layout);
 
 void calcPatronPosNerv(WindPatternsProject* gfd, int noNerv1, bool sym1, int FaceDeb1, int FaceFin1, double Deb1, double Fin1,
         int noNerv2, bool sym2, int FaceDeb2, int FaceFin2, double Deb2, double Fin2,
