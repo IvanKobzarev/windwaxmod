@@ -37,7 +37,7 @@ class LayoutElement
     public:
         LayoutElement ();
         virtual ~LayoutElement();
-        
+
         int type;
 
 		int n1, n2;
@@ -74,28 +74,28 @@ class KlapanLayoutElement : public LayoutElement {
     public:
 		KlapanLayoutElement();
 		virtual ~KlapanLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
+        void calculateExport(WindPatternsProject* gfd);
 };
 
 class ProfLayoutElement : public LayoutElement {
     public:
 		ProfLayoutElement();
 		virtual ~ProfLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
+        void calculateExport(WindPatternsProject* gfd);
 };
 
 class DiagNervLayoutElement : public LayoutElement {
     public:
 		DiagNervLayoutElement();
 		virtual ~DiagNervLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
+        void calculateExport(WindPatternsProject* gfd);
 };
 
 class PanelLayoutElement : public LayoutElement {
     public:
 		PanelLayoutElement();
 		virtual ~PanelLayoutElement();
-        void calculateExport(WindPatternsProject* gfd); 
+        void calculateExport(WindPatternsProject* gfd);
 };
 
 
@@ -221,11 +221,11 @@ ProfilGeom* getProfile(WindPatternsProject* gfd, Form* F, int nerv);
 
 void goCalcIndepPinceNew(WindPatternsProject* gfd, int noNerv, int face, double *pLA, double *pLF, Matrix** fl, double *pRA, double *pRF, Matrix** fr, double *len);
 
-Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix* P, 
+Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix* P,
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov);
 
 
-Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0, double coeff, Matrix* Xd, Matrix* Yd, Matrix* P, 
+Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0, double coeff, Matrix* Xd, Matrix* Yd, Matrix* P,
 								int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov);
 
 
