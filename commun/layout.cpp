@@ -596,6 +596,23 @@ void Layout::prepareKlapan(WindPatternsProject* gfd, int i) {
         }
     }
 }
+
+void Layout::preparePanelIntDesign(WindPatternsProject* gfd, int i) {
+    //TODO: me
+}
+
+void Layout::preparePanelExtDesign(WindPatternsProject* gfd, int i) {
+    //TODO: me
+}
+
+void Layout::prepareCenterPanelIntDesign(WindPatternsProject* gfd) {
+    //TODO: me
+}
+
+void Layout::prepareCenterPanelExtDesign(WindPatternsProject* gfd) {
+    //TODO: me
+}
+
 void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
     PanelLayoutElement* le1 = new PanelLayoutElement();
     le1->side=INT_SIDE;
