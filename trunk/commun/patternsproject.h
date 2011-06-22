@@ -2,6 +2,7 @@
 
 #include "matrice.h"
 #include "fichier.h"
+#include "design.h"
 
 //#include <afx.h>		//class CString
 //#include <afxdlgs.h>	//class CFileDialog
@@ -88,6 +89,8 @@ class WindPatternsProject
         char logFileName[255];
 		bool debug;
 		Ballonement* ballonement;
+        KiteDesign* kiteDesignExt;
+        KiteDesign* kiteDesignInt;
         void print();
 
 };

@@ -344,6 +344,9 @@ WindPatternsProject* getWindPatternsProject() {
     FicVentHoles->set_text(fileNameVentHoles);
     FicRepPoints->set_text(fileNameRepPoints);
     FicDiagNerv->set_text(fileNameDiagNerv);
+
+    gfd->kiteDesignInt = kiteDesignInt;
+    gfd->kiteDesignExt = kiteDesignExt;
     return gfd;
 }
 

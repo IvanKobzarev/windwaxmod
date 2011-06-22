@@ -163,6 +163,14 @@ class Layout
         void SaveLayout2(WindPatternsProject* gfd);
         void saveCalcLayoutToFile(WindPatternsProject* gfd);
         void writeLayoutToDXF(char *fileName, WindPatternsProject* gfd);
+        /* ------------- design ----------------- */
+
+        bool isDesign;
+        void preparePanelIntDesign(WindPatternsProject* gfd, int i);
+        void preparePanelExtDesign(WindPatternsProject* gfd, int i);
+        void prepareCenterPanelIntDesign(WindPatternsProject* gfd);
+        void prepareCenterPanelExtDesign(WindPatternsProject* gfd);
+
 };
 
 
