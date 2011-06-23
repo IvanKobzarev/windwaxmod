@@ -56,8 +56,11 @@ class LayoutElement
 		double p2a0, p2a00, p2f0, p2a1, p2a01, p2f1;
 		double posKlapanIntDeb;
 		double posKlapanFin;
+
 		int isPince;
 		int isKlapan;
+        int isVentHole;
+
         int side;
 
         Matrix* func1f0;
