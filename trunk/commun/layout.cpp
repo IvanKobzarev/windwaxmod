@@ -32,6 +32,7 @@ LayoutElement::~LayoutElement() {
 }
 
 LayoutElement::LayoutElement() {
+    isVentHole = 0;
 }
 
 LayoutElementExport::LayoutElementExport(){
@@ -40,21 +41,26 @@ LayoutElementExport::~LayoutElementExport(){
 }
 
 KlapanLayoutElement::KlapanLayoutElement(){
+    isVentHole = 0;
 }
 KlapanLayoutElement::~KlapanLayoutElement(){
 }
 
 ProfLayoutElement::ProfLayoutElement(){
+    isVentHole = 0;
 }
+
 ProfLayoutElement::~ProfLayoutElement(){
 }
 
 PanelLayoutElement::PanelLayoutElement(){
+    isVentHole = 0;
 }
 PanelLayoutElement::~PanelLayoutElement(){
 }
 
 DiagNervLayoutElement::DiagNervLayoutElement(){
+    isVentHole = 0;
 }
 DiagNervLayoutElement::~DiagNervLayoutElement(){
 }
@@ -597,22 +603,6 @@ void Layout::prepareKlapan(WindPatternsProject* gfd, int i) {
     }
 }
 
-void Layout::preparePanelIntDesign(WindPatternsProject* gfd, int i) {
-    //TODO: me
-}
-
-void Layout::preparePanelExtDesign(WindPatternsProject* gfd, int i) {
-    //TODO: me
-}
-
-void Layout::prepareCenterPanelIntDesign(WindPatternsProject* gfd) {
-    //TODO: me
-}
-
-void Layout::prepareCenterPanelExtDesign(WindPatternsProject* gfd) {
-    //TODO: me
-}
-
 void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
     PanelLayoutElement* le1 = new PanelLayoutElement();
     le1->side=INT_SIDE;
@@ -652,6 +642,7 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
         le1->ff1 = 2;
         le1->ff2 = 2;
         le1->isPince = 1;
+        le1->isVentHole = 1;
         le1->coeff = 0.0f;
         preparePanelLayoutElementCoeff(le1, gfd);
         panelsInt.push_back(le1);
@@ -684,6 +675,12 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
     le2->ff1 = 2;
     le2->ff2 = 2;
     le2->isPince = 1;
+    
+    le2->isVentHole = 0;
+    if ((gfd->VentHoles) && (gfd->noNervVH[i])) {
+        le2->isVentHole = 1;
+    }
+
     le2->coeff = 0.0f;
 
     if (i == (n - 2)) {
@@ -730,6 +727,7 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
         le3->ff2 = 2;
 
         le3->isPince = 1;
+        le3->isVentHole = 0;
         le3->coeff = 0.0f;
 
         //edge
@@ -776,6 +774,7 @@ void Layout::preparePanelExt(WindPatternsProject* gfd, int i) {
 
     le->isPince = 1;
 	le->isKlapan = 0;
+    le->isVentHole = 0;
     le->coeff = 0.0f;
     // tututu
     if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->noNervVH[i])) {
@@ -1044,18 +1043,22 @@ void Layout::prepareDiagNerv(WindPatternsProject* gfd, int i) {
 }
 
 
-PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* p, double d1, double f1, double d2, double f2) {
+
+PanelLayoutElement* getPanelLayoutElementCopy(PanelLayoutElement* p){
     PanelLayoutElement* ple = new PanelLayoutElement();
     ple->side=p->side;
     ple->n1 = p->n1;
     ple->n2 = p->n2;
-    ple->s1 = false;
-    ple->s2 = false;
-    ple->posDeb1 = d1;
-    ple->posFin1 = f1;
-    ple->posDeb2 = d2;
-    ple->posFin2 = f2;
+    ple->s1 = p->s1;
+    ple->s2 = p->s2;
+    ple->posDeb1 = p->posDeb1;
+    ple->posFin1 = p->posFin1;
+    ple->posDeb2 = p->posDeb2;
+    ple->posFin2 = p->posFin2;
 
+    memcpy(ple->p1a00, p->p1a00, sizeof(p->p1a00));
+    memcpy(ple->p1a0, p->p1a0, sizeof(p->p1a0));
+    memcpy(ple->p1f0, p->p1f0, sizeof(p->p1f0));
     /*
     ple->p1a00 = pinceRAAmp2 [i];
     ple->p1a0 = pinceRAAmp1 [i];
@@ -1065,9 +1068,16 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* 
     ple->p1a1 = pinceLAAmp1 [i + 1];
     ple->p1f1 = pinceLFAmp1 [i + 1];
     */
+    memcpy(ple->p1a01, p->p1a01, sizeof(p->p1a01));
+    memcpy(ple->p1a1, p->p1a1, sizeof(p->p1a1));
+    memcpy(ple->p1f1, p->p1f1, sizeof(p->p1f1));
 
+    /*
     ple->func1f0 = funcR1[i];
     ple->func1f1 = funcL1[i + 1];
+    */
+    memcpy(ple->func1f0, p->func1f0, sizeof(p->func1f0));
+    memcpy(ple->func1f1, p->func1f1, sizeof(p->func1f1));
 
     ple->ff1 = p->ff1;
     ple->ff2 = p->ff2;
@@ -1077,9 +1087,57 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* 
     ple->isPince = p->isPince;
     ple->isKlapan = p->isKlapan;
     ple->coeff = p->coeff;
+    ple->isVentHole = p->isVentHole;
     return ple;
 }
-void Layout::intersectPanelExtWithColorSegment(PanelLayoutElement* p, ColorSegment* cs) {
+
+PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* p, double d1, double f1, double d2, double f2) {
+    PanelLayoutElement* ple = new PanelLayoutElement();
+    ple->side=p->side;
+    ple->n1 = p->n1;
+    ple->n2 = p->n2;
+    ple->s1 = p->s1;
+    ple->s2 = p->s2;
+    ple->posDeb1 = d1;
+    ple->posFin1 = f1;
+    ple->posDeb2 = d2;
+    ple->posFin2 = f2;
+
+    memcpy(ple->p1a00, p->p1a00, sizeof(p->p1a00));
+    memcpy(ple->p1a0, p->p1a0, sizeof(p->p1a0));
+    memcpy(ple->p1f0, p->p1f0, sizeof(p->p1f0));
+    /*
+    ple->p1a00 = pinceRAAmp2 [i];
+    ple->p1a0 = pinceRAAmp1 [i];
+    ple->p1f0 = pinceRFAmp1 [i];
+
+    ple->p1a01 = pinceLAAmp2 [i + 1];
+    ple->p1a1 = pinceLAAmp1 [i + 1];
+    ple->p1f1 = pinceLFAmp1 [i + 1];
+    */
+    memcpy(ple->p1a01, p->p1a01, sizeof(p->p1a01));
+    memcpy(ple->p1a1, p->p1a1, sizeof(p->p1a1));
+    memcpy(ple->p1f1, p->p1f1, sizeof(p->p1f1));
+
+    /*
+    ple->func1f0 = funcR1[i];
+    ple->func1f1 = funcL1[i + 1];
+    */
+    memcpy(ple->func1f0, p->func1f0, sizeof(p->func1f0));
+    memcpy(ple->func1f1, p->func1f1, sizeof(p->func1f1));
+
+    ple->ff1 = p->ff1;
+    ple->ff2 = p->ff2;
+    ple->fd1 = p->fd1;
+    ple->fd2 = p->fd2;
+
+    ple->isPince = p->isPince;
+    ple->isKlapan = p->isKlapan;
+    ple->isVentHole = p->isVentHole;
+    ple->coeff = p->coeff;
+    return ple;
+}
+void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, std::vector<PanelLayoutElement*> vec) {
     double pd1 = p->posDeb1;
     double pf1 = p->posFin1;
     double pd2 = p->posDeb2;
@@ -1132,7 +1190,7 @@ void Layout::intersectPanelExtWithColorSegment(PanelLayoutElement* p, ColorSegme
         }
     }
 
-    panelsExtDesign.push_back(ple);
+    vec.push_back(ple);
 }
 
 void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
@@ -1147,29 +1205,31 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 
     for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
         PanelLayoutElement* p = panelsExt[ipe];
-
         int nerv = p->n1;
         vector<ColorSegment*> vcs = cst->table[nerv];            
 		for (int i = 0; i < vcs.size(); i++) {
 			ColorSegment* cs = vcs[i];
-            intersectPanelExtWithColorSegment(p, cs);
-
+            intersectPanelWithColorSegment(p, cs, panelsExtDesign);
         }
     }
     
     // -----------------------------------------------------
 
-
-
-    for (int i = 0; i < panelsInt.size(); i++) {
-        panelsInt[i]->calculateExport(gfd);
+    for (int ipi = 0; ipi < panelsInt.size(); ipi++) {
+        PanelLayoutElement* p = panelsInt[ipi];
+        if (p->isVentHole) {
+            int nerv = p->n1;
+            vector<ColorSegment*> vcs = cst->table[nerv];            
+		    for (int i = 0; i < vcs.size(); i++) {
+			    ColorSegment* cs = vcs[i];
+                intersectPanelWithColorSegment(p, cs, panelsIntDesign);
+            }
+        } else {
+            PanelLayoutElement* ple = getPanelLayoutElementCopy(p);
+            panelsIntDesign.push_back(ple);
+        }
     }
 
-    // preparePanelExtDesign(gfd, i);
-    // preparePanelIntDesign(gfd, i);
-
-    // prepareCenterPanelExtDesign(gfd);
-    // prepareCenterPanelIntDesign(gfd);
 }
 
 void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
