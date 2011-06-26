@@ -940,8 +940,8 @@ void getPinceFunctions(WindPatternsProject* gfd, int nerv1, int nerv2, int face,
 
 	//	printf ("\n calcNormalRasst");
     Matrix* Hn = calcNormalRasst(XProfil, YProfil, XProfil2n, YProfil2n);
-	 if (nerv1 == -1) printf ("\n Hn.len= %d", Hn->GetLignes());
-	 if (nerv1 == -1) Hn->print(0);
+	// if (nerv1 == -1) printf ("\n Hn.len= %d", Hn->GetLignes());
+	// if (nerv1 == -1) Hn->print(0);
 	// printf ("\n ...calcNormalRasst");
     Matrix* Hh = calcNormalRasst(XProfil, YProfil, XProfil2h, YProfil2h);
 	// printf ("\n Hh:");

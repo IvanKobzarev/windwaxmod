@@ -80,7 +80,7 @@ KiteDesign* readKiteDesignFromFile(const char* FilePath) {
 	}
 
 	kd->colorTable = new ColorTable(in);
-	kd->colorTable->print();
+	//kd->colorTable->print();
 	return kd;
 }
 
