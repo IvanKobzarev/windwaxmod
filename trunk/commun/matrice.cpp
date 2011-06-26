@@ -97,11 +97,6 @@ void Matrix::DivideElement( int l, int c, double value )
 	m_fTab[l][c] /= value;
 }
 
-/********************************/
-
-/* addition de deux matrices	*/
-
-/********************************/
 
 Matrix* AddMat(Matrix *m1,Matrix *m2)
 {
@@ -140,12 +135,6 @@ Matrix* AddMat(Matrix *m1,Matrix *m2)
 
 
 
-/************************************/
-
-/* addition d'un r�el � une matrice */
-
-/************************************/
-
 Matrix* AddReelMat(Matrix *m, double value )
 {
 	Matrix *res = NULL;
@@ -170,12 +159,6 @@ Matrix* AddReelMat(Matrix *m, double value )
 }
 
 
-
-/************************************/
-
-/* multiplication de deux matrices	*/
-
-/************************************/
 
 Matrix* MultMat(Matrix *m1,Matrix *m2)
 {
@@ -219,12 +202,6 @@ Matrix* MultMat(Matrix *m1,Matrix *m2)
 
 
 
-/********************************************/
-
-/* multiplication d'une matrice par un reel */
-
-/********************************************/
-
 Matrix * MultReelMat(Matrix *m, double value)
 {
 	Matrix *res = NULL;
@@ -246,14 +223,6 @@ Matrix * MultReelMat(Matrix *m, double value)
 }
 
 
-
-/********************************************/
-
-/* cre� une matrice ligne contenant des     */
-
-/* reels lin�airement espac� entre 2 bornes */
-
-/********************************************/
 
 Matrix* LinSpace(double deb, double fin, int n)
 {
@@ -278,12 +247,6 @@ Matrix* LinSpace(double deb, double fin, int n)
 
 
 
-/***********************************************/
-
-/* cre� une matrice ne contenant que des zeros */
-
-/***********************************************/
-
 Matrix* Zeros(int lig, int col)
 {
    if (DEBUG) printf ("\n Zeros(%d, %d)", lig, col);
@@ -303,12 +266,6 @@ Matrix* Zeros(int lig, int col)
 }
 
 
-
-/***********************************************/
-
-/* cre� une matrice ne contenant que des uns   */
-
-/***********************************************/
 
 Matrix* Ones(int lig, int col)
 {

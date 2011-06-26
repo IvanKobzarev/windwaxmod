@@ -345,6 +345,7 @@ WindPatternsProject* getWindPatternsProject() {
     FicRepPoints->set_text(fileNameRepPoints);
     FicDiagNerv->set_text(fileNameDiagNerv);
 
+    gfd->layoutWithDesign = layoutWithDesign;
     gfd->kiteDesignInt = kiteDesignInt;
     gfd->kiteDesignExt = kiteDesignExt;
     return gfd;
@@ -534,8 +535,6 @@ void initValueDialogue(void) {
     SpinNoNerv[0] -> set_int_limits(-1, F->m_nbProfils - 1);
     SpinNoNerv[1] -> set_int_limits(-1, F->m_nbProfils - 1);
 }
-
-
 
 void readRepPoints(int /*control*/) {
     CString fileName;
@@ -863,15 +862,14 @@ void apply(int /*control*/) {
 
 
 void applyMagic2(int /*control*/) {
+    printf ("\n applyMagic2()");
     int i; //,j;
     Matrix *xe, *xi;
     Matrix *extProf, *intProf;
     xe = new Matrix(ExtProfCent->GetLignes(), 1);
     xi = new Matrix(IntProfCent->GetLignes(), 1);
-    for (i = 0; i < ExtProfCent->GetLignes(); i++)
-        xe->SetElement(i, 0, ExtProfCent->Element(i, 0));
-    for (i = 0; i < IntProfCent->GetLignes(); i++)
-        xi->SetElement(i, 0, IntProfCent->Element(i, 0));
+    for (i = 0; i < ExtProfCent->GetLignes(); i++) xe->SetElement(i, 0, ExtProfCent->Element(i, 0));
+    for (i = 0; i < IntProfCent->GetLignes(); i++) xi->SetElement(i, 0, IntProfCent->Element(i, 0));
     for (i = 0; i < 2; i++) {
         if ((FaceDeb[i] == 1) && (!ValeurPresente(Deb[i], xe))) addeValeurCroissant(Deb[i], &xe);
         if ((FaceDeb[i] == 2) && (!ValeurPresente(Deb[i], xi))) addeValeurCroissant(Deb[i], &xi);
@@ -894,13 +892,11 @@ void applyMagic2(int /*control*/) {
         if ((!ValeurPresente(VentHolesFin, xi))) addeValeurCroissant(VentHolesFin, &xi);
     }
 
-
     extProf = Zeros(xe->GetLignes(), 2);
     intProf = Zeros(xi->GetLignes(), 2);
-    for (i = 0; i < extProf->GetLignes(); i++)
-        extProf->SetElement(i, 0, xe->Element(i, 0));
-    for (i = 0; i < intProf->GetLignes(); i++)
-        intProf->SetElement(i, 0, xi->Element(i, 0));
+
+    for (i = 0; i < extProf->GetLignes(); i++) extProf->SetElement(i, 0, xe->Element(i, 0));
+    for (i = 0; i < intProf->GetLignes(); i++) intProf->SetElement(i, 0, xi->Element(i, 0));
     InterpoleProfilBout(&ExtProfBout, extProf);
     InterpoleProfilBout(&IntProfBout, intProf);
     InterpoleProfilBout(&ExtProfCent, extProf);
@@ -909,12 +905,8 @@ void applyMagic2(int /*control*/) {
     delete(xi);
     delete(extProf);
     delete(intProf);
-    //printf ("gocalcPinceLayout()");
 	Layout* Layout = calcIndepPinceLayout(getWindPatternsProject(), F);
-    //printf ("...gocalcPinceLayout()");
-	//printf ("goSaveLayout2()");
     Layout->SaveLayout2(getWindPatternsProject());
-	//printf ("...goSaveLayout2()");
 }
 
 void saveFichier3dDXF( int ) //
@@ -1024,11 +1016,6 @@ void saveProject(int /*control*/) {
     }
 
 }
-
-
-/***********/
-/* quit */
-/***********/
 
 void quit(int control) {
     if (MessageBox(NULL, "Voulez-vous vraiment quit l'application ?", "Confirmation", MB_YESNO) == IDYES) {
@@ -1522,10 +1509,6 @@ void calcMagicPinceR(int noNerv1, double perc, int face, double* percNew) {
     delete (Xd2[1]);
     delete (Yd2[1]);
 }
-
-/***********************/
-/* calcPinces        */
-/***********************/
 
 void calcPinces(Matrix *Xd1, Matrix *Yd1,
         double PosPinceBA1, double AmpPinceBA1, double PosPinceBF1, double AmpPinceBF1,
@@ -2830,10 +2813,6 @@ void calcVue3dEtPatron(void)
     delete(ZInt);
 }
 
-/****************/
-/* display      */
-/****************/
-
 void display(void) {
     //calcVue3dEtPatron();
     ViewAxe(Axe3d);
@@ -2844,18 +2823,10 @@ void display(void) {
     glutSwapBuffers();
 }
 
-/*****************/
-/* reshape       */
-/*****************/
-
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     display();
 }
-
-/*****************/
-/* motion        */
-/*****************/
 
 void motion(int x, int y) {
     //pour gestion zoom dans fenetre patron
@@ -2988,10 +2959,6 @@ void motion(int x, int y) {
 
 }
 
-/****************/
-/* BoutonSouris */
-/****************/
-
 void BoutonSouris(int button, int state, int x, int y) {
     int window;
     //double xmil, ymil; //pour zoom OUT
@@ -3120,10 +3087,6 @@ void BoutonSouris(int button, int state, int x, int y) {
 
 }
 
-/*****************/
-/* keyboard      */
-/*****************/
-
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
         case 27: quit(0);
@@ -3131,11 +3094,6 @@ void keyboard(unsigned char key, int x, int y) {
         default:;
     }
 }
-
-/*****************/
-/* InitWindow   */
-
-/*****************/
 
 void InitWindow(void) {
     glEnable(GL_LINE_STIPPLE);
@@ -3145,9 +3103,6 @@ void InitWindow(void) {
     glutMotionFunc(&motion);
     glutMouseFunc(&BoutonSouris);
 }
-
-
-
 
 void InitLight(void) {
     float mat_specular[] = {1.0, 1.0, 1.0, 1.0};
@@ -3166,7 +3121,6 @@ void InitLight(void) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
 }
-
 
 int main(int argc, char** argv) {
     int ws, hs;

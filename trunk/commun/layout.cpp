@@ -296,7 +296,7 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         //P[0] = newP[0];
         //P[1] = newP[1];
     }
-    printf ("\n PanelLayoutElement::calculateExport.1");
+    //printf ("\n PanelLayoutElement::calculateExport.1");
     double marge1 = gfd->Marge[0];
     double marge2 = gfd->Marge[1];
     double margeDeb = gfd->MargeDeb;
@@ -324,23 +324,23 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
                    }
                 }
     }
-    printf ("\n PanelLayoutElement::calculateExport.2");
+    //printf ("\n PanelLayoutElement::calculateExport.2");
 
     int n = gfd->Form->m_nbProfils;
     char text[100];
     sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
     TAxe *AxeP, *AxePD,  *AxePTD,  *AxeMD,  *AxeCD,  *AxeRepD;
-    printf ("\n PanelLayoutElement::calculateExport.3");
+    //printf ("\n PanelLayoutElement::calculateExport.3");
     leexport = new LayoutElementExport();
     GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xdp[1], Ydp[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
         &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug,
 		true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
-    printf ("\n PanelLayoutElement::calculateExport.3.2");
+    //printf ("\n PanelLayoutElement::calculateExport.3.2");
 
-    printf ("\n PanelLayoutElement::calculateExport.4");
+    //printf ("\n PanelLayoutElement::calculateExport.4");
     calcMaxWH(Xdp[0], Ydp[0], Xdp[1], Ydp[1], &(leexport->W), &(leexport->H));
-    printf ("\n PanelLayoutElement::calculateExport.5");
+    //printf ("\n PanelLayoutElement::calculateExport.5");
     delete (Xdp[0]);
     delete (Ydp[0]);
     delete (Xdp[1]);
@@ -451,7 +451,7 @@ Layout::Layout(int n) {
 }
 
 Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
-    if ( gfd->debug ) printf("\n calcIndepPinceLayout()");
+    printf("\n calcIndepPinceLayout()");
 
     char name[255];
     if (getLayoutLogger() == NULL) {
@@ -468,9 +468,10 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
     int n = F->m_nbProfils;
     bool isCenterPanel = (1 & F->NbCaiss);
     Layout* layout = new Layout(n);
+    layout->isDesign = (gfd->layoutWithDesign == 1);
     layout->isCenterPanel = isCenterPanel;
     int startNerv;
-    //printf ("\n 1");
+
     if (isCenterPanel) {
         startNerv = 0;
     } else {
@@ -494,14 +495,14 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
         layout->funcR2[0] = p0f2->function1;
         goCalcPinceLen(gfd, 0, 2, &(layout->lenp2[0]));
     }
-	//printf ("\n 2");
+
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 1,
                 &(layout->pinceLAAmp1[inoNerv]), &(layout->pinceLFAmp1[inoNerv]), &(layout->funcL1[inoNerv]),
                 &(layout->pinceRAAmp1[inoNerv]), &(layout->pinceRFAmp1[inoNerv]), &(layout->funcR1[inoNerv]),
                 &(layout->lenp1[inoNerv]));
     }
-	//printf ("\n 3");
+
     getLayoutLogger()->logprintf("\n");
     for (int inoNerv = startNerv; inoNerv < n - 1; inoNerv++) {
         goCalcIndepPinceNew(gfd, inoNerv, 2,
@@ -509,15 +510,13 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
                 &(layout->pinceRAAmp2[inoNerv]), &(layout->pinceRFAmp2[inoNerv]), &(layout->funcR2[inoNerv]),
                 &(layout->lenp2[inoNerv]));
     }
-	//printf ("\n 4");
-    //if (DEBUG) printf("\n");
 
     // calc Profile Nervures
     for (int inoNerv = 0; inoNerv < n - 1; inoNerv++) {
         goCalcNervureWithPince(gfd, inoNerv, 2, inoNerv, 1,
                 layout->lenp2[inoNerv], layout->lenp1[inoNerv], &(layout->coeffn[inoNerv]));
     }
-    //if (DEBUG) printf("\n");
+
     // calc Diagonal Nervures
 	if (gfd->DiagNervs) {
 		int isave = 0;
@@ -528,6 +527,7 @@ Layout* calcIndepPinceLayout(WindPatternsProject* gfd, Form* F) {
 			isave++;
 		}
 	}
+    printf("\n...calcIndepPinceLayout()");
     return layout;
 }
 
@@ -1056,28 +1056,16 @@ PanelLayoutElement* getPanelLayoutElementCopy(PanelLayoutElement* p){
     ple->posDeb2 = p->posDeb2;
     ple->posFin2 = p->posFin2;
 
-    memcpy(ple->p1a00, p->p1a00, sizeof(p->p1a00));
-    memcpy(ple->p1a0, p->p1a0, sizeof(p->p1a0));
-    memcpy(ple->p1f0, p->p1f0, sizeof(p->p1f0));
-    /*
-    ple->p1a00 = pinceRAAmp2 [i];
-    ple->p1a0 = pinceRAAmp1 [i];
-    ple->p1f0 = pinceRFAmp1 [i];
+    ple->p1a00 = p->p1a00;
+    ple->p1a0 = p->p1a0;
+    ple->p1f0 = p->p1f0;
 
-    ple->p1a01 = pinceLAAmp2 [i + 1];
-    ple->p1a1 = pinceLAAmp1 [i + 1];
-    ple->p1f1 = pinceLFAmp1 [i + 1];
-    */
-    memcpy(ple->p1a01, p->p1a01, sizeof(p->p1a01));
-    memcpy(ple->p1a1, p->p1a1, sizeof(p->p1a1));
-    memcpy(ple->p1f1, p->p1f1, sizeof(p->p1f1));
+    ple->p1a01 = p->p1a01;
+    ple->p1a1 = p->p1a1;
+    ple->p1f1 = p->p1f1;
 
-    /*
-    ple->func1f0 = funcR1[i];
-    ple->func1f1 = funcL1[i + 1];
-    */
-    memcpy(ple->func1f0, p->func1f0, sizeof(p->func1f0));
-    memcpy(ple->func1f1, p->func1f1, sizeof(p->func1f1));
+    ple->func1f0 = CloneMat(p->func1f0);
+    ple->func1f1 = CloneMat(p->func1f1);
 
     ple->ff1 = p->ff1;
     ple->ff2 = p->ff2;
@@ -1103,28 +1091,16 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* 
     ple->posDeb2 = d2;
     ple->posFin2 = f2;
 
-    memcpy(ple->p1a00, p->p1a00, sizeof(p->p1a00));
-    memcpy(ple->p1a0, p->p1a0, sizeof(p->p1a0));
-    memcpy(ple->p1f0, p->p1f0, sizeof(p->p1f0));
-    /*
-    ple->p1a00 = pinceRAAmp2 [i];
-    ple->p1a0 = pinceRAAmp1 [i];
-    ple->p1f0 = pinceRFAmp1 [i];
+    ple->p1a00 = p->p1a00;
+    ple->p1a0 = p->p1a0;
+    ple->p1f0 = p->p1f0;
 
-    ple->p1a01 = pinceLAAmp2 [i + 1];
-    ple->p1a1 = pinceLAAmp1 [i + 1];
-    ple->p1f1 = pinceLFAmp1 [i + 1];
-    */
-    memcpy(ple->p1a01, p->p1a01, sizeof(p->p1a01));
-    memcpy(ple->p1a1, p->p1a1, sizeof(p->p1a1));
-    memcpy(ple->p1f1, p->p1f1, sizeof(p->p1f1));
+    ple->p1a01 = p->p1a01;
+    ple->p1a1 = p->p1a1;
+    ple->p1f1 = p->p1f1;
 
-    /*
-    ple->func1f0 = funcR1[i];
-    ple->func1f1 = funcL1[i + 1];
-    */
-    memcpy(ple->func1f0, p->func1f0, sizeof(p->func1f0));
-    memcpy(ple->func1f1, p->func1f1, sizeof(p->func1f1));
+    ple->func1f0 = CloneMat(p->func1f0);
+    ple->func1f1 = CloneMat(p->func1f1);
 
     ple->ff1 = p->ff1;
     ple->ff2 = p->ff2;
@@ -1138,6 +1114,7 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* 
     return ple;
 }
 void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, std::vector<PanelLayoutElement*> vec) {
+
     double pd1 = p->posDeb1;
     double pf1 = p->posFin1;
     double pd2 = p->posDeb2;
@@ -1233,6 +1210,7 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 }
 
 void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
+    printf("\n prepareLayoutElements()");
     int i = 0, face = 0;
     int n = gfd->Form->m_nbProfils;
     float debBorder = 0.0f;
@@ -1271,23 +1249,24 @@ void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
     if (isDesign) {
         prepareDesignLayoutElements(gfd);
     }
-
+    printf("\n...prepareLayoutElements()");
 }
 
 void Layout::SaveLayout2(WindPatternsProject* gfd) {
-    if (gfd->debug) printf("\n SaveLayout2()");
+    printf("\n SaveLayout2()");
     prepareLayoutElements(gfd);
     if (isDesign) prepareDesignLayoutElements(gfd);
-
     calculateExport(gfd);
-
     saveCalcLayoutToFile(gfd);
+    printf("\n...SaveLayout2()");
 }
 
 void Layout::calculateExport(WindPatternsProject* gfd){
+    printf("\n calculateExport()");
     for (int i = 0; i < panelsExt.size(); i++) {
         panelsExt[i]->calculateExport(gfd);
     }
+
     for (int i = 0; i < panelsInt.size(); i++) {
         panelsInt[i]->calculateExport(gfd);
     }
@@ -1304,9 +1283,12 @@ void Layout::calculateExport(WindPatternsProject* gfd){
     for (int i = 0; i < diagNervs.size(); i++) {
         diagNervs[i]->calculateExport(gfd);
     }
+
     for (int i = 0; i < profs.size(); i++) {
         profs[i]->calculateExport(gfd);
     }
+
+    printf("\n...calculateExport()");
 }
 
 void calculateLayout(WindPatternsProject* gfd, Layout* layout) {

@@ -10,6 +10,7 @@
 #include "pince.h"
 #include "matrice.h"
 #include "fichier.h"
+#include "design.h"
 
 #define HACCUR 0.005f
 
@@ -21,6 +22,7 @@
 
 class WindPatternsProject;
 class LayoutElement;
+class ColorSegment;
 
 class LayoutElementExport {
 public:
@@ -183,7 +185,9 @@ class Layout
         void prepareCenterPanelExtDesign(WindPatternsProject* gfd);
 
         void prepareDesignLayoutElements(WindPatternsProject* gfd);
+        void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, std::vector<PanelLayoutElement*> vec);
 };
+
 
 
 const int REP_TRIANGLE = 1;

@@ -62,6 +62,7 @@ class WindPatternsProject
         int VentilationLayout;
         int ReperPointsPlotterFormat;
 		int CorrectRepPoints;
+        int layoutWithDesign;
 
         float textX;
         float textY;
