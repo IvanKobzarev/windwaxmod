@@ -159,7 +159,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glui32d.lib glut32.lib"
+				AdditionalDependencies="glui32.lib glut32.lib"
 				OutputFile=".\Debug/WindPatterns.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
