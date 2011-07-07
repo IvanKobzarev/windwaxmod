@@ -312,6 +312,7 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(int n_profils ){
     printf ("\nKiteDesign::getColorSegmentsTable()");
     PanelLinesTable* panelLinesTable = getPanelLinesTable();
     ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable(n_profils);
+	printf (" KiteDesign::getColorSegmentsTable() colorTable->table.size()=%d n_profils=%d",  colorTable->table.size(), n_profils);
 	//printf ("\n nbprofils=%d colorTable->table.size()=%d", n_profils,colorTable->table.size());
 	for (int nerv = 0; (nerv < n_profils) && (nerv < colorTable->table.size()); nerv++) {
 		//printf ("\n===================================================");

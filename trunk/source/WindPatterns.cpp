@@ -70,7 +70,8 @@ int Numerotation = 0;
 int Ventilation = 0;
 int RepPoints = 1;
 int VentilationLayout = 1;
-int layoutWithDesign = 0;
+//TODO: should be 0
+int layoutWithDesign = 1;
 int CorrectRepPoints = 1;
 
 int PincePowerA = 0;
