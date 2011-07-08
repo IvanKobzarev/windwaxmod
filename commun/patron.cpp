@@ -22,7 +22,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                     double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
 					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
 {
-    if (debug) printf ("\n GenerateCourbe()");
+    printf ("\n GenerateCourbe()");
     double Marge[2]={marge1, marge2};
     *AxePatronP = createAxe(gfd->windowPatron);
     *AxePatronDXFP = createAxe(gfd->windowPatron);
@@ -30,7 +30,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
     *AxePatronTextDXFP = createAxe(gfd->windowPatron);
     *AxeMarginDXFP = createAxe(gfd->windowPatron);
     *AxeCercleDXFP = createAxe(gfd->windowPatron);
-    printf ("\n GenerateCourbe def 1");
+    //printf ("\n GenerateCourbe def 1");
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
     int ajCo1[2] = {0, 0};
     int ajCo2[2] = {0, 0};
@@ -41,18 +41,18 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
     int FaceFin[2]= {faceFin1, faceFin2};
     double Deb[2] = {deb1, deb2};
     double Fin[2] = {fin1, fin2};
-    printf ("\n GenerateCourbe def 2");
+    //printf ("\n GenerateCourbe def 2");
     Matrix *distance;
     int n;
     double xText, yText;
     char texte[100], texteExtInt[3] = "EI";
     Matrix *interpXSuspente, *interpYSuspente;
     double posSuspente, xSuspente[2][205], ySuspente[2][205];
-    printf ("\n GenerateCourbe def 3");
+    //printf ("\n GenerateCourbe def 3");
     Matrix * Xd[2] = {Xd1, Xd2};
 
-    printf ("\n Xd1->GetLignes()=%d", Xd1->GetLignes());
-    printf ("\n Xd2->GetLignes()=%d", Xd2->GetLignes());
+    //printf ("\n Xd1->GetLignes()=%d", Xd1->GetLignes());
+    //printf ("\n Xd2->GetLignes()=%d", Xd2->GetLignes());
 
 	Matrix * Xd0[2] = {Xd01, Xd02};
     Matrix * Yd[2] = {Yd1, Yd2};
@@ -60,31 +60,31 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
     Matrix * P[2] = {P1, P2};
 	double coeff[2]= {coeff1, coeff2};
     int i = 0, j = 0;
-    printf ("\n GenerateCourbe def 4");
+    //printf ("\n GenerateCourbe def 4");
     Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
     Courbe *CourbAv, *CourbAvBack, *CourbAr, *CourbArDXF, *CourbMargeAv, *CourbMargeAvBack, *CourbMargeAr, *CourbCoin, *CourbMargeArDXF, *CourbCoin1[2], *CourbCoin1Back[2], *CourbCoin2[2], *CourbCoin2Back[2], *CourbRep, *CourbRepDXF;
     Courbe *CourbCercle, *CourbCercleDXF;
-    printf ("\n GenerateCourbe def 5");
+    //printf ("\n GenerateCourbe def 5");
     for (i = 0; i < 2; i++) {
-        printf ("\n GenerateCourbe 1for: %d", i);
+       // printf ("\n GenerateCourbe 1for: %d", i);
         CourbPatron[i] = new Courbe("Patron");
         CourbPatronDXF[i] = new Courbe("Patron");
         CourbPatronBack[i] = new Courbe("PatronBack");
-        printf ("\n G0.1");
+       // printf ("\n G0.1");
         CourbPatron[i]->points = OFF;
         CourbPatronDXF[i]->points = OFF;
         CourbPatronBack[i]->points = OFF;
-        printf ("\n G0.2");
+       // printf ("\n G0.2");
         CourbPatron[i]->symX = OFF;
         CourbPatronDXF[i]->symX = OFF;
         CourbPatronBack[i]->symX = OFF;
-        printf ("\n G0.3");
+       // printf ("\n G0.3");
         CourbPatron[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
-        printf ("\n G0.4");
+       // printf ("\n G0.4");
         CourbPatronDXF[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
-        printf ("\n G0.5");
+       // printf ("\n G0.5");
         CourbPatronBack[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
-        printf ("\n G1");
+       // printf ("\n G1");
         for (j = 0; j < Xd[i]->GetLignes(); j++) {
             CourbPatron[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
             CourbPatronDXF[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
@@ -94,15 +94,15 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
             CourbPatronDXF[i]->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
             CourbPatronBack[i]->pts->SetElement(Xd[i]->GetLignes() - j - 1, 1, Yd[i]->Element(j, 0));
         }
-        printf ("\n G2");
+       // printf ("\n G2");
         addCourbe(*AxePatronP, CourbPatron[i]);
         distance = Ones(CourbPatron[i]->pts->GetLignes(), 1);
         for (j = 0; j < distance->GetLignes(); j++) distance->MultiplyElement(j, 0, Marge[i] / 100.0f);
-        printf ("\n CC Marge/Marge/MargeBack");
+      // printf ("\n CC Marge/Marge/MargeBack");
         CourbMarge[i] = new Courbe("Marge");
         CourbMargeDXF[i] = new Courbe("Marge");
         CourbMargeBack[i] = new Courbe("MargeBack");
-        printf ("\n G3");
+       // printf ("\n G3");
         if (i == 0) {
             CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
             CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
@@ -112,27 +112,27 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
             CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
             CourbMargeBack[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
         }
-        printf ("\n G4");
+       // printf ("\n G4");
         CourbMarge[i]->points = OFF;
         CourbMarge[i]->symX = OFF;
         CourbMargeDXF[i]->points = OFF;
         CourbMargeDXF[i]->symX = OFF;
         CourbMargeBack[i]->points = OFF;
         CourbMargeBack[i]->symX = OFF;
-        printf ("\n G5");
+       // printf ("\n G5");
         for (j = 0; j < CourbMarge[i]->pts->GetLignes(); j++) {
             CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 0, CourbMarge[i]->pts->Element(j, 0));
             CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 1, CourbMarge[i]->pts->Element(j, 1));
         }
-        printf ("\n G6");
+       // printf ("\n G6");
         addCourbe(*AxePatronP, CourbMarge[i]);
         delete(distance);
     }
-    printf ("\n G7");
+   // printf ("\n G7");
     addCourbe(*AxePatronDXFP, CourbPatronDXF[0]);
     if ((Xd[0]->Element(0, 0) != Xd[1]->Element(0, 0)) //test points Av cote 1&2 confondus
             || (Yd[0]->Element(0, 0) != Yd[1]->Element(0, 0))) {
-        if (debug) printf ("\n GenerateCourbe Avant");
+       // if (debug) printf ("\n GenerateCourbe Avant");
         CourbAv = new Courbe("Avant");
         CourbAvBack = new Courbe("AvantBack");
         CourbAv->pts = new Matrix(2, 2);
@@ -723,7 +723,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                             CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
                     addCourbe(*AxeRepDXFP, CourbRepDXF);
                 } else {
-                    printf (" \n NOOOOT MATCH!");
+                   // printf (" \n NOOOOT MATCH!");
                 }
 
             }
