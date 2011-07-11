@@ -185,7 +185,7 @@ class Layout
         void prepareCenterPanelExtDesign(WindPatternsProject* gfd);
 
         void prepareDesignLayoutElements(WindPatternsProject* gfd);
-        void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, std::vector<PanelLayoutElement*> vec);
+        void intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, int csFace, std::vector<PanelLayoutElement*> *vec);
 };
 
 

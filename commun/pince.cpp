@@ -623,7 +623,8 @@ Pince* getPincePlus(WindPatternsProject* gfd,
                         int nerv1, int nerv2,
                         float deb1, float fin1, float deb2, float fin2, int faceDeb, int faceFin )
 {
-    //printf ("\ngetPincePlus()");
+    printf ("\ngetPincePlus (%d, %f, %f)-(%d, %f, %f)", nerv1, deb1, fin1, nerv2, deb2, fin2);
+	printf ("\n faceDeb: %d, faceFin: %d", faceDeb, faceFin);
     Pince *res, *res1, *res2;
     if (faceDeb == 1 && faceFin == 1) 
         {
@@ -693,7 +694,7 @@ Pince* getPincePlus(WindPatternsProject* gfd,
             res->makeSrez(deb1, fin1, deb2, fin2);
         }
 
-        //printf ("\n...getPincePlusNew()");
+        printf ("\n...getPincePlusNew()");
         return res;
 }
 
