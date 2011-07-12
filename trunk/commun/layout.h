@@ -103,7 +103,11 @@ class PanelLayoutElement : public LayoutElement {
         void calculateExport(WindPatternsProject* gfd);
 };
 
-
+class Quad {
+	public:
+		Quad(double _pd1, double _pf1, double _pd2, double _pf2);
+		double pd1, pd2, pf1, pf2;
+};
 
 class Layout
 {
@@ -185,7 +189,8 @@ class Layout
         void prepareCenterPanelExtDesign(WindPatternsProject* gfd);
 
         void prepareDesignLayoutElements(WindPatternsProject* gfd);
-        void intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, int csFace, std::vector<PanelLayoutElement*> *vec);
+        void intersectPanelExtWithColorSegment(PanelLayoutElement* p, ColorSegment* cs);
+		void intersectPanelIntWithColorSegment(PanelLayoutElement* p, ColorSegment* cs);
 };
 
 

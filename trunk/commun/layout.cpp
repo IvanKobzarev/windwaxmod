@@ -66,6 +66,14 @@ DiagNervLayoutElement::~DiagNervLayoutElement(){
 }
 
 
+
+Quad::Quad(double _pd1, double _pf1, double _pd2, double _pf2){
+	pd1 = _pd1;
+	pf1 = _pf1;
+	pd2 = _pd2;
+	pf2 = _pf2;
+}
+
 void KlapanLayoutElement::calculateExport(WindPatternsProject* gfd){
     printf ("\n KlapanLayoutElement::calculateExport");
     bool debug = 0;
@@ -1088,7 +1096,43 @@ PanelLayoutElement* getPanelLayoutElementCopy(PanelLayoutElement* p){
     return ple;
 }
 
-PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* p, double d1, double f1, double d2, double f2) {
+PanelLayoutElement* getPanelLayoutElementCopyWithNewQuad(PanelLayoutElement* p, Quad* q) {
+    PanelLayoutElement* ple = new PanelLayoutElement();
+    ple->side=p->side;
+    ple->n1 = p->n1;
+    ple->n2 = p->n2;
+    ple->s1 = p->s1;
+    ple->s2 = p->s2;
+	ple->posDeb1 = q->pd1;
+    ple->posFin1 = q->pf1;
+    ple->posDeb2 = q->pd2;
+    ple->posFin2 = q->pf2;
+
+    ple->p1a00 = p->p1a00;
+    ple->p1a0 = p->p1a0;
+    ple->p1f0 = p->p1f0;
+
+    ple->p1a01 = p->p1a01;
+    ple->p1a1 = p->p1a1;
+    ple->p1f1 = p->p1f1;
+
+    ple->func1f0 = CloneMat(p->func1f0);
+    ple->func1f1 = CloneMat(p->func1f1);
+
+    ple->ff1 = p->ff1;
+    ple->ff2 = p->ff2;
+    ple->fd1 = p->fd1;
+    ple->fd2 = p->fd2;
+
+    ple->isPince = p->isPince;
+    ple->isKlapan = p->isKlapan;
+    ple->isVentHole = p->isVentHole;
+    ple->coeff = p->coeff;
+    return ple;
+}
+
+
+PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* p, double d1, double f1, double d2, double f2, int face) {
     PanelLayoutElement* ple = new PanelLayoutElement();
     ple->side=p->side;
     ple->n1 = p->n1;
@@ -1122,12 +1166,156 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewBorders(PanelLayoutElement* 
     ple->coeff = p->coeff;
     return ple;
 }
-void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment* cs, int csFace, std::vector<PanelLayoutElement*> *vec) {
+
+Quad* intersectQuads(Quad* qp, Quad* qcs) {
+	Quad* result = 0;
+	double pd1 = qp->pd1;
+	double pf1 = qp->pf1;
+	double pd2 = qp->pd2;
+	double pf2 = qp->pf2;
+	printf ("\n intersectQuads qp: (%f, %f) (%f, %f)", pd1, pf1, pd2, pf2);
+
+	double csd1 = qcs->pd1;
+	double csf1 = qcs->pf1;
+	double csd2 = qcs->pd2;
+	double csf2 = qcs->pf2;
+	printf ("\n intersectQuads qcs: (%f, %f) (%f, %f)", csd1, csf1, csd2, csf2);
+
+	if ((csd1 <= pd1) && (csd2 <= pd2)) {
+        if ((pf1  <= csf1) && (pf2 <= csf2)) {
+            // ?
+            // pf1  pf2 
+            // pd1  pd2
+            if ((pd1 <= pf1) && (pd2 <= pf2)){
+				printf ("\n!!! csd1 <= pd1 < pf1 <= csf1");
+				result = new Quad(pd1, pf1, pd2, pf2);
+                //ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, pf1, pd2, pf2);
+
+            }
+        }
+
+        if ((csf1  <= pf1) && (csf2 <= pf2)) {
+            // ?
+            // csf1  csf2 
+            // pd1   pd2
+            if ((pd1 <= csf1) && (pd2 <= csf2)){
+				printf ("\n!!! csd1 <= pd1 < csf1 <= pf1");
+                //ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, csf1, pd2, csf2);
+				result = new Quad(pd1, csf1, pd2, csf2);
+            }
+        }
+    }
+
+    if ((pd1 <= csd1) && (pd2 <= csd2)) {
+        if ((pf1  <= csf1) && (pf2 <= csf2)) {
+            // ?
+            // pf1  pf2 
+            // csd1  csd2
+            if ((csd1 <= pf1) && (csd2 <= pf2)){
+				printf ("\n!!! pd1 <= csd1 < pf1 <= csf1");
+                //ple = getPanelLayoutElementCopyWithNewBorders(p, csd1, pf1,csd2, pf2);
+				result = new Quad(csd1, pf1, csd2, pf2);
+            }
+        }
+
+        if ((csf1  <= pf1) && (csf2 <= pf2)) {
+            // ?
+            // csf1  csf2 
+            // csd1   csd2
+            if ((csd1 <= csf1) && (csd2 <= csf2)){
+				printf ("\n!!! pd1 <= csd1 < csf1 <= pf1");
+                //ple = getPanelLayoutElementCopyWithNewBorders(p, csd1, csf1, csd2, csf2);
+				result = new Quad(csd1, csf1, csd2, csf2);
+            }
+        }
+    }
+
+	return result;
+}
+
+void Layout::intersectPanelExtWithColorSegment(PanelLayoutElement* p, ColorSegment* cs) {
 	printf ("\n Layout::intersectPanelWithColorSegment()");
 
     double pd1 = p->posDeb1;
     double pf1 = p->posFin1;
     double pd2 = p->posDeb2;
+    double pf2 = p->posFin2;
+	printf ("\nP  (%f(%d), %f(%d)) (%f(%d), %f(%d))", pd1, p->fd1,  pf1, p->ff1,pd2, p->fd2, pf2, p->ff2);
+
+	int fd1 = p->fd1;
+	int fd2 = p->fd2;
+
+	bool was = false;
+	if (fd1 == 2) {
+		pd1 = 0.0f; // make fd1 = 1
+		was = true;
+	}
+	if (fd2 == 2) {
+		pd2 = 0.0f; // make fd2 = 1
+		was = true;
+	}
+	printf ("\nnewP  (%f(%d), %f(%d)) (%f(%d), %f(%d))", pd1, p->fd1, pf1, p->ff1, pd2, p->fd2,  pf2, p->ff2);
+	
+	Quad* qp = new Quad(pd1, pf1, pd2, pf2);
+
+    double csd1 = cs->p00;
+    double csf1 = cs->p10;
+    double csd2 = cs->p01;
+    double csf2 = cs->p11;
+	Quad* qcs = new Quad(csd1, csf1, csd2, csf2);
+
+	printf ("\nCS (%f, %f) (%f, %f)", csd1, csf1, csd2, csf2);
+
+	printf ("\n IPE 1");
+	Quad* qr = intersectQuads(qp, qcs);
+	printf ("\n IPE 2");
+	if (qr == 0) {
+		printf ("\n ERROR! quad result==0");
+		return;
+	}
+	printf ("Quad result (%f, %f) (%f, %f)", qr->pd1, qr->pf1, qr->pd2, qr->pf2);
+	PanelLayoutElement* ple = getPanelLayoutElementCopyWithNewQuad(p, qr);
+	printf ("\n IPE 3");
+	printf ("\nP  (%f(%d), %f(%d)) (%f(%d), %f(%d))", ple->posDeb1, ple->fd1,  ple->posFin1, ple->ff1,ple->posDeb2, ple->fd2, ple->posFin2, ple->ff2);
+
+	if ((was) && (qr->pd1 == 0.0f) && (qr->pd2 == 0.0f)) {
+		printf ("\n was IPE 4");
+		printf ("\n if ((qr->pd1 == 0.0f) && (qr->pd2 == 0.0f))...");
+		ple->posDeb1 = p->posDeb1;
+		ple->posDeb2 = p->posDeb2;
+		ple->fd1 = p->fd1;
+		ple->fd2 = p->fd2;
+	} else {
+		ple->fd1 = 1;
+		ple->fd2 = 1;
+	}
+	printf ("\n IPE 5");
+	printf ("\nresP  (%f(%d), %f(%d)) (%f(%d), %f(%d))", ple->posDeb1, ple->fd1, ple->posFin1, ple->ff1, ple->posDeb2, ple->fd2, ple->posFin2, ple->ff2);
+
+	if (ple != 0 ) {
+		printf ("\n panelsExtDesign->push_back");
+		panelsExtDesign.push_back(ple);
+	}
+}
+
+void Layout::intersectPanelIntWithColorSegment(PanelLayoutElement* p, ColorSegment* cs) {
+/*	printf ("\n Layout::intersectPanelWithColorSegment()");
+
+    double pd1 = p->posDeb1;
+    double pf1 = p->posFin1;
+    double pd2 = p->posDeb2;
+
+	int fd1 = p->faceDeb1;
+	int fd2 = p->faceDeb2;
+	if (fd1 == 2) {
+		pd1 = 0; // make fd1 = 1
+	}
+
+	if (fd2 == 2) {
+		pd2 = 0; // make fd2 = 1
+	}
+
+
     double pf2 = p->posFin2;
 	printf ("\nP  d(%f(%d), %f(%d)) f(%f(%d), %f(%d))", pd1, p->faceDeb1, pd2, p->faceDeb2, pf1, p->faceFin1, pf2, p->faceFin2);
     double csd1 = cs->p00;
@@ -1144,7 +1332,7 @@ void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment*
             // pd1  pd2
             if ((pd1 < pf1) && (pd2 < pf2)){
 				printf ("\n!!! csd1 <= pd1 < pf1 <= csf1");
-                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, pf1,pd2, pf2);
+                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, pf1, pd2, pf2);
 
             }
         }
@@ -1155,7 +1343,7 @@ void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment*
             // pd1   pd2
             if ((pd1 < csf1) && (pd2 < csf2)){
 				printf ("\n!!! csd1 <= pd1 < csf1 <= pf1");
-                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, csf1,pd2, csf2);
+                ple = getPanelLayoutElementCopyWithNewBorders(p, pd1, csf1, pd2, csf2);
             }
         }
     }
@@ -1183,9 +1371,11 @@ void Layout::intersectPanelWithColorSegment(PanelLayoutElement* p, ColorSegment*
     }
 	if (ple != 0 ) {
 		printf ("\n VEC.push_back");
-		vec->push_back(ple);
-	}
+		panelsIntDesign.push_back(ple);
+	}*/
 }
+
+
 
 void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 	printf ("\nprepareDesignLayoutElements()");
@@ -1198,11 +1388,13 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 	
     // ------------------ Ext ------------------------------
 	printf ("\n panelsExt.size(): %d", panelsExt.size());
-    for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+    //for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+	for (int ipe = 0; ipe < 3; ipe++) {
 		printf("\n ipe: %d", ipe);
         PanelLayoutElement* p = panelsExt[ipe];
         int nerv = p->n1;
 		printf ("\n nerv: %d", nerv);
+		printf ("-- %d, %d, %d, %d ", p->fd1, p->ff1, p->fd2, p->ff2);
 		if (nerv == -1) {
 			printf ("\ncontinue...");
 			continue;
@@ -1212,12 +1404,12 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 		printf ("\n vcs.size()=%d", vcs.size());
 		for (int i = 0; i < vcs.size(); i++) {
 			ColorSegment* cs = vcs[i];
-            intersectPanelWithColorSegment(p, cs, 1, &panelsExtDesign);
+            intersectPanelExtWithColorSegment(p, cs);
         }
     }
 
 	printf ("\n result: ");
-	for (int _i=0; _i < panelsExtDesign.size(); _i++) {
+	for (int _i = 0; _i < panelsExtDesign.size(); _i++) {
 		PanelLayoutElement* pd = panelsExtDesign[_i];
 		
 		printf ("\n %d pd: {%d(%f, %d)-(%f, %d)  %d(%f, %d)-(%f, %d)}  ", _i, pd->n1, pd->posDeb1, pd->fd1, pd->posFin1, pd->ff1, pd->n2, pd->posDeb2, pd->fd2, pd->posFin2, pd->ff2);
@@ -1304,8 +1496,8 @@ void Layout::SaveLayout2(WindPatternsProject* gfd) {
 		printf("\n prepareDesignLayoutElements()");
 		prepareDesignLayoutElements(gfd);
 	}
-    calculateExport(gfd);
-    saveCalcLayoutToFile(gfd);
+    //calculateExport(gfd);
+    //saveCalcLayoutToFile(gfd);
     printf("\n...SaveLayout2()");
 }
 
