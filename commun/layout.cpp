@@ -231,7 +231,7 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         } else {
             if (posDeb1 > posDeb2) myDeb = posDeb1; else myDeb = posDeb2;
         }
-        if (debug) printf ("calcPatron myDeb myFin");
+        if (debug) printf ("\n calcPatron myDeb myFin");
 		printf ("\n ce3");
         calcPatron(gfd, n1, s1, fd1, ff1, myDeb, myFin,
                 n2, s2, fd2, ff2, myDeb, myFin,
@@ -651,6 +651,9 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
         le1->p2a1 = pinceLAAmp2 [i + 1];
         le1->p2f1 = pinceLFAmp2 [i + 1];
 
+        le1->func1f0 = 0;
+        le1->func1f1 = 0;
+
         le1->func2f0 = funcR2[i];
         le1->func2f1 = funcL2[i + 1];
 
@@ -683,6 +686,9 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
     le2->p2a01 = 0.0f;
     le2->p2a1 = pinceLAAmp2 [i + 1];
     le2->p2f1 = pinceLFAmp2 [i + 1];
+
+    le2->func1f0 = 0;
+    le2->func1f1 = 0;
 
     le2->func2f0 = funcR2[i];
     le2->func2f1 = funcL2[i + 1];
@@ -730,6 +736,9 @@ void Layout::preparePanelInt(WindPatternsProject* gfd, int i) {
         le3->p2a00 = 0.0f;
         le3->p2a0 = pinceRAAmp2 [i];
         le3->p2f0 = pinceRFAmp2 [i];
+
+        le3->func1f0 = 0;
+        le3->func1f1 = 0;
 
         le3->func2f0 = funcR2[i];
         le3->func2f1 = funcL2[i + 1];
@@ -783,6 +792,9 @@ void Layout::preparePanelExt(WindPatternsProject* gfd, int i) {
 
     le->func1f0 = funcR1[i];
     le->func1f1 = funcL1[i + 1];
+
+    le->func2f0 = 0;
+    le->func2f1 = 0;
 
     le->ff1 = 1;
     le->ff2 = 1;
@@ -847,6 +859,8 @@ void Layout::prepareCenterPanelInt(WindPatternsProject* gfd) {
             le->p2a1 = pinceLAAmp2 [i + 1];
             le->p2f1 = pinceLFAmp2 [i + 1];
 
+		    le->func1f0 = 0;
+		    le->func1f1 = 0;
             le->func2f0 = funcR2[i];
             le->func2f1 = funcL2[i + 1];
 
@@ -885,6 +899,9 @@ void Layout::prepareCenterPanelInt(WindPatternsProject* gfd) {
         le1->p2a1 = pinceLAAmp2[0];
         le1->p2f1 = pinceLFAmp2[0];
 
+		le1->func1f0 = 0;
+		le1->func1f1 = 0;
+
         le1->func2f0 = funcL2[0];
         le1->func2f1 = funcL2[0];
         panelsInt.push_back(le1);
@@ -917,6 +934,9 @@ void Layout::prepareCenterPanelInt(WindPatternsProject* gfd) {
             le2->p2a01 = 0.0f;
             le2->p2a1 = pinceLAAmp2[0];
             le2->p2f1 = pinceLFAmp2[0];
+
+		    le2->func1f0 = 0;
+		    le2->func1f1 = 0;
 
             le2->func2f0 = funcL2[0];
             le2->func2f1 = funcL2[0];
@@ -992,6 +1012,9 @@ void Layout::prepareCenterPanelExt(WindPatternsProject* gfd) {
 
     le->func1f0 = funcL1[0];
     le->func1f1 = funcL1[0];
+    le->func2f0 = 0;
+    le->func2f1 = 0;
+
     if ((gfd->VentHoles) && (gfd->VentHolesDouble) && (gfd->VentCentralNerv)) {
         le->posDeb1 = 0.0f;
         le->posDeb2 = 0.0f;
@@ -1118,8 +1141,32 @@ PanelLayoutElement* getPanelLayoutElementCopyWithNewQuad(PanelLayoutElement* p, 
     ple->p1a1 = p->p1a1;
     ple->p1f1 = p->p1f1;
 	printf ("\n 4");
-    ple->func1f0 = CloneMat(p->func1f0);
-    ple->func1f1 = CloneMat(p->func1f1);
+
+	printf ("\n p->func1f0");
+	if (p->func1f0 != 0) {
+		printf ("\n --p->func1f0");
+		ple->func1f0 = CloneMat(p->func1f0);
+	}
+	
+	printf ("\n p->func1f1");
+	if (p->func1f1 != 0) {
+		printf ("\n --p->func1f1");
+		ple->func1f1 = CloneMat(p->func1f1);
+	}
+
+	printf ("\n p->func2f0");
+	if (p->func2f0 != 0) {
+		printf ("\n --p->func2f0");
+		ple->func2f0 = CloneMat(p->func2f0);
+	}
+
+	printf ("\n p->func2f1");
+	if (p->func2f1 != 0) {
+		printf ("\n --p->func2f1");
+		ple->func2f1 = CloneMat(p->func2f1);
+	}
+
+
 	printf ("\n 5");
     ple->ff1 = p->ff1;
     ple->ff2 = p->ff2;
@@ -1427,26 +1474,26 @@ void Layout::prepareLayoutElements(WindPatternsProject* gfd) {
 
 	this->debBorder = debBorder;
 	this->faceDebBorder = faceDebBorder;
-	/*
+	
     if (isCenterPanel) {
         prepareCenterPanelExt(gfd);
         prepareCenterPanelInt(gfd);
-    }*/
+    }
 
 
     for (i = 0; i < n - 1; i++) {
       preparePanelExt(gfd, i);
       preparePanelInt(gfd, i);
 
-      //prepareKlapan(gfd, i);
-      //prepareProfile(gfd, i);
+      prepareKlapan(gfd, i);
+      prepareProfile(gfd, i);
     }
-	/*
+	
     if (gfd->DiagNervs) {
         for (i = 0; i < gfd->quantDiag; i++) {
           prepareDiagNerv(gfd, i);
         }
-    }*/
+    }
 
     if (isDesign) {
         prepareDesignLayoutElements(gfd);
@@ -1461,14 +1508,14 @@ void Layout::SaveLayout2(WindPatternsProject* gfd) {
 		printf("\n prepareDesignLayoutElements()");
 		prepareDesignLayoutElements(gfd);
 	}
-    //calculateExport(gfd);
-    //saveCalcLayoutToFile(gfd);
+    calculateExport(gfd);
+    saveCalcLayoutToFile(gfd);
     printf("\n...SaveLayout2()");
 }
 
 void Layout::calculateExport(WindPatternsProject* gfd){
     printf("\n calculateExport()");
-	/*printf("\n calculateExport.1Panels");
+	printf("\n calculateExport.1Panels");
     for (int i = 0; i < panelsExt.size(); i++) {
         panelsExt[i]->calculateExport(gfd);
     }
@@ -1477,16 +1524,16 @@ void Layout::calculateExport(WindPatternsProject* gfd){
         panelsInt[i]->calculateExport(gfd);
     }
 		
-	printf("\n calculateExport.2PanelsDesign");*/
+	printf("\n calculateExport.2PanelsDesign");
     if (isDesign) {
 		printf ("\n --- Design Ext panelsExtDesign.size()=%d", panelsExtDesign.size());
         for (int i = 0; i < panelsExtDesign.size(); i++) {
-			printf ("\next i=%d", i);
+			printf ("\next i=%d(%d)", i, panelsExtDesign.size());
             panelsExtDesign[i]->calculateExport(gfd);
         }
 		printf ("\n --- Design Int panelsIntDesign.size()=%d", panelsIntDesign.size());
         for (int i = 0; i < panelsIntDesign.size(); i++) {
-			printf ("\nint i=%d", i);
+			printf ("\nint i=%d(%d)", i, panelsIntDesign.size());
             panelsIntDesign[i]->calculateExport(gfd);
         }
     }
