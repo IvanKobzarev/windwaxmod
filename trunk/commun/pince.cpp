@@ -577,13 +577,26 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
 {
     Pince* res = new Pince();
     int i = 0;
-    while (pince1 -> P1 -> Element(i, 0) != pos1) i++;
+	printf ("\ngetGluePinceOnlyFuncs.1 pos1=%f", pos1);
+	while (pince1 -> P1 -> Element(i, 0) != pos1) {
+		printf ("\n pince1 -> P1 -> Element(%d, 0)=%f", i, pince1 -> P1 -> Element(i, 0));
+		i++;
+	}
+
     int i1 = i;
     i = pince2->P1->GetLignes()-1;
-    while (pince2 -> P1->Element(i, 0) != pos2) i--;
-   
+	printf ("\ngetGluePinceOnlyFuncs.2 pos2=%f", pos2);
+
+	// IF DESIGN IT'S NOT FOUND!
+	while (pince2 -> P1->Element(i, 0) != pos2) {
+		printf ("\n pince2 -> P1->Element(%d, 0)=%f", i, pince2 -> P1->Element(i, 0));
+		i--;
+
+	}
+	printf ("\ngetGluePinceOnlyFuncs.3");
     int i2 = i;
     
+	printf ("\ngetGluePinceOnlyFuncs.4");
     int n = i2 + i1 + 1;
     Matrix* func1 = new Matrix (n, 1);
     Matrix* func2 = new Matrix (n, 1);
@@ -591,6 +604,7 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
     Matrix* P2 = new Matrix (n, 1);
     int isave = 0;
 
+	printf ("\ngetGluePinceOnlyFuncs.5");
     for (i = i1; i > 0; i--) {
         func1 -> SetElement(isave,0, pince1->function1->Element(i, 0));
         func2 -> SetElement(isave,0, pince1->function2->Element(i, 0));
@@ -598,6 +612,8 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
         P2 -> SetElement(isave, 0, pince1->P1->Element(i, 0));
         isave++;
     }
+
+	printf ("\ngetGluePinceOnlyFuncs.6");
     for (i = 0; i <= i2; i++) {
         func1 -> SetElement(isave,0, pince2->function1->Element(i, 0));
         func2 -> SetElement(isave,0, pince2->function2->Element(i, 0));
@@ -605,6 +621,8 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
         P2 -> SetElement(isave, 0, pince2->P1->Element(i, 0));
         isave++;
     }
+
+	printf ("\ngetGluePinceOnlyFuncs.7");
     res -> function1 = func1;
     res -> function2 = func2;
     res -> P1 = P1;
@@ -626,76 +644,79 @@ Pince* getPincePlus(WindPatternsProject* gfd,
     printf ("\ngetPincePlus (%d, %f, %f)-(%d, %f, %f)", nerv1, deb1, fin1, nerv2, deb2, fin2);
 	printf ("\n faceDeb: %d, faceFin: %d", faceDeb, faceFin);
     Pince *res, *res1, *res2;
-    if (faceDeb == 1 && faceFin == 1) 
-        {
-            // Ext -> Ext
-            res = getPince(gfd, nerv1, nerv2, 1);
-            res -> makeSrez(deb1, fin1, deb2, fin2);
-        } else if (faceDeb == 1)
-        {
-            // Ext -> Int
-            Pince* pext = getPince(gfd, nerv1, nerv2, 1);
-            Pince* pint = getPince(gfd, nerv1, nerv2, 2);
+    if (faceDeb == 1 && faceFin == 1) {
+		// Ext -> Ext
+		printf ("\n Ext -> Ext");
+		res = getPince(gfd, nerv1, nerv2, 1);
+		res -> makeSrez(deb1, fin1, deb2, fin2);
+    } else if (faceDeb == 1) {
+        // Ext -> Int
+		printf ("\n Ext -> Int");
+        Pince* pext = getPince(gfd, nerv1, nerv2, 1);
+        Pince* pint = getPince(gfd, nerv1, nerv2, 2);
 
-            res1 = getGluePinceOnlyFuncs (pext, deb1, pint, fin1);
-            res2 = getGluePinceOnlyFuncs (pext, deb2, pint, fin2);
-            res = new Pince();
-            res -> nerv1 = nerv1;
-            res -> nerv2 = nerv2;
-            res -> glue = true;
+        res1 = getGluePinceOnlyFuncs (pext, deb1, pint, fin1);
+        res2 = getGluePinceOnlyFuncs (pext, deb2, pint, fin2);
+        res = new Pince();
+        res -> nerv1 = nerv1;
+        res -> nerv2 = nerv2;
+        res -> glue = true;
 
-            res->function1 = res1->function1;
-            res->function2 = res2->function2;
-            res->P1 = res1->P1;
-            res->P2 = res2->P2;
-            res->ipa1 = res1->ipa1;
-            res->ipa2 = res2->ipa2;
-            res->ipf1 = res1->ipf1;
-            res->ipf2 = res2->ipf2;
-            res->i01 = res1->i01;
-            res->i02 = res2->i02;
-            res -> AmpA = pint -> AmpA;
-            res -> AmpF = pint -> AmpF;
-            res -> AmpA0 = pext -> AmpA;
-       
-        } else if (faceFin == 1)
-        {
-            // Int -> Ext
-            Pince* pext = getPince(gfd, nerv1, nerv2, 1);
-            Pince* pint = getPince(gfd, nerv1, nerv2, 2);
-            //res = getGluePinceOnlyFuncs (pint, deb, pext, fin);
-
-            res1 = getGluePinceOnlyFuncs (pint, deb1, pext, fin1);
-            res2 = getGluePinceOnlyFuncs (pint, deb2, pext, fin2);
-
-        	res = new Pince();
-
-            res -> nerv1 = nerv1;
-            res -> nerv2 = nerv2;
-            res -> glue = true;
-
-            res->function1 = res1->function1;
-            res->function2 = res2->function2;
-            res->P1 = res1->P1;
-            res->P2 = res2->P2;
-            res->ipa1 = res1->ipa1;
-            res->ipa2 = res2->ipa2;
-            res->ipf1 = res1->ipf1;
-            res->ipf2 = res2->ipf2;
-            res->i01 = res1->i01;
-            res->i02 = res2->i02;
-            res -> AmpA = pint -> AmpA;
-            res -> AmpF = pint -> AmpF;
-            res -> AmpA0 = pext -> AmpA;
-        } else 
-        {
-            // Int -> Int
-            res = getPince(gfd, nerv1, nerv2, 2);
-            res->makeSrez(deb1, fin1, deb2, fin2);
-        }
-
-        printf ("\n...getPincePlusNew()");
-        return res;
+        res->function1 = res1->function1;
+        res->function2 = res2->function2;
+        res->P1 = res1->P1;
+        res->P2 = res2->P2;
+        res->ipa1 = res1->ipa1;
+        res->ipa2 = res2->ipa2;
+        res->ipf1 = res1->ipf1;
+        res->ipf2 = res2->ipf2;
+        res->i01 = res1->i01;
+        res->i02 = res2->i02;
+        res -> AmpA = pint -> AmpA;
+        res -> AmpF = pint -> AmpF;
+        res -> AmpA0 = pext -> AmpA;
+   } else if (faceFin == 1) {
+        // Int -> Ext
+	    printf ("\n Int -> Ext");
+	    printf ("\n Int -> Ext.1");
+        Pince* pext = getPince(gfd, nerv1, nerv2, 1);
+        Pince* pint = getPince(gfd, nerv1, nerv2, 2);
+        //res = getGluePinceOnlyFuncs (pint, deb, pext, fin);
+		printf ("\n Int -> Ext.2");
+		printf ("\ndeb1=%f deb2=%f", deb1, deb2);
+		printf ("\nfin1=%f fin2=%f", fin1, fin2);
+        res1 = getGluePinceOnlyFuncs (pint, deb1, pext, fin1);
+        res2 = getGluePinceOnlyFuncs (pint, deb2, pext, fin2);
+		printf ("\n Int -> Ext.3");
+    	res = new Pince();
+		printf ("\n Int -> Ext.4");
+        res -> nerv1 = nerv1;
+        res -> nerv2 = nerv2;
+        res -> glue = true;
+		printf ("\n Int -> Ext.5");
+        res->function1 = res1->function1;
+        res->function2 = res2->function2;
+		printf ("\n Int -> Ext.6");
+        res->P1 = res1->P1;
+        res->P2 = res2->P2;
+        res->ipa1 = res1->ipa1;
+        res->ipa2 = res2->ipa2;
+        res->ipf1 = res1->ipf1;
+        res->ipf2 = res2->ipf2;
+        res->i01 = res1->i01;
+        res->i02 = res2->i02;
+		printf ("\n Int -> Ext.7");
+        res -> AmpA = pint -> AmpA;
+        res -> AmpF = pint -> AmpF;
+        res -> AmpA0 = pext -> AmpA;
+		printf ("\n ...Int -> Ext");
+    } else {
+        // Int -> Int
+        res = getPince(gfd, nerv1, nerv2, 2);
+        res->makeSrez(deb1, fin1, deb2, fin2);
+    }
+    printf ("\n...getPincePlusNew()");
+    return res;
 }
 
 Pince* getPince(WindPatternsProject* gfd, int nerv1, int nerv2, int face)
