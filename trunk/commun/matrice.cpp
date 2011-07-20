@@ -570,7 +570,6 @@ bool ValeurPresente(double val, Matrix *m)
 /*****************************************************************/
 
 void addeValeurCroissant(double val, Matrix **m)
-
 {
 	Matrix *res = new Matrix( (*m)->GetLignes()+1, (*m)->GetColonnes() );
 	if(val < (*m)->Element(0,0)) //add devant ?
@@ -582,10 +581,8 @@ void addeValeurCroissant(double val, Matrix **m)
 	else if (val>(*m)->Element((*m)->GetLignes()-1,0)) //add derriere ?
 	{
 		for( int l=0; l<(*m)->GetLignes(); l++ ) res->SetElement( l, 0,(*m)->Element(l,0) );
-
 		res->SetElement((*m)->GetLignes()-1,0,val);
 	}
-
 	else //add dans le tableau
 	{
 		int l = 0;
@@ -594,12 +591,10 @@ void addeValeurCroissant(double val, Matrix **m)
 			res->SetElement( l, 0, (*m)->Element(l,0) ); 
 			l++;
 		}
-
 		res->SetElement(l,0,val);
 		for( int i=l+1; i<res->GetLignes(); i++) 
 			res->SetElement(i,0,(*m)->Element(i-1,0));
 	}
-
 	//mise a jour pointeurs ...
 	delete *m;
 	*m = res;
