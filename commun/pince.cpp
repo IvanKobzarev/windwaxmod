@@ -10,6 +10,7 @@
 #include "geom.h"
 #include "layout.h"
 #include "logger.h"
+#include "assert.h"
 
 #define sqr(f1) ((f1)*(f1))
 #define pi	3.141592675f
@@ -453,6 +454,9 @@ void calcPincePlusAloneAbsFunc(Matrix *Xd, Matrix *Yd,
     
     newXd = new Matrix (Xd->GetLignes(), 1);
     newYd = new Matrix (Yd->GetLignes(), 1);
+	printf ("\n i0=%d ipai=%d ipfi=%d Xd->GetLignes()=%d", i0, ipai, ipfi, Xd->GetLignes());
+	printf ("\n func->GetLignes()=%d", func->GetLignes());
+	
     for (i = 0; i < Xd->GetLignes(); i++) {
         if (p->debug) printf ("\n %d ", i);
         if (i < i0) {
@@ -464,16 +468,16 @@ void calcPincePlusAloneAbsFunc(Matrix *Xd, Matrix *Yd,
             if (p->debug)  printf("_1_%d -> %8.5f", i, amp);
         }
         if ((i >= ipai) && (i <= ipfi) ) {
-               x1 = ipai;
-               x2 = ipfi;
-               y1 = ampPinceAabs;
-               y2 = ampPinceFabs;
-               amp = (i * (y2 - y1) + (y1 * (x2 - x1) - x1 * (y2 - y1))) / (x2 - x1);
-               if (p->debug)  printf("_2_%d -> %8.5f", i, amp);
+           x1 = ipai;
+           x2 = ipfi;
+           y1 = ampPinceAabs;
+           y2 = ampPinceFabs;
+           amp = (i * (y2 - y1) + (y1 * (x2 - x1) - x1 * (y2 - y1))) / (x2 - x1);
+           if (p->debug)  printf("_2_%d -> %8.5f", i, amp);
         }
         if (i > ipfi) {
-                    amp = ampPinceFabs * func->Element(i,0);
-                    if (p->debug)  printf("_3_%d -> %8.5f", i, amp);
+            amp = ampPinceFabs * func->Element(i,0);
+			if (p->debug)  printf("_3_%d -> %8.5f (ipfi=%d)", i, amp, ipfi);
         } 
             
         larg = sqrt(sqr(Xd->Element(i, 0) - Xd0->Element(i, 0)) + sqr(Yd->Element(i, 0) - Yd0->Element(i, 0)));
@@ -578,8 +582,8 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
     Pince* res = new Pince();
     int i = 0;
 	printf ("\ngetGluePinceOnlyFuncs.1 pos1=%f", pos1);
-	while (pince1 -> P1 -> Element(i, 0) != pos1) {
-		printf ("\n pince1 -> P1 -> Element(%d, 0)=%f", i, pince1 -> P1 -> Element(i, 0));
+	while (abs(pince1 -> P1 -> Element(i, 0) - pos1) < 0.001) {
+		printf ("\n ?pos1=%f pince1 -> P1 -> Element(%d, 0)=%f", pos1, i, pince1 -> P1 -> Element(i, 0));
 		i++;
 	}
 
@@ -588,10 +592,10 @@ Pince* getGluePinceOnlyFuncs (Pince* pince1, double pos1, Pince* pince2, double 
 	printf ("\ngetGluePinceOnlyFuncs.2 pos2=%f", pos2);
 
 	// IF DESIGN IT'S NOT FOUND!
-	while (pince2 -> P1->Element(i, 0) != pos2) {
-		printf ("\n pince2 -> P1->Element(%d, 0)=%f", i, pince2 -> P1->Element(i, 0));
+	while (abs(pince2 -> P1->Element(i, 0) - pos2) < 0.001) {
+		printf ("\n ?pos2=%f pince2 -> P1->Element(%d, 0)=%f", pos2, i, pince2 -> P1->Element(i, 0));
 		i--;
-
+		if (i < 0) break;
 	}
 	printf ("\ngetGluePinceOnlyFuncs.3");
     int i2 = i;

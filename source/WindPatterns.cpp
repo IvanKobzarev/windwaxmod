@@ -893,11 +893,44 @@ void applyMagic2(int /*control*/) {
         if ((!ValeurPresente(VentHolesFin, xi))) addeValeurCroissant(VentHolesFin, &xi);
     }
 
+	if (layoutWithDesign == 1) {
+		// Ext
+		for (int i = 0; i < kiteDesignExt->n_elements; i++) {
+			KiteDesignElement* kde = kiteDesignExt->kiteDesignElements[i];
+			Line* line = (Line*) kde;
+	        for (int j = 0; j < line->n_points; j++){
+				double pos = line->pointsPercents[j];
+				printf ("\n EXT EXT pos=%f", pos);
+				if ((!ValeurPresente(pos, xe))) addeValeurCroissant(pos, &xe);
+			}
+		}
+
+		// Int
+		for (i = 0; i < kiteDesignInt->n_elements; i++) {
+			KiteDesignElement* kde = kiteDesignInt->kiteDesignElements[i];
+			Line* line = (Line*) kde;
+	        for (int j = 0; j < line->n_points; j++){
+				double pos = line->pointsPercents[j];
+				printf ("\n INT INT pos=%f", pos);
+				if ((!ValeurPresente(pos, xi))) addeValeurCroissant(pos, &xi);
+			}
+		}
+
+	}
+
     extProf = Zeros(xe->GetLignes(), 2);
     intProf = Zeros(xi->GetLignes(), 2);
 
-    for (i = 0; i < extProf->GetLignes(); i++) extProf->SetElement(i, 0, xe->Element(i, 0));
-    for (i = 0; i < intProf->GetLignes(); i++) intProf->SetElement(i, 0, xi->Element(i, 0));
+	for (i = 0; i < extProf->GetLignes(); i++) {
+		extProf->SetElement(i, 0, xe->Element(i, 0));
+		printf ("\n extProf %d %f", i, xe->Element(i, 0));
+	}
+
+	for (i = 0; i < intProf->GetLignes(); i++) {
+		intProf->SetElement(i, 0, xi->Element(i, 0));
+		printf ("\n intProf %d %f", i, xi->Element(i, 0));
+	}
+
     InterpoleProfilBout(&ExtProfBout, extProf);
     InterpoleProfilBout(&IntProfBout, intProf);
     InterpoleProfilBout(&ExtProfCent, extProf);

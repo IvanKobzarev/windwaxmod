@@ -241,9 +241,6 @@ PanelLine::PanelLine(int _nerv1, double _pos1, int _nerv2, double _pos2)
 	: nerv1(_nerv1), pos1(_pos1), nerv2(_nerv2), pos2(_pos2)
 {
 }
-
-
-
 PanelLine::~PanelLine(){
 }
 
@@ -685,7 +682,6 @@ void KiteDesign::addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, floa
     }
 	printf ("\n...KiteDesign::addMeshesToAxe3d");
 }
- 
 double calcYminFp(FormProjection* fp, double ymult) {
 	int n = fp->X->GetLignes();
 	int m = fp->X->GetColonnes();
