@@ -449,17 +449,17 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 			Matrix* m = 0;
 
 			if (gfd->CorrectRepPoints && isPince && (coeff[i] != -1)) {
-				printf ("\n coeff=%f", coeff[i]);
-				printf ("\n 1");
+				if (debug) printf ("\n coeff=%f", coeff[i]);
+				if (debug) printf ("\n 1");
 				m = getReperPointsPince (gfd, Xd0[i], Yd0[i], coeff[i], 
 										Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
-				printf ("\n ...1");
+				if (debug) printf ("\n ...1");
 			} else {
 				m = getReperPoints(gfd, Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
 				if (coeff[i] == -1) 
 					printf ("\nlength XY=%6.2f", 1000*calcCourbeLength(Xd[i], Yd[i]));
 			} 
-			printf ("\n ...--");
+			if (debug) printf ("\n ...--");
 
             if (debug) for (int _i=0; _i<m->GetLignes(); _i++) {
                 printf ("\n grp %d (%f, %f, %f)", _i, m->Element(_i,0), m->Element(_i,1), m->Element(_i,2));
