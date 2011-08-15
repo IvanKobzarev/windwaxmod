@@ -570,18 +570,18 @@ Matrix* GetFunctionSrez(Matrix *X, Matrix *Y, double pa, double pf, int *ia) {
 }
 
 Matrix* GetFunctionSrezDebFin(Matrix *X, Matrix *Y, double pa, double pf) {
-	printf ("\n GetFunctionSrezDebFin(pa=%f pf=%f) ", pa, pf);
-    int i1 = 0, i2 = 0;
-    for (int i = 0; i < X -> GetLignes(); i++) {
-        if (X->Element(i, 0) == pa) i1 = i;
-        if (X->Element(i, 0) == pf) i2 = i;
-    }
+	bool debug = false;
+	if (debug) printf ("\n GetFunctionSrezDebFin(pa=%f pf=%f) ", pa, pf);
+    int i1 = 0;
+	int i2 = X->GetLignes()-1;
 
-	printf ("\n n: %d i1: %d i2: %d", X -> GetLignes(), i1, i2);
+	while (X->Element(i1, 0) != pa) i1++; 
+	while (X->Element(i2, 0) != pf) i2--;
+   
+	if (debug) printf ("\n n: %d i1: %d i2: %d", X -> GetLignes(), i1, i2);
     Matrix* res = new Matrix(i2 - i1 + 1, 1);
     for (int i = i1; i <= i2; i++) res -> SetElement(i - i1, 0, Y->Element(i, 0));
-
-	printf ("\n ...GetFunctionSrezDebFin() ");
+	if (debug) printf ("\n ...GetFunctionSrezDebFin() ");
     return res;
 }
 

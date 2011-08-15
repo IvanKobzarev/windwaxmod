@@ -256,7 +256,8 @@ bool PanelLinePredicate(const PanelLine* pl1, const PanelLine* pl2)
 }
 
 PanelLinesTable::PanelLinesTable(int n_profils) {
-	printf ("\nPanelLinesTable::PanelLinesTable(%d)", n_profils);
+	bool debug = false;
+	if (debug) printf ("\nPanelLinesTable::PanelLinesTable(%d)", n_profils);
 	table.resize(n_profils);
 }
 
@@ -281,7 +282,8 @@ void PanelLinesTable::sortNervsVectors(){
 	}
 }
 PanelLinesTable* KiteDesign::getPanelLinesTable() {
-	printf ("\n KiteDesign::getPanelLinesTable()");
+	bool debug = false;
+	if (debug) printf ("\n KiteDesign::getPanelLinesTable()");
     PanelLinesTable* panelLinesTable = new PanelLinesTable(200);
 
     for (int i = 0; i < n_elements; i++) {
@@ -301,15 +303,16 @@ PanelLinesTable* KiteDesign::getPanelLinesTable() {
         }
     }
 	//panelLinesTable->sortNervsVectors();
-	printf ("\n...KiteDesign::getPanelLinesTable()");
+	if (debug) printf ("\n...KiteDesign::getPanelLinesTable()");
     return panelLinesTable;
 }
 
 ColorSegmentsTable* KiteDesign::getColorSegmentsTable(int n_profils ){
-    printf ("\nKiteDesign::getColorSegmentsTable()");
+	bool debug = false;
+    if (debug) printf ("\nKiteDesign::getColorSegmentsTable()");
     PanelLinesTable* panelLinesTable = getPanelLinesTable();
     ColorSegmentsTable* colorSegmentsTable = new ColorSegmentsTable(n_profils);
-	printf (" KiteDesign::getColorSegmentsTable() colorTable->table.size()=%d n_profils=%d",  colorTable->table.size(), n_profils);
+	if (debug) printf (" KiteDesign::getColorSegmentsTable() colorTable->table.size()=%d n_profils=%d",  colorTable->table.size(), n_profils);
 	//printf ("\n nbprofils=%d colorTable->table.size()=%d", n_profils,colorTable->table.size());
 	for (int nerv = 0; (nerv < n_profils) && (nerv < colorTable->table.size()); nerv++) {
 		//printf ("\n===================================================");
@@ -357,7 +360,7 @@ ColorSegmentsTable* KiteDesign::getColorSegmentsTable(int n_profils ){
 			}
 		}
     }
-	printf ("\n...KiteDesign::getColorSegmentsTable()");
+	if (debug) printf ("\n...KiteDesign::getColorSegmentsTable()");
     return colorSegmentsTable;
 
 }
@@ -377,10 +380,7 @@ void setMeshPoint3d2d(TMesh *mesh3,TMesh *mesh2, int i, int j, double x, double 
 	mesh2->x->SetElement(i, j, x);
 	mesh2->y->SetElement(i, j, dy + ymult*z - ymin);
 	mesh2->z->SetElement(i, j, 0.0f);
-
 }
-
-
 
 void addColorSegmentToAxe3d2d(TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, ColorSegment* colorSegment, int side, int symetric, double dy, double ymult, double ymin) {
 	//printf ("\ndesign:addColorSegmentToAxe3d()");
@@ -653,7 +653,8 @@ void addColorSegmentToAxe3d2d(TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, ColorSegmen
 	addMesh(Axe2d, mesh2d);
 }
 void KiteDesign::addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, float opac, int side, int symetric, double dy, double ymult, double ymin){
-	printf ("\nKiteDesign::addMeshesToAxe3d");
+	bool debug = false;
+	if (debug) printf ("\nKiteDesign::addMeshesToAxe3d");
 	/*
 	// test 
 	ColorSegment* cs = new ColorSegment();
@@ -680,7 +681,7 @@ void KiteDesign::addMeshesToAxe3d2d( TAxe *Axe3d, TAxe *Axe2d, Form3D* f3d, floa
 			addColorSegmentToAxe3d2d(Axe3d, Axe2d, f3d, cs, side, symetric, dy, ymult, ymin);
 		}
     }
-	printf ("\n...KiteDesign::addMeshesToAxe3d");
+	if (debug) printf ("\n...KiteDesign::addMeshesToAxe3d");
 }
 double calcYminFp(FormProjection* fp, double ymult) {
 	int n = fp->X->GetLignes();
