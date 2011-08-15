@@ -48,6 +48,8 @@ Matrix* GetFunctionSrez(Matrix*X, Matrix *Y, double pa, double pf, int *ia);
 
 Matrix* GetFunctionSrezDeb(Matrix*X, Matrix *Y, double pa);
 
+Matrix* GetFunctionSrezDebFin(Matrix*X, Matrix *Y, double pa, double pf);
+
 double pinceFunctionA(WindPatternsProject* gfd, double x);
 
 double pinceFunctionF(WindPatternsProject* gfd, double x);

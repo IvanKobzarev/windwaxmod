@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include <string.h>
 #include <math.h>
 
@@ -35,6 +36,19 @@
 #define pi	3.141592675f
 //#define DEBUG 0
 #define TEST_BUTTON true
+
+#ifndef DEBUG
+		#define ASSERT(x)
+	#else
+		#define ASSERT(x) \
+			if (! (x)) \
+			{ \
+				cout << "ERROR!! Assert " << #x << " failed\n"; \
+				cout << " on line " << __LINE__  << "\n"; \
+				cout << " in file " << __FILE__ << "\n";  \
+			}
+		#endif
+
 
 /**********************/
 /* variables globales */
@@ -332,11 +346,16 @@ WindPatternsProject* getWindPatternsProject() {
 
     gfd->isPosNerv = isPosNerv;
     gfd->PosNerv = PosNerv;
-
-    gfd->ExtProfCent=ExtProfCent;
-    gfd->ExtProfBout=ExtProfBout;
-    gfd->IntProfCent=IntProfCent;
-    gfd->IntProfBout=IntProfBout;
+	printf ("\n getWindPatternsProject()");
+    gfd->ExtProfCent = ExtProfCent;
+	printf("\n ExtProfCent=%d", ExtProfCent->GetLignes());
+    gfd->ExtProfBout = ExtProfBout;
+	printf("\n ExtProfBout=%d", ExtProfBout->GetLignes());
+    gfd->IntProfCent = IntProfCent;
+	printf("\n IntProfCent=%d", IntProfCent->GetLignes());
+    gfd->IntProfBout = IntProfBout;
+	printf("\n IntProfBout=%d", IntProfBout->GetLignes());
+	printf ("\n =====getWindPatternsProject()=======");
     strcpy(gfd->fileNameDiagNerv, fileNameDiagNerv);
     strcpy(gfd->fileNameVentHoles, fileNameVentHoles);
     strcpy(gfd->fileNameRepPoints, fileNameRepPoints);
@@ -742,9 +761,6 @@ void modifProjection3d(int /*control*/) {
     glutSwapBuffers();
 }
 
-/***************/
-/* modifView3d */
-/***************/
 void modifView3d(int /*control*/) {
     /*recalc et retrace la vue 3d*/
     calcVue3dEtPatron();
@@ -755,9 +771,6 @@ void modifView3d(int /*control*/) {
 
 }
 
-/***********************/
-/* modifViewSymetrique */
-/***********************/
 void modifViewSymetrique(int /*control*/) {
     /*recalc et retrace la vue 3d*/
     calcVue3dEtPatron();
@@ -774,19 +787,15 @@ void modifGoPince(int /*control*/) {
 }
 
 void modifLayoutSymetrique(int /*control*/) {
-
 }
 
 void modifVentilationLayout(int /*control*/) {
-
 }
 
 void modifLayoutWithDesign(int /*control*/) {
-
 }
 
 void adder(int /*control*/) {
-
 }
 
 void apply(int /*control*/) {
@@ -858,7 +867,6 @@ void apply(int /*control*/) {
     //recalc forme 3D et patron avec "nouveau" profil
     calcVue3dEtPatron();
     display();
-
 }
 
 
@@ -901,10 +909,13 @@ void applyMagic2(int /*control*/) {
 	        for (int j = 0; j < line->n_points; j++){
 				double pos = line->pointsPercents[j];
 				printf ("\n EXT EXT pos=%f", pos);
-				if ((!ValeurPresente(pos, xe))) addeValeurCroissant(pos, &xe);
+				if ((!ValeurPresente(pos, xe))) {
+					printf ("\n addeValeurCroissant %f", pos);
+					addeValeurCroissant(pos, &xe);
+				}
 			}
 		}
-
+		printf ("\n\n===============================================\n\n");
 		// Int
 		for (i = 0; i < kiteDesignInt->n_elements; i++) {
 			KiteDesignElement* kde = kiteDesignInt->kiteDesignElements[i];
@@ -912,7 +923,10 @@ void applyMagic2(int /*control*/) {
 	        for (int j = 0; j < line->n_points; j++){
 				double pos = line->pointsPercents[j];
 				printf ("\n INT INT pos=%f", pos);
-				if ((!ValeurPresente(pos, xi))) addeValeurCroissant(pos, &xi);
+				if ((!ValeurPresente(pos, xi))) {
+					printf ("\n addeValeurCroissant %f", pos);
+					addeValeurCroissant(pos, &xi);
+				}
 			}
 		}
 
@@ -923,11 +937,13 @@ void applyMagic2(int /*control*/) {
 
 	for (i = 0; i < extProf->GetLignes(); i++) {
 		extProf->SetElement(i, 0, xe->Element(i, 0));
+
 		printf ("\n extProf %d %f", i, xe->Element(i, 0));
 	}
-
+	printf ("\n\n===============================================\n\n");
 	for (i = 0; i < intProf->GetLignes(); i++) {
 		intProf->SetElement(i, 0, xi->Element(i, 0));
+
 		printf ("\n intProf %d %f", i, xi->Element(i, 0));
 	}
 
@@ -939,6 +955,7 @@ void applyMagic2(int /*control*/) {
     delete(xi);
     delete(extProf);
     delete(intProf);
+
 	Layout* Layout = calcIndepPinceLayout(getWindPatternsProject(), F);
     Layout->SaveLayout2(getWindPatternsProject());
 }
@@ -3654,9 +3671,7 @@ int main(int argc, char** argv) {
     apply(0);
     AxeSel = Axe3d;
     display();
-
-    applyMagic2(0);
-    /*boucle glut*/
+	applyMagic2(0);
     glutMainLoop();
     return 0;
 }
