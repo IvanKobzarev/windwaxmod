@@ -4,25 +4,25 @@
 Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix* P, 
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
-    //printf ("\nget Reper Points()");
-	//printf ("\n P:");
-	//printM (P);
-	
-	//printf ("\nP");
-	//printM(P);
-	//printf ("\n...");
+    printf ("\nget Reper Points()");
+	printf ("\n P:");
+	printM (P);
+	printf ("\n...");
     Matrix *interpXSuspente, *interpYSuspente, *interpXSuspente0, *interpYSuspente0;
     bool cerezNos = false;
     int i0 = 0;
     if ((faceDeb != faceFin) && (deb != 0.0f)) {
         cerezNos = true;
-      //  printf ("\n cerezNos");
+        printf ("\n cerezNos");
         while (P->Element(i0, 0) != 0.0f) {
         //    printf ("\n i0=%d", i0);
             i0++;
-         }
+        }
+		if (i0 >= P->GetLignes()) {
+			printf ("\n\n\nERROR! reper.cpp getReperPoints() faceDeb != faceFin, but no 0.00 in P");
+		}
      }
-    //printf ("...1 i0=%d", i0);
+    printf ("...1 i0=%d", i0);
     interpXSuspente = Zeros(P -> GetLignes() - i0, 2);
     interpYSuspente = Zeros(P -> GetLignes() - i0, 2);
     for (int j = i0; j < P->GetLignes(); j++) {
@@ -31,7 +31,7 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
         interpXSuspente->SetElement(j - i0, 1, Xd->Element(j, 0));
         interpYSuspente->SetElement(j - i0, 1, Yd->Element(j, 0));
     }
-    //printf ("...2");
+    printf ("...2");
     int isave = 0;
     if (cerezNos) {
 		//printf ("\n cerezNos");
@@ -45,7 +45,7 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
             isave++;
         }
     }
-    //printf ("...3");
+    printf ("...3");
     //printf ("\n interpYSuspente0->GetLignes()=%d", interpYSuspente0->GetLignes());
     int ndn = 0;
     double posda = 0.0f, posdf = 100.0f;
@@ -77,7 +77,7 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
 
         }
     }
-    //printf ("...4");
+    printf ("...4");
     int nrp;
     if (gfd->ReperPointsFromFile) nrp = gfd->ReperPoints[1] -> GetLignes();
     else nrp = P -> GetLignes();
@@ -276,6 +276,15 @@ double calcPolyLength(Matrix* X, Matrix* Y, double xrp, double yrp) {
 Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0, double coeff, Matrix* Xd, Matrix* Yd, Matrix* P, 
 								int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
+	printf ("getReperPointsPince()");
+	printf ("\n Xd0->GetLignes()=%d", Xd0->GetLignes());
+	printf ("\n Yd0->GetLignes()=%d", Yd0->GetLignes());
+	printf ("\n Xd->GetLignes()=%d", Xd->GetLignes());
+	printf ("\n Yd->GetLignes()=%d", Yd->GetLignes());
+	printf ("\n P->GetLignes()=%d", P->GetLignes());
+	printf ("\n nerv=%d deb=%f (%d)  fin=%f (%d)", nerv, deb, faceDeb, fin, faceFin);
+
+
 	// printf ("\n\n\n Xd0 Yd0");
 	// printXY (Xd0, Yd0);
 
@@ -285,12 +294,12 @@ Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0,
 	if (Xd0->GetLignes() != P->GetLignes()) {
 		printf ("\n!!!\n!!!\n!!!ACHTUNG! getRepPointsPince() Xd0->GetL[%d] != P->GetL[%d]\n!!!", Xd0->GetLignes(), P->GetLignes());
 	}
-
+	printf ("\n=0===============================================");
 	Matrix *reperPoints0 = getReperPoints(gfd, Xd0, Yd0, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
 
-	//printf ("\n=1===============================================");
+	printf ("\n=1===============================================");
 	Matrix *reperPointsP = getReperPoints(gfd, Xd, Yd, P, nerv, deb, faceDeb, fin, faceFin, klapanShov);
-	//printf ("\n=2===============================================");
+	printf ("\n=2===============================================");
 	
 	//printf ("\n\n Xd0 Yd0");
     //printXY(Xd0, Yd0);

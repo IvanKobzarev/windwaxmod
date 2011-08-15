@@ -22,7 +22,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                     double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
 					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
 {
-    printf ("\n GenerateCourbe()");
+    //printf ("\n GenerateCourbe()");
     double Marge[2]={marge1, marge2};
     *AxePatronP = createAxe(gfd->windowPatron);
     *AxePatronDXFP = createAxe(gfd->windowPatron);
@@ -183,11 +183,8 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 
         delete(distance);
 
-
-
-        if  ( 	( abs(CourbMargeAv->pts->Element(0, 0) -  CourbMargeAv->pts->Element(1, 0)) > 0.000001 ) 
-				|| 
-				( abs(CourbMargeAv->pts->Element(0, 1) - CourbMargeAv->pts->Element(1, 1)) > 0.000001 )	) {
+        if  ( ( abs(CourbMargeAv->pts->Element(0, 0) -  CourbMargeAv->pts->Element(1, 0)) > 0.000001 ) 
+				|| ( abs(CourbMargeAv->pts->Element(0, 1) - CourbMargeAv->pts->Element(1, 1)) > 0.000001 )	) {
 
 			for (i = 0; i < 2; i++) {
 
@@ -453,14 +450,16 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 
 			if (gfd->CorrectRepPoints && isPince && (coeff[i] != -1)) {
 				printf ("\n coeff=%f", coeff[i]);
+				printf ("\n 1");
 				m = getReperPointsPince (gfd, Xd0[i], Yd0[i], coeff[i], 
 										Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
+				printf ("\n ...1");
 			} else {
 				m = getReperPoints(gfd, Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
 				if (coeff[i] == -1) 
 					printf ("\nlength XY=%6.2f", 1000*calcCourbeLength(Xd[i], Yd[i]));
 			} 
-				
+			printf ("\n ...--");
 
             if (debug) for (int _i=0; _i<m->GetLignes(); _i++) {
                 printf ("\n grp %d (%f, %f, %f)", _i, m->Element(_i,0), m->Element(_i,1), m->Element(_i,2));
@@ -666,7 +665,8 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                 //printf ("\n go make shov!");
                 bool match = false;
 				int _i, _j;
-                if ((nerv1==-1) || (nerv1==0)){
+                if ((nerv1==-
+					1) || (nerv1==0)){
                         if (gfd->VentCentralNerv) match = true;
                 }
                 else {
