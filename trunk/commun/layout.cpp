@@ -174,7 +174,7 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Yd[1]);
 }
 void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
-    bool debug = false;
+    bool debug = true;
 	if (debug) printf ("\n PanelLayoutElement::calculateExport");
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
@@ -248,10 +248,10 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
                 &X[1], &Y[1], &Z[1], &P[1]);
 
 		if (debug) printf ("\n ce4");
-		//printf ("\n Xd[0]->GetLignes(): %d, Yd[0]->GetLignes(): %d", Xd[0]->GetLignes(), Yd[0]->GetLignes());
-		//printf ("\n Xd[1]->GetLignes(): %d, Yd[1]->GetLignes(): %d", Xd[1]->GetLignes(), Yd[1]->GetLignes());
-		//printf ("\n P[0]->GetLignes(): %d,  P[1]->GetLignes(): %d", P[0]->GetLignes(),  P[1]->GetLignes());
-		//printf ("\n ********************************************************** ");
+		if (debug) printf ("\n Xd[0]->GetLignes(): %d, Yd[0]->GetLignes(): %d", Xd[0]->GetLignes(), Yd[0]->GetLignes());
+		if (debug) printf ("\n Xd[1]->GetLignes(): %d, Yd[1]->GetLignes(): %d", Xd[1]->GetLignes(), Yd[1]->GetLignes());
+		if (debug) printf ("\n P[0]->GetLignes(): %d,  P[1]->GetLignes(): %d", P[0]->GetLignes(),  P[1]->GetLignes());
+		if (debug) printf ("\n ********************************************************** ");
         if (debug) printf ("\n...calcPatron myDeb myFin");
         getLayoutLogger()->logprintf("\n p[%4.1f %4.1f %4.1f %4.1f]", _pa0 * 1000, _pf0 * 1000, _pa1 * 1000, _pf1 * 1000);
         getLayoutLogger()->logprintf(" \n %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1, n2, posDeb1, fd1, posFin1,  ff1, posDeb2, fd2, posFin2,  ff2);
@@ -261,9 +261,9 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
 		if (debug) printf ("\n getPincePlus.1 (%d, %d, %f, %f, %f, %f, %d, %d)", n1, n2, myDeb, myFin,  myDeb, myFin,  fd1, ff1);
 	
         Pince* tmpPince = getPincePlus(gfd, n1, n2, myDeb, myFin,  myDeb, myFin,  fd1, ff1);
-		//printf ("\n ********************************************************** ");
-		//printf ("\n tmpPince->function1->GetLignes(): %d tmpPince->function2->GetLignes(): %d  ", tmpPince->function1->GetLignes(), tmpPince->function2->GetLignes());
-		//printf ("\n getPincePlus.2");
+		if (debug) printf ("\n ********************************************************** ");
+		if (debug) printf ("\n tmpPince->function1->GetLignes(): %d    tmpPince->function2->GetLignes(): %d  ", tmpPince->function1->GetLignes(), tmpPince->function2->GetLignes());
+		if (debug) printf ("\n getPincePlus.2");
         pince -> SetFunction1(tmpPince->function1);
         pince -> SetFunction2(tmpPince->function2);
 		if (debug) printf ("\n ... - ");
@@ -276,15 +276,14 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         pince -> SetDiffAmps0(_pa00, _pa01);
         pince -> i01 = tmpPince -> i01;
         pince -> i02 = tmpPince -> i02;
-        //printf("\n pince->i01=%d", pince->i01);
-        //printf("\n pince->ipa1=%d", pince->ipa1);
-        //printf("\n pince->ipf1=%d", pince->ipf1);
+        if (debug) printf("\n pince->i01=%d", pince->i01);
+        if (debug) printf("\n pince->ipa1=%d", pince->ipa1);
+        if (debug) printf("\n pince->ipf1=%d", pince->ipf1);
 		if (debug) printf ("\n ce5");
-		//printf ("\n Xd[0]->GetLignes(): %d, Yd[0]->GetLignes(): %d", Xd[0]->GetLignes(), Yd[0]->GetLignes());
-		//printf ("\n Xd[1]->GetLignes(): %d, Yd[1]->GetLignes(): %d", Xd[1]->GetLignes(), Yd[1]->GetLignes());
-		
+		if (debug) printf ("\n Xd[0]->GetLignes(): %d, Yd[0]->GetLignes(): %d", Xd[0]->GetLignes(), Yd[0]->GetLignes());
+		if (debug) printf ("\n Xd[1]->GetLignes(): %d, Yd[1]->GetLignes(): %d", Xd[1]->GetLignes(), Yd[1]->GetLignes());
         calcPincePlusNew(Xd[0], Yd[0], Xd[1], Yd[1], pince, &Xdp[0], &Ydp[0], &Xdp[1], &Ydp[1]);
-		//printf ("\n ce6");
+		if (debug) printf ("\n ce6");
         if ((myDeb != posDeb1) || (myDeb != posDeb2) || (myFin != posFin1) || (myFin != posFin2)) {
             // rezem Xd, newXd
             // rXdp[0] = GetFunctionSrezDeb(P[0], Xdp[0], posDeb1);
@@ -344,7 +343,7 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         //P[1] = newP[1];
     }
     if (debug) printf ("\n PanelLayoutElement::calculateExport.1");
-	//printf ("\n ce7");
+	if (debug) printf ("\n ce7");
     double marge1 = gfd->Marge[0];
     double marge2 = gfd->Marge[1];
     double margeDeb = gfd->MargeDeb;
@@ -1437,8 +1436,8 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 	
     // ------------------ Ext ------------------------------
 	if (debug) printf ("\n panelsExt.size(): %d", panelsExt.size());
-    //for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
-	for (int ipe = 0; ipe < 2; ipe++) {
+    for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+	//for (int ipe = 0; ipe < 2; ipe++) {
 		if (debug) printf("\n ipe: %d", ipe);
         PanelLayoutElement* p = panelsExt[ipe];
         int nerv = p->n1;

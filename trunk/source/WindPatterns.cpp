@@ -36,6 +36,7 @@
 #define pi	3.141592675f
 //#define DEBUG 0
 #define TEST_BUTTON true
+#define EPSILON 0.00001f
 
 #ifndef DEBUG
 		#define ASSERT(x)
