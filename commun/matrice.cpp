@@ -456,25 +456,28 @@ void InterpLinMat(Matrix *x, Matrix *y, Matrix *xi, Matrix *yi)
 double InterpLinX(Matrix *m, double xi)
 {
 	double yi = 0.0;
-	/*test matrices non nulle*/
 	if(m==NULL) 
-		printf("\n erreur fonction InterpLinX: m = NULL !!!");
+		printf("\n ERROR fonction InterpLinX: m = NULL !!!");
 	else
 	{
-		/*recherche indice pts avant/apres*/
+		if (m->GetLignes() <= 1) {
+			printf ("ERROR bad interpolation X->GetLignes()=%d", m->GetLignes());
+			if (m->GetLignes() == 1) {
+				if (m->Element(0,0) == xi) {
+				} else {
+					printf ("ERROR bad interpolation X->GetLignes()=1, X->Element(0,0)=%f  but xi=%f returned X->Element(0, 1)=%f", m->Element(0,0), xi, m->Element(0,1));
+				}
+				return m->Element(0, 1);
+			}
+		}
+
+
 		int ipc=0; 
-		while( (m->Element(ipc,0) <= xi) && (ipc<m->GetLignes()-1) ) 
-			ipc++;
+		while( (m->Element(ipc,0) <= xi) && (ipc<m->GetLignes()-1) ) ipc++;
 
 		if(ipc>0) ipc--; 
-
-		/*interpole y*/
-		yi = 
-			m->Element(ipc,1) + 
-				(m->Element(ipc+1,1) - m->Element(ipc,1))
-				*
-				(xi - m->Element(ipc,0))/(m->Element(ipc+1,0) - m->Element(ipc,0))
-			;
+		yi = m->Element(ipc,1) + 
+				(m->Element(ipc+1,1) - m->Element(ipc,1)) * (xi - m->Element(ipc,0))/(m->Element(ipc+1,0) - m->Element(ipc,0));
 	}
 
 	return yi;

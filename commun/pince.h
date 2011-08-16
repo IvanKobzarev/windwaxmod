@@ -3,7 +3,7 @@
 #include "matrice.h"
 #include "fichier.h"
 #include "patternsproject.h"
-
+#include "const.h"
 //#include <afx.h>		//class CString
 //#include <afxdlgs.h>	//class CFileDialog
 

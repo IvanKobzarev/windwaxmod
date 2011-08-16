@@ -560,8 +560,8 @@ void calcPinceDiff(WindPatternsProject* gfd,Matrix *Xd1, Matrix *Yd1, Matrix *Xd
 Matrix* GetFunctionSrez(Matrix *X, Matrix *Y, double pa, double pf, int *ia) {
     int i1 = 0, i2 = 0;
     for (int i = 0; i < X -> GetLignes(); i++) {
-        if (X->Element(i, 0) == pa) i1 = i;
-        if (X->Element(i, 0) == pf) i2 = i;
+        if (abs(X->Element(i, 0) - pa) < EPSILON) i1 = i;
+        if (abs(X->Element(i, 0) - pf) < EPSILON) i2 = i;
     }
     *ia = i1;
     Matrix* res = new Matrix(i2 - i1 + 1, 1);
@@ -570,7 +570,7 @@ Matrix* GetFunctionSrez(Matrix *X, Matrix *Y, double pa, double pf, int *ia) {
 }
 
 Matrix* GetFunctionSrezDebFin(Matrix *X, Matrix *Y, double pa, double pf) {
-	bool debug = false;
+	bool debug = true;
 	if (debug) printf ("\n GetFunctionSrezDebFin(pa=%f pf=%f) ", pa, pf);
     int i1 = 0;
 	int i2 = X->GetLignes()-1;
@@ -686,22 +686,41 @@ Pince* getPincePlus(WindPatternsProject* gfd,
                         int nerv1, int nerv2,
                         float deb1, float fin1, float deb2, float fin2, int faceDeb, int faceFin )
 {
-    //printf ("\ngetPincePlus (n%d, d%f, f%f)-(n%d, d%f, f%f)", nerv1, deb1, fin1, nerv2, deb2, fin2);
-	//printf ("\n faceDeb: %d, faceFin: %d", faceDeb, faceFin);
+	bool debug = true;
+    if (debug) printf ("\ngetPincePlus (n%d, d%f, f%f)-(n%d, d%f, f%f)", nerv1, deb1, fin1, nerv2, deb2, fin2);
+	if (debug) printf ("\n faceDeb: %d, faceFin: %d", faceDeb, faceFin);
     Pince *res, *res1, *res2;
     if ((faceDeb == 1) && (faceFin == 1)) {
 		// Ext -> Ext
-		//printf ("\n Ext -> Ext");
+		if (debug) printf ("\n Ext -> Ext");
 		res = getPince(gfd, nerv1, nerv2, 1);
+		if (debug) printf ("\n res->function1->GetLignes()=%d res->function2->GetLignes()=%d", res->function1->GetLignes(), res->function2->GetLignes());
+		if (debug) printf ("\n deb1=%f fin1=%f", deb1, fin1);
+		if (debug) printM(res->P1);
+		if (debug) printf ("\n deb2=%f fin2=%f", deb2, fin2);
+		if (debug) printM(res->P2);
 		res -> makeSrez(deb1, fin1, deb2, fin2);
+		if (debug) printf ("\n AFTER makeSrez");
+		if (debug) printf ("\n deb1=%f fin1=%f", deb1, fin1);
+		if (debug) printM(res->P1);
+		if (debug) printf ("\n deb2=%f fin2=%f", deb2, fin2);
+		if (debug) printM(res->P2);
+
     } else if ((faceDeb == 1) && (faceFin == 2)) {
         // Ext -> Int
-		//printf ("\n Ext -> Int");
+		if (debug) printf ("\n Ext -> Int");
         Pince* pext = getPince(gfd, nerv1, nerv2, 1);
+		if (debug) printf ("\n pext->function1->GetLignes()=%d pext->function2->GetLignes()=%d", pext->function1->GetLignes(), pext->function2->GetLignes());
         Pince* pint = getPince(gfd, nerv1, nerv2, 2);
+		if (debug) printf ("\n pint->function1->GetLignes()=%d pint->function2->GetLignes()=%d", pint->function1->GetLignes(), pint->function2->GetLignes());
+
+		if (debug) printf ("\n deb1=%f fin1=%f", deb1, fin1);
+		if (debug) printf ("\n deb2=%f fin2=%f", deb2, fin2);
 
         res1 = getGluePinceOnlyFuncs (pext, deb1, pint, fin1);
         res2 = getGluePinceOnlyFuncs (pext, deb2, pint, fin2);
+
+
         res = new Pince();
         res -> nerv1 = nerv1;
         res -> nerv2 = nerv2;
@@ -722,28 +741,28 @@ Pince* getPincePlus(WindPatternsProject* gfd,
         res -> AmpA0 = pext -> AmpA;
    } else if ((faceDeb == 2) && (faceFin == 1)) {
         // Int -> Ext
-	    //printf ("\n Int -> Ext");
-	    //printf ("\n Int -> Ext.1");
+	    if (debug) printf ("\n Int -> Ext");
+	    if (debug) printf ("\n Int -> Ext.1");
         Pince* pext = getPince(gfd, nerv1, nerv2, 1);
-		//printf ("\n pext->function1->GetLignes()=%d pext->function2->GetLignes()=%d", pext->function1->GetLignes(), pext->function2->GetLignes());
+		if (debug) printf ("\n pext->function1->GetLignes()=%d pext->function2->GetLignes()=%d", pext->function1->GetLignes(), pext->function2->GetLignes());
         Pince* pint = getPince(gfd, nerv1, nerv2, 2);
-		//printf ("\n pint->function1->GetLignes()=%d pint->function2->GetLignes()=%d", pint->function1->GetLignes(), pint->function2->GetLignes());
+		if (debug) printf ("\n pint->function1->GetLignes()=%d pint->function2->GetLignes()=%d", pint->function1->GetLignes(), pint->function2->GetLignes());
         //res = getGluePinceOnlyFuncs (pint, deb, pext, fin);
-		//printf ("\n Int -> Ext.2");
-		//printf ("\ndeb1=%f deb2=%f", deb1, deb2);
-		//printf ("\nfin1=%f fin2=%f", fin1, fin2);
+		if (debug) printf ("\n Int -> Ext.2");
+		if (debug) printf ("\ndeb1=%f deb2=%f", deb1, deb2);
+		if (debug) printf ("\nfin1=%f fin2=%f", fin1, fin2);
         res1 = getGluePinceOnlyFuncs (pint, deb1, pext, fin1);
         res2 = getGluePinceOnlyFuncs (pint, deb2, pext, fin2);
-		//printf ("\n Int -> Ext.3");
+		if (debug) printf ("\n Int -> Ext.3");
     	res = new Pince();
-		//printf ("\n Int -> Ext.4");
+		if (debug) printf ("\n Int -> Ext.4");
         res -> nerv1 = nerv1;
         res -> nerv2 = nerv2;
         res -> glue = true;
-		//printf ("\n Int -> Ext.5");
+		if (debug) printf ("\n Int -> Ext.5");
         res->function1 = res1->function1;
         res->function2 = res2->function2;
-		//printf ("\n Int -> Ext.6");
+		if (debug) printf ("\n Int -> Ext.6");
         res->P1 = res1->P1;
         res->P2 = res2->P2;
         res->ipa1 = res1->ipa1;
@@ -752,21 +771,20 @@ Pince* getPincePlus(WindPatternsProject* gfd,
         res->ipf2 = res2->ipf2;
         res->i01 = res1->i01;
         res->i02 = res2->i02;
-		//printf ("\n Int -> Ext.7");
+		if (debug) printf ("\n Int -> Ext.7");
         //res -> AmpA = pint -> AmpA;
         //res -> AmpF = pint -> AmpF;
         //res -> AmpA0 = pext -> AmpA;
-
         res -> AmpA = pext -> AmpA;
         res -> AmpF = pext -> AmpF;
         res -> AmpA0 = pint -> AmpA;
-		//printf ("\n ...Int -> Ext");
+		if (debug) printf ("\n ...Int -> Ext");
     } else {
         // Int -> Int
         res = getPince(gfd, nerv1, nerv2, 2);
         res->makeSrez(deb1, fin1, deb2, fin2);
     }
-    //printf ("\n...getPincePlusNew()");
+    if (debug) printf ("\n...getPincePlusNew()");
     return res;
 }
 
@@ -861,15 +879,15 @@ void Pince::makeSrez(double deb1, double fin1, double deb2, double fin2)
     Matrix* Pn2 = this -> P2;
     int ia1 = 0;
     int ia2 = 0;
-    //printf ("\nbefore P1->GetLignes");
-    //printf ("\nP1->GetLignes()=%d", P1->GetLignes());
-    //printf ("\nP2->GetLignes()=%d", P2->GetLignes());
-    //printf ("\nafter P1->GetLignes");
+	if (debug) printf ("\nbefore P1->GetLignes");
+    if (debug) printf ("\nP1->GetLignes()=%d", P1->GetLignes());
+    if (debug) printf ("\nP2->GetLignes()=%d", P2->GetLignes());
+    if (debug) printf ("\nafter P1->GetLignes");
 
     function1 = GetFunctionSrez(P1, func1, deb1, fin1, &ia1);
-    //printf ("\nF1 ipa1=%d ipf1=%d ia1=%d function1->GetLignes()=%d",ipa1, ipf1, ia1, function1->GetLignes());
+    if (debug) printf ("\nF1 ipa1=%d ipf1=%d ia1=%d function1->GetLignes()=%d",ipa1, ipf1, ia1, function1->GetLignes());
     function2 = GetFunctionSrez(P2, func2, deb2, fin2, &ia2);
-    //printf ("\nF2 ipa2=%d ipf2=%d ia2=%d",ipa2, ipf2, ia2);
+    if (debug) printf ("\nF2 ipa2=%d ipf2=%d ia2=%d",ipa2, ipf2, ia2);
     P1 = GetFunctionSrez(Pn1, Pn1, deb1, fin1, &ia1);
     P2 = GetFunctionSrez(Pn2, Pn2, deb2, fin2, &ia2);
     ipa1 = ipa1 - ia1;

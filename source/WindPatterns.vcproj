@@ -208,6 +208,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\commun\const.h"
+			>
+		</File>
+		<File
 			RelativePath="..\commun\design.cpp"
 			>
 		</File>
