@@ -52,7 +52,6 @@ void EcritPolyVertexDXF(FILE *fid, char *nom, int en3d,
 
 
 void writeFichierDXF(char *fileName, TAxe *axe)
-
 {
 	int i, j, cpt;
 	FILE *fid;

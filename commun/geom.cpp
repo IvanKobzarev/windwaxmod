@@ -71,12 +71,12 @@ bool Segment2d::contains(Point2d* pt) {
 	//printf ("\n onLine=%d", onLine);
 	double vx = (x0-x1)*(x0-x2);
 	//printf ("\n vx=%f", vx);
-	bool btwX = (vx<=0.00001f);
+	bool btwX = (vx <= EPSILON);
 	//printf ("\n btwX=%d", btwX);
 
 	double vy = (y0-y1)*(y0-y2);
 	//printf ("\n vy=%f", vy);
-	bool btwY = (vy<=0.00001f);
+	bool btwY = (vy <= EPSILON);
 	//printf ("\n btwY=%d", btwY);
 	return (onLine && btwX && btwY);
 }
@@ -90,8 +90,8 @@ ResultIntersect2d* intersectSegments2d (Segment2d* s1, Segment2d* s2) {
 	double dy = s1->A * (-s2->C) - s2->A * (-s1->C);
 	ResultIntersect2d* res = new ResultIntersect2d();
 	//printf ("\nintersect d=%f dx=%f dy=%f", d, dx, dy);
-	if (d == 0) {
-		if ((dx == 0) && (dy == 0)) {
+	if (fabs(d) < EPSILON) {
+		if ((fabs(dx) < EPSILON) && (fabs(dy) < EPSILON)) {
 			//printf ("\nSEG");
 			res->type = SEG;
 		} else {
@@ -179,7 +179,7 @@ void calcVecteurNormal(double xa,double ya,double xb,double yb,
 	b2=xb*xab +yb*yab;
 	/*calc determinants*/
 	delta=a11*a22-a21*a12;
-	if (delta !=0)
+	if (delta != 0.0f)
 	{
 		delta1=b1*a22-b2*a12;
 		delta2=a11*b2-a21*b1;
@@ -211,15 +211,15 @@ Matrix* calcContour(Matrix* xy, Matrix *d, int cote)
 	/*test parametres ok*/
 	/* a faire ...*/
 	/*creation matrices*/
-	Matrix *res = new Matrix(xy->GetLignes(),2);
+	Matrix *res = new Matrix(xy->GetLignes(), 2);
 	/*calc matrices contour xc,yc a partir du 2eme point*/
 	double xc, yc;
-	for(i=0; i<xy->GetLignes()-1; i++)
+	for(i = 0; i < xy->GetLignes()-1; i++)
 	{
 		xc = res->Element(i+1,0);
 		yc = res->Element(i+1,1);
-                //printf ("\n calcContour1()");
-		calcVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1),	&xc, &yc, d->Element(i,0), cote);
+        //printf ("\n calcContour1()");
+		calcVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1), &xc, &yc, d->Element(i,0), cote);
 		res->SetElement(i+1,0,xc);
 		res->SetElement(i+1,1,yc);
 	}
@@ -227,12 +227,11 @@ Matrix* calcContour(Matrix* xy, Matrix *d, int cote)
 	/*calc premier point xc,yc*/
 	xc = res->Element(0,0);
 	yc = res->Element(0,1);
-        //printf ("\n calcContour2()");
+    //printf ("\n calcContour2()");
 	calcVecteurNormal(xy->Element(1,0), xy->Element(1,1), xy->Element(0,0), xy->Element(0,1), &xc, &yc, d->Element(0,0), -cote);
 	res->SetElement(0,0,xc);
 	res->SetElement(0,1,yc);
 	return res;
-
 }
 
 void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb)
@@ -265,19 +264,20 @@ void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb)
         if (j < np) xp = pts -> Element(j, 0); else xp = pts -> Element(np-1, 0);
         //printf ("\n (%d, %d, %d)    (%f) (%f)", i, j, s, xc, xp);
 
-        if (  (i < n) && ((xc < xp) || ((j == np)))) {
+        if ( (i < n) && ((xc < xp) || ((j == np)))) {
           //  printf ("\n < i");
             (*newCourb) -> SetElement(i + j - s, 0, xc);
             (*newCourb) -> SetElement(i + j - s, 1, yc);
             i++;
         } 
-        if (  (j < np)  && ((xc > xp) || (i == n)) ) {
+        if ( (j < np)  && ((xc > xp) || (i == n)) ) {
             //printf ("\n > j");
             (*newCourb) -> SetElement(i + j - s, 0, xp);
             (*newCourb) -> SetElement(i + j - s, 1, InterpLinX(courb, xp));
             j++;
          }
-         if (xc==xp) {
+
+         if (fabs(xc-xp) < EPSILON) {
               //  printf ("\n =");
                  (*newCourb) -> SetElement(i + j - s, 0, xc);
                  (*newCourb) -> SetElement(i + j - s, 1, yc);
@@ -285,9 +285,6 @@ void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb)
                  j++;
                  s++;
          }
-       
-
-        
     }
     //printf ("\n ...add Points to courb()");
 }
@@ -313,9 +310,9 @@ Matrix* calcNormalRasst(Matrix* X1, Matrix* Y1,Matrix* X2, Matrix* Y2) {
         double x0 = X1->Element(i, 0);
         double y0 = Y1->Element(i, 0);
         calcVecteurBissec(X1->Element(i-1, 0), Y1->Element(i-1, 0),
-                        x0, y0,
-                        X1->Element(i+1, 0), Y1->Element(i+1, 0),
-		         &xn, &yn, 10.0f, +1);
+							x0, y0,
+							X1->Element(i+1, 0), Y1->Element(i+1, 0),
+							&xn, &yn, 10.0f, +1);
         
         for (int j = 0; j < X2->GetLignes()-1; j++) {
             double x1 = X2->Element(j,0);
@@ -350,14 +347,14 @@ void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double
 	//test pts 1,2,3 alignï¿½s
 	if (x12*y23-x23*y12 == 0.0f)
 	{
-//printf ("\ncalcVecteurBissec cote1");
+		//printf ("\ncalcVecteurBissec cote1");
 		calcVecteurNormal(x1,y1,x2,y2,x,y,l,cote);
 	}
 	else
 	{
-//printf ("\ncalcVecteurBissec cote2");
+		//printf ("\ncalcVecteurBissec cote2");
 		calcVecteurNormal(x1,y1,x2,y2,&x4,&y4,l,cote);
-//printf ("\ncalcVecteurBissec -cote");
+		//printf ("\ncalcVecteurBissec -cote");
 		calcVecteurNormal(x3,y3,x2,y2,&x5,&y5,l,-cote);
 		/*preparation matrices A et B pour resolution AX=B*/
 		a11=y12; a12=-x12;
@@ -366,7 +363,7 @@ void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double
 		b2=x5*y23-y5*x23;
 		/*calc determinants*/
 		delta=a11*a22-a21*a12;
-		if (delta !=0)
+		if (fabs(delta) > EPSILON)
 		{
 			delta1=b1*a22-b2*a12;
 			delta2=a11*b2-a21*b1;
@@ -429,18 +426,11 @@ void InterpoleProfilBout(Matrix** XYBout, Matrix* XYCent)
 		(*XYBout)->SetElement(i,1,Yi->Element(i,0));
 	}
 	/*liberation matrice intermediaire*/
-	if ( X != NULL )
-		delete(X); 
-	if ( Y != NULL )
-		delete(Y);
-	if ( Xi != NULL )
-		delete(Xi); 
-	if ( Yi != NULL )
-		delete(Yi);
-
+	if ( X != NULL ) delete(X); 
+	if ( Y != NULL ) delete(Y);
+	if ( Xi != NULL ) delete(Xi); 
+	if ( Yi != NULL ) delete(Yi);
 }
-
-
 
 /**********/
 /* dist3d */
@@ -691,17 +681,17 @@ void calcDeveloppe(
 			&&(Ys2->Element(i,0)==Ys1->Element(i,0))
 			&&(Zs2->Element(i,0)==Zs1->Element(i,0)))
 		{
-                    //printf ("\n Xs2->Element(i,0)==Xs1->Element(i,0)");
-        		(*Xb2)->SetElement(i+1,0,(*Xb2)->Element(i,0));
+            //printf ("\n Xs2->Element(i,0)==Xs1->Element(i,0)");
+       		(*Xb2)->SetElement(i+1,0,(*Xb2)->Element(i,0));
 			(*Yb2)->SetElement(i+1,0,(*Yb2)->Element(i,0)+dX);
-                }
+        }
 		else
 		{
-                    //printf ("\n Xs2->Element(i,0)!=Xs1->Element(i,0)");
+            //printf ("\n Xs2->Element(i,0)!=Xs1->Element(i,0)");
 			//test points b2->Element(i,0) et b2->Element(i+1,0) confondus ?
 			if (dX!=0.0f)
 			{
-                            //printf ("\n dX!=0.0f");
+                //printf ("\n dX!=0.0f");
 				//int_cer(
 				int_cer_bis(
 					(*Xb1)->Element(i,0), (*Yb1)->Element(i,0), diag,
@@ -712,38 +702,29 @@ void calcDeveloppe(
 				//calc de produits scalaires ...
 				if (i>0)
 				{
-					Scal1 =
-						(X1-(*Xb2)->Element(i,0))*((*Xb2)->Element(i,0)-(*Xb2)->Element(i-1,0))
-						+(Y1-(*Yb2)->Element(i,0))*((*Yb2)->Element(i,0)-(*Yb2)->Element(i-1,0));
-					Scal2 =
-						(X2-(*Xb2)->Element(i,0))*((*Xb2)->Element(i,0)-(*Xb2)->Element(i-1,0))
-						+(Y2-(*Yb2)->Element(i,0))*((*Yb2)->Element(i,0)-(*Yb2)->Element(i-1,0));
-					if (Scal1>Scal2)
-        				{
+					Scal1 = (X1-(*Xb2)->Element(i,0))*((*Xb2)->Element(i,0)-(*Xb2)->Element(i-1,0))
+								+ (Y1-(*Yb2)->Element(i,0))*((*Yb2)->Element(i,0)-(*Yb2)->Element(i-1,0));
+					Scal2 = (X2-(*Xb2)->Element(i,0))*((*Xb2)->Element(i,0)-(*Xb2)->Element(i-1,0))
+								+ (Y2-(*Yb2)->Element(i,0))*((*Yb2)->Element(i,0)-(*Yb2)->Element(i-1,0));
+					if (Scal1 > Scal2) {
 						(*Xb2)->SetElement(i+1,0,X1);
 						(*Yb2)->SetElement(i+1,0,Y1);
-					}
-					else
-					{
+					} else {
 						(*Xb2)->SetElement(i+1,0,X2); 
 						(*Yb2)->SetElement(i+1,0,Y2);
 					}
 				}
 				else //(i=0) 1er point calce du bord 2
 				{
-					if (X1>X2)
-					{
+					if (X1>X2) {
 						(*Xb2)->SetElement(i+1,0,X1);
 						(*Yb2)->SetElement(i+1,0,Y1);
-					}
-					else
-					{
+					} else {
 						(*Xb2)->SetElement(i+1,0,X2);
 						(*Yb2)->SetElement(i+1,0,Y2);
 					}
 				}
-			}
-			else //points b2->Element(i,0) et b2->Element(i+1,0) confondus
+			} else //points b2->Element(i,0) et b2->Element(i+1,0) confondus 
 			{
                             //printf ("\n dX==0.0f");
 				(*Xb2)->SetElement(i+1,0,(*Xb2)->Element(i,0));
@@ -761,10 +742,10 @@ void calcDeveloppe(
 			Xs1->Element(i,0),Ys1->Element(i,0),Zs1->Element(i,0));
 		//test points b1->Element(i,0) et b1->Element(i+1,0) confondus ?
                 //printf ("\n_i=%d dY=%f dX=%f", i, dY, dX);
-		if (dX!=0)
+		if (dX != 0.0f)
 		{
 			//test points b1->Element(i+1,0) et b2->Element(i+1,0) confondus ?
-			if (dY!=0)
+			if (dY != 0.0f)
 			{
 				//int_cer(
 				int_cer_bis(
@@ -774,14 +755,11 @@ void calcDeveloppe(
                 //printf ("\n_N=%d (%f, %f) (%f, %f)", N, X1, Y1, X2, Y2);
 				//choix du point resultat ?
 				//calc de produits scalaires ...
-				if (i>1)
-        			{
-                			Scal1 =
-						(X1-(*Xb1)->Element(i,0))*((*Xb1)->Element(i,0)-(*Xb1)->Element(i-1,0))
-						+(Y1-(*Yb1)->Element(i,0))*((*Yb1)->Element(i,0)-(*Yb1)->Element(i-1,0));
-					Scal2 =
-						(X2-(*Xb1)->Element(i,0))*((*Xb1)->Element(i,0)-(*Xb1)->Element(i-1,0))
-						+(Y2-(*Yb1)->Element(i,0))*((*Yb1)->Element(i,0)-(*Yb1)->Element(i-1,0));
+				if (i>1) {
+                	Scal1 = (X1-(*Xb1)->Element(i,0))*((*Xb1)->Element(i,0)-(*Xb1)->Element(i-1,0))
+								+(Y1-(*Yb1)->Element(i,0))*((*Yb1)->Element(i,0)-(*Yb1)->Element(i-1,0));
+					Scal2 =	(X2-(*Xb1)->Element(i,0))*((*Xb1)->Element(i,0)-(*Xb1)->Element(i-1,0))
+								+(Y2-(*Yb1)->Element(i,0))*((*Yb1)->Element(i,0)-(*Yb1)->Element(i-1,0));
 					if (Scal1>Scal2)
 					{
 						(*Xb1)->SetElement(i+1,0,X1); 
@@ -836,7 +814,7 @@ void calcDeveloppe(
 		Thb2->RemoveElement(i,0,Th);
 	}
 	//passage en coordonnees cartesienne
-	if ( *Xb1 != NULL )
+	if ( *Xb1 != NULL ) 
 		delete(*Xb1);
 	*Xb1 = NULL;
 	if ( *Yb1 != NULL )

@@ -796,7 +796,7 @@ void addFormProjectionCourbesToAxe(TAxe* axe, FormProjection* fp, KiteDesign* kd
 			//printf ("\n (%d, %d)    %f, %f", i, j, fp->X->Element(i, j), fp->Y->Element(i, j));
 		}
 		courbe1->pts->SetElement(i, 0, fp->X->Element(i, m-1) );
-		courbe1->pts->SetElement(i, 1, dy + ymult*fp->Y->Element(i, m-1)-ymin);
+		courbe1->pts->SetElement(i, 1, dy + ymult * fp->Y->Element(i, m - 1) - ymin);
 
 		//printf ("\n addCourbe()");
 		addCourbe(axe, courbe);
