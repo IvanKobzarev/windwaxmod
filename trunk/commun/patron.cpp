@@ -12,9 +12,8 @@
 #define DEG2RAD	(3.141592675f/180.0f)
 #endif
 
-
-void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
-					Matrix *Yd1, Matrix *P1,
+void GenerateCourbeText(WindPatternsProject* gfd, 
+					Matrix *Xd1, Matrix *Yd1, Matrix *P1,
 					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
 					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
 					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
@@ -22,169 +21,582 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
                     double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
 					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
 {
-    if (debug) printf ("\n GenerateCourbe()");
-    double Marge[2]={marge1, marge2};
-    *AxePatronP = createAxe(gfd->windowPatron);
-    *AxePatronDXFP = createAxe(gfd->windowPatron);
-    *AxeRepDXFP = createAxe(gfd->windowPatron);
-    *AxePatronTextDXFP = createAxe(gfd->windowPatron);
-    *AxeMarginDXFP = createAxe(gfd->windowPatron);
-    *AxeCercleDXFP = createAxe(gfd->windowPatron);
-    if (debug) printf ("\n GenerateCourbe def 1");
-    int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
-    int ajCo1[2] = {0, 0};
-    int ajCo2[2] = {0, 0};
-    int nerv[2] = {nerv1, nerv2};
-    if (nerv1 == -1) nerv[0]=0;
+    Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+    Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+    Matrix * P[2] = {P1, P2};
+
+    double xText, yText;
+    char texte[100], texteExtInt[3] = "EI";
+
+    xText = (Xd[0]->Element(0, 0) + Xd[0]->Element(Xd[0]->GetLignes() - 1, 0)
+            + Xd[1]->Element(0, 0) + Xd[1]->Element(Xd[1]->GetLignes() - 1, 0)) / 4.0f;
+
+    double x0len = Xd[0]->Element(Xd[0]->GetLignes() - 1, 0) - Xd[0]->Element(0, 0);
+    double x1len = Xd[1]->Element(Xd[1]->GetLignes() - 1, 0) - Xd[1]->Element(0, 0);
+    double xlen = (x0len + x1len) / 2.0f;
+
+    //		printf ("\nXd[0]->Element(0,0) %f",Xd[0]->Element(0,0));
+    //		printf ("\nXd[0]->Element(Xd[0]->GetLignes()-1,0) %f", Xd[0]->Element(Xd[0]->GetLignes()-1,0));
+    //		printf ("\nXd[1]->Element(0,0) %f", Xd[1]->Element(0,0));
+    //		printf ("\nXd[1]->Element(Xd[1]->GetLignes()-1,0) %f", Xd[1]->Element(Xd[1]->GetLignes()-1,0));
+
+    xText = gfd->textX * xlen;
+    yText = (Yd[0]->Element(0, 0) + Yd[0]->Element(Yd[0]->GetLignes() - 1, 0)
+            + Yd[1]->Element(0, 0) + Yd[1]->Element(Yd[1]->GetLignes() - 1, 0)) / 4.0f;
+
+    double y0len = Yd[1]->Element(0, 0) - Yd[0]->Element(0, 0);
+    double y1len = Yd[1]->Element(Yd[1]->GetLignes() - 1, 0) - Yd[0]->Element(Yd[0]->GetLignes() - 1, 0);
+    double ylen = (y0len + y1len) / 2.0f;
+
+    yText = Yd[1]->Element(0, 0) - gfd->textY*ylen;
+
+    //		printf ("\nYd[0]->Element(0,0) %f",Yd[0]->Element(0,0));
+    //		printf ("\nYd[0]->Element(Yd[0]->GetLignes()-1,0) %f", Yd[0]->Element(Yd[0]->GetLignes()-1,0));
+    //		printf ("\nYd[1]->Element(0,0) %f", Yd[1]->Element(0,0));
+    //		printf ("\nYd[1]->Element(Yd[1]->GetLignes()-1,0) %f", Yd[1]->Element(Yd[1]->GetLignes()-1,0));
+    //sprintf(texte, "%d%c%03.1f%c%03.1f_%d%c%03.1f%c%03.1f",
+    //	NoNerv[0],texteExtInt[FaceDeb[0]-1],Deb[0],texteExtInt[FaceFin[0]-1],Fin[0],
+    //	NoNerv[1],texteExtInt[FaceDeb[1]-1],Deb[1],texteExtInt[FaceFin[1]-1],Fin[1]);
+    sprintf(texte, "%s", text);
+    addTexte(*AxePatronP, texte, 0.02f, 0.0f, xText, yText);
+    sprintf(texte, "%s", text);
+    addTexte(*AxePatronTextDXFP, texte, 0.02f, 0.0f, xText, yText);
+    if (debug) printf ("\n...GenerateCourbe()");
+    //}
+
+}
+
+void GenerateCourbeRep(WindPatternsProject* gfd, 
+					Matrix *Xd1, Matrix *Yd1, Matrix *P1,
+					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
+					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
+			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
+                    double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
+					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
+{
+    if (debug) printf ("\n GC go in Reper()");
+    int ventisave=0;
+    double xk0, xk1, xk2, yk0, yk1, yk2, xkf, ykf;
+
+	Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+	Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+	Matrix * P[2] = {P1, P2};
+
     int face[2] = {faceFin1, faceFin2};
     int FaceDeb[2]= {faceDeb1, faceDeb2};
     int FaceFin[2]= {faceFin1, faceFin2};
     double Deb[2] = {deb1, deb2};
     double Fin[2] = {fin1, fin2};
-    if (debug) printf ("\n GenerateCourbe def 2");
     Matrix *distance;
     int n;
-    double xText, yText;
-    char texte[100], texteExtInt[3] = "EI";
     Matrix *interpXSuspente, *interpYSuspente;
-    double posSuspente, xSuspente[2][205], ySuspente[2][205];
-    if (debug) printf ("\n GenerateCourbe def 3");
-    Matrix * Xd[2] = {Xd1, Xd2};
+	double posSuspente, xSuspente[2][205], ySuspente[2][205];
 
-    if (debug) printf ("\n Xd1->GetLignes()=%d", Xd1->GetLignes());
-    if (debug) printf ("\n Xd2->GetLignes()=%d", Xd2->GetLignes());
-
-	Matrix * Xd0[2] = {Xd01, Xd02};
-    Matrix * Yd[2] = {Yd1, Yd2};
-	Matrix * Yd0[2] = {Yd01, Yd02};
-    Matrix * P[2] = {P1, P2};
-	double coeff[2]= {coeff1, coeff2};
-    int i = 0, j = 0;
-    if (debug) printf ("\n GenerateCourbe def 4");
-    Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
-    Courbe *CourbAv, *CourbAvBack, *CourbAr, *CourbArDXF, *CourbMargeAv, *CourbMargeAvBack, *CourbMargeAr, *CourbCoin, *CourbMargeArDXF, *CourbCoin1[2], *CourbCoin1Back[2], *CourbCoin2[2], *CourbCoin2Back[2], *CourbRep, *CourbRepDXF;
+	double coeff[2] = {coeff1, coeff2};
+    int nerv[2] = {nerv1, nerv2};
+    if (nerv1 == -1) nerv[0]=0;
+    Courbe *CourbRep, *CourbRepDXF;
     Courbe *CourbCercle, *CourbCercleDXF;
-    if (debug) printf ("\n GenerateCourbe def 5");
+
+	int i = 0, j = 0;
+    for (i = 0; i < 2; i++) {
+        if (debug) printf ("\n i=%d\n", i);
+        for (j = 0;j < 5; j++) {
+            if (debug) printf (" set j=%d ", j);
+            xSuspente[i][j] = -100000.0f;
+            ySuspente[i][j] = -100000.0f;
+        }
+
+		Matrix* m = 0;
+
+		if (gfd->CorrectRepPoints && isPince && (coeff[i] != -1)) {
+			if (debug) printf ("\n coeff[%d]=%f", i, coeff[i]);
+			if (debug) printf ("\n 1");
+			m = getReperPointsPince (gfd, Xd0[i], Yd0[i], coeff[i], 
+									Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
+			if (debug) printf ("\n ...1");
+		} else {
+			m = getReperPoints(gfd, Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
+			if (coeff[i] == -1) 
+				printf ("\nlength XY=%6.2f", 1000*calcCourbeLength(Xd[i], Yd[i]));
+		} 
+		if (debug) printf ("\n ...--");
+
+		if (debug) {
+			for (int _i=0; _i<m->GetLignes(); _i++) {
+				printf ("\n grp %d (%f, %f, %f)", _i, m->Element(_i,0), m->Element(_i,1), m->Element(_i,2));
+			}
+		}
+        //add croix au graphe
+        for (j = 0;j<m->GetLignes();j++) {
+            if (debug)    printf ("\nj3=%d", j);
+                int mark = m->Element(j,2);
+                double xSus = m->Element(j,0);
+                double ySus = m->Element(j,1);
+
+                if (((mark == REP_TRIANGLE) || (mark == REP_V)) && (m->Element(j, 3) > 0.0f)) {
+                    ventisave = (int) m->Element(j, 3) - 1;
+                    xSuspente[i][ventisave] = xSus;
+                    ySuspente[i][ventisave] = ySus;
+                }
+                if ((i==0) && (nerv1==nerv2)) {
+                    if (mark == REP_0) {
+                        xk0 = xSus;
+                        yk0 = ySus;
+                        //printf ("\n REP_0 (%f, %f)", xk0, yk0);
+                    }
+                    if (mark == REP_VENTDEB) {
+                        xk1 = xSus;
+                        yk1 = ySus;
+                        //printf ("\n REP_VENTDEB (%f, %f)", xk1, yk1);
+                    }
+                    if (mark == REP_VENTFIN) {
+                        xk2 = xSus;
+                        yk2 = ySus;
+                        //printf ("\n REP_VENTFIN (%f, %f)", xk2, yk2);
+                    }
+                    if (mark == REP_KLAPAN_FIN) {
+                        xkf = xSus;
+                        ykf = ySus;
+                        //printf ("\n REP_KLAPAN_FIN (%f, %f)", xkf, ykf);
+                    }
+                }
+
+
+                if ((mark == REP_CROSS) && (gfd->ReperesProfile[i])) {
+                        CourbRep = new Courbe("Repers points");
+                        CourbRep->points = OFF;
+                        CourbRepDXF = new Courbe("Repers points");
+                        CourbRepDXF->points = OFF;
+                        CourbRep->pts = Zeros(2, 2);
+                        CourbRepDXF->pts = Zeros(2, 2);
+                        CourbRep->pts->SetElement(0, 0, xSus - gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(0, 1, ySus - gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(1, 0, xSus + gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(1, 1, ySus + gfd->XMashtab * 0.01f);
+                        int _i, _j;
+                        for (_i = 0; _i < 2; _i++)
+                            for (_j = 0; _j < 2; _j++)
+                                CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                        addCourbe(*AxeRepDXFP, CourbRepDXF);
+                        CourbRep = new Courbe("Repers points");
+                        CourbRep->points = OFF;
+                        CourbRepDXF = new Courbe("Repers points");
+                        CourbRepDXF->points = OFF;
+                        CourbRep->pts = Zeros(2, 2);
+                        CourbRepDXF->pts = Zeros(2, 2);
+                        CourbRep->pts->SetElement(0, 0, xSus - gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(0, 1, ySus + gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(1, 0, xSus + gfd->XMashtab * 0.01f);
+                        CourbRep->pts->SetElement(1, 1, ySus - gfd->XMashtab * 0.01f);
+                        for (_i = 0; _i < 2; _i++)
+                            for (_j = 0; _j < 2; _j++)
+                                CourbRepDXF->pts->SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                        addCourbe(*AxeRepDXFP, CourbRepDXF);
+                    } 
+                    if ((mark==REP_LINE) || ((gfd->ReperesProfile[i]) && (mark == REP_MIDDLE_LINE))) {
+                            char courbName[255];
+                            if (mark==REP_MIDDLE_LINE) 
+                                strcpy(courbName, "Repers points");
+                            else
+                                strcpy(courbName, "Repers diag");
+                            //perpendiular
+                            int direction = -1;
+                            if (i == 1) direction = 1;
+                            double _x0 = xSus;
+                            double _y0 = ySus;
+                            int ix, icol;
+                            Ind(_x0, Xd[i], &ix, &icol);
+                            //Ind(ySuspente[i][j], interpYSuspente, &iy, &icol);
+                            double xc, yc;
+                            double _l = 3 * gfd->XMashtab * 0.01f;
+                            if (mark == REP_MIDDLE_LINE) {
+                                _l = 0.4 * _l;
+                            }
+                            if ((Xd[i]->Element(ix, 0) > _x0) && (ix != 0)) ix--;
+                            if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0)) ix--;
+                            if (ix != 0)
+                                calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
+                            else
+                                calcVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                            double _x1 = _x0;
+                            double _y1 = _y0;
+                            double _x2 = xc;
+                            double _y2 = yc;
+                            if (ix == 0) {
+                                _x2 = _x0 + (xc - Xd[i]->Element(1,0));
+                                _y2 = _y0 + (yc - Yd[i]->Element(1,0));
+                            }
+                            int _i, _j;
+                            CourbRep = new Courbe(courbName);
+                            CourbRep->points = OFF;
+                            CourbRepDXF = new Courbe(courbName);
+                            CourbRepDXF->points = OFF;
+                            CourbRep->pts = Zeros(2, 2);
+                            CourbRepDXF->pts = Zeros(2, 2);
+                            CourbRep->pts->SetElement(0, 0, _x1);
+                            CourbRep->pts->SetElement(0, 1, _y1);
+                            CourbRep->pts->SetElement(1, 0, _x2);
+                            CourbRep->pts->SetElement(1, 1, _y2);
+                            for (_i = 0; _i < 2; _i++)
+                                for (_j = 0; _j < 2; _j++)
+                                    CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                            addCourbe(*AxeRepDXFP, CourbRepDXF);
+                        }
+                        if ((gfd -> ReperesSuspentes[i]) && ((mark == REP_TRIANGLE) || (mark==REP_V)) ) {
+                            int direction = -1;
+                            if (i == 1) direction = 1;
+                            double _x0 = xSus;
+                            double _y0 = ySus;
+                            double _l = 2*gfd->XMashtab * 0.01f;
+                            double _x1 = _x0;
+                            double _y1 = _y0;
+
+                            int ix, icol;
+                            Ind(xSus, Xd[i], &ix, &icol);
+                            double xc, yc;
+                            if ((Xd[i]->Element(ix,0) > _x0) && (ix != 0 )) ix--;
+                            if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0) ) ix--;
+                            if  (ix != 0)
+                                calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
+                            else
+                                calcVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
+                            if (ix == 0) ix=1;
+
+                            double nx = (Xd[i]->Element(ix, 0)-_x0);
+                            double ny = (Yd[i]->Element(ix, 0)-_y0);
+                            double rasst = sqrt (sqr(nx) + sqr(ny));
+                            nx=_l/2.0f*nx/rasst;
+                            ny=_l/2.0f*ny/rasst;
+
+                            double _x2 = xc + nx;
+                            double _y2 = yc + ny;
+
+                            double _x3 = xc - nx;
+                            double _y3 = yc - ny;
+                            int _i, _j;
+                            CourbRep = new Courbe("Repers suspente");
+                            CourbRep->points = OFF;
+                            CourbRepDXF = new Courbe("Repers suspente");
+                            CourbRepDXF->points = OFF;
+                            CourbRep->pts = Zeros(2, 2);
+                            CourbRepDXF->pts = Zeros(2, 2);
+                            CourbRep->pts->SetElement(0, 0, _x1);
+                            CourbRep->pts->SetElement(0, 1, _y1);
+                            CourbRep->pts->SetElement(1, 0, _x2);
+                            CourbRep->pts->SetElement(1, 1, _y2);
+                            for (_i = 0; _i < 2; _i++)
+                                for (_j = 0; _j < 2; _j++)
+                                    CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+
+                            addCourbe(*AxeRepDXFP, CourbRepDXF);
+
+                            if (mark != REP_V) {
+                                CourbRep = new Courbe("Repers suspente");
+                                CourbRep->points = OFF;
+                                CourbRepDXF = new Courbe("Repers suspente");
+                                CourbRepDXF->points = OFF;
+                                CourbRep->pts = Zeros(2, 2);
+                                CourbRepDXF->pts = Zeros(2, 2);
+                                CourbRep->pts->SetElement(0, 0, _x2);
+                                CourbRep->pts->SetElement(0, 1, _y2);
+                                CourbRep->pts->SetElement(1, 0, _x3);
+                                CourbRep->pts->SetElement(1, 1, _y3);
+                                for (_i = 0; _i < 2; _i++)
+                                    for (_j = 0; _j < 2; _j++)
+                                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                                addCourbe(*AxeRepDXFP, CourbRepDXF);
+                            }
+                            CourbRep = new Courbe("Repers suspente");
+                            CourbRep->points = OFF;
+                            CourbRepDXF = new Courbe("Repers suspente");
+                            CourbRepDXF->points = OFF;
+                            CourbRep->pts = Zeros(2, 2);
+                            CourbRepDXF->pts = Zeros(2, 2);
+                            CourbRep->pts->SetElement(0, 0, _x3);
+                            CourbRep->pts->SetElement(0, 1, _y3);
+                            CourbRep->pts->SetElement(1, 0, _x1);
+                            CourbRep->pts->SetElement(1, 1, _y1);
+                            for (_i = 0; _i < 2; _i++)
+                                for (_j = 0; _j < 2; _j++)
+                                    CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                            addCourbe(*AxeRepDXFP, CourbRepDXF);
+                        }
+        }
+
+        if ((i==0) && (nerv1==nerv2) && (gfd->LayoutKlapans) && (gfd->VentHoles)) {
+            if (debug) printf ("\n go make shov!");
+            bool match = false;
+			int _i, _j;
+            if ((nerv1==-
+				1) || (nerv1==0)){
+                    if (gfd->VentCentralNerv) match = true;
+            }
+            else {
+                    if ((gfd->noNervVH[nerv1] == 1) || (gfd->noNervVH[nerv1 - 1]==1)) match = true;
+            }
+
+            if (match) {
+                if (debug) printf (" \n MATCH true!");
+                if (gfd->VentHolesDouble) {
+                    // xk0, yk0 -> xkfin, ykfin
+                    CourbRep = new Courbe("Klapan line");
+                    CourbRep->points = OFF;
+                    CourbRepDXF = new Courbe("Klapan line");
+                    CourbRepDXF->points = OFF;
+                    CourbRep->pts = Zeros(2, 2);
+                    CourbRepDXF->pts = Zeros(2, 2);
+                    CourbRep->pts->SetElement(0, 0, xk0);
+                    CourbRep->pts->SetElement(0, 1, yk0);
+                    CourbRep->pts->SetElement(1, 0, xkf);
+                    CourbRep->pts->SetElement(1, 1, 0.0f);
+                    for (_i = 0; _i < 2; _i++)
+                        for (_j = 0; _j < 2; _j++)
+                            CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                    addCourbe(*AxeRepDXFP, CourbRepDXF);
+                }
+                // xk1, yk1 -> xkfin, ykfin
+                CourbRep = new Courbe("Klapan line");
+                CourbRep->points = OFF;
+                CourbRepDXF = new Courbe("Klapan line");
+                CourbRepDXF->points = OFF;
+                CourbRep->pts = Zeros(2, 2);
+                CourbRepDXF->pts = Zeros(2, 2);
+                CourbRep->pts->SetElement(0, 0, xk1);
+                CourbRep->pts->SetElement(0, 1, yk1);
+                CourbRep->pts->SetElement(1, 0, xkf);
+                CourbRep->pts->SetElement(1, 1, 0.0f);
+                for (_i = 0; _i < 2; _i++)
+                    for (_j = 0; _j < 2; _j++)
+                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                addCourbe(*AxeRepDXFP, CourbRepDXF);
+                // xk2, yk2 -> xkfin, ykfin
+                CourbRep = new Courbe("Klapan line");
+                CourbRep->points = OFF;
+                CourbRepDXF = new Courbe("Klapan line");
+                CourbRepDXF->points = OFF;
+                CourbRep->pts = Zeros(2, 2);
+                CourbRepDXF->pts = Zeros(2, 2);
+                CourbRep->pts->SetElement(0, 0, xk2);
+                CourbRep->pts->SetElement(0, 1, yk2);
+                CourbRep->pts->SetElement(1, 0, xkf);
+                CourbRep->pts->SetElement(1, 1, 0.0f);
+                for (_i = 0; _i < 2; _i++)
+                    for (_j = 0; _j < 2; _j++)
+                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
+                addCourbe(*AxeRepDXFP, CourbRepDXF);
+            } else {
+               if (debug) printf (" \n NOOOOT MATCH!");
+            }
+
+        }
+
+}
+
+	if (debug) printf ("\n... in Reper()");
+	if (Ventilation == 1) {
+    if (debug)   printf ("\nif Ventil");
+    for (int i = 1; i < 4; i++) {
+        if ((xSuspente[0][i] != -100000.0f)
+                && (xSuspente[1][i] != -100000.0f)
+                && (xSuspente[0][i - 1] != -100000.0f)
+                && (xSuspente[1][i - 1] != -100000.0f)) {
+
+            CourbCercle = new Courbe("Cercle");
+            CourbCercleDXF = new Courbe("Cercle");
+
+            CourbCercle->points = OFF;
+            CourbCercleDXF->points = OFF;
+
+            CourbCercle->pts = Cercle(
+                    (xSuspente[0][i] + xSuspente[1][i] + xSuspente[0][i - 1] + xSuspente[1][i - 1]) / 4.0,
+                    (ySuspente[0][i] + ySuspente[1][i] + ySuspente[0][i - 1] + ySuspente[1][i - 1]) / 4.0,
+                    (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
+                    36);
+            CourbCercleDXF->pts = Cercle(
+                    (xSuspente[0][i] + xSuspente[1][i] + xSuspente[0][i - 1] + xSuspente[1][i - 1]) / 4.0,
+                    (ySuspente[0][i] + ySuspente[1][i] + ySuspente[0][i - 1] + ySuspente[1][i - 1]) / 4.0,
+                    (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
+                    36);
+
+            addCourbe(*AxePatronP, CourbCercle);
+            addCourbe(*AxeCercleDXFP, CourbCercleDXF);
+        }
+
+    }
+	if (debug)   printf ("\n...if Ventil");
+	}
+}
+
+
+
+void GenerateCourbPatron(WindPatternsProject* gfd, 
+					Matrix *Xd1, Matrix *Yd1, Matrix *P1,
+					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
+					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
+			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
+                    double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
+					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2,
+					Courbe*** CourbPatron, Courbe*** CourbPatronDXF, Courbe*** CourbPatronBack,
+					Courbe*** CourbMarge, Courbe*** CourbMargeDXF, Courbe*** CourbMargeBack) {
+	Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+	Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+	Matrix * P[2] = {P1, P2};
+	Matrix *distance;
+    int face[2] = {faceFin1, faceFin2};
+    int FaceDeb[2]= {faceDeb1, faceDeb2};
+    int FaceFin[2]= {faceFin1, faceFin2};
+    double Deb[2] = {deb1, deb2};
+    double Fin[2] = {fin1, fin2};
+	double Marge[2]={marge1, marge2};
+	int i = 0, j = 0;
     for (i = 0; i < 2; i++) {
         if (debug) printf ("\n GenerateCourbe 1for: %d", i);
-        CourbPatron[i] = new Courbe("Patron");
-        CourbPatronDXF[i] = new Courbe("Patron");
-        CourbPatronBack[i] = new Courbe("PatronBack");
+        *CourbPatron[i] = new Courbe("Patron");
+        *CourbPatronDXF[i] = new Courbe("Patron");
+        *CourbPatronBack[i] = new Courbe("PatronBack");
         if (debug) printf ("\n G0.1");
-        CourbPatron[i]->points = OFF;
-        CourbPatronDXF[i]->points = OFF;
-        CourbPatronBack[i]->points = OFF;
+        (*CourbPatron[i])->points = OFF;
+        (*CourbPatronDXF[i])->points = OFF;
+        (*CourbPatronBack[i])->points = OFF;
         if (debug) printf ("\n G0.2");
-        CourbPatron[i]->symX = OFF;
-        CourbPatronDXF[i]->symX = OFF;
-        CourbPatronBack[i]->symX = OFF;
+        (*CourbPatron[i])->symX = OFF;
+        (*CourbPatronDXF[i])->symX = OFF;
+        (*CourbPatronBack[i])->symX = OFF;
         if (debug) printf ("\n G0.3");
-        CourbPatron[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
-        if (debug) printf ("\n G0.4");
-        CourbPatronDXF[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
-        if (debug) printf ("\n G0.5");
-        CourbPatronBack[i]->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        (*CourbPatron[i])->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        (*CourbPatronDXF[i])->pts = new Matrix(Xd[i]->GetLignes(), 2);
+        (*CourbPatronBack[i])->pts = new Matrix(Xd[i]->GetLignes(), 2);
         if (debug) printf ("\n G1");
         for (j = 0; j < Xd[i]->GetLignes(); j++) {
-            CourbPatron[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
-            CourbPatronDXF[i]->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
-            CourbPatronBack[i]->pts->SetElement(Xd[i]->GetLignes() - j - 1, 0, Xd[i]->Element(j, 0));
+            (*CourbPatron[i])->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
+            (*CourbPatronDXF[i])->pts->SetElement(j, 0, Xd[i]->Element(j, 0));
+            (*CourbPatronBack[i])->pts->SetElement(Xd[i]->GetLignes() - j - 1, 0, Xd[i]->Element(j, 0));
 
-            CourbPatron[i]->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
-            CourbPatronDXF[i]->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
-            CourbPatronBack[i]->pts->SetElement(Xd[i]->GetLignes() - j - 1, 1, Yd[i]->Element(j, 0));
+			(*CourbPatron[i])->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
+            (*CourbPatronDXF[i])->pts->SetElement(j, 1, Yd[i]->Element(j, 0));
+            (*CourbPatronBack[i])->pts->SetElement(Xd[i]->GetLignes() - j - 1, 1, Yd[i]->Element(j, 0));
         }
         if (debug) printf ("\n G2");
-        addCourbe(*AxePatronP, CourbPatron[i]);
-        distance = Ones(CourbPatron[i]->pts->GetLignes(), 1);
+        addCourbe(*AxePatronP, *CourbPatron[i]);
+        distance = Ones((*CourbPatron[i])->pts->GetLignes(), 1);
         for (j = 0; j < distance->GetLignes(); j++) distance->MultiplyElement(j, 0, Marge[i] / 100.0f);
         if (debug) printf ("\n CC Marge/Marge/MargeBack");
-        CourbMarge[i] = new Courbe("Marge");
-        CourbMargeDXF[i] = new Courbe("Marge");
-        CourbMargeBack[i] = new Courbe("MargeBack");
+        (*CourbMarge[i]) = new Courbe("Marge");
+        (*CourbMargeDXF[i]) = new Courbe("Marge");
+        (*CourbMargeBack[i]) = new Courbe("MargeBack");
         if (debug) printf ("\n G3");
         if (i == 0) {
-            CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
-            CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
-            CourbMargeBack[i]->pts = calcContour(CourbPatron[i]->pts, distance, -1);
+            (*CourbMarge[i])->pts = calcContour((*CourbPatron[i])->pts, distance, -1);
+            (*CourbMargeDXF[i])->pts = calcContour((*CourbPatron[i])->pts, distance, -1);
+            (*CourbMargeBack[i])->pts = calcContour((*CourbPatron[i])->pts, distance, -1);
         } else {
-            CourbMarge[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
-            CourbMargeDXF[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
-            CourbMargeBack[i]->pts = calcContour(CourbPatron[i]->pts, distance, +1);
+            (*CourbMarge[i])->pts = calcContour((*CourbPatron[i])->pts, distance, +1);
+            (*CourbMargeDXF[i])->pts = calcContour((*CourbPatron[i])->pts, distance, +1);
+            (*CourbMargeBack[i])->pts = calcContour((*CourbPatron[i])->pts, distance, +1);
         }
         if (debug) printf ("\n G4");
-        CourbMarge[i]->points = OFF;
-        CourbMarge[i]->symX = OFF;
-        CourbMargeDXF[i]->points = OFF;
-        CourbMargeDXF[i]->symX = OFF;
-        CourbMargeBack[i]->points = OFF;
-        CourbMargeBack[i]->symX = OFF;
+        (*CourbMarge[i])->points = OFF;
+        (*CourbMarge[i])->symX = OFF;
+        (*CourbMargeDXF[i])->points = OFF;
+        (*CourbMargeDXF[i])->symX = OFF;
+        (*CourbMargeBack[i])->points = OFF;
+        (*CourbMargeBack[i])->symX = OFF;
         if (debug) printf ("\n G5");
-        for (j = 0; j < CourbMarge[i]->pts->GetLignes(); j++) {
-            CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 0, CourbMarge[i]->pts->Element(j, 0));
-            CourbMargeBack[i]->pts->SetElement(CourbMarge[i]->pts->GetLignes() - j - 1, 1, CourbMarge[i]->pts->Element(j, 1));
+        for (j = 0; j < (*CourbMarge[i])->pts->GetLignes(); j++) {
+            (*CourbMargeBack[i])->pts->SetElement((*CourbMarge[i])->pts->GetLignes() - j - 1, 0, (*CourbMarge[i])->pts->Element(j, 0));
+            (*CourbMargeBack[i])->pts->SetElement((*CourbMarge[i])->pts->GetLignes() - j - 1, 1, (*CourbMarge[i])->pts->Element(j, 1));
         }
         if (debug) printf ("\n G6");
-        addCourbe(*AxePatronP, CourbMarge[i]);
+        addCourbe(*AxePatronP, (*CourbMarge[i]));
         delete(distance);
     }
-     if (debug) printf ("\n G7");
-    addCourbe(*AxePatronDXFP, CourbPatronDXF[0]);
-    if ((Xd[0]->Element(0, 0) != Xd[1]->Element(0, 0)) //test points Av cote 1&2 confondus
-            || (Yd[0]->Element(0, 0) != Yd[1]->Element(0, 0))) {
+    if (debug) printf ("\n G7");
+    addCourbe(*AxePatronDXFP, *CourbPatronDXF[0]);
+}
+
+void GenerateCourbAvant(WindPatternsProject* gfd, 
+					Matrix *Xd1, Matrix *Yd1, Matrix *P1,
+					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
+					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
+			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
+                    double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
+					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2,
+					Courbe** CourbAv, Courbe** CourbAvBack, Courbe** CourbMargeAv, Courbe** CourbMargeAvBack, 
+					int* ajCoAv, int* ajCoMaAv, int** ajCo1) {
+	
+	Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+	Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+	Matrix * P[2] = {P1, P2};
+	Matrix *distance;
+	int i = 0, j = 0;
+
+    if ((fabs( Xd[0]->Element(0, 0) - Xd[1]->Element(0, 0) ) > EPSILON) //test points Av cote 1&2 confondus
+            || (fabs(Yd[0]->Element(0, 0) - Yd[1]->Element(0, 0)) > EPSILON)) {
         if (debug) printf ("\n GenerateCourbe Avant");
-        CourbAv = new Courbe("Avant");
-        CourbAvBack = new Courbe("AvantBack");
-        CourbAv->pts = new Matrix(2, 2);
-        CourbAvBack->pts = new Matrix(2, 2);
+        (*CourbAv) = new Courbe("Avant");
+        (*CourbAvBack) = new Courbe("AvantBack");
+        (*CourbAv)->pts = new Matrix(2, 2);
+        (*CourbAvBack)->pts = new Matrix(2, 2);
 
-        CourbAv->pts->SetElement(0, 0, Xd[0]->Element(0, 0));
-        CourbAvBack->pts->SetElement(1, 0, Xd[0]->Element(0, 0));
+        (*CourbAv)->pts->SetElement(0, 0, Xd[0]->Element(0, 0));
+        (*CourbAvBack)->pts->SetElement(1, 0, Xd[0]->Element(0, 0));
 
-        CourbAv->pts->SetElement(1, 0, Xd[1]->Element(0, 0));
-        CourbAvBack->pts->SetElement(0, 0, Xd[1]->Element(0, 0));
+        (*CourbAv)->pts->SetElement(1, 0, Xd[1]->Element(0, 0));
+        (*CourbAvBack)->pts->SetElement(0, 0, Xd[1]->Element(0, 0));
 
-        CourbAv->pts->SetElement(0, 1, Yd[0]->Element(0, 0));
-        CourbAvBack->pts->SetElement(1, 1, Yd[0]->Element(0, 0));
+        (*CourbAv)->pts->SetElement(0, 1, Yd[0]->Element(0, 0));
+        (*CourbAvBack)->pts->SetElement(1, 1, Yd[0]->Element(0, 0));
 
-        CourbAv->pts->SetElement(1, 1, Yd[1]->Element(0, 0));
-        CourbAvBack->pts->SetElement(0, 1, Yd[1]->Element(0, 0));
+        (*CourbAv)->pts->SetElement(1, 1, Yd[1]->Element(0, 0));
+        (*CourbAvBack)->pts->SetElement(0, 1, Yd[1]->Element(0, 0));
 
-        CourbAv->points = OFF;
-        CourbAv->symX = OFF;
-        CourbAvBack->points = OFF;
-        CourbAv->symX = OFF;
+        (*CourbAv)->points = OFF;
+        (*CourbAv)->symX = OFF;
+        (*CourbAvBack)->points = OFF;
+        (*CourbAv)->symX = OFF;
 
-        addCourbe(*AxePatronP, CourbAv);
-        ajCoAv = 1;
+        addCourbe(*AxePatronP, *CourbAv);
+        *ajCoAv = 1;
 
         //marge avant
         distance = Ones(2, 1);
         for (j = 0; j < distance->GetLignes(); j++)
             distance->MultiplyElement(j, 0, margeDeb / 100.0f);
 
-        CourbMargeAv = new Courbe("MargeAV");
-        CourbMargeAvBack = new Courbe("MargeAvBack");
+        *CourbMargeAv = new Courbe("MargeAV");
+        *CourbMargeAvBack = new Courbe("MargeAvBack");
         if (debug) printf ("\n CC MargeAv/MargeAvBack");
-        CourbMargeAv->pts = calcContour(CourbAv->pts, distance, +1);
-        CourbMargeAvBack->pts = calcContour(CourbAv->pts, distance, +1);
-        for (j = 0; j < CourbMargeAv->pts->GetLignes(); j++) {
-            CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 0, CourbMargeAv->pts->Element(j, 0));
-            CourbMargeAvBack->pts->SetElement(CourbMargeAv->pts->GetLignes() - j - 1, 1, CourbMargeAv->pts->Element(j, 1));
+        (*CourbMargeAv)->pts = calcContour((*CourbAv)->pts, distance, +1);
+        (*CourbMargeAvBack)->pts = calcContour((*CourbAv)->pts, distance, +1);
+        for (j = 0; j < (*CourbMargeAv)->pts->GetLignes(); j++) {
+            (*CourbMargeAvBack)->pts->SetElement((*CourbMargeAv)->pts->GetLignes() - j - 1, 0, (*CourbMargeAv)->pts->Element(j, 0));
+            (*CourbMargeAvBack)->pts->SetElement((*CourbMargeAv)->pts->GetLignes() - j - 1, 1, (*CourbMargeAv)->pts->Element(j, 1));
         }
 
-        CourbMargeAv->points = OFF;
-        CourbMargeAv->symX = OFF;
-        CourbMargeAvBack->points = OFF;
-        CourbMargeAvBack->symX = OFF;
+        (*CourbMargeAv)->points = OFF;
+        (*CourbMargeAv)->symX = OFF;
+        (*CourbMargeAvBack)->points = OFF;
+        (*CourbMargeAvBack)->symX = OFF;
 
-        addCourbe(*AxePatronP, CourbMargeAv);
-        ajCoMaAv = 1;
+        addCourbe(*AxePatronP, *CourbMargeAv);
+        *ajCoMaAv = 1;
 
         delete(distance);
 
-        if  ( ( abs(CourbMargeAv->pts->Element(0, 0) -  CourbMargeAv->pts->Element(1, 0)) > 0.000001 ) 
-				|| ( abs(CourbMargeAv->pts->Element(0, 1) - CourbMargeAv->pts->Element(1, 1)) > 0.000001 )	) {
+        if  ( ( fabs((*CourbMargeAv)->pts->Element(0, 0) -  (*CourbMargeAv)->pts->Element(1, 0)) > EPSILON ) 
+				|| ( fabs((*CourbMargeAv)->pts->Element(0, 1) - (*CourbMargeAv)->pts->Element(1, 1)) > EPSILON )	) {
 
 			for (i = 0; i < 2; i++) {
 
@@ -264,10 +676,16 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
         // 1
         ajCoAv = 0;
     }*/
+
+
+}
+
+
+void GenerateCourbAr(int* ajCoAr, int* ajCoMaAr, int** ajCo2) {
     int n0 = Xd[0]->GetLignes() - 1;
     int n1 = Xd[1]->GetLignes() - 1;
-    if ((Xd[0]->Element(n0, 0) != Xd[1]->Element(n1, 0)) //test points Ar cote 1&2 confondus
-            || (Yd[0]->Element(n0, 0) != Yd[1]->Element(n1, 0))) {
+    if ((fabs(Xd[0]->Element(n0, 0) - Xd[1]->Element(n1, 0)) >  EPSILON) //test points Ar cote 1&2 confondus
+            || (fabs(Yd[0]->Element(n0, 0) - Yd[1]->Element(n1, 0)) > EPSILON)) {
         if (debug) printf ("\n GenerateCourbe AR");
         CourbAr = new Courbe("AR");
         CourbArDXF = new Courbe("AR");
@@ -293,7 +711,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
         CourbAr->symX = OFF;
 
         addCourbe(*AxePatronP, CourbAr);
-        ajCoAr = 1;
+        *ajCoAr = 1;
 
         distance = Ones(2, 1);
 
@@ -312,14 +730,11 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
         CourbMargeArDXF->symX = OFF;
 
         addCourbe(*AxePatronP, CourbMargeAr);
-        ajCoMaAr = 1;
+        *ajCoMaAr = 1;
 
         delete(distance);
-        if  ( 	( abs(CourbMargeAr->pts->Element(0, 0) -  CourbMargeAr->pts->Element(1, 0)) > 0.000001 ) 
-				|| 
-				( abs(CourbMargeAr->pts->Element(0, 1) - CourbMargeAr->pts->Element(1, 1)) > 0.000001 )	) 
-			{
-
+        if  (( abs(CourbMargeAr->pts->Element(0, 0) -  CourbMargeAr->pts->Element(1, 0)) >  EPSILON ) || 
+				( abs(CourbMargeAr->pts->Element(0, 1) - CourbMargeAr->pts->Element(1, 1)) >  EPSILON )	) {
 			for (i = 0; i < 2; i++) {
 				CourbCoin2[i] = new Courbe("Coin2");
 				CourbCoin = new Courbe("Coin2");
@@ -387,7 +802,7 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
 				}
 
 				addCourbe(*AxePatronP, CourbCoin);
-				ajCo2[i] = 1;
+				*ajCo2[i] = 1;
 			}
 		}
     } /*else //relie les marges cote 1&2 par un segment
@@ -416,393 +831,114 @@ void GenerateCourbe(WindPatternsProject* gfd, Matrix *Xd1,
         // 1
         ajCoAr = 0;
     }*/
+
+}
+
+void GenerateCourbe(WindPatternsProject* gfd, 
+					Matrix *Xd1, Matrix *Yd1, Matrix *P1,
+					int nerv1, double deb1, int faceDeb1, double fin1, int faceFin1,
+					Matrix *Xd2, Matrix *Yd2, Matrix *P2,
+					int nerv2, double deb2, int faceDeb2, double fin2, int faceFin2, char *text,
+			        TAxe **AxePatronP, TAxe **AxePatronDXFP, TAxe **AxePatronTextDXFP, TAxe **AxeMarginDXFP, TAxe **AxeCercleDXFP, TAxe **AxeRepDXFP, int Ventilation,
+                    double marge1, double marge2, double margeDeb, double margeFin,bool makeRep, bool debug,
+					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
+{
+    if (debug) printf ("\n GenerateCourbe()");
+    double Marge[2]={marge1, marge2};
+    *AxePatronP = createAxe(gfd->windowPatron);
+    *AxePatronDXFP = createAxe(gfd->windowPatron);
+    *AxeRepDXFP = createAxe(gfd->windowPatron);
+    *AxePatronTextDXFP = createAxe(gfd->windowPatron);
+    *AxeMarginDXFP = createAxe(gfd->windowPatron);
+    *AxeCercleDXFP = createAxe(gfd->windowPatron);
+    if (debug) printf ("\n GenerateCourbe def 1");
+    int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
+    int ajCo1[2] = {0, 0};
+    int ajCo2[2] = {0, 0};
+    int nerv[2] = {nerv1, nerv2};
+    if (nerv1 == -1) nerv[0]=0;
+    int face[2] = {faceFin1, faceFin2};
+    int FaceDeb[2]= {faceDeb1, faceDeb2};
+    int FaceFin[2]= {faceFin1, faceFin2};
+    double Deb[2] = {deb1, deb2};
+    double Fin[2] = {fin1, fin2};
+    if (debug) printf ("\n GenerateCourbe def 2");
+    Matrix *distance;
+    int n;
+    Matrix *interpXSuspente, *interpYSuspente;
+    double posSuspente, xSuspente[2][205], ySuspente[2][205];
+    if (debug) printf ("\n GenerateCourbe def 3");
+    Matrix * Xd[2] = {Xd1, Xd2};
+	Matrix * Xd0[2] = {Xd01, Xd02};
+    Matrix * Yd[2] = {Yd1, Yd2};
+	Matrix * Yd0[2] = {Yd01, Yd02};
+    Matrix * P[2] = {P1, P2};
+
+    if (debug) printf ("\n Xd1->GetLignes()=%d", Xd1->GetLignes());
+    if (debug) printf ("\n Xd2->GetLignes()=%d", Xd2->GetLignes());
+
+	double coeff[2]= {coeff1, coeff2};
+    int i = 0, j = 0;
+    if (debug) printf ("\n GenerateCourbe def 4");
+    Courbe * CourbPatron[2], *CourbPatronDXF[2], *CourbPatronBack[2], *CourbMarge[2], *CourbMargeBack[2], *CourbMargeDXF[2];
+    Courbe *CourbAv, *CourbAvBack, *CourbAr, *CourbArDXF, *CourbMargeAv, *CourbMargeAvBack, *CourbMargeAr, *CourbCoin, *CourbMargeArDXF, *CourbCoin1[2], *CourbCoin1Back[2], *CourbCoin2[2], *CourbCoin2Back[2], *CourbRep, *CourbRepDXF;
+    Courbe *CourbCercle, *CourbCercleDXF;
+    if (debug) printf ("\n GenerateCourbe def 5");
+
+	GenerateCourbPatron( gfd, Xd1, Yd1, P1,
+					nerv1, deb1, faceDeb1, fin1, faceFin1,
+					Xd2, Yd2, P2,
+					nerv2, deb2, faceDeb2, fin2, faceFin2, text,
+			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
+                    marge1, marge2, margeDeb, margeFin, makeRep, debug,
+					isPince, Xd01, Yd01, coeff1, Xd02, Yd02, coeff2, &CourbPatron, &CourbPatronDXF, &CourbPatronBack);
+
+	GenerateCourbAvant(gfd, Xd1, Yd1, P1,
+					nerv1, deb1, faceDeb1, fin1, faceFin1,
+					Xd2, Yd2, P2,
+					nerv2, deb2, faceDeb2, fin2, faceFin2, text,
+			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
+                    marge1, marge2, margeDeb, margeFin, makeRep, debug,
+					isPince, Xd01, Yd01, coeff1, Xd02, Yd02, coeff2,
+					&CourbAv, &CourbAvBack, &CourbMargeAv, &CourbMargeAvBack,
+					&ajCoAv, &ajCoMaAv, &ajCo1);
+
+	GenerateCourbAr(&ajCoAr, &ajCoMaAr, &ajCo2);
+
     if (ajCoAr) addCourbe(*AxePatronDXFP, CourbArDXF);
 
-    addCourbe(*AxePatronDXFP, CourbPatronBack[1]);
-    if (ajCoAv) addCourbe(*AxePatronDXFP, CourbAvBack);
+	addCourbe(*AxePatronDXFP, CourbPatronBack[1]);
 
+	if (ajCoAv) addCourbe(*AxePatronDXFP, CourbAvBack);
 
     addCourbe(*AxeMarginDXFP, CourbMargeDXF[0]);
-    if (ajCo2[0]) addCourbe(*AxeMarginDXFP, CourbCoin2[0]);
 
+	if (ajCo2[0]) addCourbe(*AxeMarginDXFP, CourbCoin2[0]);
     if (ajCoMaAr) addCourbe(*AxeMarginDXFP, CourbMargeArDXF);
     if (ajCo2[1]) addCourbe(*AxeMarginDXFP, CourbCoin2Back[1]);
 
-
     addCourbe(*AxeMarginDXFP, CourbMargeBack[1]);
-    if (ajCo1[1]) addCourbe(*AxeMarginDXFP, CourbCoin1[1]);
+
+	if (ajCo1[1]) addCourbe(*AxeMarginDXFP, CourbCoin1[1]);
     if (ajCoMaAv) addCourbe(*AxeMarginDXFP, CourbMargeAvBack);
     if (ajCo1[0]) addCourbe(*AxeMarginDXFP, CourbCoin1Back[0]);
 
-    if (debug) printf ("\n GC go in Reper()");
-    int ventisave=0;
-    double xk0, xk1, xk2, yk0, yk1, yk2, xkf, ykf;
-    if (makeRep)
-    for (i = 0; i < 2; i++) {
-        if (debug) printf ("\n i=%d\n", i);
-            for (j = 0;j < 5; j++) {
-                if (debug) printf (" set j=%d ", j);
-                xSuspente[i][j] = -100000.0f;
-                ySuspente[i][j] = -100000.0f;
-            }
-
-			Matrix* m = 0;
-
-			if (gfd->CorrectRepPoints && isPince && (coeff[i] != -1)) {
-				if (debug) printf ("\n coeff[%d]=%f", i, coeff[i]);
-				if (debug) printf ("\n 1");
-				m = getReperPointsPince (gfd, Xd0[i], Yd0[i], coeff[i], 
-										Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
-				if (debug) printf ("\n ...1");
-			} else {
-				m = getReperPoints(gfd, Xd[i], Yd[i], P[i], nerv[i], Deb[i], FaceDeb[i], Fin[i], FaceFin[i], (nerv1==nerv2));
-				if (coeff[i] == -1) 
-					printf ("\nlength XY=%6.2f", 1000*calcCourbeLength(Xd[i], Yd[i]));
-			} 
-			if (debug) printf ("\n ...--");
-
-			if (debug) {
-				for (int _i=0; _i<m->GetLignes(); _i++) {
-					printf ("\n grp %d (%f, %f, %f)", _i, m->Element(_i,0), m->Element(_i,1), m->Element(_i,2));
-				}
-			}
-            //add croix au graphe
-            for (j = 0;j<m->GetLignes();j++) {
-                if (debug)    printf ("\nj3=%d", j);
-                    int mark = m->Element(j,2);
-                    double xSus = m->Element(j,0);
-                    double ySus = m->Element(j,1);
-
-                    if (((mark == REP_TRIANGLE) || (mark == REP_V)) && (m->Element(j, 3) > 0.0f)) {
-                        ventisave = (int) m->Element(j, 3) - 1;
-                        xSuspente[i][ventisave] = xSus;
-                        ySuspente[i][ventisave] = ySus;
-                    }
-                    if ((i==0) && (nerv1==nerv2)) {
-                        if (mark == REP_0) {
-                            xk0 = xSus;
-                            yk0 = ySus;
-                            //printf ("\n REP_0 (%f, %f)", xk0, yk0);
-                        }
-                        if (mark == REP_VENTDEB) {
-                            xk1 = xSus;
-                            yk1 = ySus;
-                            //printf ("\n REP_VENTDEB (%f, %f)", xk1, yk1);
-                        }
-                        if (mark == REP_VENTFIN) {
-                            xk2 = xSus;
-                            yk2 = ySus;
-                            //printf ("\n REP_VENTFIN (%f, %f)", xk2, yk2);
-                        }
-                        if (mark == REP_KLAPAN_FIN) {
-                            xkf = xSus;
-                            ykf = ySus;
-                            //printf ("\n REP_KLAPAN_FIN (%f, %f)", xkf, ykf);
-                        }
-                    }
-
-
-                    if ((mark == REP_CROSS) && (gfd->ReperesProfile[i])) {
-                            CourbRep = new Courbe("Repers points");
-                            CourbRep->points = OFF;
-                            CourbRepDXF = new Courbe("Repers points");
-                            CourbRepDXF->points = OFF;
-                            CourbRep->pts = Zeros(2, 2);
-                            CourbRepDXF->pts = Zeros(2, 2);
-                            CourbRep->pts->SetElement(0, 0, xSus - gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(0, 1, ySus - gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(1, 0, xSus + gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(1, 1, ySus + gfd->XMashtab * 0.01f);
-                            int _i, _j;
-                            for (_i = 0; _i < 2; _i++)
-                                for (_j = 0; _j < 2; _j++)
-                                    CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            addCourbe(*AxeRepDXFP, CourbRepDXF);
-                            CourbRep = new Courbe("Repers points");
-                            CourbRep->points = OFF;
-                            CourbRepDXF = new Courbe("Repers points");
-                            CourbRepDXF->points = OFF;
-                            CourbRep->pts = Zeros(2, 2);
-                            CourbRepDXF->pts = Zeros(2, 2);
-                            CourbRep->pts->SetElement(0, 0, xSus - gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(0, 1, ySus + gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(1, 0, xSus + gfd->XMashtab * 0.01f);
-                            CourbRep->pts->SetElement(1, 1, ySus - gfd->XMashtab * 0.01f);
-                            for (_i = 0; _i < 2; _i++)
-                                for (_j = 0; _j < 2; _j++)
-                                    CourbRepDXF->pts->SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                            addCourbe(*AxeRepDXFP, CourbRepDXF);
-                        } 
-                        if ((mark==REP_LINE) || ((gfd->ReperesProfile[i]) && (mark == REP_MIDDLE_LINE))) {
-                                char courbName[255];
-                                if (mark==REP_MIDDLE_LINE) 
-                                    strcpy(courbName, "Repers points");
-                                else
-                                    strcpy(courbName, "Repers diag");
-                                //perpendiular
-                                int direction = -1;
-                                if (i == 1) direction = 1;
-                                double _x0 = xSus;
-                                double _y0 = ySus;
-                                int ix, icol;
-                                Ind(_x0, Xd[i], &ix, &icol);
-                                //Ind(ySuspente[i][j], interpYSuspente, &iy, &icol);
-                                double xc, yc;
-                                double _l = 3 * gfd->XMashtab * 0.01f;
-                                if (mark == REP_MIDDLE_LINE) {
-                                    _l = 0.4 * _l;
-                                }
-                                if ((Xd[i]->Element(ix, 0) > _x0) && (ix != 0)) ix--;
-                                if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0)) ix--;
-                                if (ix != 0)
-                                    calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0),_x0, _y0, &xc, &yc, _l, direction);
-                                else
-                                    calcVecteurNormal(_x0, _y0,Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
-                                double _x1 = _x0;
-                                double _y1 = _y0;
-                                double _x2 = xc;
-                                double _y2 = yc;
-                                if (ix == 0) {
-                                    _x2 = _x0 + (xc - Xd[i]->Element(1,0));
-                                    _y2 = _y0 + (yc - Yd[i]->Element(1,0));
-                                }
-                                int _i, _j;
-                                CourbRep = new Courbe(courbName);
-                                CourbRep->points = OFF;
-                                CourbRepDXF = new Courbe(courbName);
-                                CourbRepDXF->points = OFF;
-                                CourbRep->pts = Zeros(2, 2);
-                                CourbRepDXF->pts = Zeros(2, 2);
-                                CourbRep->pts->SetElement(0, 0, _x1);
-                                CourbRep->pts->SetElement(0, 1, _y1);
-                                CourbRep->pts->SetElement(1, 0, _x2);
-                                CourbRep->pts->SetElement(1, 1, _y2);
-                                for (_i = 0; _i < 2; _i++)
-                                    for (_j = 0; _j < 2; _j++)
-                                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                addCourbe(*AxeRepDXFP, CourbRepDXF);
-                            }
-                            if ((gfd -> ReperesSuspentes[i]) && ((mark == REP_TRIANGLE) || (mark==REP_V)) ) {
-                                int direction = -1;
-                                if (i == 1) direction = 1;
-                                double _x0 = xSus;
-                                double _y0 = ySus;
-                                double _l = 2*gfd->XMashtab * 0.01f;
-                                double _x1 = _x0;
-                                double _y1 = _y0;
-
-                                int ix, icol;
-                                Ind(xSus, Xd[i], &ix, &icol);
-                                double xc, yc;
-                                if ((Xd[i]->Element(ix,0) > _x0) && (ix != 0 )) ix--;
-                                if ((Xd[i]->Element(ix,0) == _x0) && (ix != 0) ) ix--;
-                                if  (ix != 0)
-                                    calcVecteurNormal(Xd[i]->Element(ix,0), Yd[i]->Element(ix, 0), _x0, _y0, &xc, &yc, _l, direction);
-                                else
-                                    calcVecteurNormal( _x0, _y0, Xd[i]->Element(1,0), Yd[i]->Element(1, 0), &xc, &yc, _l, direction);
-                                if (ix == 0) ix=1;
-
-                                double nx = (Xd[i]->Element(ix, 0)-_x0);
-                                double ny = (Yd[i]->Element(ix, 0)-_y0);
-                                double rasst = sqrt (sqr(nx) + sqr(ny));
-                                nx=_l/2.0f*nx/rasst;
-                                ny=_l/2.0f*ny/rasst;
-
-                                double _x2 = xc + nx;
-                                double _y2 = yc + ny;
-
-                                double _x3 = xc - nx;
-                                double _y3 = yc - ny;
-                                int _i, _j;
-                                CourbRep = new Courbe("Repers suspente");
-                                CourbRep->points = OFF;
-                                CourbRepDXF = new Courbe("Repers suspente");
-                                CourbRepDXF->points = OFF;
-                                CourbRep->pts = Zeros(2, 2);
-                                CourbRepDXF->pts = Zeros(2, 2);
-                                CourbRep->pts->SetElement(0, 0, _x1);
-                                CourbRep->pts->SetElement(0, 1, _y1);
-                                CourbRep->pts->SetElement(1, 0, _x2);
-                                CourbRep->pts->SetElement(1, 1, _y2);
-                                for (_i = 0; _i < 2; _i++)
-                                    for (_j = 0; _j < 2; _j++)
-                                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-
-                                addCourbe(*AxeRepDXFP, CourbRepDXF);
-
-                                if (mark != REP_V) {
-                                    CourbRep = new Courbe("Repers suspente");
-                                    CourbRep->points = OFF;
-                                    CourbRepDXF = new Courbe("Repers suspente");
-                                    CourbRepDXF->points = OFF;
-                                    CourbRep->pts = Zeros(2, 2);
-                                    CourbRepDXF->pts = Zeros(2, 2);
-                                    CourbRep->pts->SetElement(0, 0, _x2);
-                                    CourbRep->pts->SetElement(0, 1, _y2);
-                                    CourbRep->pts->SetElement(1, 0, _x3);
-                                    CourbRep->pts->SetElement(1, 1, _y3);
-                                    for (_i = 0; _i < 2; _i++)
-                                        for (_j = 0; _j < 2; _j++)
-                                            CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                    addCourbe(*AxeRepDXFP, CourbRepDXF);
-                                }
-                                CourbRep = new Courbe("Repers suspente");
-                                CourbRep->points = OFF;
-                                CourbRepDXF = new Courbe("Repers suspente");
-                                CourbRepDXF->points = OFF;
-                                CourbRep->pts = Zeros(2, 2);
-                                CourbRepDXF->pts = Zeros(2, 2);
-                                CourbRep->pts->SetElement(0, 0, _x3);
-                                CourbRep->pts->SetElement(0, 1, _y3);
-                                CourbRep->pts->SetElement(1, 0, _x1);
-                                CourbRep->pts->SetElement(1, 1, _y1);
-                                for (_i = 0; _i < 2; _i++)
-                                    for (_j = 0; _j < 2; _j++)
-                                        CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                                addCourbe(*AxeRepDXFP, CourbRepDXF);
-                            }
-            }
-
-            if ((i==0) && (nerv1==nerv2) && (gfd->LayoutKlapans) && (gfd->VentHoles)) {
-                if (debug) printf ("\n go make shov!");
-                bool match = false;
-				int _i, _j;
-                if ((nerv1==-
-					1) || (nerv1==0)){
-                        if (gfd->VentCentralNerv) match = true;
-                }
-                else {
-                        if ((gfd->noNervVH[nerv1] == 1) || (gfd->noNervVH[nerv1 - 1]==1)) match = true;
-                }
-
-                if (match) {
-                    if (debug) printf (" \n MATCH true!");
-                    if (gfd->VentHolesDouble) {
-                        // xk0, yk0 -> xkfin, ykfin
-                        CourbRep = new Courbe("Klapan line");
-                        CourbRep->points = OFF;
-                        CourbRepDXF = new Courbe("Klapan line");
-                        CourbRepDXF->points = OFF;
-                        CourbRep->pts = Zeros(2, 2);
-                        CourbRepDXF->pts = Zeros(2, 2);
-                        CourbRep->pts->SetElement(0, 0, xk0);
-                        CourbRep->pts->SetElement(0, 1, yk0);
-                        CourbRep->pts->SetElement(1, 0, xkf);
-                        CourbRep->pts->SetElement(1, 1, 0.0f);
-                        for (_i = 0; _i < 2; _i++)
-                            for (_j = 0; _j < 2; _j++)
-                                CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                        addCourbe(*AxeRepDXFP, CourbRepDXF);
-                    }
-                    // xk1, yk1 -> xkfin, ykfin
-                    CourbRep = new Courbe("Klapan line");
-                    CourbRep->points = OFF;
-                    CourbRepDXF = new Courbe("Klapan line");
-                    CourbRepDXF->points = OFF;
-                    CourbRep->pts = Zeros(2, 2);
-                    CourbRepDXF->pts = Zeros(2, 2);
-                    CourbRep->pts->SetElement(0, 0, xk1);
-                    CourbRep->pts->SetElement(0, 1, yk1);
-                    CourbRep->pts->SetElement(1, 0, xkf);
-                    CourbRep->pts->SetElement(1, 1, 0.0f);
-                    for (_i = 0; _i < 2; _i++)
-                        for (_j = 0; _j < 2; _j++)
-                            CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    addCourbe(*AxeRepDXFP, CourbRepDXF);
-                    // xk2, yk2 -> xkfin, ykfin
-                    CourbRep = new Courbe("Klapan line");
-                    CourbRep->points = OFF;
-                    CourbRepDXF = new Courbe("Klapan line");
-                    CourbRepDXF->points = OFF;
-                    CourbRep->pts = Zeros(2, 2);
-                    CourbRepDXF->pts = Zeros(2, 2);
-                    CourbRep->pts->SetElement(0, 0, xk2);
-                    CourbRep->pts->SetElement(0, 1, yk2);
-                    CourbRep->pts->SetElement(1, 0, xkf);
-                    CourbRep->pts->SetElement(1, 1, 0.0f);
-                    for (_i = 0; _i < 2; _i++)
-                        for (_j = 0; _j < 2; _j++)
-                            CourbRepDXF -> pts -> SetElement(_i, _j, CourbRep->pts->Element(_i, _j));
-                    addCourbe(*AxeRepDXFP, CourbRepDXF);
-                } else {
-                   if (debug) printf (" \n NOOOOT MATCH!");
-                }
-
-            }
-
-    }
-
-    if (debug) printf ("\n... in Reper()");
-
-    if (Ventilation == 1) {
-      if (debug)   printf ("\nif Ventil");
-        for (i = 1; i < 4; i++) {
-            if ((xSuspente[0][i] != -100000.0f)
-                    && (xSuspente[1][i] != -100000.0f)
-                    && (xSuspente[0][i - 1] != -100000.0f)
-                    && (xSuspente[1][i - 1] != -100000.0f)) {
-
-                CourbCercle = new Courbe("Cercle");
-                CourbCercleDXF = new Courbe("Cercle");
-
-                CourbCercle->points = OFF;
-                CourbCercleDXF->points = OFF;
-
-                CourbCercle->pts = Cercle(
-                        (xSuspente[0][i] + xSuspente[1][i] + xSuspente[0][i - 1] + xSuspente[1][i - 1]) / 4.0,
-                        (ySuspente[0][i] + ySuspente[1][i] + ySuspente[0][i - 1] + ySuspente[1][i - 1]) / 4.0,
-                        (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
-                        36);
-                CourbCercleDXF->pts = Cercle(
-                        (xSuspente[0][i] + xSuspente[1][i] + xSuspente[0][i - 1] + xSuspente[1][i - 1]) / 4.0,
-                        (ySuspente[0][i] + ySuspente[1][i] + ySuspente[0][i - 1] + ySuspente[1][i - 1]) / 4.0,
-                        (ySuspente[0][i] + ySuspente[0][i - 1] - ySuspente[1][i] - ySuspente[1][i - 1]) / 8.0,
-                        36);
-
-                addCourbe(*AxePatronP, CourbCercle);
-                addCourbe(*AxeCercleDXFP, CourbCercleDXF);
-            }
-
-        }
-      if (debug)   printf ("\n...if Ventil");
-    }
+    if (makeRep) GenerateCourbeRep( gfd, Xd1, Yd1, P1,
+					nerv1, deb1, faceDeb1, fin1, faceFin1,
+					Xd2, Yd2, P2,
+					nerv2, deb2, faceDeb2, fin2, faceFin2, text,
+			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
+                    marge1, marge2, margeDeb, margeFin, makeRep, debug,
+					isPince, Xd01, Yd01, coeff1, Xd02, Yd02, coeff2);
 
     //if (Numerotation == 1) {
-    xText = (Xd[0]->Element(0, 0) + Xd[0]->Element(Xd[0]->GetLignes() - 1, 0)
-            + Xd[1]->Element(0, 0) + Xd[1]->Element(Xd[1]->GetLignes() - 1, 0)) / 4.0f;
-
-    double x0len = Xd[0]->Element(Xd[0]->GetLignes() - 1, 0) - Xd[0]->Element(0, 0);
-    double x1len = Xd[1]->Element(Xd[1]->GetLignes() - 1, 0) - Xd[1]->Element(0, 0);
-    double xlen = (x0len + x1len) / 2.0f;
-
-    //		printf ("\nXd[0]->Element(0,0) %f",Xd[0]->Element(0,0));
-    //		printf ("\nXd[0]->Element(Xd[0]->GetLignes()-1,0) %f", Xd[0]->Element(Xd[0]->GetLignes()-1,0));
-    //		printf ("\nXd[1]->Element(0,0) %f", Xd[1]->Element(0,0));
-    //		printf ("\nXd[1]->Element(Xd[1]->GetLignes()-1,0) %f", Xd[1]->Element(Xd[1]->GetLignes()-1,0));
-
-    xText = gfd->textX * xlen;
-    yText = (Yd[0]->Element(0, 0) + Yd[0]->Element(Yd[0]->GetLignes() - 1, 0)
-            + Yd[1]->Element(0, 0) + Yd[1]->Element(Yd[1]->GetLignes() - 1, 0)) / 4.0f;
-
-    double y0len = Yd[1]->Element(0, 0) - Yd[0]->Element(0, 0);
-    double y1len = Yd[1]->Element(Yd[1]->GetLignes() - 1, 0) - Yd[0]->Element(Yd[0]->GetLignes() - 1, 0);
-    double ylen = (y0len + y1len) / 2.0f;
-
-    yText = Yd[1]->Element(0, 0) - gfd->textY*ylen;
-
-    //		printf ("\nYd[0]->Element(0,0) %f",Yd[0]->Element(0,0));
-    //		printf ("\nYd[0]->Element(Yd[0]->GetLignes()-1,0) %f", Yd[0]->Element(Yd[0]->GetLignes()-1,0));
-    //		printf ("\nYd[1]->Element(0,0) %f", Yd[1]->Element(0,0));
-    //		printf ("\nYd[1]->Element(Yd[1]->GetLignes()-1,0) %f", Yd[1]->Element(Yd[1]->GetLignes()-1,0));
-    //sprintf(texte, "%d%c%03.1f%c%03.1f_%d%c%03.1f%c%03.1f",
-    //	NoNerv[0],texteExtInt[FaceDeb[0]-1],Deb[0],texteExtInt[FaceFin[0]-1],Fin[0],
-    //	NoNerv[1],texteExtInt[FaceDeb[1]-1],Deb[1],texteExtInt[FaceFin[1]-1],Fin[1]);
-    sprintf(texte, "%s", text);
-    addTexte(*AxePatronP, texte, 0.02f, 0.0f, xText, yText);
-    sprintf(texte, "%s", text);
-    addTexte(*AxePatronTextDXFP, texte, 0.02f, 0.0f, xText, yText);
-    if (debug) printf ("\n...GenerateCourbe()");
-    //}
+	GenerateCourbeText( gfd, Xd1, Yd1, P1,
+					nerv1, deb1, faceDeb1, fin1, faceFin1,
+					Xd2, Yd2, P2,
+					nerv2, deb2, faceDeb2, fin2, faceFin2, text,
+			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
+                    marge1, marge2, margeDeb, margeFin, makeRep, debug,
+					isPince, Xd01, Yd01, coeff1, Xd02, Yd02,coeff2);
 }
 
 void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT,
