@@ -570,7 +570,7 @@ Matrix* GetFunctionSrez(Matrix *X, Matrix *Y, double pa, double pf, int *ia) {
 }
 
 Matrix* GetFunctionSrezDebFin(Matrix *X, Matrix *Y, double pa, double pf) {
-	bool debug = true;
+	bool debug = false;
 	if (debug) printf ("\n GetFunctionSrezDebFin(pa=%f pf=%f) ", pa, pf);
     int i1 = 0;
 	int i2 = X->GetLignes()-1;
@@ -686,7 +686,7 @@ Pince* getPincePlus(WindPatternsProject* gfd,
                         int nerv1, int nerv2,
                         float deb1, float fin1, float deb2, float fin2, int faceDeb, int faceFin )
 {
-	bool debug = true;
+	bool debug = false;
     if (debug) printf ("\ngetPincePlus (n%d, d%f, f%f)-(n%d, d%f, f%f)", nerv1, deb1, fin1, nerv2, deb2, fin2);
 	if (debug) printf ("\n faceDeb: %d, faceFin: %d", faceDeb, faceFin);
     Pince *res, *res1, *res2;

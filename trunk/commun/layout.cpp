@@ -174,7 +174,7 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
     delete (Yd[1]);
 }
 void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
-    bool debug = true;
+    bool debug = false;
 	if (debug) printf ("\n PanelLayoutElement::calculateExport");
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
@@ -1436,8 +1436,8 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 	
     // ------------------ Ext ------------------------------
 	if (debug) printf ("\n panelsExt.size(): %d", panelsExt.size());
-    for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
-	//for (int ipe = 0; ipe < 2; ipe++) {
+    //for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+	for (int ipe = 3; ipe < 4; ipe++) {
 		if (debug) printf("\n ipe: %d", ipe);
         PanelLayoutElement* p = panelsExt[ipe];
         int nerv = p->n1;

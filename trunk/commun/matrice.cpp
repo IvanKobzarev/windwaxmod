@@ -461,11 +461,12 @@ double InterpLinX(Matrix *m, double xi)
 	else
 	{
 		if (m->GetLignes() <= 1) {
-			printf ("ERROR bad interpolation X->GetLignes()=%d", m->GetLignes());
+			printf ("\nERROR bad interpolation X->GetLignes()=%d", m->GetLignes());
 			if (m->GetLignes() == 1) {
 				if (m->Element(0,0) == xi) {
+					printf ("\n m->Element(0,0) == xi == %f --> returned %f", xi, m->Element(0, 1));
 				} else {
-					printf ("ERROR bad interpolation X->GetLignes()=1, X->Element(0,0)=%f  but xi=%f returned X->Element(0, 1)=%f", m->Element(0,0), xi, m->Element(0,1));
+					printf ("\nERROR bad interpolation X->GetLignes()=1, X->Element(0,0)=%f  but xi=%f returned X->Element(0, 1)=%f", m->Element(0,0), xi, m->Element(0,1));
 				}
 				return m->Element(0, 1);
 			}

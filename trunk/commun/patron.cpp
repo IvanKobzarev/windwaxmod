@@ -520,7 +520,6 @@ void GenerateCourbPatron(WindPatternsProject* gfd,
         delete(distance);
     }
     if (debug) printf ("\n G7");
-    addCourbe(*AxePatronDXFP, (*CourbPatronDXF)[0]);
 }
 
 void GenerateCourbAvant(WindPatternsProject* gfd, 
@@ -581,44 +580,45 @@ void GenerateCourbAvant(WindPatternsProject* gfd,
         if (debug) printf ("\n CC MargeAv/MargeAvBack");
         (*CourbMargeAv)->pts = calcContour((*CourbAv)->pts, distance, +1);
         (*CourbMargeAvBack)->pts = calcContour((*CourbAv)->pts, distance, +1);
+		if (debug) printf ("\n CC MargeAv/MargeAvBack 1");
         for (j = 0; j < (*CourbMargeAv)->pts->GetLignes(); j++) {
             (*CourbMargeAvBack)->pts->SetElement((*CourbMargeAv)->pts->GetLignes() - j - 1, 0, (*CourbMargeAv)->pts->Element(j, 0));
             (*CourbMargeAvBack)->pts->SetElement((*CourbMargeAv)->pts->GetLignes() - j - 1, 1, (*CourbMargeAv)->pts->Element(j, 1));
         }
 
+		printf ("\n Av: (%f, %f) - (%f, %f)", 
+			(*CourbAv)->pts->Element(0, 0), (*CourbAv)->pts->Element(0, 1),
+			(*CourbAv)->pts->Element(1, 0), (*CourbAv)->pts->Element(1, 1));
+
+
+		printf ("\n MargeAv: (%f, %f) - (%f, %f)", 
+			(*CourbMargeAv)->pts->Element(0, 0), (*CourbMargeAv)->pts->Element(0, 1),
+			(*CourbMargeAv)->pts->Element(1, 0), (*CourbMargeAv)->pts->Element(1, 1));
+
         (*CourbMargeAv)->points = OFF;
         (*CourbMargeAv)->symX = OFF;
         (*CourbMargeAvBack)->points = OFF;
         (*CourbMargeAvBack)->symX = OFF;
-
         addCourbe(*AxePatronP, *CourbMargeAv);
         *ajCoMaAv = 1;
-
         delete(distance);
-
         if  ( ( fabs((*CourbMargeAv)->pts->Element(0, 0) -  (*CourbMargeAv)->pts->Element(1, 0)) > EPSILON ) 
 				|| ( fabs((*CourbMargeAv)->pts->Element(0, 1) - (*CourbMargeAv)->pts->Element(1, 1)) > EPSILON )	) {
-
 			for (i = 0; i < 2; i++) {
 
 				(*CourbCoin1)[i] = new Courbe("Coin1");
 				*CourbCoin = new Courbe("Coin");
 				(*CourbCoin1Back)[i] = new Courbe("Coin1Back");
-
 				((*CourbCoin1)[i])->points = OFF;
 				(*CourbCoin)->points = OFF;
 				((*CourbCoin1Back)[i])->points = OFF;
-
 				((*CourbCoin1)[i])->pts = Zeros(3, 2);
 				(*CourbCoin)->pts = Zeros(3, 2);
 				((*CourbCoin1Back)[i])->pts = Zeros(3, 2);
-
 				((*CourbCoin1)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(0, 0));
 				(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(0, 0));
-
 				((*CourbCoin1)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(0, 1));
 				(*CourbCoin)->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(0, 1));
-
 				//			CourbCoin1[i]->pts->SetElement(2,0, CourbMargeAv->pts->Element(0,0));
 				//			CourbCoin->pts->SetElement(2,0, CourbMargeAv->pts->Element(0,0));
 				((*CourbCoin1)[i])->pts->SetElement(2, 0, (*CourbMargeAv)->pts->Element(i, 0));
@@ -628,27 +628,28 @@ void GenerateCourbAvant(WindPatternsProject* gfd,
 				//			CourbCoin->pts->SetElement(2,1, CourbMargeAv->pts->Element(0,1));
 				((*CourbCoin1)[i])->pts->SetElement(2, 1, (*CourbMargeAv)->pts->Element(i, 1));
 				(*CourbCoin)->pts->SetElement(2, 1, (*CourbMargeAv)->pts->Element(i, 1));
+				if (debug) printf ("\n CC MargeAv/MargeAvBack 12");
 
 				double x, y;
+				printf ("\n((*CourbMarge)[i])->pts->GetLignes()=%d", ((*CourbMarge)[i])->pts->GetLignes());
 				Inter2Vecteurs(
 						((*CourbMarge)[i])->pts->Element(1, 0), ((*CourbMarge)[i])->pts->Element(1, 1),
 						((*CourbMarge)[i])->pts->Element(0, 0), ((*CourbMarge)[i])->pts->Element(0, 1),
 						(*CourbMargeAv)->pts->Element(1, 0), (*CourbMargeAv)->pts->Element(1, 1),
 						(*CourbMargeAv)->pts->Element(0, 0), (*CourbMargeAv)->pts->Element(0, 1),
-						&x, &y);
+						&x, &y, true);
 
+				printf ("\n Coin1 x=%f y=%f");
 				((*CourbCoin1)[i])->pts->SetElement(1, 0, x);
 				(*CourbCoin)->pts->SetElement(1, 0, x);
-
 				((*CourbCoin1)[i])->pts->SetElement(1, 1, y);
 				(*CourbCoin)->pts->SetElement(1, 1, y);
-
 				for (int _i = 0; _i < 3; _i++) {
 					((*CourbCoin1Back)[i])->pts -> SetElement(2 - _i, 0, ((*CourbCoin1)[i])->pts->Element(_i, 0));
 					((*CourbCoin1Back)[i])->pts -> SetElement(2 - _i, 1, ((*CourbCoin1)[i])->pts->Element(_i, 1));
 				}
 				addCourbe(*AxePatronP, (*CourbCoin));
-				*ajCo1[i] = 1;
+				(*ajCo1)[i] = 1;
 			}
 		}
 	}
@@ -788,14 +789,28 @@ void GenerateCourbAr(WindPatternsProject* gfd,
 				(*CourbCoin)->pts->SetElement(2, 1, (*CourbMargeAr)->pts->Element(i, 1));
 
 				double x, y;
+				printf ("\n i=%d", i);
+				printf ("\n((*CourbMarge)[%d])->pts->GetLignes()=%d", i, ((*CourbMarge)[i])->pts->GetLignes());
+				for (int _i = 0; _i < ((*CourbMarge)[i])->pts->GetLignes(); _i++) {
+					printf ("\n %d --> (%f, %f) ", _i, ((*CourbMarge)[i])->pts->Element(_i, 0), ((*CourbMarge)[i])->pts->Element(_i, 1));
+				}
+
+				printf ("\n(*CourbMargeAr)->pts->GetLignes()=%d", (*CourbMargeAr)->pts->GetLignes());
+				printf ("\n Ar: (%f, %f) - (%f, %f)", 
+					(*CourbAr)->pts->Element(0, 0), (*CourbAr)->pts->Element(0, 1),
+					(*CourbAr)->pts->Element(1, 0), (*CourbAr)->pts->Element(1, 1));
+				printf ("\n MargeAr: (%f, %f) - (%f, %f)", 
+					(*CourbMargeAr)->pts->Element(0, 0), (*CourbMargeAr)->pts->Element(0, 1),
+					(*CourbMargeAr)->pts->Element(1, 0), (*CourbMargeAr)->pts->Element(1, 1));
+
 				Inter2Vecteurs(
 						((*CourbMarge)[i])->pts->Element(n, 0), ((*CourbMarge)[i])->pts->Element(n, 1),
 						((*CourbMarge)[i])->pts->Element(n - 1, 0), ((*CourbMarge)[i])->pts->Element(n - 1, 1),
 						(*CourbMargeAr)->pts->Element(1, 0), (*CourbMargeAr)->pts->Element(1, 1),
 						(*CourbMargeAr)->pts->Element(0, 0), (*CourbMargeAr)->pts->Element(0, 1),
-						&x, &y);
-
-				if ( x < ((*CourbMarge)[i])->pts->Element(n, 0)) {
+						&x, &y, true);
+				printf ( "\n Coin2 x=%f y=%f", x, y);
+				/*if ( x < ((*CourbMarge)[i])->pts->Element(n, 0)) {
 					if (debug) printf ("\n\n x < ... %f\n\n", 1000.0f* (((*CourbMarge)[i])->pts->Element(n, 0)-x));
 					((*CourbMarge)[i])->pts->SetElement(n, 0, x);
 					((*CourbMarge)[i])->pts->SetElement(n, 1, y);
@@ -804,12 +819,11 @@ void GenerateCourbAr(WindPatternsProject* gfd,
 					((*CourbMargeBack)[i])->pts->SetElement(0, 0, x);
 					((*CourbMargeBack)[i])->pts->SetElement(0, 1, y);
 
-					(*CourbCoin2[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
-					(*CourbCoin2[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
+					((*CourbCoin2)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
+					((*CourbCoin2)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
 					(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
 					(*CourbCoin)->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
-				}
-
+				}*/
 
 				((*CourbCoin2)[i])->pts->SetElement(1, 0, x);
 				(*CourbCoin)->pts->SetElement(1, 0, x);
@@ -817,13 +831,18 @@ void GenerateCourbAr(WindPatternsProject* gfd,
 				((*CourbCoin2)[i])->pts->SetElement(1, 1, y);
 				(*CourbCoin)->pts->SetElement(1, 1, y);
 
-				for (int _i = 0; _i < 3; _i++) {
+				for (int _i = 0; _i <= 2; _i++) {
 					((*CourbCoin2Back)[i])->pts -> SetElement(2 - _i, 0, ((*CourbCoin2)[i])->pts->Element(_i, 0));
 					((*CourbCoin2Back)[i])->pts -> SetElement(2 - _i, 1, ((*CourbCoin2)[i])->pts->Element(_i, 1));
 				}
 
+				printf ("\n CourbCoin2[%d]", i);
+				printf ("\n0-(%f, %f)", ((*CourbCoin2)[i])->pts->Element(0, 0), ((*CourbCoin2)[i])->pts->Element(0, 1) );
+				printf ("\n1-(%f, %f)", ((*CourbCoin2)[i])->pts->Element(1, 0), ((*CourbCoin2)[i])->pts->Element(1, 1) );
+				printf ("\n2-(%f, %f)", ((*CourbCoin2)[i])->pts->Element(2, 0), ((*CourbCoin2)[i])->pts->Element(2, 1) );
+
 				addCourbe(*AxePatronP, *CourbCoin);
-				*ajCo2[i] = 1;
+				(*ajCo2)[i] = 1;
 			}
 		}
     } /*else //relie les marges cote 1&2 par un segment
@@ -865,22 +884,22 @@ void GenerateCourbe(WindPatternsProject* gfd,
 					bool isPince, Matrix *Xd01, Matrix *Yd01,double coeff1, Matrix *Xd02, Matrix *Yd02,double coeff2)
 {
     if (debug) printf ("\n GenerateCourbe()");
-    double Marge[2]={marge1, marge2};
+    
+	double Marge[2]={marge1, marge2};
     *AxePatronP = createAxe(gfd->windowPatron);
     *AxePatronDXFP = createAxe(gfd->windowPatron);
     *AxeRepDXFP = createAxe(gfd->windowPatron);
     *AxePatronTextDXFP = createAxe(gfd->windowPatron);
     *AxeMarginDXFP = createAxe(gfd->windowPatron);
     *AxeCercleDXFP = createAxe(gfd->windowPatron);
+
     if (debug) printf ("\n GenerateCourbe def 1");
     int ajCoAr = 0, ajCoMaAr = 0, ajCoAv = 0, ajCoMaAv = 0;
     //int ajCo1[2] = {0, 0};
 	int* ajCo1 = new int[2];
 	ajCo1[0] = 0; ajCo1[1] = 0;
-
 	int* ajCo2 = new int[2];
 	ajCo2[0] = 0; ajCo2[1] = 0;
-
     //int ajCo2[2] = {0, 0};
 	//int* ajCo2 = {0, 0};
     int nerv[2] = {nerv1, nerv2};
@@ -928,10 +947,7 @@ void GenerateCourbe(WindPatternsProject* gfd,
 
     Courbe *CourbCercle, *CourbCercleDXF;
 
-
-
-    if (debug) printf ("\n GenerateCourbe def 5");
-
+	if (debug) printf ("\n call GenerateCourbPatron");
 	GenerateCourbPatron( gfd, Xd1, Yd1, P1, // 4
 					nerv1, deb1, faceDeb1, fin1, faceFin1, // 9
 					Xd2, Yd2, P2, // 12
@@ -942,10 +958,7 @@ void GenerateCourbe(WindPatternsProject* gfd,
 					&CourbPatron, &CourbPatronDXF, &CourbPatronBack, // 41
 					&CourbMarge, &CourbMargeDXF, &CourbMargeBack); // 44
 
-// Courbe*** CourbPatron, Courbe*** CourbPatronDXF, Courbe*** CourbPatronBack,
-// Courbe*** CourbMarge, Courbe*** CourbMargeDXF, Courbe*** CourbMargeBack) {
-
-
+	if (debug) printf ("\n call GenerateCourbAvant");
 	GenerateCourbAvant(gfd, Xd1, Yd1, P1,
 					nerv1, deb1, faceDeb1, fin1, faceFin1,
 					Xd2, Yd2, P2,
@@ -956,7 +969,8 @@ void GenerateCourbe(WindPatternsProject* gfd,
 					&CourbAv, &CourbAvBack, &CourbMargeAv, &CourbMargeAvBack,
 					&CourbCoin, &CourbCoin1, &CourbCoin1Back, &CourbMarge,
 					&ajCoAv, &ajCoMaAv, &ajCo1);
-
+	if (debug) printf ("\n ...GenerateCourbAvant");
+	if (debug) printf ("\n call GenerateCourbAr");
 	GenerateCourbAr(gfd, Xd1, Yd1, P1,
 					nerv1, deb1, faceDeb1, fin1, faceFin1,
 					Xd2, Yd2, P2,
@@ -968,34 +982,44 @@ void GenerateCourbe(WindPatternsProject* gfd,
 					&CourbCoin2, &CourbCoin2Back, &CourbCoin,
 					&CourbMarge, &CourbMargeDXF, &CourbMargeBack,
 					&ajCoAr, &ajCoMaAr, &ajCo2);
+	if (debug) printf ("\n ...GenerateCourbAr");
+    
 
-    if (ajCoAr) addCourbe(*AxePatronDXFP, CourbArDXF);
-
+	// Patron Axe construct ---------
+	addCourbe(*AxePatronDXFP, CourbPatronDXF[0]);
+	if (ajCoAr) addCourbe(*AxePatronDXFP, CourbArDXF);
 	addCourbe(*AxePatronDXFP, CourbPatronBack[1]);
-
 	if (ajCoAv) addCourbe(*AxePatronDXFP, CourbAvBack);
-
-    addCourbe(*AxeMarginDXFP, CourbMargeDXF[0]);
-
+	// -------- Patron --------------
+    
+	// Marge Axe construct ----------
+	addCourbe(*AxeMarginDXFP, CourbMargeDXF[0]);
 	if (ajCo2[0]) addCourbe(*AxeMarginDXFP, CourbCoin2[0]);
     if (ajCoMaAr) addCourbe(*AxeMarginDXFP, CourbMargeArDXF);
     if (ajCo2[1]) addCourbe(*AxeMarginDXFP, CourbCoin2Back[1]);
-
     addCourbe(*AxeMarginDXFP, CourbMargeBack[1]);
-
 	if (ajCo1[1]) addCourbe(*AxeMarginDXFP, CourbCoin1[1]);
     if (ajCoMaAv) addCourbe(*AxeMarginDXFP, CourbMargeAvBack);
     if (ajCo1[0]) addCourbe(*AxeMarginDXFP, CourbCoin1Back[0]);
+	// -------- Marge ----------------
+	
 
-    if (makeRep) GenerateCourbeRep( gfd, Xd1, Yd1, P1,
+
+	if (makeRep) {
+		if (debug) printf ("\n GenerateCourbRep");
+		GenerateCourbeRep( gfd, Xd1, Yd1, P1,
 					nerv1, deb1, faceDeb1, fin1, faceFin1,
 					Xd2, Yd2, P2,
 					nerv2, deb2, faceDeb2, fin2, faceFin2, text,
 			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
                     marge1, marge2, margeDeb, margeFin, makeRep, debug,
 					isPince, Xd01, Yd01, coeff1, Xd02, Yd02, coeff2);
+		if (debug) printf ("\n ...GenerateCourbRep");
+
+	}
 
     //if (Numerotation == 1) {
+	if (debug) printf ("\n call GenerateCourbeText");
 	GenerateCourbeText( gfd, Xd1, Yd1, P1,
 					nerv1, deb1, faceDeb1, fin1, faceFin1,
 					Xd2, Yd2, P2,
@@ -1003,6 +1027,7 @@ void GenerateCourbe(WindPatternsProject* gfd,
 			        AxePatronP, AxePatronDXFP, AxePatronTextDXFP, AxeMarginDXFP, AxeCercleDXFP, AxeRepDXFP, Ventilation,
                     marge1, marge2, margeDeb, margeFin, makeRep, debug,
 					isPince, Xd01, Yd01, coeff1, Xd02, Yd02,coeff2);
+	if (debug) printf ("\n...GenerateCourbeText");
 }
 
 void fillXYZP(int* nerv, double* DebT, int* FaceDebT, double* FinT,int* FaceFinT,

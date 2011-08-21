@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "plot.h"
+#include "const.h"
 #include "layout.h"
 #include "matrice.h"
 #include "geom.h"
@@ -189,7 +190,13 @@ void calcVecteurNormal(double xa,double ya,double xb,double yb,
 	}
 	else
 	{
-		printf("\nIMPSBL calcVecteurNormal (%f, %f)(%f, %f)", xa, ya, xb, yb);
+		printf ("\n * ");
+		printf ("\n * ");
+		printf ("\n * ");
+		printf ("\n geom.cpp calcVecteurNormal delta == 0");
+		printf ("\nA(%f, %f) B(%f, %f)", xa, ya, xb, yb);
+		printf ("\n !!! calcVecteurNormal return 0.0f 0.0f");
+		printf ("\nIMPSBL calcVecteurNormal (%f, %f)(%f, %f)", xa, ya, xb, yb);
 		*xc=0.0; *yc=0.0;
 	}
 
@@ -345,7 +352,7 @@ void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double
 	x12=x2-x1; y12=y1-y2;
 	x23=x3-x2; y23=y3-y2;
 	//test pts 1,2,3 alignï¿½s
-	if (x12*y23-x23*y12 == 0.0f)
+	if (fabs(x12*y23-x23*y12)  < EPSILON)
 	{
 		//printf ("\ncalcVecteurBissec cote1");
 		calcVecteurNormal(x1,y1,x2,y2,x,y,l,cote);
@@ -373,8 +380,13 @@ void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double
 		}
 		else
 		{
-			printf("\npb: impossibilitï¿½ de calc dans la procï¿½dure 'calcVecteurBissec'");
-			*x=0.0; *y=0.0;
+			printf ("\n * ");
+			printf ("\n * ");
+			printf ("\n * ");
+			printf ("\n geom.cpp calcVecteurBissec delta == 0");
+			printf ("\n1(%f, %f) 2(%f, %f) 3(%f, %f)", x1, y1, x2, y2, x3, y3);
+			printf("\n !!! calcVecteurBissec return 0.0f 0.0f");
+			*x=0.0f; *y=0.0f;
 		}
 	}
 }
@@ -489,7 +501,7 @@ void int_cer(
 	else if (normeO1O2==fabs(r1-r2))
 	{
 		////////test cercles confondus ?
-		if (normeO1O2==0.0f)
+		if (fabs(normeO1O2) < EPSILON)
 		{
 			*nbr_sol=0;
 		}
@@ -877,38 +889,44 @@ void Pol2Cart(Matrix *T, Matrix *R, Matrix **X, Matrix **Y)
 /* intersectione de 2 vecteurs */
 /*******************************/
 void Inter2Vecteurs(double xa, double ya,
-         		double xb, double yb,
-			double xc, double yc,
-			double xd, double yd,
-			double *x, double *y)
+         			double xb, double yb,
+					double xc, double yc,
+					double xd, double yd,
+					double *x, double *y, bool debug)
 {
+	if (debug) printf ("\nInter2Vecteur A(%f, %f)->B(%f, %f)", xa, ya, xb, yb);
+	if (debug) printf ("\nInter2Vecteur C(%f, %f)->D(%f, %f)", xc, yc, xd, yd);
+	if (debug) printf ("\nInter2Vecteur AB(%f, %f)   CD(%f, %f)", (xb - xa), (yb - ya), (xd - xc), (yd - yc));
 	double xab, yab, xcd, ycd;
-	double a11,a12,a21,a22,b1,b2,delta,delta1,delta2;
+	double a11, a12, a21, a22, b1, b2, delta, delta1, delta2;
 	//poursimplifier write
-	xab=xb-xa; yab=yb-ya;
-	xcd=xd-xc; ycd=yd-yc;
+	xab = xb - xa; yab = yb - ya;
+	xcd = xd-xc; ycd=  yd - yc;
 	//preparation matrices A et B pour resolution AX=B
-	a11=yab; a12=-xab; b1=xa*yab-ya*xab;
-	a21=ycd; a22=-xcd; b2=xc*ycd-yc*xcd;
+	a11 = yab; a12 = -xab; b1 = xa*yab - ya*xab;
+	a21 = ycd; a22 = -xcd; b2 = xc*ycd - yc*xcd;
 	//calc determinants
-	delta=a11*a22-a21*a12;
-	if (delta !=0)
+	delta = a11*a22 - a21*a12;
+	if (debug) printf ("\n delta=%f", delta);
+	if (fabs(delta) > EPSILON )
 	{
-		delta1=b1*a22-b2*a12;
-		delta2=a11*b2-a21*b1;
+		delta1 = b1*a22 - b2*a12;
+		delta2 = a11*b2 - a21*b1;
 		/*calc resultat*/
-		*x=delta1/delta;
-		*y=delta2/delta;
-	}
-	else
-	{
+		*x = delta1/delta;
+		*y = delta2/delta;
+	} else {
+		printf ("\n * ");
+		printf ("\n * ");
+		printf ("\n * ");
+		printf ("\n geom.cpp Inter2Vecteurs delta == 0, no ponints ");
+		printf ("A(%f, %f)->B(%f, %f)   C(%f, %f)->D(%f, %f)", xa, ya, xb, yb, xc, yc, xd, yd);
 		printf("\npb: impossibilitï¿½ de calc dans la procï¿½dure 'Inter2Vecteurs'");
+		printf("\n !!! Inter2Vecteurs return 0.0f 0.0f");
 		*x=0.0f; *y=0.0f;
 	}
+	if (debug) printf ("\n res x=%f y=%f", *x, *y);
 }
-/*********************************************/
-/* calc longueur dï¿½veloppï¿½ d'une courbe XY */
-/*********************************************/
 
 Matrix* Longueur(Matrix* x, Matrix *y)
 {
