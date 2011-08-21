@@ -12,7 +12,7 @@ class WindPatternsProject
 {
     public:
         WindPatternsProject() {
-			debug = true;
+			debug = false;
             for (int i = 0; i < 2; i++) {
                     PosPinceBA[i] = 0.0f;
                     PosPinceBF[i] = 0.0f;

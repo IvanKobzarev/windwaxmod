@@ -100,7 +100,7 @@ void Inter2Vecteurs(
 					double xb, double yb, 
 					double xc, double yc,
 					double xd, double yd,
-					double *x, double *y);
+					double *x, double *y, bool debug = false);
 
 void LVFoil(Matrix *XB, Matrix *YB, double alphaD, Matrix **X, Matrix **Y, Matrix **Cp );
 

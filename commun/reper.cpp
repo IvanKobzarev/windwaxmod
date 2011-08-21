@@ -5,8 +5,10 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
 	bool debug = false;
+	printf ("\nget Reper Points()");
+
 	if (debug) {
-		printf ("\nget Reper Points()");
+
 		printf ("\n P:");
 		printM (P);
 		printf ("\n...");
@@ -273,6 +275,8 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
         delete (interpYSuspente0);
     }
    if (debug) printf ("\n...END get Reper Points()");
+
+   printf ("\n...END get Reper Points()");
    return resexit;
 }
 
@@ -300,7 +304,7 @@ double calcPolyLength(Matrix* X, Matrix* Y, double xrp, double yrp) {
 Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0, double coeff, Matrix* Xd, Matrix* Yd, Matrix* P, 
 								int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
-	bool debug = true;
+	bool debug = false;
 	if (debug) {
 		printf ("getReperPointsPince()");
 		printf ("\n Xd0->GetLignes()=%d", Xd0->GetLignes());
@@ -388,7 +392,7 @@ Matrix* getReperPointsPince(WindPatternsProject* gfd,  Matrix* Xd0, Matrix* Yd0,
 
 
 int calcRepPointByLength(Matrix* Xd, Matrix* Yd, double l, double* x, double* y) {
-	bool debug = true;
+	bool debug = false;
 	if (debug) printf ("\n calcRepPointByLength(... l=%f", l);
 	if (l < 0.0f) {
 		getLayoutLogger()->logprintf("\nERROR: !!! calcRepPointByLength l=%f return -1", l);
