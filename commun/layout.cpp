@@ -375,7 +375,9 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
 	//printf ("\n ce8");
     int n = gfd->Form->m_nbProfils;
     char text[100];
-    sprintf(text, "%s%dF%dt%dF%d", charname, n1, ff1, n2, ff2);
+    sprintf(text, "%s%d %.1fF%d-%.1fF%d t %d %.1fF%d-%.1fF%d", charname,
+		n1, posDeb1, fd1, posFin1, ff1,
+		n2, posDeb2, fd2, posFin2, ff2);
     TAxe *AxeP, *AxePD,  *AxePTD,  *AxeMD,  *AxeCD,  *AxeRepD;
     if (debug) printf ("\n PanelLayoutElement::calculateExport.3");
     leexport = new LayoutElementExport();
@@ -1549,10 +1551,10 @@ void Layout::SaveLayout2(WindPatternsProject* gfd) {
 	bool debug = false;
     if (debug) printf("\n SaveLayout2()");
     prepareLayoutElements(gfd);
-	if (isDesign) {
+	/* if (isDesign) {
 		if (debug) printf("\n prepareDesignLayoutElements()");
 		prepareDesignLayoutElements(gfd);
-	}
+	} */
     calculateExport(gfd);
     saveCalcLayoutToFile(gfd);
     if (debug) printf("\n...SaveLayout2()");

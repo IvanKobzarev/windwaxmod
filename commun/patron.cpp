@@ -540,7 +540,7 @@ void GenerateCourbAvant(WindPatternsProject* gfd,
 	Matrix * Yd0[2] = {Yd01, Yd02};
 	Matrix * P[2] = {P1, P2};
 	Matrix *distance;
-	int i = 0, j = 0;
+	int i = 0, j = 0, n = 0;
 
     if ((fabs( Xd[0]->Element(0, 0) - Xd[1]->Element(0, 0) ) > EPSILON) //test points Av cote 1&2 confondus
             || (fabs(Yd[0]->Element(0, 0) - Yd[1]->Element(0, 0)) > EPSILON)) {
@@ -615,34 +615,50 @@ void GenerateCourbAvant(WindPatternsProject* gfd,
 				((*CourbCoin1)[i])->pts = Zeros(3, 2);
 				(*CourbCoin)->pts = Zeros(3, 2);
 				((*CourbCoin1Back)[i])->pts = Zeros(3, 2);
-				((*CourbCoin1)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(0, 0));
+
 				(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(0, 0));
-				((*CourbCoin1)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(0, 1));
 				(*CourbCoin)->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(0, 1));
 				//			CourbCoin1[i]->pts->SetElement(2,0, CourbMargeAv->pts->Element(0,0));
 				//			CourbCoin->pts->SetElement(2,0, CourbMargeAv->pts->Element(0,0));
-				((*CourbCoin1)[i])->pts->SetElement(2, 0, (*CourbMargeAv)->pts->Element(i, 0));
 				(*CourbCoin)->pts->SetElement(2, 0, (*CourbMargeAv)->pts->Element(i, 0));
 
 				//			CourbCoin1[i]->pts->SetElement(2,1, CourbMargeAv->pts->Element(0,1));
 				//			CourbCoin->pts->SetElement(2,1, CourbMargeAv->pts->Element(0,1));
-				((*CourbCoin1)[i])->pts->SetElement(2, 1, (*CourbMargeAv)->pts->Element(i, 1));
 				(*CourbCoin)->pts->SetElement(2, 1, (*CourbMargeAv)->pts->Element(i, 1));
 				if (debug) printf ("\n CC MargeAv/MargeAvBack 12");
-
-				double x, y;
 				printf ("\n((*CourbMarge)[i])->pts->GetLignes()=%d", ((*CourbMarge)[i])->pts->GetLignes());
-				Inter2Vecteurs(
-						((*CourbMarge)[i])->pts->Element(1, 0), ((*CourbMarge)[i])->pts->Element(1, 1),
-						((*CourbMarge)[i])->pts->Element(0, 0), ((*CourbMarge)[i])->pts->Element(0, 1),
-						(*CourbMargeAv)->pts->Element(1, 0), (*CourbMargeAv)->pts->Element(1, 1),
-						(*CourbMargeAv)->pts->Element(0, 0), (*CourbMargeAv)->pts->Element(0, 1),
-						&x, &y, true);
+				n = ((*CourbMarge)[i])->pts->GetLignes() - 1;
+				double x, y;
 
+				int ifc = 1;
+				for (int ifc = 1; i < n; i++) {
+					Inter2Vecteurs(
+							((*CourbMarge)[i])->pts->Element(ifc, 0), ((*CourbMarge)[i])->pts->Element(ifc, 1),
+							((*CourbMarge)[i])->pts->Element(0, 0), ((*CourbMarge)[i])->pts->Element(0, 1),
+							(*CourbMargeAv)->pts->Element(1, 0), (*CourbMargeAv)->pts->Element(1, 1),
+							(*CourbMargeAv)->pts->Element(0, 0), (*CourbMargeAv)->pts->Element(0, 1),
+							&x, &y, true);
+
+					if (x < ((*CourbMarge)[i])->pts->Element(0, 0)) break;
+				}
+				
 				printf ("\n Coin1 x=%f y=%f");
+
+				// ----- CourbCoin1 --------------------------
+
+				((*CourbCoin1)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(0, 0));
+				((*CourbCoin1)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(0, 1));
+
 				((*CourbCoin1)[i])->pts->SetElement(1, 0, x);
-				(*CourbCoin)->pts->SetElement(1, 0, x);
 				((*CourbCoin1)[i])->pts->SetElement(1, 1, y);
+
+				((*CourbCoin1)[i])->pts->SetElement(2, 0, (*CourbMargeAv)->pts->Element(i, 0));
+				((*CourbCoin1)[i])->pts->SetElement(2, 1, (*CourbMargeAv)->pts->Element(i, 1));
+
+				// =============================================
+
+
+				(*CourbCoin)->pts->SetElement(1, 0, x);
 				(*CourbCoin)->pts->SetElement(1, 1, y);
 				for (int _i = 0; _i < 3; _i++) {
 					((*CourbCoin1Back)[i])->pts -> SetElement(2 - _i, 0, ((*CourbCoin1)[i])->pts->Element(_i, 0));
@@ -758,6 +774,7 @@ void GenerateCourbAr(WindPatternsProject* gfd,
         if  (( abs((*CourbMargeAr)->pts->Element(0, 0) -  (*CourbMargeAr)->pts->Element(1, 0)) >  EPSILON ) || 
 				( abs((*CourbMargeAr)->pts->Element(0, 1) - (*CourbMargeAr)->pts->Element(1, 1)) >  EPSILON )	) {
 			for (i = 0; i < 2; i++) {
+
 				(*CourbCoin2)[i] = new Courbe("Coin2");
 				*CourbCoin = new Courbe("Coin2");
 				(*CourbCoin2Back)[i] = new Courbe("Coin2Back");
@@ -772,20 +789,14 @@ void GenerateCourbAr(WindPatternsProject* gfd,
 				if (debug) printf ("\n GenerateCourbe CourbMarge(%d", i);
 				n = ((*CourbMarge)[i])->pts->GetLignes() - 1;
 
-				((*CourbCoin2)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
 				(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
-
-				((*CourbCoin2)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
 				(*CourbCoin)->pts->SetElement(0, 1, (*CourbMarge[i])->pts->Element(n, 1));
 
 				//CourbCoin2[i]->pts->SetElement(2,0, CourbMargeAr->pts->Element(0,0));
 				//CourbCoin->pts->SetElement(2,0, CourbMargeAr->pts->Element(0,0));
-				((*CourbCoin2)[i])->pts->SetElement(2, 0, (*CourbMargeAr)->pts->Element(i, 0));
 				(*CourbCoin)->pts->SetElement(2, 0, (*CourbMargeAr)->pts->Element(i, 0));
-
 				//CourbCoin2[i]->pts->SetElement(2,1, CourbMargeAr->pts->Element(0,1));
 				//CourbCoin->pts->SetElement(2,1, CourbMargeAr->pts->Element(0,1));
-				((*CourbCoin2)[i])->pts->SetElement(2, 1, (*CourbMargeAr)->pts->Element(i, 1));
 				(*CourbCoin)->pts->SetElement(2, 1, (*CourbMargeAr)->pts->Element(i, 1));
 
 				double x, y;
@@ -803,33 +814,59 @@ void GenerateCourbAr(WindPatternsProject* gfd,
 					(*CourbMargeAr)->pts->Element(0, 0), (*CourbMargeAr)->pts->Element(0, 1),
 					(*CourbMargeAr)->pts->Element(1, 0), (*CourbMargeAr)->pts->Element(1, 1));
 
-				Inter2Vecteurs(
-						((*CourbMarge)[i])->pts->Element(n, 0), ((*CourbMarge)[i])->pts->Element(n, 1),
-						((*CourbMarge)[i])->pts->Element(n - 1, 0), ((*CourbMarge)[i])->pts->Element(n - 1, 1),
-						(*CourbMargeAr)->pts->Element(1, 0), (*CourbMargeAr)->pts->Element(1, 1),
-						(*CourbMargeAr)->pts->Element(0, 0), (*CourbMargeAr)->pts->Element(0, 1),
-						&x, &y, true);
-				printf ( "\n Coin2 x=%f y=%f", x, y);
-				/*if ( x < ((*CourbMarge)[i])->pts->Element(n, 0)) {
-					if (debug) printf ("\n\n x < ... %f\n\n", 1000.0f* (((*CourbMarge)[i])->pts->Element(n, 0)-x));
-					((*CourbMarge)[i])->pts->SetElement(n, 0, x);
-					((*CourbMarge)[i])->pts->SetElement(n, 1, y);
-					((*CourbMargeDXF)[i])->pts->SetElement(n, 0, x);
-					((*CourbMargeDXF)[i])->pts->SetElement(n, 1, y);
-					((*CourbMargeBack)[i])->pts->SetElement(0, 0, x);
-					((*CourbMargeBack)[i])->pts->SetElement(0, 1, y);
 
-					((*CourbCoin2)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
-					((*CourbCoin2)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
-					(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
-					(*CourbCoin)->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
-				}*/
+				for (int ifc = n - 1; ifc >= 0; ifc--) {
+					printf ("\n ifc = %d", ifc);
+
+					Inter2Vecteurs(
+							((*CourbMarge)[i])->pts->Element(n, 0), ((*CourbMarge)[i])->pts->Element(n, 1),
+							((*CourbMarge)[i])->pts->Element(ifc, 0), ((*CourbMarge)[i])->pts->Element(ifc, 1),
+							(*CourbMargeAr)->pts->Element(1, 0), (*CourbMargeAr)->pts->Element(1, 1),
+							(*CourbMargeAr)->pts->Element(0, 0), (*CourbMargeAr)->pts->Element(0, 1),
+							&x, &y, true);
+					printf ( "\n Coin2 x=%f y=%f", x, y);
+
+					if ( x >= ((*CourbMarge)[i])->pts->Element(n, 0)) break;
+
+					//{
+						/* 
+						((*CourbMarge)[i])->pts->SetElement(n, 0, x);
+						((*CourbMarge)[i])->pts->SetElement(n, 1, y);
+
+						((*CourbMargeDXF)[i])->pts->SetElement(n, 0, x);
+						((*CourbMargeDXF)[i])->pts->SetElement(n, 1, y);
+						((*CourbMargeBack)[i])->pts->SetElement(0, 0, x);
+						((*CourbMargeBack)[i])->pts->SetElement(0, 1, y);
+
+						((*CourbCoin2)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
+						((*CourbCoin2)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
+						(*CourbCoin)->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
+						(*CourbCoin)->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
+						*/
+					//}
+
+				}
+
+				
+
+
+
+				(*CourbCoin)->pts->SetElement(1, 0, x);
+				(*CourbCoin)->pts->SetElement(1, 1, y);
+
+				// ----- CourbCoin2 -----
+				((*CourbCoin2)[i])->pts->SetElement(0, 0, ((*CourbMarge)[i])->pts->Element(n, 0));
+				((*CourbCoin2)[i])->pts->SetElement(0, 1, ((*CourbMarge)[i])->pts->Element(n, 1));
 
 				((*CourbCoin2)[i])->pts->SetElement(1, 0, x);
-				(*CourbCoin)->pts->SetElement(1, 0, x);
-
 				((*CourbCoin2)[i])->pts->SetElement(1, 1, y);
-				(*CourbCoin)->pts->SetElement(1, 1, y);
+
+				((*CourbCoin2)[i])->pts->SetElement(2, 0, (*CourbMargeAr)->pts->Element(i, 0));
+				((*CourbCoin2)[i])->pts->SetElement(2, 1, (*CourbMargeAr)->pts->Element(i, 1));
+				// ======================
+
+
+
 
 				for (int _i = 0; _i <= 2; _i++) {
 					((*CourbCoin2Back)[i])->pts -> SetElement(2 - _i, 0, ((*CourbCoin2)[i])->pts->Element(_i, 0));
