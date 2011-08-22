@@ -179,11 +179,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\commun\design.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\dxf.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\fichier.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\commun\form.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\geom.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\layout.cpp"
 				>
 			</File>
 			<File
@@ -192,6 +208,10 @@
 			</File>
 			<File
 				RelativePath="..\commun\matrice.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\patron.cpp"
 				>
 			</File>
 			<File
@@ -215,7 +235,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\commun\rasklad.cpp"
+				RelativePath="..\commun\reper.cpp"
 				>
 			</File>
 			<File
@@ -245,11 +265,27 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\commun\design.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\dxf.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\fichier.h"
 				>
 			</File>
 			<File
+				RelativePath="..\commun\form.h"
+				>
+			</File>
+			<File
 				RelativePath="..\commun\geom.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\layout.h"
 				>
 			</File>
 			<File
@@ -258,6 +294,10 @@
 			</File>
 			<File
 				RelativePath="..\commun\matrice.h"
+				>
+			</File>
+			<File
+				RelativePath="..\commun\patron.h"
 				>
 			</File>
 			<File
@@ -277,7 +317,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\commun\rasklad.h"
+				RelativePath="..\commun\reper.h"
 				>
 			</File>
 			<File

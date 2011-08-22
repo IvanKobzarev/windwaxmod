@@ -21,8 +21,8 @@
 #include "../commun/layout.h"
 #include "../commun/logger.h"
 
-#include "GL/glui.h"
-#include "GL/glut.h"
+#include "../GL/glui.h"
+#include "../GL/glut.h"
 
 GLUI *glui;
 GLUI_StaticText *FicProject;

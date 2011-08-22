@@ -1438,8 +1438,8 @@ void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
 	
     // ------------------ Ext ------------------------------
 	if (debug) printf ("\n panelsExt.size(): %d", panelsExt.size());
-    //for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
-	for (int ipe = 3; ipe < 4; ipe++) {
+    for (int ipe = 0; ipe < panelsExt.size(); ipe++) {
+	//for (int ipe = 3; ipe < 4; ipe++) {
 		if (debug) printf("\n ipe: %d", ipe);
         PanelLayoutElement* p = panelsExt[ipe];
         int nerv = p->n1;
