@@ -5,10 +5,8 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
 						int nerv, float deb, int faceDeb, float fin, int faceFin, bool klapanShov)
 {
 	bool debug = false;
-	printf ("\nget Reper Points()");
 
 	if (debug) {
-
 		printf ("\n P:");
 		printM (P);
 		printf ("\n...");
@@ -275,8 +273,6 @@ Matrix* getReperPoints(WindPatternsProject* gfd, Matrix* Xd, Matrix* Yd, Matrix*
         delete (interpYSuspente0);
     }
    if (debug) printf ("\n...END get Reper Points()");
-
-   printf ("\n...END get Reper Points()");
    return resexit;
 }
 

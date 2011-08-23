@@ -175,19 +175,20 @@ void ProfLayoutElement::calculateExport(WindPatternsProject* gfd){
 }
 void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
     bool debug = false;
+
 	if (debug) printf ("\n PanelLayoutElement::calculateExport");
     Matrix * Xd[2], *Yd[2],*newXd[2], *newYd[2], *Xdp[2], *Ydp[2], *rXdp[2], *rYdp[2], *rXd[2], *rYd[2];
     Matrix *X[2], *Y[2], *Z[2], *P[2], *rP[2];//, *newP[2];
     double _pa0, _pa00, _pf0, _pa1, _pa01, _pf1;
     Matrix *_f0, *_f1;
     char* charname = new char[1];
-	if (debug) printf ("\n ce1");
+	if (debug) printf ("\n call calcPatron()");
     calcPatron(gfd, n1, s1, fd1, ff1, posDeb1, posFin1,
         n2, s2, fd2, ff2, posDeb2, posFin2,
         &Xd[0], &Yd[0], &Xd[1], &Yd[1],
         &X[0], &Y[0], &Z[0], &P[0],
         &X[1], &Y[1], &Z[1], &P[1]);
-	if (debug) printf ("\n ce2");
+	if (debug) printf ("\n ...call calcPatron()");
     if (debug) printf ("\n n1=%d fd1=%d ff1=%d posDeb1=%f posFin1=%f", n1, fd1, ff1, posDeb1, posFin1);
     if (debug) printf ("\n n2=%d fd2=%d ff2=%d posDeb2=%f posFin2=%f", n2, fd2, ff2, posDeb2, posFin2);
     if (isPince) {
@@ -257,7 +258,10 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
         getLayoutLogger()->logprintf(" \n %d %d [%5.1f(%d) %5.1f(%d)] [%5.1f(%d) %5.1f(%d)]", n1, n2, posDeb1, fd1, posFin1,  ff1, posDeb2, fd2, posFin2,  ff2);
 
         Pince* pince = new Pince();
+
         pince -> debug = false;
+		//pince -> debug = true;
+
 		if (debug) printf ("\n getPincePlus.1 (%d, %d, %f, %f, %f, %f, %d, %d)", n1, n2, myDeb, myFin,  myDeb, myFin,  fd1, ff1);
 	
         Pince* tmpPince = getPincePlus(gfd, n1, n2, myDeb, myFin,  myDeb, myFin,  fd1, ff1);
@@ -384,7 +388,8 @@ void PanelLayoutElement::calculateExport(WindPatternsProject* gfd) {
 
     GenerateCourbe(gfd, Xdp[0], Ydp[0], P[0], n1, posDeb1, fd1, posFin1, ff1,
         Xdp[1], Ydp[1], P[1], n2, posDeb2, fd2, posFin2, ff2, text,
-        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD), vent, marge1, marge2, margeDeb, margeFin, true, debug,
+        &(leexport->AxeP), &(leexport->AxePD), &(leexport->AxePTD), &(leexport->AxeMD), &(leexport->AxeCD), &(leexport->AxeRepD),
+		vent, marge1, marge2, margeDeb, margeFin, true, debug,
 		true, Xd[0], Yd[0], coeff1, Xd[1], Yd[1], coeff2);
 
     if (debug) printf ("\n PanelLayoutElement::calculateExport.3.2");
@@ -1427,7 +1432,7 @@ void Layout::intersectPanelIntWithColorSegment(PanelLayoutElement* p, ColorSegme
 
 
 void Layout::prepareDesignLayoutElements(WindPatternsProject* gfd) {
-	bool debug = 0;
+	bool debug = false;
 	if (debug) printf ("\nprepareDesignLayoutElements()");
     // calculate ColorSegmentsTable here, and pass it (i)
     // to preparePanelExtDesign(gfd, i, KiteDesignExt . CST[i] // row );

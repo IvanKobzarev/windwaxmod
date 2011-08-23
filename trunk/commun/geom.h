@@ -55,6 +55,8 @@ void calcVecteurNormal(double xa,double ya,double xb,double yb,
 
 Matrix* calcContour(Matrix* xy, Matrix *d, int cote);
 
+Matrix* calcContour1(Matrix* xy, Matrix* xy1, Matrix *d, int cote);
+
 void calcVecteurBissec(double x1,double y1,double x2,double y2, double x3,double y3,
 						 double *x,double *y,double l,int cote);
 
