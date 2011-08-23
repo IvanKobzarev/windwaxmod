@@ -215,31 +215,60 @@ void calcVecteurNormal(double xa,double ya,double xb,double yb,
 Matrix* calcContour(Matrix* xy, Matrix *d, int cote)
 {
 	int i; 
-	/*test parametres ok*/
-	/* a faire ...*/
-	/*creation matrices*/
-	Matrix *res = new Matrix(xy->GetLignes(), 2);
-	/*calc matrices contour xc,yc a partir du 2eme point*/
+	int n = xy->GetLignes();
+	Matrix *res = new Matrix(n, 2);
 	double xc, yc;
-	for(i = 0; i < xy->GetLignes()-1; i++)
-	{
-		xc = res->Element(i+1,0);
-		yc = res->Element(i+1,1);
-        //printf ("\n calcContour1()");
-		calcVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1), &xc, &yc, d->Element(i,0), cote);
-		res->SetElement(i+1,0,xc);
-		res->SetElement(i+1,1,yc);
-	}
+	if (n > 1) {
+		for(i = 0; i < xy->GetLignes()-1; i++)
+		{
+			xc = res->Element(i+1,0);
+			yc = res->Element(i+1,1);
+			calcVecteurNormal(xy->Element(i,0), xy->Element(i,1), xy->Element(i+1,0), xy->Element(i+1,1), &xc, &yc, d->Element(i,0), cote);
+			res->SetElement(i+1,0,xc);
+			res->SetElement(i+1,1,yc);
+		}
 
-	/*calc premier point xc,yc*/
-	xc = res->Element(0,0);
-	yc = res->Element(0,1);
-    //printf ("\n calcContour2()");
-	calcVecteurNormal(xy->Element(1,0), xy->Element(1,1), xy->Element(0,0), xy->Element(0,1), &xc, &yc, d->Element(0,0), -cote);
-	res->SetElement(0,0,xc);
-	res->SetElement(0,1,yc);
+		/*calc premier point xc,yc*/
+		xc = res->Element(0,0);
+		yc = res->Element(0,1);
+		//printf ("\n calcContour2()");
+		calcVecteurNormal(xy->Element(1,0), xy->Element(1,1), xy->Element(0,0), xy->Element(0,1), &xc, &yc, d->Element(0,0), -cote);
+		res->SetElement(0,0,xc);
+		res->SetElement(0,1,yc);
+	} else {
+		res->SetElement(0,0,xy->Element(0,0));
+		res->SetElement(0,1,xy->Element(0,1));
+	}
 	return res;
 }
+
+Matrix* calcContour1(Matrix* xy, Matrix* xy1, Matrix *d, int cote)
+{
+	double x = xy->Element(0,0);
+	double y = xy->Element(0,1);
+
+	double x1 = xy1->Element(0,0);
+	double y1 = xy1->Element(0,1);
+	int n1 = xy1->GetLignes();
+	double x2 = xy1->Element(n1-1,0);
+	double y2 = xy1->Element(n1-1,1);
+
+	double _vx = (x-x1) + (x-x2);
+	double _vy = (y-y1) + (y-y2);
+	
+	double norme = (double) sqrt(sqr(_vx) + sqr(_vy));
+
+	double vx = _vx/norme;
+	double vy = _vy/norme;
+
+	Matrix *res = new Matrix(1, 2);
+	double dist = d->Element(0,0);
+	res->SetElement(0,0, x + dist*vx);
+	res->SetElement(0,1, y + dist*vy);
+
+	return res;
+}
+
 
 void AddPointsToCourb(Matrix* courb, Matrix* pts, Matrix** newCourb)
 {
