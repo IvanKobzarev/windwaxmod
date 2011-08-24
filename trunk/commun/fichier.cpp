@@ -624,6 +624,7 @@ void writeWindPatternsProject(char *fileName, WindPatternsProject *wpp) {
 
 
 Ballonement* readBallonementFromFile(char* NomFic) {
+	printf ("\nRead BALLONEMENT from file %s", NomFic);
 	FILE *fid;
 	Matrix *m = NULL;
 	Ballonement* bal = new Ballonement();
@@ -667,6 +668,7 @@ Ballonement* readBallonementFromFile(char* NomFic) {
 		printf("\nProbleme  reading ballonement");
 		exit(0);
 	}
+	printf ("\n... Read BALLONEMENT from file %s successfull", NomFic);
 	return bal;
 }
 

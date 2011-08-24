@@ -86,7 +86,7 @@ int Ventilation = 0;
 int RepPoints = 1;
 int VentilationLayout = 1;
 //TODO: should be 0
-int layoutWithDesign = 1;
+int layoutWithDesign = 0;
 int CorrectRepPoints = 1;
 
 int PincePowerA = 0;
@@ -356,8 +356,8 @@ WindPatternsProject* getWindPatternsProject() {
 	printf("\n IntProfCent=%d", IntProfCent->GetLignes());
     gfd->IntProfBout = IntProfBout;
 	printf("\n IntProfBout=%d", IntProfBout->GetLignes());
-	printf ("\n =====getWindPatternsProject()=======");
-    strcpy(gfd->fileNameDiagNerv, fileNameDiagNerv);
+
+	strcpy(gfd->fileNameDiagNerv, fileNameDiagNerv);
     strcpy(gfd->fileNameVentHoles, fileNameVentHoles);
     strcpy(gfd->fileNameRepPoints, fileNameRepPoints);
 
@@ -367,8 +367,9 @@ WindPatternsProject* getWindPatternsProject() {
     FicDiagNerv->set_text(fileNameDiagNerv);
 
     gfd->layoutWithDesign = layoutWithDesign;
-    gfd->kiteDesignInt = kiteDesignInt;
-    gfd->kiteDesignExt = kiteDesignExt;
+    //gfd->kiteDesignInt = kiteDesignInt;
+    //gfd->kiteDesignExt = kiteDesignExt;
+	printf ("\n =====getWindPatternsProject()=======");
     return gfd;
 }
 
@@ -800,6 +801,7 @@ void adder(int /*control*/) {
 }
 
 void apply(int /*control*/) {
+	printf ("\n apply");
     int i; //,j;
     Matrix *xe, *xi;
     Matrix *extProf, *intProf;
@@ -868,6 +870,7 @@ void apply(int /*control*/) {
     //recalc forme 3D et patron avec "nouveau" profil
     calcVue3dEtPatron();
     display();
+	printf ("\n ...apply");
 }
 
 
@@ -1655,7 +1658,7 @@ void calcPinces(Matrix *Xd1, Matrix *Yd1,
 
 void calcVue3dEtPatron(void)
 {
-    //printf ("\n calcVue3dEtPatron");
+    printf ("\n calcVue3dEtPatron");
     Matrix *XExt, *YExt, *ZExt;
     Matrix *XInt, *YInt, *ZInt;
     Matrix *XExtBal, *YExtBal, *ZExtBal;
@@ -3228,10 +3231,11 @@ int main(int argc, char** argv) {
     glutPositionWindow((int) (0.0 * (double) ws), (int) (0.50 * (double) hs));
     glutReshapeWindow((int) (1.0 * (double) ws), (int) (0.45 * (double) hs));
 
-    strcpy(fileNameProject, "f17project.wpp");
+    strcpy(fileNameProject, "DefaultProject.wpp");
     gfd = readWindPatternsProject(fileNameProject);
 
     LoadFromWindPatternsProject(gfd);
+	printf ("\n loading project ok - ...LoadFromWindPatternsProject(gfd)");
 
     EpaiRelProfCent = EpaisseurRelative(ExtProfCent, IntProfCent);
     EpaiRelProfBout = EpaisseurRelative(ExtProfBout, IntProfBout);
@@ -3239,6 +3243,7 @@ int main(int argc, char** argv) {
     InterpoleProfilBout(&ExtProfBout, ExtProfCent);
     InterpoleProfilBout(&IntProfBout, IntProfCent);
 
+	printf ("\n loading profiles ok");
 	//printf("Ce programme utilise GLUI version: %3.2f\n", GLUI_Master.get_version());
     glui = GLUI_Master.create_glui("Boite de dialogue", 0, 0, 0);
 
@@ -3620,6 +3625,7 @@ int main(int argc, char** argv) {
 	glui->add_checkbox_to_panel(panel_Layout2, "correct rep points", &CorrectRepPoints, 0, &modifVentilationLayout);
 
 	//--------------- Design GUI -------------------
+	/*
 	GLUI_Rollout *panelDesign = glui->add_rollout("Design", false);
     glui->add_checkbox_to_panel(panelDesign, "Layout with design", &layoutWithDesign, 0, &modifLayoutWithDesign);
 
@@ -3633,6 +3639,7 @@ int main(int argc, char** argv) {
 
 	glui->add_statictext_to_panel(panelDesign, "");
 
+
 	// load default design
 	strcpy(fileNameDesignExt, "f17ext.wdn");
     FicDesignExt = glui->add_statictext_to_panel(panelDesign, "???");
@@ -3643,7 +3650,7 @@ int main(int argc, char** argv) {
     FicDesignInt = glui->add_statictext_to_panel(panelDesign, "???");
     FicDesignInt->set_text(fileNameDesignInt);
 	kiteDesignInt = readKiteDesignFromFile(fileNameDesignInt);
-
+	*/
 	//----------------------------------------------
 
     GLUI_Spinner *SpinTochnostLayout2 = glui->add_spinner_to_panel(panel_Layout2, "Accuracy", GLUI_SPINNER_FLOAT, &(tochnostLayout2));
@@ -3672,7 +3679,7 @@ int main(int argc, char** argv) {
     apply(0);
     AxeSel = Axe3d;
     display();
-	applyMagic2(0);
+	//applyMagic2(0);
     glutMainLoop();
     return 0;
 }
